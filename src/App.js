@@ -24,7 +24,6 @@ function App() {
             <Route path="/board" element={<Board />}/>
         </Routes>
       </BrowserRouter>
-
   );
 }
 

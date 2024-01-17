@@ -11,9 +11,176 @@
     margin-right: auto;
     display: flex;
     .board_nav_bar{
-      width: 160px;
-      .WritePost{
-        
+      position: sticky;
+      top: 60px;
+      padding: 15px 0;
+      border-radius: 24px;
+      background: #F6F6F6;
+      .aside{
+        width: 164px;
+        padding: 16px 16px 0 16px;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .WritePost{
+          background: black;
+          font-weight: 500;
+          color: white;
+          line-height: 20px;
+          border-radius: 8px;
+          justify-content: center;
+          align-items: center;
+          width: 81%;
+          height: 40px;
+          display: flex;
+          margin-bottom: 8px;
+        }
+        .nav_bar_listBox{
+          width: 80%;
+          .nav_bar_list{
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 12px 0;
+            text-align: center;
+          }
+          .nav_bar_list:hover{
+            background: white;
+            box-shadow: inset 0.1px 0.1px 5px 1px lightgray;
+          }
+          .nav_bar_list.click{
+            background: white;
+            box-shadow: inset 0.1px 0.1px 5px 1px lightgray;
+          }
+        }
+      }
+
+    }
+    .board_list_box{
+      width: 100%;
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+      .board_search_box{
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+
+        .toggleBtn{
+          background: #E6ECF3;
+          font-size: 14px;
+          line-height: 20px;
+          font-weight: 700;
+          padding: 8px;
+          border-radius: 8px;
+          gap: 8px;
+          justify-content: flex-start;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          .sorting-button{
+            padding: 0 8px;
+            border-radius: 8px;
+            height: 32px;
+            -webkit-appearance: button;
+            background-color: transparent;
+            background-image: none;
+            text-transform: none;
+            font-family: inherit;
+            font-size: 100%;
+            font-weight: inherit;
+            line-height: inherit;
+            color: #828B95;
+            border: none;
+            cursor: pointer;
+
+          }
+          .sorting-button:hover{
+            background: #D3DCE9;
+          }
+          .sorting-button.toggle{
+            background-color: white;
+            box-shadow:  2px 2px 5px 1px  lightgray;
+          }
+          .sorting-button.toggle:hover{
+            color: black;
+          }
+
+        }
+        .searchT{
+          justify-content: flex-end;
+          display: flex;
+          .relative{
+            display: flex;
+            position: relative;
+            .relativeBtn{
+              cursor: pointer;
+              padding: 4px 12px;
+              border-radius: 8px;
+              border: #B4C3D8 1px solid;
+              background: #fff;
+              width: 140px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              span{
+                font-size: 14px;
+                line-height: 20px;
+                font-weight: 400;
+                text-align: left;
+                width: 100%;
+              }
+              .hiddenSelect{
+                display: none;
+                width: 100%;
+                left: 0;
+                top: 41px;
+                position: absolute;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                ul{
+                  width: 100%;
+                  background: white;
+                  box-shadow:  2px 2px 5px 1px  lightgray;
+                  border-radius: 8px;
+                  padding: 3px 0;
+                  li{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    button{
+                      justify-content: center;
+                      align-items: center;
+                      border-width: 0;
+                      width: 100%;
+                      display: inline-flex;
+                      background-color: transparent;
+                      background-image: none;
+                      font-size: 14px;
+                      line-height: 20px;
+                      text-align: center;
+                      padding: 8px 16px;
+
+                    }
+                    button:hover{
+                      background-color: #F1F3FF;
+
+                    }
+                  }
+                }
+              }
+              .hiddenSelect.hide{
+                display: flex;
+
+              }
+            }
+          }
+        }
       }
     }
   }
