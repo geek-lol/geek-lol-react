@@ -1,5 +1,8 @@
 import React, {useRef, useState} from 'react';
 import "../scss/SpectorItem.scss"
+import BanPick from "./BanPick";
+import Team1ItemDetail from "./Team1ItemDetail";
+import Team2ItemDetail from "./Team2ItemDetail";
 
 const SpectorItem = () => {
 
@@ -57,13 +60,13 @@ const SpectorItem = () => {
             }}>
                 <div className={'modal-item'}>
                     <div className={'t1-container'}>
-
+                        <Team1ItemDetail />
                     </div>
                     <div className={'banpick-box'}>
-
+                        <BanPick />
                     </div>
                     <div className={'t2-container'}>
-
+                        <Team2ItemDetail />
                     </div>
                 </div>
             </div>
