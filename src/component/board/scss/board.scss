@@ -169,7 +169,6 @@
                     }
                     button:hover{
                       background-color: #F1F3FF;
-
                     }
                   }
                 }
@@ -179,6 +178,89 @@
 
               }
             }
+            .relativeBtn:focus{
+              border:  #B4C3D8 2px solid;
+            }
+          }
+          form{
+            margin-left: 12px;
+            position: relative;
+            border: #B4C3D8 1px solid;
+            border-radius: 8px;
+
+            input{
+              padding-left: 12px;
+              border-radius: 8px;
+              width: 240px;
+              height: 38px;
+              border-width: 0;
+              padding-right: 40px;
+              font-size: 100%;
+            }
+            input:focus{
+              border-width: 0;
+              outline-color: #5888cc;
+            }
+            button{
+              position: absolute;
+              border-width: 0;
+              right: 0;
+              top: 0;
+              margin: 7px;
+              text-transform: none;
+              background-color: transparent;
+              background-image: none;
+              cursor: pointer;
+              .SearchIcon{
+                display: block;
+                vertical-align: middle;
+                border-width: 0;
+
+              }
+            }
+          }
+        }
+      }
+      .board_table_box{
+        .table{
+          padding-left: 8px;
+          padding-right: 8px;
+          height: 32px;
+          display: grid;
+          font-weight: 700;
+          border-bottom-width: 1px;
+          grid-template-columns: 56px 32px 1fr 136px 80px 56px 56px;
+          .s-title1{
+          }
+          .s-title2{
+            grid-column: span 2/span 2;
+          }
+          .py-1{
+            padding-top: 4px;
+            padding-bottom: 4px;
+            height: 100%;
+          }
+        }
+        .table-content{
+          font-size: 14px;
+          line-height: 20px;
+          text-align: center;
+          padding-left: 8px;
+          padding-right: 8px;
+          border-bottom-width: 1px;
+          grid-template-columns: 56px 32px 1fr 136px 80px 56px 56px;
+          height: 48px;
+          align-items: center;
+          align-content: center;
+          display: grid;
+          .contents{
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 20px;
+            text-align: left;
+            overflow: hidden;
+            flex-direction: row;
+            display: flex;
           }
         }
       }

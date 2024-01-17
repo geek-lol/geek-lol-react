@@ -1,4 +1,7 @@
-.menuModal {display: none}
+.menuModal {
+  display: none;
+  z-index: 99999999999999;
+}
 @media screen and (max-width: 1600px) {
   .menuModal {
     display: block;
@@ -8,8 +11,6 @@
     width: 484px;
     height: 100vh;
     background: #1F1F1F;
-    //background: #fff;
-
     list-style: none;
     padding-left: 0;
     .input__box{

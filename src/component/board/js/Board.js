@@ -8,8 +8,12 @@ const Board = () => {
     const [hide,setHide]=useState(false);
     const [title,setTitle]=useState("제목");
 
-    const relativeButtonHandler=()=>{
+    const relativeButtonHandler=(e)=>{
         setHide(!hide);
+    }
+    const offDiv=()=>{
+        if(hide===true)
+            setHide(false);
     }
     const hiddenHandler=(e)=>{
         setTitle(e.target.value);
@@ -17,7 +21,7 @@ const Board = () => {
     return (
         <>
             <Header/>
-            <div id="board_wrap">
+            <div id="board_wrap" onClick={offDiv}>
                 <div id="board_header"></div>
                 <section id="board_main">
                     <div className="board_nav_bar">
@@ -40,7 +44,7 @@ const Board = () => {
                             <div className="searchT">
                                 <div className="relative">
                                     <button className="relativeBtn" onClick={relativeButtonHandler}>
-                                        <span>{title}</span>
+                                        <span className="asdasd">{title}</span>
                                         <GoChevronDown size={12*2}/>
                                         <div className={cn("hiddenSelect",{hide:hide})}>
                                             <ul>
@@ -52,38 +56,32 @@ const Board = () => {
                                     </button>
                                 </div>
                                 <form>
-                                    <input/>
-                                    <button><CiSearch/></button>
+                                    <input placeholder="게시물 검색" />
+                                    <button><CiSearch className="SearchIcon" size={12*2}/></button>
                                 </form>
                             </div>
                         </div>
                         <div className="board_table_box">
-                            <table>
-                                <tr>
-                                    <th>번호</th>
-                                    <th>제목</th>
-                                    <th>작성자</th>
-                                    <th>날짜</th>
-                                    <th>조회</th>
-                                    <th>추천</th>
-                                </tr>
-                                <tr>
-                                    <td>번호</td>
-                                    <td>제목</td>
-                                    <td>작성자</td>
-                                    <td>날짜</td>
-                                    <td>조회</td>
-                                    <td>추천</td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>애도라 코딩하잔...</td>
-                                    <td>코딩벌레레</td>
-                                    <td>3시간전</td>
-                                    <td>5</td>
-                                    <td>0</td>
-                                </tr>
-                            </table>
+                            <div className="table">
+                                <span className="s-title1 py-1">번호</span>
+                                <span className="s-title2 py-1">제목</span>
+                                <span className="s-title3 py-1">작성자</span>
+                                <span className="s-title4 py-1">날짜</span>
+                                <span className="s-title5 py-1">조회</span>
+                                <span className="s-title6 py-1">추천</span>
+                            </div>
+                            <a className="table-content">
+                                <div className="num">27687</div>
+                                <div className="num">27687</div>
+                                <div className="contents">
+                                    <span>쇼진/기회/불경 방관 헤카림.</span>
+                                    <span>[0]</span>
+                                </div>
+                                <div className="num">넌 감동이었던 케이틀린</div>
+                                <div className="num">1시간 전</div>
+                                <div className="num">23</div>
+                                <div className="num">0</div>
+                            </a>
                         </div>
                     </div>
                 </section>
