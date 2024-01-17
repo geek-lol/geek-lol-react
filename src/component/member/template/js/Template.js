@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "../scss/Template.scss";
 import {Route, Routes} from "react-router-dom";
 import Login from "../../login/js/Login";
@@ -7,6 +7,9 @@ import Passwordreset from "../../passwordreset/js/Passwordreset";
 
 
 const Template = () => {
+
+
+
     return (
         <div className={'wrapper'}>
             <form>
