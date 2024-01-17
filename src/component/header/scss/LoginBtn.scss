@@ -1,5 +1,4 @@
 .certification__box{
-  flex: 1;
   display: flex;
   list-style: none;
   padding-left: 0;
@@ -9,6 +8,8 @@
   .login__Btn{
     color: black;
     font-size: 20px;
+    margin-right: 50px;
+    padding: 5px 10px;
   }
   .login__Btn:hover{
     background: #D6D6D6;
@@ -16,4 +17,16 @@
     padding: 5px 10px;
   }
 
+}
+@media screen and (max-width:768px) {
+  .certification__box{
+    .login__Btn{
+      padding: 5px 10px;
+      margin: 20px;
+    }
+    .login__Btn:hover{
+
+      padding: 5px 10px;
+    }
+  }
 }

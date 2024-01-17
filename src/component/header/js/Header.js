@@ -6,6 +6,8 @@ import { TiThMenu } from "react-icons/ti";
 import LoginBtn from "./LoginBtn";
 import SearchBox from "./SearchBox";
 import cn from 'classnames';
+import Profile from "./Profile";
+import MenuModal from "./MenuModal";
 
 const Header =()=> {
   const [menu, setMenu]=useState(false);
@@ -18,11 +20,9 @@ const Header =()=> {
           <nav id="nav-box">
             <div className="logo__box">
               <a className="logo" href="#">
-                <span className="geek">GEEK</span>
-                <span className="lol">LOL</span>
               </a>
             </div>
-            <ul className={cn("content__box",{active:menu})}>
+            <ul className="content__box">
               <li className="content__menu">
                 <a href="#">홈</a>
               </li>
@@ -37,17 +37,19 @@ const Header =()=> {
               </li>
               <SearchBox/>
             </ul>
-            <LoginBtn/>
-            <div className="nav_toggle_Btn" onClick={menuHandler}>
-              <TiThMenu />
-            </div>
+            <ul className="certification__box">
+              {/*<LoginBtn/>*/}
+              <Profile/>
+            </ul>
+              <div className="nav_toggle_Btn" onClick={menuHandler}>
+                <TiThMenu/>
+              </div>
           </nav>
         </header>
+        <MenuModal menu={menu} />
       </div>
-    );
+  );
 }
-
-
 
 
 Header.propTypes = {};
