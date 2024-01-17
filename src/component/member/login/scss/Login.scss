@@ -1,0 +1,141 @@
+.loginform {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 75%;
+
+  .loginform-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .login-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      height: 100%;
+
+
+
+      .login-input-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 80%;
+        height: 80%;
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        //padding: 3%;
+
+        .login-inputbox {
+          display: flex;
+          justify-content: center;
+          border: none;
+          width: 85%;
+          height: 45px;
+          font-size: 20px;
+
+        }
+
+        .login-inputbox:focus {
+          outline: none;
+        }
+
+        .line {
+          width: 100%;
+          border: 1px solid #ccc;
+        }
+      }
+
+      .signin-box {
+        width: 80%;
+        height: 60px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #DB00FF;
+        color: #fff;
+        font-size: 25px;
+      }
+
+
+    //  easy-login
+      .easy-login-text {
+        color: #fff;
+        font-family: 'NanumGothic';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+      }
+
+      .easy-login {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        .easy-login-google {
+          width: 50px;
+          height: 50px;
+          background: url("../../../../image/web_neutral_sq_na@4x.png");
+          background-size: cover;
+          background-repeat: no-repeat;
+        }
+        .easy-login-kakao {
+          width: 50px;
+          height: 50px;
+          background: url("../../../../image/kakaotalk_sharing_btn_medium.png");
+          background-size: cover;
+          background-repeat: no-repeat;
+        }
+      }
+
+
+      // login-helper
+
+      .login-helper-box {
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+
+        .login-helper {
+          color: #db00ff;
+          font-family: 'NanumGothic';
+          font-style: normal;
+          font-weight: 700;
+          font-size: 18px;
+        }
+
+        .line2 {
+          display: flex;
+          justify-content: center;
+          width: 18px;
+          border-bottom: 1.2px solid #000000;
+          transform: rotate(90deg);
+        }
+
+        .sign-up {
+          margin-right: 15px;
+        }
+      }
+
+    }
+
+    .loginform-box {
+      margin-top: 55px;
+    }
+
+    .easylogin-box {
+      margin-top: 20px;
+    }
+
+    .loginhelper {
+      margin-top: 30px;
+    }
+  }
+}

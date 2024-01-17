@@ -1,0 +1,19 @@
+.certification__box{
+  flex: 1;
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .login__Btn{
+    color: black;
+    font-size: 20px;
+  }
+  .login__Btn:hover{
+    background: #D6D6D6;
+    border-radius: 7px;
+    padding: 5px 10px;
+  }
+
+}

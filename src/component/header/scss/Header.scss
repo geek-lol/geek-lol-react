@@ -1,0 +1,203 @@
+@import "../../../../node_modules/@euid/scss-mixins";
+a{
+  text-decoration: none;
+}
+#nav-box{
+  @include flex-container(justify-space-between);
+  background: #fff;
+  //padding: 8px 12px;
+  box-shadow: #000;
+  height: 80px;
+  .logo__box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    flex: 1;
+    .logo{
+      font-size: 36px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+      .geek{
+        font-weight: 600;
+        color: #DB00FF;
+      }
+      .lol{
+        font-weight: 600;
+        color: #00FFF0;
+        position: relative;
+        top: 20px;
+        left: -15px;
+      }
+    }
+  }
+  .content__box{
+    flex: 7;
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+    justify-content: flex-start;
+    align-items: center;
+    .content__menu{
+      margin: 16px 24px;
+      // a{
+      //   color: black;
+      //   font-size: 20px;
+      //   padding: 12px;
+      // }
+      // a:hover{
+      //   padding: 3px 12px;
+      //   background: #D6D6D6;
+      //   border-radius: 7px;
+      // }
+       a {
+        padding: .5em .8em;
+        color: #000;
+        position: relative;
+        text-decoration: none;
+        font-size: 20px;
+      }
+       a::before,
+       a::after {
+        content: '';
+        height: 14px;
+        width: 14px;
+        position: absolute;
+        transition: all .35s ease;
+        opacity: 0;
+      }
+
+       a::before {
+        content: '';
+        right: 0;
+        top: 0;
+        border-top: 3px solid #f39cff;
+        border-right: 3px solid #f39cff;
+        transform: translate(-100%, 50%);
+      }
+
+       a:after {
+        content: '';
+        left: 0;
+        bottom: 0;
+        border-bottom: 3px solid #f39cff;
+        border-left: 3px solid #f39cff;
+        transform: translate(100%, -50%)
+      }
+
+       a:hover:before,
+       a:hover:after{
+        transform: translate(0,0);
+        opacity: 1;
+      }
+
+       a:hover {
+        color: #f39cff;
+      }
+    }
+    .input__box{
+      margin-left: auto;
+      position: relative;
+      margin-right: 50px;
+      .input {
+        padding: 15px;
+        width: 1.5em;
+        height: 1.5em;
+        background: none;
+        border: 2px solid #00FFF0;
+        border-radius: 50px;
+        box-sizing: border-box;
+        font-size: 20px;
+        color: #00FFF0;
+        outline: none;
+        transition: .5s;
+      }
+    }
+    .input__box:hover input{
+      width: 350px;
+      border-radius: 24px;
+      opacity: 1;
+    }
+    .input__box .i{
+      position: absolute;
+      top: 50%;
+      right: 3px;
+      transform: translate(-50%,-50%);
+      font-size: 15px;
+      color: #00FFF0;
+      transition: .2s;
+    }
+    .input__box:hover .i{
+
+    }
+
+  }
+  .nav_toggle_Btn{
+    position: absolute;
+    right: 32px;
+    font-size: 24px;
+    top: 24px;
+    color: black;
+    display: none;
+  }
+  @media screen and (max-width:768px) {
+    #nav-box{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 8px 12px;
+      .content__box{
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        .content__menu{
+          width: 100%;
+          text-align: center;
+        }
+      }
+      .certification__box{
+        justify-content: center;
+        width: 100%;
+      }
+      .content__box,
+      .certification__box{
+        display: none;
+      }
+      .content__box.active,
+      .certification__box.active{
+        display: flex;
+      }
+      .nav_toggle_Btn{
+        display: block;
+      }
+      .content__menu a:hover{
+        width: 100%;
+      }
+      .input__box{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        order: -1;
+        margin-top: 30px;
+        width: 100%;
+        border-radius: 24px;
+        opacity: 1;
+        form{
+          width: 50%;
+          .input{
+            width: 100%;
+          }
+          .i{
+            width: 28%;
+          }
+
+        }
+
+
+      }
+    }
+  }
+
+
