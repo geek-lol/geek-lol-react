@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import {useEffect, useState} from "react";
+import axios from "axios";
+import Header from "./component/header/js/Header";
+import {Reset} from "styled-reset";
+import Template from "./component/member/template/js/Template";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 function App() {
+  // const [hi, setHi] = useState('');
+  //
+  // useEffect(() => {
+  //   axios.get('api/test')
+  //       .then(res => {
+  //         setHi(res.data);
+  //       })
+  // }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Template />} />
+
+        </Routes>
+      </BrowserRouter>
+
   );
 }
 
