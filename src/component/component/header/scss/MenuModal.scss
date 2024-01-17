@@ -1,0 +1,163 @@
+.menuModal {display: none}
+@media screen and (max-width: 1600px) {
+  .menuModal {
+    display: block;
+    position: fixed;
+    right: -484px;
+    transition: 1s;
+    width: 484px;
+    height: 100vh;
+    background: #1F1F1F;
+    //background: #fff;
+
+    list-style: none;
+    padding-left: 0;
+    .input__box{
+      transition: opacity .2s linear;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px 0 16px;
+      .searchBox{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #2b2a29;
+        border-radius: 1.6rem;
+        padding: 16px 0;
+        .input{
+          background-color: transparent;
+          padding: 0;
+          margin: -8px 10px;
+          border-style: hidden;
+          outline: none;
+          width: 100%;
+          height: 40px;
+          transition: width ease 1s;
+          text-indent: 42px;
+          font-size: 18px;
+          letter-spacing: 1.5px;
+          color: #f9f9f9;
+        }
+        .searchI{
+          position: absolute;
+          pointer-events: none;
+          color: white;
+          left: 25px;
+        }
+        .crossI{
+          position: absolute;
+          color: #7E7E7E;
+          right: 25px;
+        }
+      }
+    }
+
+    .modalBox {
+        .modalContent{
+          font-family: sans-serif;
+          position: relative;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 22px;
+          font-weight: 700;
+          line-height: 1.5;
+          height: 48px;
+          padding: 6px 12px 6px 12px;
+          margin: 16px 16px;
+          text-transform: uppercase;
+          transition: color 1s cubic-bezier(0.06, 0.81, 0, 0.98);
+          cursor: pointer;
+          text-decoration: none;
+          color: #f9f9f9;
+        }
+      .modalContent:hover{
+        background: rgba(128,128,128,.2);
+        border-radius: 6.4px;
+      }
+    }
+    .infoBox{
+      transition: opacity .2s linear;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      margin-top: 20px;
+      .sign_in_a{
+        cursor: pointer;
+        display: block;
+        transition: color 1s cubic-bezier(0.06, 0.81, 0, 0.98);
+        color: #fcfcfc;
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: uppercase;
+        background: rgba(128,128,128,.2);
+        padding: 8px 16px;
+        border-radius: 6.4px;
+        letter-spacing: .08em;
+        line-height: 120%;
+        text-align: center;
+        height: 48px;
+
+      }
+      .sign_up_a{
+        text-align: center;
+        line-height: 120%;
+        position: relative;
+        z-index: 0;
+        text-overflow: ellipsis;
+        height: 48px;
+        border-radius: 12px;
+        padding: 8px 16px;
+        color: #111;
+        margin-top: 12px;
+        background: rgb(11, 196, 226);
+        cursor: pointer;
+        font-weight: 600;
+
+      }
+      .sign_up_a:hover{
+        background: rgb(0,178,207);
+      }
+      .sign_in_M
+      ,.sign_up_M{
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+  .menuModal.active{
+    right: 0;
+    transition: 1s;
+  }
+  .profile_a{
+    color: #fcfcfc;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: rgba(128,128,128,.2);
+    padding: 8px 16px;
+    border-radius: 6.4px;
+    letter-spacing: .08em;
+    line-height: 120%;
+    text-align: center;
+  }
+}
+@media screen and (max-width: 640px) {
+  .menuModal {
+    right: -625px;
+    width: 100%;
+  }
+  .menuModal.active{
+    right: 0;
+    transition: 1s;
+  }
+
+
+}
+
+
+
+
+
