@@ -22,7 +22,7 @@ const Team1ItemDetail = () => {
                         </div>
 
                     </li>
-                    
+
                 </ul>
             </div>
         </div>

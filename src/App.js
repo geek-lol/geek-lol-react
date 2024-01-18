@@ -6,6 +6,7 @@ import Template from "./component/member/template/js/Template";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import SpectorMain from "./component/spector/js/SpectorMain";
 import SpectorTemplate from "./component/spector/js/SpectorTemplate";
+import Rank from "./component/rank/js/Rank";
 
 function App() {
   // const [hi, setHi] = useState('');
@@ -22,7 +23,7 @@ function App() {
           <Header />
         <Routes>
           {/*<Route path="/" element={<Template />} />*/}
-          <Route path="/" element={<SpectorTemplate />} />
+          <Route path="/" element={<Rank />} />
 
         </Routes>
       </BrowserRouter>
