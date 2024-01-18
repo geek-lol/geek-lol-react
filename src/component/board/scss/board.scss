@@ -1,74 +1,34 @@
 #board_wrap{
   display: flex;
   flex-direction: column;
-  #board_header{
+
+  #board_header::before{
+    filter: brightness(60%);
+    content: "";
     width: 100%;
-    height: 93px;
+    height: 100%;
+    z-index: -1; /* 배경 이미지를 내용 뒤로 이동 */
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   #board_main{
     background: white;
-    margin-left: auto;
-    margin-right: auto;
     display: flex;
-    .board_nav_bar{
-      position: sticky;
-      top: 60px;
-      padding: 15px 0;
-      border-radius: 24px;
-      background: #F6F6F6;
-      .aside{
-        width: 164px;
-        padding: 16px 16px 0 16px;
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        .WritePost{
-          background: black;
-          font-weight: 500;
-          color: white;
-          line-height: 20px;
-          border-radius: 8px;
-          justify-content: center;
-          align-items: center;
-          width: 81%;
-          height: 40px;
-          display: flex;
-          margin-bottom: 8px;
-        }
-        .nav_bar_listBox{
-          width: 80%;
-          .nav_bar_list{
-            border-radius: 8px;
-            margin-bottom: 8px;
-            font-size: 16px;
-            font-weight: 700;
-            padding: 12px 0;
-            text-align: center;
-          }
-          .nav_bar_list:hover{
-            background: white;
-            box-shadow: inset 0.1px 0.1px 5px 1px lightgray;
-          }
-          .nav_bar_list.click{
-            background: white;
-            box-shadow: inset 0.1px 0.1px 5px 1px lightgray;
-          }
-        }
-      }
-
-    }
+    padding: 32px;
+    margin:  0 auto;
+    width: 1080px;
     .board_list_box{
+      margin: 0 16px;
       width: 100%;
       display: flex;
       flex-grow: 1;
       flex-direction: column;
       .board_search_box{
-
+        margin: 12px 0 36px 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 16px;
 
         .toggleBtn{
           background: #E6ECF3;
@@ -222,14 +182,15 @@
         }
       }
       .board_table_box{
+        border-bottom: lightgray 1px solid;
         .table{
           padding-left: 8px;
           padding-right: 8px;
           height: 32px;
           display: grid;
           font-weight: 700;
-          border-bottom-width: 1px;
           grid-template-columns: 56px 32px 1fr 136px 80px 56px 56px;
+          border-bottom: 1px solid lightgray; /* 예시 보더 설정 */
           .s-title1{
           }
           .s-title2{
@@ -239,6 +200,7 @@
             padding-top: 4px;
             padding-bottom: 4px;
             height: 100%;
+            text-align: center;
           }
         }
         .table-content{
@@ -248,7 +210,7 @@
           padding-left: 8px;
           padding-right: 8px;
           border-bottom-width: 1px;
-          grid-template-columns: 56px 32px 1fr 136px 80px 56px 56px;
+          grid-template-columns: 56px 32px 2fr 136px 80px 56px 56px;
           height: 48px;
           align-items: center;
           align-content: center;
@@ -258,10 +220,27 @@
             font-size: 14px;
             line-height: 20px;
             text-align: left;
-            overflow: hidden;
             flex-direction: row;
             display: flex;
+            overflow: hidden;
+            span{
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+            i{
+              margin-right: 10px;
+            }
           }
+          .board_nickname{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+        .table-content:hover{
+          cursor: pointer;
+          background: #F1F3FF;
         }
       }
     }

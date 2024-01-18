@@ -19,7 +19,7 @@ function App() {
   return (
       <BrowserRouter>
         <Routes>
-            <Route path="/" element={<Main />} />
+            <Route path="/main" element={<Main />} />
             <Route path="/Template" element={<Template />} />
             <Route path="/board" element={<Board />}/>
         </Routes>

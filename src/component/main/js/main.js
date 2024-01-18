@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Header from "../../header/js/Header";
 import '../scss/main.scss';
 import {FaSearch} from "react-icons/fa";
 const Main = () => {
+
+
     return (
         <>
             <Header/>
