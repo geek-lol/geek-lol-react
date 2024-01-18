@@ -182,7 +182,6 @@
         }
       }
       .board_table_box{
-        border-bottom: lightgray 1px solid;
         .table{
           padding-left: 8px;
           padding-right: 8px;
@@ -241,6 +240,34 @@
         .table-content:hover{
           cursor: pointer;
           background: #F1F3FF;
+        }
+        .page-box{
+          border-top: lightgray 1px solid;
+          padding-top: 70px;
+          padding-bottom: 100px;
+          .arrowBox{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .arrow{
+              height: 40px;
+              border: 1px solid #9FE8FF;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              padding-left: 6px;
+              padding-right: 6px;
+              font-size: 24px;
+              font-weight: 100;
+              border-radius: 8px;
+              margin: 3px;
+              cursor: pointer;
+            }
+            .arrow:hover{
+              background: #9FE8FF;
+            }
+          }
         }
       }
     }

@@ -6,6 +6,12 @@ import { GoChevronDown } from "react-icons/go";
 import cn from "classnames";
 import BoardContent from "./BoardContent";
 import BoardHeader from "./Board_header";
+import {
+    MdKeyboardArrowLeft,
+    MdKeyboardDoubleArrowLeft,
+    MdKeyboardDoubleArrowRight,
+    MdOutlineKeyboardArrowRight
+} from "react-icons/md";
 const Board = () => {
     const [hide,setHide]=useState(false);
     const [title,setTitle]=useState("제목");
@@ -79,7 +85,16 @@ const Board = () => {
                             <BoardContent/>
                             <BoardContent/>
                             <BoardContent/>
-
+                            <nav className="page-box">
+                                <ul className="arrowBox">
+                                    <li className="arrow"><MdKeyboardDoubleArrowLeft size={12 * 2}/></li>
+                                    <li className="arrow"><MdKeyboardArrowLeft size={12 * 2}/></li>
+                                    <li className="arrow">1</li>
+                                    <li className="arrow">2</li>
+                                    <li className="arrow"><MdOutlineKeyboardArrowRight size={12 * 2}/></li>
+                                    <li className="arrow"><MdKeyboardDoubleArrowRight size={12 * 2}/></li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </section>
