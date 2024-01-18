@@ -41,10 +41,10 @@ const SpectorItem = () => {
                 </div>
                 <div className={'spector-btns'}>
                     <div className={'sp-button'}>
-                        <a>관전하기</a>
+                        <p>관전하기</p>
                     </div>
                     <div className={'sp-button modal-open-btn'} onClick={() => setModalOpen(true)}>
-                        <a>자세히 보기</a>
+                        <p>자세히 보기</p>
                     </div>
 
                 </div>

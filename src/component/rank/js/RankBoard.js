@@ -4,9 +4,10 @@ import "../scss/RankBoard.scss"
 
 const RankBoard = () => {
     return (
-        <>
+
+        <table>
             <thead>
-                <tr>
+                <tr className={'table'}>
                     <th>순위</th>
                     <th>소환사</th>
                     <th>티어</th>
@@ -14,10 +15,10 @@ const RankBoard = () => {
                     <th>승률</th>
                 </tr>
             </thead>
-            <tbody>
-                <RankBoardData />
-            </tbody>
-        </>
+
+            <RankBoardData />
+        </table>
+
     );
 };
 
