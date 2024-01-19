@@ -39,16 +39,16 @@ const Header =()=> {
             </div>
             <ul className="content__box">
               <li className="content__menu">
-                <Link className='a' to="#">홈</Link>
+                <Link className='a' to="/">홈</Link>
               </li>
               <li className="content__menu">
-                <Link className='a' to="#">랭킹</Link>
+                <Link className='a' to="/rank">랭킹</Link>
               </li>
               <li className="content__menu">
-                <Link className='a' to="#">게시판</Link>
+                <Link className='a' to="/board">게시판</Link>
               </li>
               <li className="content__menu">
-                <Link className='a' to="#">홈</Link>
+                <Link className='a' to="#">..</Link>
               </li>
               {isInput===true&&<SearchBox/>}
 

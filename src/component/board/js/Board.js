@@ -28,7 +28,6 @@ const Board = () => {
     }
     return (
         <>
-            <Header/>
             <div id="board_wrap" onClick={offDiv}>
                 <BoardHeader/>
                 <section id="board_main">

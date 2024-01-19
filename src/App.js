@@ -10,25 +10,26 @@ import Rank from "./component/rank/js/Rank";
 
 
 function App() {
-  // const [hi, setHi] = useState('');
-  //
-  // useEffect(() => {
-  //   axios.get('api/test')
-  //       .then(res => {
-  //         setHi(res.data);
-  //       })
-  // }, []);
-  return (
-      <>
-          <Reset />
-          <Header />
-        <Routes>
-          <Route path="/template/*" element={<Template />} />
-          <Route path="/" element={<Main />} />
-          <Route path="/rank" element={<Rank />} />
-        </Routes>
-      </>
-  );
+    // const [hi, setHi] = useState('');
+    //
+    // useEffect(() => {
+    //   axios.get('api/test')
+    //       .then(res => {
+    //         setHi(res.data);
+    //       })
+    // }, []);
+    return (
+        <>
+            <Reset/>
+            <Header/>
+            <Routes>
+                <Route path="/template/*" element={<Template/>}/>
+                <Route path="/" element={<Main/>}/>
+                <Route path="/rank" element={<Rank/>}/>
+                <Route path="/board" element={<Board />} />
+            </Routes>
+        </>
+    );
 }
 
 export default App;
