@@ -45,7 +45,7 @@ const Header =()=> {
                 <Link className='a' to="/rank">랭킹</Link>
               </li>
               <li className="content__menu">
-                <Link className='a' to="/board">게시판</Link>
+                <Link className='a' to="/board/main">게시판</Link>
               </li>
               <li className="content__menu">
                 <Link className='a' to="#">..</Link>
