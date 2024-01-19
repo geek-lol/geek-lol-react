@@ -1,16 +1,19 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import BoardHeader from "./Board_header";
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useLocation} from "react-router-dom";
 import Board from "./Board";
 import BoardCreate from "./BoardCreate";
+import BoardShorts from "./BoardShorts";
+import Header from "../../header/js/Header";
 
 const BoardTemplate = () => {
+
     return (
         <>
-            <BoardHeader/>
             <Routes>
                 <Route path={'/main'} element={<Board />}/>
                 <Route path={'/create'} element={<BoardCreate />} />
+                <Route path={'/shorts'} element={<BoardShorts />} />
             </Routes>
         </>
     );

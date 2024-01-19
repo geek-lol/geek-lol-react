@@ -45,10 +45,13 @@ const Header =()=> {
                 <Link className='a' to="/rank">랭킹</Link>
               </li>
               <li className="content__menu">
+                <Link className='a' to="/spector">관전</Link>
+              </li>
+              <li className="content__menu">
                 <Link className='a' to="/board/main">게시판</Link>
               </li>
               <li className="content__menu">
-                <Link className='a' to="#">..</Link>
+                <Link className='a' to="#">미니게임</Link>
               </li>
               {isInput===true&&<SearchBox/>}
 

@@ -3,9 +3,12 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {Link} from "react-router-dom";
 import "../scss/BoardCreate.scss"
+import BoardHeader from "./Board_header";
 
 const BoardCreate = () => {
     return (
+        <>
+        <BoardHeader/>
         <div className={'bc-wrapper'}>
             <div className={'bc-container'}>
                 <div className={'bc-boardtitle'}>
@@ -46,6 +49,7 @@ const BoardCreate = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
