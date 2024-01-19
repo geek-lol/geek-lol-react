@@ -9,7 +9,7 @@ const Profile = props => {
         <>
             <div className='profile__box'>
                 <img className='profile' alt='흠냐' src={src}/>
-                <span className='nickname'>모가지캔디모가지캔디모가지캔디디</span>
+                <span className='nickname'>모가지캔디모</span>
             </div>
         </>
     );

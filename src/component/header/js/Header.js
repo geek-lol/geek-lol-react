@@ -33,9 +33,9 @@ const Header =()=> {
         <header id="header">
           <nav id="nav-box">
             <div className="logo__box">
-              <a className="logo" href="#">
+              <Link className="logo" to="/">
                 <img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지" />
-              </a>
+              </Link>
             </div>
             <ul className="content__box">
               <li className="content__menu">
