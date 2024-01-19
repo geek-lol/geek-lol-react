@@ -7,6 +7,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Main from "./component/main/js/main";
 import Board from "./component/board/js/Board";
 import Rank from "./component/rank/js/Rank";
+import BoardTemplate from "./component/board/js/BoardTemplate";
 
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
                 <Route path="/template/*" element={<Template/>}/>
                 <Route path="/" element={<Main/>}/>
                 <Route path="/rank" element={<Rank/>}/>
-                <Route path="/board" element={<Board />} />
+                <Route path="/board/*" element={<BoardTemplate />} />
             </Routes>
         </>
     );

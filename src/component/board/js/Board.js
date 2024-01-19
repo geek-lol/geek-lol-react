@@ -29,7 +29,6 @@ const Board = () => {
     return (
         <>
             <div id="board_wrap" onClick={offDiv}>
-                <BoardHeader/>
                 <section id="board_main">
                     <div className="board_list_box">
                         <div className="board_search_box">
