@@ -4,9 +4,8 @@ import Header from "./component/header/js/Header";
 import {Reset} from "styled-reset";
 import Template from "./component/member/template/js/Template";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import SpectorMain from "./component/spector/js/SpectorMain";
-import SpectorTemplate from "./component/spector/js/SpectorTemplate";
 import Rank from "./component/rank/js/Rank";
+import Main from "./component/main/js/main";
 
 function App() {
   // const [hi, setHi] = useState('');
@@ -18,16 +17,15 @@ function App() {
   //       })
   // }, []);
   return (
-      <BrowserRouter>
+      <>
           <Reset />
           <Header />
         <Routes>
-          {/*<Route path="/" element={<Template />} />*/}
-          <Route path="/" element={<Rank />} />
-
+          <Route path="/template/*" element={<Template />} />
+          <Route path="/" element={<Main />} />
+          <Route path="/rank" element={<Rank />} />
         </Routes>
-      </BrowserRouter>
-
+      </>
   );
 }
 

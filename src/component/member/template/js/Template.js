@@ -9,7 +9,6 @@ import Passwordreset from "../../passwordreset/js/Passwordreset";
 const Template = () => {
 
 
-
     return (
         <div className={'wrapper'}>
             <form>
@@ -17,9 +16,9 @@ const Template = () => {
                     <div className="logo_box"><img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지"/></div>
 
                     <Routes>
-                        {/*<Route path="/" element={<Login />}/>*/}
-                        {/*<Route path="/" element={<Signup />}/>*/}
-                        <Route path="/" element={<Passwordreset />}/>
+                        <Route path="login" element={<Login/>}/>
+                        <Route path="signup" element={<Signup/>}/>
+                        <Route path="pwreset" element={<Passwordreset/>}/>
                     </Routes>
                 </div>
             </form>
