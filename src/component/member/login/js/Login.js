@@ -1,5 +1,6 @@
 import React from 'react';
 import "../scss/Login.scss";
+import {Route, Routes} from "react-router-dom";
 
 const Login = () => {
     return (
@@ -28,6 +29,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
+
         </div>
     );
 };
