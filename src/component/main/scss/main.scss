@@ -10,10 +10,10 @@
     justify-content: center;
     align-items: center;
     font-family: 'NEXONFootballGothicBA1', sans-serif;
-    .title__logo{
+    img{
       width: 400px;
       height: 220px;
-      background: url('../../../image/logo.png') no-repeat;
+      //background: url('/public/assets/logo.png') no-repeat;
       background-size: contain;
     }
   }

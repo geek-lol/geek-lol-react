@@ -23,10 +23,10 @@ a{
     align-items: center;
     margin-top: 15px;
     flex: 1;
-    .logo{
+    img{
       width: 100px;
-      height: 100px;
-      background: url('../../../image/logo.png') no-repeat;
+      height: 60px;
+      //background: url('/public/assets/logo.png') no-repeat;
       background-size: contain;
     }
     }

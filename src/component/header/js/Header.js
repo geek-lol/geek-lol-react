@@ -8,12 +8,13 @@ import SearchBox from "./SearchBox";
 import cn from 'classnames';
 import Profile from "./Profile";
 import MenuModal from "./MenuModal";
+import {Link} from "react-router-dom";
 
 const Header =()=> {
   const [menu, setMenu]=useState(false);
   const [isInput,setIsInput]=useState(true);
-  const [isProfile,setProfile]=useState(true);
-  const [isLogin,setLogin]=useState(false);
+  const [isProfile,setProfile]=useState(false);
+  const [isLogin,setLogin]=useState(true);
   const findPage=()=>{
     if (window.location.href.includes("main")) {
       setIsInput(false);
@@ -33,20 +34,21 @@ const Header =()=> {
           <nav id="nav-box">
             <div className="logo__box">
               <a className="logo" href="#">
+                <img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지" />
               </a>
             </div>
             <ul className="content__box">
               <li className="content__menu">
-                <a href="#">홈</a>
+                <Link className='a' to="#">홈</Link>
               </li>
               <li className="content__menu">
-                <a href="#">랭킹</a>
+                <Link className='a' to="#">랭킹</Link>
               </li>
               <li className="content__menu">
-                <a href="#">게시판</a>
+                <Link className='a' to="#">게시판</Link>
               </li>
               <li className="content__menu">
-                <a href="#">챔피언 분석</a>
+                <Link className='a' to="#">홈</Link>
               </li>
               {isInput===true&&<SearchBox/>}
 

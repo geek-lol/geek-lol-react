@@ -7,10 +7,12 @@ const Main = () => {
 
     return (
         <>
-            <Header/>
+
             <div className='mainBox'>
                 <div className='main__Title'>
-                    <a href='#' className='title__logo'></a>
+                    <a href='#' className='title__logo'>
+                        <img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지" />
+                    </a>
                 </div>
                 <div className='input__Title'>
                     <input className='title' placeholder='소환사명을 입력해주세요'/>
