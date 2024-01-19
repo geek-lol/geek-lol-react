@@ -2,6 +2,7 @@ import React from 'react';
 import BoardHeader from "./Board_header";
 import {Route, Routes} from "react-router-dom";
 import Board from "./Board";
+import BoardCreate from "./BoardCreate";
 
 const BoardTemplate = () => {
     return (
@@ -9,7 +10,7 @@ const BoardTemplate = () => {
             <BoardHeader/>
             <Routes>
                 <Route path={'/main'} element={<Board />}/>
-                {/*<Route path={'/main'} />*/}
+                <Route path={'/create'} element={<BoardCreate />} />
             </Routes>
         </>
     );
