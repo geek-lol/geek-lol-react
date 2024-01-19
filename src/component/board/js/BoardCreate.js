@@ -12,12 +12,12 @@ const BoardCreate = () => {
                     <p>자유게시판</p>
                 </div>
                 <div className={'bc-create-title'}>
-                    <input className={'bc-ct-input'} type="text"/>
+                    <input className={'bc-ct-input'} type="text" placeholder={'제목'}/>
                 </div>
                 <div className={'bc-create-content'}>
                     <CKEditor
                         editor={ ClassicEditor }
-                        data="<p>Hello from CKEditor 5!</p>"
+                        data=""
                         onReady={ editor => {
                             // You can store the "editor" and use when it is needed.
                             console.log( 'Editor is ready to use!', editor );
@@ -40,7 +40,7 @@ const BoardCreate = () => {
                             <Link to="/board/main" className={'btn'}>취소</Link>
                         </div>
                         <div className={'save-btn'}>
-                            <a className={'btn'}>등록</a>
+                            <p className={'btn'}>등록</p>
                         </div>
                     </div>
                 </div>
