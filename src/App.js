@@ -10,6 +10,7 @@ import Rank from "./component/rank/js/Rank";
 import BoardTemplate from "./component/board/js/BoardTemplate";
 import SpectorMain from "./component/spector/js/SpectorMain";
 import BoardShorts from "./component/board/js/BoardShorts";
+import "./component/LinkReset.scss"
 
 function App() {
     const [showHeader, setShowHeader] = useState(true);

@@ -1,0 +1,109 @@
+.shorts-content-wrapper {
+  width: 1600px;
+  margin-left: 200px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: end;
+
+  .content-container {
+    width: 700px;
+    display: flex;
+    align-content: flex-end;
+    justify-content: flex-end;
+    margin-top: 100px;
+
+    .short-form {
+      width: 100% ;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+
+      .content {
+        background: #CCCCCC;
+        width: 450px;
+        height: 700px;
+        position: relative;
+
+        .short-video {
+          width: 450px;
+          height: 700px;
+        }
+
+        .produce {
+          width: 410px;
+          height: 80px;
+          bottom: 0;
+          left: 0;
+          position: absolute;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          padding: 20px;
+
+          .profile_box {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 10px;
+
+            img {
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+            }
+
+            .profile-name {
+              display: flex;
+              align-items: center;
+            }
+          }
+
+          .short-title {
+
+          }
+        }
+      }
+
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        .short-btn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          margin: 20px 0;
+
+          .btn {
+            width: 25px;
+            height: 25px;
+          }
+        }
+      }
+
+    }
+
+  }
+  .comment {
+
+
+    .comment-box {
+      background: #cccccc;
+      width: 100%;
+      height: 600px;
+    }
+  }
+
+  .comment_view {
+    width: 400px;
+    height: 700px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    //align-content: flex-end;
+    position: absolute;
+    left: 1275px;
+  }
+}

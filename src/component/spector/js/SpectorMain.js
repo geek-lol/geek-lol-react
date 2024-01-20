@@ -8,7 +8,7 @@ const SpectorMain = ({spectorList}) => {
         <div className={'spector-container'}>
             <div className={'spector-form'}>
                 <div className={'title-box'}>
-                    <a>Pro Matches</a>
+                    <p>Pro Matches</p>
                 </div>
                 <ul className={'spector-lists'}>
 
