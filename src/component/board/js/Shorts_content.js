@@ -47,10 +47,10 @@ const ShortsContent = () => {
                         </div>
 
                     </div>
+                    <div className={cn("comment",{comment_view:viewComment})}>
+                        <div className={'comment-box'}></div>
+                    </div>
                 </div>
-            </div>
-            <div className={cn("comment",{comment_view:viewComment})}>
-                <div className={'comment-box'}></div>
             </div>
         </div>
     );

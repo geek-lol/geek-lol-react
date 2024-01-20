@@ -17,11 +17,11 @@ const Shorts_header = () => {
                 <div className={'title-bottom-line'}></div>
                 <div className={'header-navbar'}>
                     <div className={'menubar'}>
-                        <Link to='/'>홈</Link>
-                        <Link to='/rank'>랭킹</Link>
-                        <Link to='/spector'>관전</Link>
-                        <Link to='/'>미니게임</Link>
-                        <Link to='/board/main'>게시판</Link>
+                        <Link to='/' className={'btn-b'}>홈</Link>
+                        <Link to='/rank' className={'btn-b'}>랭킹</Link>
+                        <Link to='/spector' className={'btn-b'}>관전</Link>
+                        <Link to='/' className={'btn-b'}>미니게임</Link>
+                        <Link to='/board/main' className={'btn-b'}>게시판</Link>
                     </div>
                 </div>
             </div>

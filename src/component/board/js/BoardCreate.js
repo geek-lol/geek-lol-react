@@ -40,7 +40,7 @@ const BoardCreate = () => {
                 <div className={'btn-container'}>
                     <div className={'bc-btns'}>
                         <div className={'cancel-btn'}>
-                            <Link to="/board/main" className={'btn'}>취소</Link>
+                            <Link to="/board/main" className={'btn-b'}>취소</Link>
                         </div>
                         <div className={'save-btn'}>
                             <p className={'btn'}>등록</p>
