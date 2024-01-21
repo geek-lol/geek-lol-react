@@ -4,6 +4,7 @@ import '../scss/Shorts_content.scss'
 import Shorts_header from "./Shorts_header";
 import {BsChatLeft, BsExclamationCircle, BsHeart} from "react-icons/bs";
 import cn from "classnames";
+import Shorts_comment from "./Shorts_comment";
 
 const ShortsContent = () => {
     const [viewComment, setViewComment] = useState(false);
@@ -45,16 +46,16 @@ const ShortsContent = () => {
                         <div className={'short-btn report-btn'}>
                             <BsExclamationCircle className={'btn'}/>
                         </div>
-
-                    </div>
-                    <div className={cn("comment",{comment_view:viewComment})}>
-                        <div className={'comment-box'}></div>
+                        <div className={cn("comment", {comment_view: viewComment})}>
+                            <div className={'comment-wrapper'}>
+                                <Shorts_comment />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     );
-
 
 
 };
