@@ -4,7 +4,7 @@ import MyPageProfile from "./MyPageProfile";
 
 const MypageTemplate= () => {
     return (
-        <div>
+        <div className="mypage">
             <MypageSideMenu />
             <MyPageProfile />
         </div>
