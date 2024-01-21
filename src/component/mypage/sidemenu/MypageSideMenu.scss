@@ -1,0 +1,40 @@
+.my-sidemenu-wrapper{
+  max-width: 224px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+
+  top:224px;
+  left: 155px;
+  h2{
+    color: #000000;
+    text-align: left;
+    font-family: "NanumGothic-Regular", sans-serif;
+    font-size: 30px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    margin-bottom: 30px;
+  }
+  .my-sidemenu{
+    display: flex;
+    flex-direction: column;
+    .menu-item{
+      border-radius: 2px;
+      padding: 22px 10px 22px 10px;
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-start;
+      width: 224px;
+      height: 60px;
+    }
+
+  }
+}

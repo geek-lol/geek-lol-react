@@ -8,6 +8,8 @@ import Main from "./component/main/js/main";
 import Board from "./component/board/js/Board";
 import Rank from "./component/rank/js/Rank";
 import BoardTemplate from "./component/board/js/BoardTemplate";
+import MyPageProfile from "./component/mypage/profile/js/MyPageProfile";
+import MyPageTemplate from "./component/mypage/profile/js/MyPageTemplate";
 
 
 function App() {
@@ -28,6 +30,7 @@ function App() {
                 <Route path="/" element={<Main/>}/>
                 <Route path="/rank" element={<Rank/>}/>
                 <Route path="/board/*" element={<BoardTemplate />} />
+                <Route path="/mypage/*" element={<MyPageTemplate />} />
             </Routes>
         </>
     );

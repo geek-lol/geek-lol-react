@@ -1,0 +1,64 @@
+.my-user-info {
+  padding: 20px 0 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: absolute;
+  left: 960px;
+  top: 420px;
+  .my-user-name {
+  color: #000000;
+  text-align: left;
+  font-family: "NanumGothic-Regular", sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+  .my-start-date {
+    color: #2c2c2c;
+    text-align: left;
+    font-family: "NanumGothic-Regular", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+}
+
+
+// 나의 활동 간략소개 부분
+.my-profile-active{
+  width: 267px;
+  height: 62px;
+  position: relative;
+  left: 960px;
+  display: flex;
+  flex-direction: row;
+  .active-item{
+    color: #706c6c;
+    text-align: left;
+    font-family: "NanumGothic-Regular", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .active-count {
+    color: #000000;
+    text-align: left;
+    font-family: "NanumGothic-Bold", sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+}
