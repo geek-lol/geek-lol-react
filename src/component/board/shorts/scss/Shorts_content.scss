@@ -22,6 +22,7 @@
         width: 450px;
         height: 700px;
         position: relative;
+        border-radius: 10px;
 
         .short-video {
           width: 450px;
@@ -88,6 +89,7 @@
 
         .comment-box {
           background: #cccccc;
+          border-radius: 10px;
           width: 100%;
           height: 600px;
 
@@ -95,6 +97,7 @@
       }
 
       .comment_view {
+        animation: comment-view-animation .6s ease;
         width: 400px;
         height: 700px;
         display: flex;
@@ -109,4 +112,14 @@
 
   }
 
+}
+
+@keyframes comment-view-animation {
+  0% {
+    transform: translatex(-10%);
+  }
+
+  100% {
+    transform: translatex(0);
+  }
 }

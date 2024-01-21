@@ -53,8 +53,63 @@
         font-style: normal;
         font-weight: 700;
         font-size: 20px;
+
+        .board-menu-container {
+          display: flex;
+          flex-direction: column;
+
+        .board-menu-bar {
+          display: none;
+        }
+
+
+        .dropdown-board:hover {
+          .board-menu-bar {
+            flex-direction: column;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+
+
+            .board-menuline {
+              animation: slide-drop-left-animation .5s ease;
+              border-bottom: 1px solid #000000;
+              margin: 20px 0 10px 0;
+            }
+
+            .menubar {
+              animation: slide-dropdown-animation .5s ease;
+              font-family: 'Nanum Gothic', sans-serif;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 18px;
+            }
+          }
+
+
+        }
+        }
       }
     }
+  }
+}
 
+@keyframes slide-dropdown-animation {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-drop-left-animation {
+  0% {
+    transform: translatex(-30%);
+  }
+
+  100% {
+    transform: translatex(0);
   }
 }

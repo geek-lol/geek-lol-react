@@ -3,7 +3,7 @@ import BoardHeader from "./Board_header";
 import {Route, Routes, useLocation} from "react-router-dom";
 import Board from "./Board";
 import BoardCreate from "./BoardCreate";
-import BoardShorts from "./BoardShorts";
+import BoardShorts from "../shorts/js/BoardShorts";
 import Header from "../../header/js/Header";
 
 const BoardTemplate = () => {
