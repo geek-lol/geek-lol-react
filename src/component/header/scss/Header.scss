@@ -43,9 +43,14 @@ a{
     .board-btn{
       cursor: pointer;
       position: relative;
+      .btn1{
+        background: blue;
+      }
+      .btn2{
+        background: red;
+      }
       .hide-btn{
         display: none;
-        background: blue;
         width: 100%;
         left: 0;
         top: 68px;
@@ -70,10 +75,20 @@ a{
         }
 
       }
-      .hide-btn.hovers{
+      .hide-btn.hovers1{
         display: flex;
       }
+      .hide-btn.hovers2 {
+        display: flex;
+      }
+
     }
+    .nav-indicator{
+      position: absolute;
+      bottom: 0;
+      height: 2px;
+      transition: width 0.3s ease-in-out, left 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  }
     .nav-item {
       color:  black;
       padding: 20px;
