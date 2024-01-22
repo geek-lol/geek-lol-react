@@ -31,6 +31,11 @@
     height: 450px;
     padding: 0 20px;
     overflow-y: scroll;
+    .comment-list {
+      display: flex;
+      flex-direction: column;
+      height: auto;
+    }
   }
   .comment-box::-webkit-scrollbar {
     width: 5px;  /* 스크롤바의 너비 */

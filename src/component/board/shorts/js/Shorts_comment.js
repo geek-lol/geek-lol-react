@@ -1,11 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import cn from "classnames";
 import {dividerClasses} from "@mui/material";
 import Shorts_comment_list from "./Shorts_comment_list";
 import '../scss/Shorts_comment.scss'
 import {BsCaretLeftFill, BsSend} from "react-icons/bs";
+import data from "bootstrap/js/src/dom/data";
+import * as commentLists from "react-bootstrap/ElementChildren";
 
 const ShortsComment = () => {
+
+
     return (
         <div className={'comment-container'}>
             <div className={'comment-title-box'}>
@@ -13,7 +17,9 @@ const ShortsComment = () => {
                 <p className={'comment-count'}>2</p>
             </div>
             <div className={'comment-box'}>
-                <Shorts_comment_list />
+                <ul className={'comment-list'}>
+                        <Shorts_comment_list />
+                </ul>
             </div>
             <div className={'comment-save'}>
                 <div className={'comment-save-profile'}>
