@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   gap: 100px;
-  margin: 100px auto 0;
+  margin: 100px auto 0 ;
   padding: 2rem;
 }
 
@@ -44,10 +44,15 @@
       gap: 10px;
       align-items: center;
       justify-content: flex-start;
+
+      .item-text{
+        color : black;
+      }
     }
     .s-gray{
-        background-color: lightgray;
-      }
+        background-color: #f3f3f3;
+        font-weight: 800;
+    }
 
   }
 }

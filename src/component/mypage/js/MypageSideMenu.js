@@ -1,5 +1,7 @@
 import React from 'react';
-import mp from './MypageSideMenu.scss';
+import mp from '../sass/MypageSideMenu.scss';
+import {Link} from "react-router-dom";
+
 
 const MypageSideMenu = () => {
     return (
@@ -7,16 +9,16 @@ const MypageSideMenu = () => {
             <div className="my-side-head">내 계정</div>
             <ul className="my-sidemenu">
                 <li className="menu-item s-gray">
-                    프로필
+                    <Link className="item-text" to="/mypage">프로필</Link>
                 </li>
                 <li className="menu-item">
-                    <div className="div15">계정 관리</div>
+                    <Link className="item-text" to="/mypage/info">계정 관리</Link>
                 </li>
                 <li className="menu-item">
-                    <div className="div15">내 활동</div>
+                    <Link className="item-text" to="/mypage/active">내 활동</Link>
                 </li>
                 <li className="menu-item">
-                    <div className="div15">로그아웃</div>
+                    <Link className="item-text" to="/logout">로그아웃</Link>
                 </li>
             </ul>
         </div>

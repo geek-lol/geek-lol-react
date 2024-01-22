@@ -3,7 +3,7 @@
   display: flex;
   gap:50px;
   padding-top: 150px;
-  width: 600px;
+  width: 700px;
 }
 // 프로필 이미지
 .my-user-img {
@@ -20,11 +20,12 @@
   align-items: flex-start;
   justify-content: flex-start;
   margin-top: 20px;
+
   .my-user-name {
   color: #000000;
   text-align: left;
   font-family: "NanumGothic-Regular", sans-serif;
-  font-size: 1.8em;
+  font-size: 2em;
   font-weight: 400;
   position: relative;
   display: flex;
@@ -35,28 +36,33 @@
     color: #2c2c2c;
     text-align: left;
     font-family: "NanumGothic-Regular", sans-serif;
-    font-size: 1.2em;
+    font-size: 1.3em;
     font-weight: 400;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: flex-start;
+
+    padding-left: 10px;
   }
 }
 
 
 // 나의 활동 간략소개 부분
 .my-profile-active{
-  margin-top: 30px;
+  margin-top: 50px;
+  padding-left: 10px;
   display: flex;
   flex-direction: row;
+
   .active-item{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin: 0 10px;
+    margin-right: 20px;
+
     .active-type{
       color: #706c6c;
       text-align: left;

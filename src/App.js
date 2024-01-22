@@ -8,8 +8,8 @@ import Main from "./component/main/js/main";
 import Board from "./component/board/js/Board";
 import Rank from "./component/rank/js/Rank";
 import BoardTemplate from "./component/board/js/BoardTemplate";
-import MyPageProfile from "./component/mypage/profile/js/MyPageProfile";
-import MyPageTemplate from "./component/mypage/profile/js/MyPageTemplate";
+import MyPageProfile from "./component/mypage/js/MyPageProfile";
+import MyPageTemplate from "./component/mypage/js/MyPageTemplate";
 
 
 function App() {
