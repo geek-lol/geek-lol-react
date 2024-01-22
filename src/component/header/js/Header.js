@@ -115,8 +115,6 @@ const Header =()=> {
 
                 </ul>
                 미니게임</Link>
-              <Link to="/" className="nav-item" active-color="rebeccapurple"
-                    onClick={(e) => handleIndicator(e.target)}>하이라이트</Link>
               <Link to="/" className="nav-item" active-color="yellowgreen"
                     onClick={(e) => handleIndicator(e.target)}>트롤사형투표</Link>
               <span className="nav-indicator" style={{
