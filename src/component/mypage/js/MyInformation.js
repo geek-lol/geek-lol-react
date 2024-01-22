@@ -1,28 +1,64 @@
 import React from 'react';
 import '../sass/MyInformation.scss';
+import {TextField} from "@mui/material";
+import Button from "@mui/material/Button";
 
 const MyInformation = () => {
     return (
         <div className="my-info-wrapper">
-            <div className="div2">기본정보</div>
-            <div className="div3">
-                <div className="rectangle-8165"></div>
-                <div className="my-id-box">asfoniw@nv.com</div>
-                <div className="div4">아이디</div>
+            <div className="info-title">기본정보</div>
+            <div className="my-info-container">
+                <TextField
+                    id="outlined-read-only-input"
+                    label="아이디"
+                    defaultValue="sdofno@mba.com"
+                    className="my-id-textField"
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
             </div>
-            <div className="div3">
-                <div className="div5">닉네임</div>
-                <div className="div6">레삐삐바위계집모가지캔딩이름이열세글자헐랭</div>
-                <div className="div7">완료</div>
+            <div className="my-info-container">
+                <div className="my-pw-title">비밀번호</div>
+                <div className="my-alter-main">
+                    <div className="my-info-item">***********</div>
+                    <div className="alter-text">수정</div>
+                </div>
+                <div className="my-alter-pw">
+                    <TextField
+                        className="standard-password-input"
+                        label="기존 비밀번호"
+                        type="password"
+                        autoComplete="current-password"
+                        variant="standard"
+                    />
+                    <TextField
+                        className="standard-password-input"
+                        label="새 비밀번호"
+                        type="password"
+                        autoComplete="current-password"
+                        variant="standard"
+                    />
+                    <TextField
+                        className="standard-password-input"
+                        label="새 비밀번호 확인"
+                        type="password"
+                        autoComplete="current-password"
+                        variant="standard"
+                    />
+                </div>
             </div>
-            <div className="div3">
-                <div className="div8">수정</div>
-                <div className="div9">***********</div>
-                <div class="div10">비밀번호</div>
+            <div className="my-info-container">
+                <div className="my-pw-title">닉네임</div>
+                <div className="my-alter-main">
+                    <div className="my-info-item">레삐삐바위계집모가지캔딩이름이열세글자헐랭</div>
+                    <div className="alter-text">수정</div>
+                </div>
             </div>
-            <div class="div3">
-                <div class="rectangle-8166"></div>
-                <div class="div11">회원탈퇴</div>
+            <div className="my-info-container user-delete">
+                <Button variant="outlined" color="error">
+                    회원탈퇴
+                </Button>
             </div>
         </div>
     );
