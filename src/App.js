@@ -10,6 +10,7 @@ import Rank from "./component/rank/js/Rank";
 import BoardTemplate from "./component/board/js/BoardTemplate";
 import MyPageProfile from "./component/mypage/js/MyPageProfile";
 import MyPageTemplate from "./component/mypage/js/MyPageTemplate";
+import ResponseTime from "./component/game/ResponseTime";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/rank" element={<Rank/>}/>
                 <Route path="/board/*" element={<BoardTemplate />} />
                 <Route path="/mypage/*" element={<MyPageTemplate />} />
+                <Route path="/resgame" element={<ResponseTime /> }/>
             </Routes>
         </>
     );

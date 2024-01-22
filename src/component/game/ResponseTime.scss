@@ -1,0 +1,42 @@
+
+// 페이지 제목 (반응 속도 테스트)
+.game-title{
+  margin-top: 50px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+//게임 화면
+#screen {
+  width: 900px;
+  height: 500px;
+
+  text-align: center;
+  user-select: none;
+  margin: 50px auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+
+#screen.waiting {
+  background-color: #c7ffff;
+}
+
+#screen.ready {
+  background-color: red;
+  color: white;
+}
+
+#screen.now {
+  background-color: #00ff3c;
+}
+.result{
+  width: fit-content;
+  margin: 0 auto;
+  .result-item{
+
+  }
+}
