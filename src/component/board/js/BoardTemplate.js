@@ -5,6 +5,8 @@ import Board from "./Board";
 import BoardCreate from "./BoardCreate";
 import BoardShorts from "../shorts/js/BoardShorts";
 import Header from "../../header/js/Header";
+import Detail from "./Detail";
+
 
 const BoardTemplate = () => {
 
@@ -12,8 +14,11 @@ const BoardTemplate = () => {
         <>
             <Routes>
                 <Route path={'/main'} element={<Board />}/>
+
                 <Route path={'/create'} element={<BoardCreate />} />
                 <Route path={'/shorts'} element={<BoardShorts />} />
+                <Route path={'/detail'} element={<Detail />}/>
+                {/*<Route path={'/main'} />*/}
             </Routes>
         </>
     );
