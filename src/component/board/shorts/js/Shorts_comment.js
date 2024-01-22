@@ -23,6 +23,10 @@ const ShortsComment = () => {
                     <input type="text" placeholder={'댓글추가...'}/>
                     <BsSend className={'comment-send'}/>
                 </div>
+                <div className="leftArrow">
+
+                </div>
+
             </div>
         </div>
     );
