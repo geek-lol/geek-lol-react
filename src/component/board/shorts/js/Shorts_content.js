@@ -46,10 +46,12 @@ const ShortsContent = () => {
                         <div className={'short-btn report-btn'}>
                             <BsExclamationCircle className={'btn'}/>
                         </div>
-                        <div className={cn("comment", {comment_view: viewComment})}>
-                            <div className={'comment-wrapper'}>
-                                <Shorts_comment />
-                            </div>
+                    </div>
+                </div>
+                <div className={'comment-form'}>
+                    <div className={cn("comment", {comment_view: viewComment})}>
+                        <div className={'comment-wrapper'}>
+                            <Shorts_comment />
                         </div>
                     </div>
                 </div>

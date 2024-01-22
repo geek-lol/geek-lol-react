@@ -1,28 +1,31 @@
 .shorts-content-wrapper {
-  width: 1600px;
-  margin-left: 250px;
-  display: flex;
-  justify-content: center;
+  max-width: 100%;
+  min-width: 700px;
+  margin-left: 450px;
 
   .content-container {
-    width: 700px;
+    min-width: 550px;
+    height: 700px;
     display: flex;
-    align-content: flex-end;
-    justify-content: flex-end;
-    margin-top: 100px;
+    //align-content: flex-end;
+    justify-content: center;
+    align-items: center;
+    padding-top: 15vh;
 
     .short-form {
-      width: 100% ;
+      max-width: 700px;
+      min-width: 550px;
       display: flex;
       justify-content: center;
       gap: 20px;
 
       .content {
-        background: #CCCCCC;
+        background: #FFFFFF;
+        box-shadow: 0 0.5px 80px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
         width: 450px;
         height: 700px;
         position: relative;
-        border-radius: 10px;
 
         .short-video {
           width: 450px;
@@ -68,6 +71,7 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
+        z-index: 1000;
 
         .short-btn {
           display: flex;
@@ -83,31 +87,40 @@
         }
       }
 
+    }
+
+    .comment-form {
+      display: flex;
+      width: 400px;
+      height: 600px;
+
+
       .comment {
         display: none;
 
-
-        .comment-wrapper {
-          background: #cccccc;
-          border-radius: 10px;
-          width: 100%;
-          height: 600px;
-
-        }
       }
 
       .comment_view {
         animation: comment-view-animation .6s ease;
         width: 400px;
-        height: 700px;
+        height: 600px;
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
+        justify-content: space-between;
         //align-content: flex-end;
-        position: fixed;
-        left: 1325px;
+        //background-color: #cccccc;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0.5px 5px 3px rgba(0,0,0,0.1);
+        z-index: 1000;
+        //padding: 20px;
+        .comment-wrapper {
+          height: 600px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
       }
-
     }
 
   }

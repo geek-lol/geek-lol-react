@@ -3,9 +3,10 @@
   height: 95vh;
   display: flex;
   justify-content: center;
+  background: #ffffff;
   border-right: 1px solid #CCCCCC;
   padding: 20px;
-  z-index: 2000;
+  z-index: 3000;
   position: absolute;
 
   .header-container {
