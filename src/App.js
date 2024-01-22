@@ -8,10 +8,12 @@ import Main from "./component/main/js/main";
 import Board from "./component/board/js/Board";
 import Rank from "./component/rank/js/Rank";
 import BoardTemplate from "./component/board/js/BoardTemplate";
+import MyPageProfile from "./component/mypage/js/MyPageProfile";
+import MyPageTemplate from "./component/mypage/js/MyPageTemplate";
+import ResponseTime from "./component/game/ResponseTime";
 import SpectorMain from "./component/spector/js/SpectorMain";
 import BoardShorts from "./component/board/shorts/js/BoardShorts";
 import "./component/LinkReset.scss"
-
 function App() {
     const [showHeader, setShowHeader] = useState(true);
     const location = useLocation();
@@ -34,6 +36,8 @@ function App() {
                 <Route path="/rank" element={<Rank />} />
                 <Route path="/spector" element={<SpectorMain />} />
                 <Route path="/board/*" element={<BoardTemplate />} />
+                <Route path="/mypage/*" element={<MyPageTemplate />} />
+                <Route path="/resgame" element={<ResponseTime /> }/>
             </Routes>
         </>
     );
