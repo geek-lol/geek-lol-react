@@ -4,6 +4,7 @@ import data from "bootstrap/js/src/dom/data";
 
 const ShortsCommentList = () => {
     const [showMore, setShowMore] = useState(false);
+    const comment = 'sdfasdfsdafsdafsadfsdafsdfsdaf';
     const [commentList, setCommentList] = useState(data);
 
     // 원본에 글자수 만큼 잘라서 짧은문장 만들기
