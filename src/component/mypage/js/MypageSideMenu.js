@@ -1,17 +1,49 @@
-import React from 'react';
-import mp from '../sass/MypageSideMenu.scss';
-import {Link} from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import '../sass/MypageSideMenu.scss';
+import {Link, useLocation} from "react-router-dom";
+import cn from 'classnames';
 
 
 const MypageSideMenu = () => {
+
+    const [selectType,setSelectType] = useState({
+        profile : true,
+        info : false
+    })
+    const location = useLocation();
+
+    useEffect(() => {
+        console.log(location.pathname)
+        switch (location.pathname){
+            case "/mypage" :
+                setSelectType({
+                    profile: true,
+                    info: false
+                })
+                break;
+            case "/mypage/info":
+                setSelectType({
+                    profile: false,
+                    info: true
+                })
+                break;
+            default :
+                setSelectType({
+                    profile: true,
+                    info: false
+                })
+
+        }
+    }, [location]);
+
     return (
         <div className="my-sidemenu-wrapper">
             <div className="my-side-head">내 계정</div>
             <ul className="my-sidemenu">
-                <li className="menu-item s-gray">
-                    <Link className="item-text" to="/mypage">프로필</Link>
+                <li className={cn('menu-item', {sgray:selectType.profile})}>
+                    <Link className="item-text" to="/mypage" >프로필</Link>
                 </li>
-                <li className="menu-item">
+                <li className={cn('menu-item', {sgray:selectType.info})}>
                     <Link className="item-text" to="/mypage/info">계정 관리</Link>
                 </li>
                 <li className="menu-item">

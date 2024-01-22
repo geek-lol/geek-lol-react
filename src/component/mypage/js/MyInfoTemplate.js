@@ -3,16 +3,13 @@ import MypageSideMenu from "./MypageSideMenu";
 import MyPageProfile from "./MyPageProfile";
 import MyInformation from "./MyInformation";
 
-const MypageTemplate= () => {
-    const [mains, setMains]=useState(1);
+const MyProfileTemplate= () => {
     return (
         <div className="mypage">
             <MypageSideMenu />
-
-            {/*<MyPageProfile />*/}
             <MyInformation />
         </div>
     );
 };
 
-export default MypageTemplate;
+export default MyProfileTemplate;

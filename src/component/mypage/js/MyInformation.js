@@ -1,9 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../sass/MyInformation.scss';
 import {TextField} from "@mui/material";
 import Button from "@mui/material/Button";
+import MyInfoAlterPw from "./MyInfoAlterPw";
 
 const MyInformation = () => {
+    const [alterPw,setAlterPw] = useState(false);
+
+    const alterPwClikHandler = ()=>{
+        setAlterPw(!alterPw);
+    }
     return (
         <div className="my-info-wrapper">
             <div className="info-title">기본정보</div>
@@ -20,33 +26,13 @@ const MyInformation = () => {
             </div>
             <div className="my-info-container">
                 <div className="my-pw-title">비밀번호</div>
-                <div className="my-alter-main">
+                {alterPw ? <MyInfoAlterPw cancle={alterPwClikHandler} />
+                    : <div className="my-alter-main">
                     <div className="my-info-item">***********</div>
-                    <div className="alter-text">수정</div>
-                </div>
-                <div className="my-alter-pw">
-                    <TextField
-                        className="standard-password-input"
-                        label="기존 비밀번호"
-                        type="password"
-                        autoComplete="current-password"
-                        variant="standard"
-                    />
-                    <TextField
-                        className="standard-password-input"
-                        label="새 비밀번호"
-                        type="password"
-                        autoComplete="current-password"
-                        variant="standard"
-                    />
-                    <TextField
-                        className="standard-password-input"
-                        label="새 비밀번호 확인"
-                        type="password"
-                        autoComplete="current-password"
-                        variant="standard"
-                    />
-                </div>
+                    <div className="alter-text" onClick={alterPwClikHandler}>수정</div>
+                    </div>
+                }
+
             </div>
             <div className="my-info-container">
                 <div className="my-pw-title">닉네임</div>

@@ -5,7 +5,6 @@
   height: 771px;
   position: relative;
   padding-top: 150px;
-  padding-right: 150px;
 
   // 기본정보
   .info-title {
@@ -20,7 +19,14 @@
   }
   .my-info-container{
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+
+    .pw-alter-text{
+      display: flex;
+      .pw-text{
+        padding: 10px;
+      }
+    }
   }
   //아이디 적힌 창
   .my-id-textField {
@@ -31,7 +37,7 @@
     display: flex;
     justify-content: space-between;
     color: #2F66D2;
-
+    margin-right: 20%;
     .my-info-item {
       color: #000000;
       text-align: left;
@@ -45,6 +51,7 @@
   }
   .user-delete{
     margin-top: 50px;
+    margin-right: 20%;
     display: flex;
     justify-content: end;
   }
