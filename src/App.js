@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "./component/header/js/Header";
-import {Reset} from "styled-reset";
+import { Reset } from "styled-reset";
 import Template from "./component/member/template/js/Template";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Main from "./component/main/js/main";
 import Board from "./component/board/js/Board";
 import Rank from "./component/rank/js/Rank";
@@ -11,25 +11,30 @@ import BoardTemplate from "./component/board/js/BoardTemplate";
 import MyPageProfile from "./component/mypage/js/MyPageProfile";
 import MyPageTemplate from "./component/mypage/js/MyPageTemplate";
 import ResponseTime from "./component/game/ResponseTime";
-
-
+import SpectorMain from "./component/spector/js/SpectorMain";
+import BoardShorts from "./component/board/shorts/js/BoardShorts";
+import "./component/LinkReset.scss"
 function App() {
-    // const [hi, setHi] = useState('');
-    //
-    // useEffect(() => {
-    //   axios.get('api/test')
-    //       .then(res => {
-    //         setHi(res.data);
-    //       })
-    // }, []);
+    const [showHeader, setShowHeader] = useState(true);
+    const location = useLocation();
+
+    useEffect(() => {
+        if (window.location.pathname === "/board/shorts") {
+            setShowHeader(false);
+        } else {
+            setShowHeader(true);
+        }
+    }, [location.pathname]);
+
     return (
         <>
-            <Reset/>
-            <Header/>
+            <Reset />
+            {showHeader && <Header />}
             <Routes>
-                <Route path="/template/*" element={<Template/>}/>
-                <Route path="/" element={<Main/>}/>
-                <Route path="/rank" element={<Rank/>}/>
+                <Route path="/template/*" element={<Template />} />
+                <Route path="/" element={<Main />} />
+                <Route path="/rank" element={<Rank />} />
+                <Route path="/spector" element={<SpectorMain />} />
                 <Route path="/board/*" element={<BoardTemplate />} />
                 <Route path="/mypage/*" element={<MyPageTemplate />} />
                 <Route path="/resgame" element={<ResponseTime /> }/>

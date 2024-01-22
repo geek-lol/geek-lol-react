@@ -1,7 +1,6 @@
 #board_wrap{
   display: flex;
   flex-direction: column;
-
   #board_header::before{
     filter: brightness(60%);
     content: "";
