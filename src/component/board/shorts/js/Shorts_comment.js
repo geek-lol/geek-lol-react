@@ -3,7 +3,7 @@ import cn from "classnames";
 import {dividerClasses} from "@mui/material";
 import Shorts_comment_list from "./Shorts_comment_list";
 import '../scss/Shorts_comment.scss'
-import {BsSend} from "react-icons/bs";
+import {BsCaretLeftFill, BsSend} from "react-icons/bs";
 
 const ShortsComment = () => {
     return (
@@ -23,10 +23,7 @@ const ShortsComment = () => {
                     <input type="text" placeholder={'댓글추가...'}/>
                     <BsSend className={'comment-send'}/>
                 </div>
-                <div className="leftArrow">
-
-                </div>
-
+                <div className="leftArrow">◀</div>
             </div>
         </div>
     );

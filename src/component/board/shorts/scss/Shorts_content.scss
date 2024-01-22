@@ -14,10 +14,10 @@
 
     .short-form {
       max-width: 700px;
-      min-width: 550px;
+      min-width: 590px;
       display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 30px;
 
       .content {
         background: #FFFFFF;
@@ -26,6 +26,7 @@
         width: 450px;
         height: 700px;
         position: relative;
+        z-index: 500;
 
         .short-video {
           width: 450px;
