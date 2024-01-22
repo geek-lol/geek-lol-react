@@ -16,9 +16,9 @@ const Template = () => {
                     <div className="logo_box"><img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지"/></div>
 
                     <Routes>
-                        <Route path="login" element={<Login/>}/>
-                        <Route path="signup" element={<Signup/>}/>
-                        <Route path="pwreset" element={<Passwordreset/>}/>
+                        <Route path="/login" element={<Login/>}/>
+                        <Route path="/signup" element={<Signup/>}/>
+                        <Route path="/pwreset" element={<Passwordreset/>}/>
                     </Routes>
                 </div>
             </form>

@@ -17,25 +17,25 @@ const SpectorItem = () => {
                 <div className={'team-box'}>
                     <div className={'t1-box'}>
                         <div className={'t1-name'}>
-                            <a>
+                            <p>
                             {/*  name박스  */}
                                 name
-                            </a>
+                            </p>
                         </div>
                         <div className={'t1-img'}>
                         {/*  이미지박스  */}
                         </div>
                     </div>
-                    <div className={'vs'}><a>VS</a></div>
+                    <div className={'vs'}><p>VS</p></div>
                     <div className={'t2-box'}>
                         <div className={'t2-img'}>
                             {/*  이미지박스  */}
                         </div>
                         <div className={'t2-name'}>
-                            <a>
+                            <p>
                                 {/*  name박스  */}
                                 name
-                            </a>
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,7 @@ import React from 'react';
 function BoardContent(props) {
     return (
         <>
-            <a className="table-content">
+            <div className="table-content">
                 <div className="num">27687</div>
                 <div className="empty"></div>
                 <div className="contents">
@@ -14,7 +14,7 @@ function BoardContent(props) {
                 <div className="num">1시간 전</div>
                 <div className="num">23</div>
                 <div className="num">0</div>
-            </a>
+            </div>
         </>
     );
 }

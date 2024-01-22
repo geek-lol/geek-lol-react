@@ -112,7 +112,6 @@ const Header =()=> {
                   <li>
                     <Link to="/">킹컴타자연습</Link>
                   </li>
-
                 </ul>
                 미니게임</Link>
               <Link to="/" className="nav-item" active-color="yellowgreen"
