@@ -1,9 +1,10 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 
 function BoardContent(props) {
     return (
         <>
-            <div className="table-content">
+            <Link className="table-content btn-b" to="/board/detail">
                 <div className="num">27687</div>
                 <div className="empty"></div>
                 <div className="contents">
@@ -14,7 +15,7 @@ function BoardContent(props) {
                 <div className="num">1시간 전</div>
                 <div className="num">23</div>
                 <div className="num">0</div>
-            </div>
+            </Link>
         </>
     );
 }

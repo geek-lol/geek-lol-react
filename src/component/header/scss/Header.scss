@@ -164,10 +164,14 @@ a{
           font-size: 16px;
           margin-left: 10px;
         }
-        .i{
-          font-size: 24px;
-          cursor: pointer;
-          margin-right: 5px;
+        button{
+          background-image: none;
+          background-color: transparent;
+          border: none;
+          .searchI{
+            cursor: pointer;
+            margin-right: 8px;
+          }
         }
 
       }
