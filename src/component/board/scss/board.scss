@@ -187,12 +187,12 @@
           height: 32px;
           display: grid;
           font-weight: 700;
-          grid-template-columns: 56px 32px 1fr 136px 80px 56px 56px;
+          grid-template-columns: 56px 50px 2fr 136px 80px 56px 56px;
           border-bottom: 1px solid lightgray; /* 예시 보더 설정 */
           .s-title1{
           }
           .s-title2{
-            grid-column: span 2/span 2;
+            grid-column: span 2/span ;
           }
           .py-1{
             padding-top: 4px;
@@ -208,11 +208,18 @@
           padding-left: 8px;
           padding-right: 8px;
           border-bottom-width: 1px;
-          grid-template-columns: 56px 32px 2fr 136px 80px 56px 56px;
+          grid-template-columns: 56px 50px 2fr 136px 80px 56px 56px;
           height: 48px;
           align-items: center;
           align-content: center;
           display: grid;
+          .empty{
+            img{
+              width: 30px;
+              height: 30px;
+            }
+
+          }
           .contents{
             font-weight: 500;
             font-size: 14px;
@@ -242,8 +249,26 @@
         }
         .page-box{
           border-top: lightgray 1px solid;
-          padding-top: 70px;
           padding-bottom: 100px;
+          .write-btn{
+            width: 100%;
+            display: flex;
+            justify-content: end;
+            margin: 20px;
+            a{
+              text-align: center;
+              color: #000;
+              margin-right: 70px;
+              cursor: pointer;
+              border-radius: 10px;
+              font-size: 12px;
+              font-weight: 700;
+              border: 1px solid lightgray;
+              padding: 13px 22px;
+              box-shadow: 0.5px 0.5px 0 0 lightgray ;
+
+            }
+          }
           .arrowBox{
             display: flex;
             justify-content: center;

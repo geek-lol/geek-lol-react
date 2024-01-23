@@ -12,6 +12,7 @@ import {
     MdKeyboardDoubleArrowRight,
     MdOutlineKeyboardArrowRight
 } from "react-icons/md";
+import LCKContent from "./LCKContent";
 const Board = () => {
     const [hide,setHide]=useState(false);
     const [title,setTitle]=useState("제목");
@@ -60,12 +61,15 @@ const Board = () => {
                         <div className="board_table_box">
                             <div className="table">
                                 <span className="s-title1 py-1">번호</span>
+                                {<span className="s-title1 py-1"></span>}
                                 <span className="s-title2 py-1">제목</span>
                                 <span className="s-title3 py-1">작성자</span>
                                 <span className="s-title4 py-1">날짜</span>
                                 <span className="s-title5 py-1">조회</span>
                                 <span className="s-title6 py-1">추천</span>
                             </div>
+                            {}
+                            <LCKContent/>
                             <BoardContent/>
                             <BoardContent/>
                             <BoardContent/>
@@ -85,6 +89,9 @@ const Board = () => {
                             <BoardContent/>
                             <BoardContent/>
                             <nav className="page-box">
+                                <div className="write-btn">
+                                    <a>글쓰기</a>
+                                </div>
                                 <ul className="arrowBox">
                                     <li className="arrow"><MdKeyboardDoubleArrowLeft size={12 * 2}/></li>
                                     <li className="arrow"><MdKeyboardArrowLeft size={12 * 2}/></li>
