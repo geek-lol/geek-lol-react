@@ -104,8 +104,9 @@
       position: absolute;
       color: #FFFFFF;
       font-size: 50px;
-      text-shadow: -2px 0.5px 3px rgba(0, 0, 0, 0.2);
-      left: -40px;
+      text-shadow: -4px 0.5px 3px rgba(0, 0, 0, 0.1);
+      z-index: 500;
+      left: -37.5px;
       bottom: 42px;
     }
 
