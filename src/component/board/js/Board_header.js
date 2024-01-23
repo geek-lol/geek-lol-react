@@ -1,9 +1,23 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import '../scss/Board_header.scss';
 import cn from "classnames";
 import {Link} from "react-router-dom";
 function BoardHeader(props) {
+
+
+    //게시판 로드시 헤더 표시 
+    useEffect(() => {
+        if (window.location.href.includes("main")) {
+            setClick("c1");
+        }
+        // if (window.location.href.includes("main")) {
+        //     setClick("c1");
+        // }
+        // if (window.location.href.includes("main")) {
+        //     setClick("c1");
+        // }
+    }, []);
     const [click,setClick]=useState("");
     const headerClickHandler = (e) => {
         const classToClickMap = {
