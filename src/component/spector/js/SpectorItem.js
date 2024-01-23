@@ -10,6 +10,8 @@ const SpectorItem = () => {
     const modalBackground = useRef();
 
 
+
+
     return (
         <>
         <li className={'spector-list'}>
