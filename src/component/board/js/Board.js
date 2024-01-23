@@ -15,10 +15,10 @@ import {
 import {Route, Routes} from "react-router-dom";
 import FreeBoard from "./Freeboard/FreeBoard";
 import LcKboard from "./LCK/LCKboard";
-const Board = () => {
+const Board = ({touch}) => {
     return (
         <>
-            <BoardHeader/>
+            <BoardHeader touch={touch}/>
             <Routes>
                 <Route path={'/FreeBoard'} element={<FreeBoard/>}/>
                 <Route path={'/LCK'} element={<LcKboard/>}/>

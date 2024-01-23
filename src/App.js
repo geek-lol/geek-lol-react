@@ -17,6 +17,8 @@ import "./component/LinkReset.scss"
 function App() {
     const [showHeader, setShowHeader] = useState(true);
     const location = useLocation();
+    const [touch, setTouch] = useState("");
+
 
     useEffect(() => {
         if (window.location.pathname === "/board/shorts") {
@@ -25,17 +27,32 @@ function App() {
             setShowHeader(true);
         }
     }, [location.pathname]);
+    const sendTouch=(e)=>{
+        console.log(e.target);
+        const classToClickMap = {
+            "c1": "c1",
+            "c2": "c2",
+            "c3": "c3",
+            "c4": "c4",
+        };
+        for (const className in classToClickMap) {
+            if (e.target.className.includes(className)) {
+                setTouch(classToClickMap[className]);
+                break;
+            }
+        }
+    }
 
     return (
         <>
             <Reset />
-            {showHeader && <Header />}
+            {showHeader && <Header sendTouch={sendTouch} />}
             <Routes>
                 <Route path="/template/*" element={<Template />} />
                 <Route path="/" element={<Main />} />
                 <Route path="/rank" element={<Rank />} />
                 <Route path="/spector" element={<SpectorMain />} />
-                <Route path="/board/*" element={<BoardTemplate />} />
+                <Route path="/board/*" element={<BoardTemplate touch={touch} />} />
                 <Route path="/mypage/*" element={<MyPageTemplate />} />
                 <Route path="/resgame" element={<ResponseTime /> }/>
             </Routes>

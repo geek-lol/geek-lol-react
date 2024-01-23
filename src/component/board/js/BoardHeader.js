@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import '../scss/Board_header.scss';
 import cn from "classnames";
 import {Link} from "react-router-dom";
-function BoardHeader(props) {
+function BoardHeader({touch}) {
     const [click,setClick]=useState("");
     //게시판 로드시 헤더 표시
     useEffect(() => {
@@ -16,10 +16,9 @@ function BoardHeader(props) {
         // if (window.location.href.includes("main")) {
         //     setClick("c1");
         // }
-    }, [click,]);
+    }, [click,touch]);
 
     const headerClickHandler = (e) => {
-        console.log(e.target);
         const classToClickMap = {
             "c1": "c1",
             "c2": "c2",

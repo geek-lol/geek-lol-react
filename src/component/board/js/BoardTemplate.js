@@ -9,11 +9,11 @@ import Detail from "./Detail";
 import LCKBoard from "./LCK/LCKContent";
 
 
-const BoardTemplate = () => {
+const BoardTemplate = ({touch}) => {
     return (
         <>
             <Routes>
-                <Route path={'/main/*'} element={<Board />}/>
+                <Route path={'/main/*'} element={<Board touch={touch} />}/>
                 <Route path={'/create'} element={<BoardCreate />} />
                 <Route path={'/shorts'} element={<BoardShorts />} />
                 <Route path={'/detail'} element={<Detail />}/>
