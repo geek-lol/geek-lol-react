@@ -60,6 +60,7 @@ const Header =()=> {
   const [isInput,setIsInput]=useState(true);
   const [isProfile,setProfile]=useState(false);
   const [isLogin,setLogin]=useState(true);
+  const [touch,setTouch]=useState();
   const findPage=()=>{
     if (window.location.href.includes("main")) {
       setIsInput(false);
@@ -90,10 +91,10 @@ const Header =()=> {
                     onClick={(e) => {handleIndicator(e.target); boardClickHandler1(e);}}>게시판
                 <ul className={cn("hide-btn btn1", {hovers1: hovers1})}>
                   <li>
-                    <Link to="/board/main">자유게시판</Link>
+                    <Link to="/board/main/FreeBoard">자유게시판</Link>
                   </li>
                   <li>
-                    <Link to="/">LCK</Link>
+                    <Link to="/board/main/LCK">LCK</Link>
                   </li>
                   <li>
                     <Link to="/">공략게시판</Link>

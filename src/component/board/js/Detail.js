@@ -105,7 +105,6 @@ const Detail = () => {
                             <button className="move-button">게시판으로</button>
                             <button className="move-button">다음 글</button>
                         </div>
-
                     </div>
                 </div>
             </section>
