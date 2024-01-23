@@ -6,8 +6,12 @@ import Shorts_content from "./Shorts_content";
 const BoardShorts = () => {
     return (
         <div className={'short-container'}>
-            <Shorts_header />
+            <div className={'shorts-header-wrapper'}>
+                <Shorts_header />
+            </div>
+            <div className={'shorts-content-wrapper'}>
             <Shorts_content />
+            </div>
         </div>
 
     );

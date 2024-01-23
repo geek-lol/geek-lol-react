@@ -21,7 +21,6 @@ const ShortsContent = () => {
     const modalBackground = useRef();
 
     return (
-        <div className={'shorts-content-wrapper'}>
             <div className={'content-container'}>
                 <div className={'short-form'}>
                     <div className={'content'}>
@@ -62,7 +61,6 @@ const ShortsContent = () => {
                         </div>
                     </div>
                 </div>
-            </div>
 
             {
                 viewReport &&
