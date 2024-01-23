@@ -25,21 +25,37 @@ const ShortsContent = () => {
                 <div className={'short-form'}>
                     <div className={'content'}>
                         <video src="#" className={'short-video'}></video>
-                        <div className={'produce'}>
-                            <div className={'profile_box'}>
-                                <div className={'profile-img'}>
-                                    <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
+                        <div className={'overlap-front'}>
+                            <div className={'produce'}>
+                                <div className={'profile_box'}>
+                                    <div className={'profile-img'}>
+                                        <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
+                                    </div>
+                                    <div className={'profile-name'}>
+                                        <p>우와앙아</p>
+                                    </div>
                                 </div>
-                                <div className={'profile-name'}>
-                                    <p>우와앙아</p>
+                                <div className={'short-title'}>
+                                    <p>구왕과왁왁</p>
                                 </div>
                             </div>
-                            <div className={'short-title'}>
-                                <p>구왕과왁왁</p>
+                            <div className={cn('front-sidebar',{front_sidebar_view: viewComment})}>
+                                <div className={'short-btn like-btn'}>
+                                    <BsHeart className={'btn'}/>
+                                    {/* <BsHeartFill /> */}
+                                    <p>1300</p>
+                                </div>
+                                <div className={'short-btn comment-btn'}>
+                                    <BsChatLeft className={'btn'} onClick={chkViewComment}/>
+                                    <p>2</p>
+                                </div>
+                                <div className={'short-btn report-btn'}>
+                                    <BsExclamationCircle className={'btn'} onClick={() => setViewReport(true)}/>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className={'sidebar'}>
+                    <div className={cn('sidebar',{sidebar_view: viewComment})}>
                         <div className={'short-btn like-btn'}>
                             <BsHeart className={'btn'}/>
                             {/* <BsHeartFill /> */}
@@ -53,11 +69,11 @@ const ShortsContent = () => {
                             <BsExclamationCircle className={'btn'} onClick={() => setViewReport(true)}/>
                         </div>
                     </div>
-                </div>
-                <div className={'comment-form'}>
-                    <div className={cn("comment", {comment_view: viewComment})}>
-                        <div className={'comment-wrapper'}>
-                            <Shorts_comment/>
+                    <div className={'comment-form'}>
+                        <div className={cn("comment", {comment_view: viewComment})}>
+                            <div className={'comment-wrapper'}>
+                                <Shorts_comment chkViewComment={chkViewComment}/>
+                            </div>
                         </div>
                     </div>
                 </div>
