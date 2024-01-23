@@ -8,7 +8,7 @@
     position: fixed;
     right: -484px;
     transition: 1s;
-    width: 484px;
+    width: 0;
     height: 100vh;
     background: #1F1F1F;
     list-style: none;
@@ -129,8 +129,10 @@
     }
   }
   .menuModal.active{
+    width: 484px;
     right: 0;
     transition: 1s;
+
   }
   .profile_a{
     color: #fcfcfc;
@@ -148,9 +150,10 @@
 @media screen and (max-width: 640px) {
   .menuModal {
     right: -625px;
-    width: 100%;
+    width: 0;
   }
   .menuModal.active{
+    width: 100%;
     right: 0;
     transition: 1s;
   }
