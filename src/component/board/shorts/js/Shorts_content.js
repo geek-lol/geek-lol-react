@@ -16,14 +16,17 @@ const ShortsContent = () => {
         setViewComment(!viewComment);
     }
 
+    //
+
+
     // 신고 모달 띄우기
     const [viewReport, setViewReport] = useState(false);
     const modalBackground = useRef();
 
     return (
             <div className={'content-container'}>
-                <div className={'short-form'}>
-                    <div className={'content'}>
+                <div className={cn('short-form',{animation_view: !viewComment})}>
+                    <div className={cn('content',{animation_content_view: viewComment})}>
                         <video src="#" className={'short-video'}></video>
                         <div className={'overlap-front'}>
                             <div className={'produce'}>
@@ -69,10 +72,10 @@ const ShortsContent = () => {
                             <BsExclamationCircle className={'btn'} onClick={() => setViewReport(true)}/>
                         </div>
                     </div>
-                    <div className={'comment-form'}>
+                    <div className={cn('comment-form', {comment_form_view: viewComment})}>
                         <div className={cn("comment", {comment_view: viewComment})}>
                             <div className={'comment-wrapper'}>
-                                <Shorts_comment chkViewComment={chkViewComment}/>
+                                <Shorts_comment chkViewComment={chkViewComment} viewComment={viewComment}/>
                             </div>
                         </div>
                     </div>

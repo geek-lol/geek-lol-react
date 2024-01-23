@@ -1,34 +1,36 @@
 .content-container {
   //background: #cccccc;
   width: 100%;
-
   min-width: 450px;
   height: 100vh;
 
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 
   .short-form {
-    padding: 10vh 0;
+    //padding: 10% 0;
     width: 100%;
     min-width: 850px;
     min-height: 700px;
+    height: 80%;
 
     display: flex;
     flex-direction: row;
     justify-content: center;
 
+
     .content {
       width: 30%;
       min-width: 450px;
-      height: 80vh;
+      height: 100%;
       min-height: 700px;
-
       background: #ffffff;
       box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
       display: flex;
       position: relative;
+      z-index: 2000;
 
 
       video {
@@ -82,6 +84,7 @@
             font-size: 17px;
           }
         }
+
         .front-sidebar {
           display: none;
         }
@@ -106,6 +109,10 @@
           }
         }
       }
+
+    }
+    .content.animation_content_view {
+      animation: short-form-animation 0.7s ease;
 
     }
 
@@ -133,30 +140,39 @@
     .sidebar_view {
       display: none;
 
-      height: 80vh;
+      height: 70%;
       min-height: 700px;
     }
 
     .comment-form {
-      display: flex;
-      align-items: flex-end;
-
+      width: 0;
 
       .comment {
-        display: none;
+        opacity: 0;
+
 
       }
 
+
+    }
+
+    .comment_form_view {
+      width: 25%;
       .comment_view {
-        width: 400px;
-        height: 80vh;
+        opacity: 1;
+        min-width: 400px;
+        height: 100%;
         min-height: 700px;
+        position: relative;
+        z-index: 500;
 
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         background: #ffffff;
-        box-shadow: 0 0.5px 5px 3px rgba(0, 0, 0, 0.1);
+        box-shadow: 4px 0 4px 2px rgba(0, 0, 0, 0.1);
+
+        animation: comment-view-animation ease 0.7s;
 
         .comment-wrapper {
           padding: 5%;
@@ -165,8 +181,11 @@
 
         }
       }
-    }
 
+    }
+  }
+  .short-form.animation_view {
+    animation: content-view-animation ease 0.7s;
   }
 
   // 신고모달
@@ -236,7 +255,7 @@
 
   @keyframes comment-view-animation {
     0% {
-      transform: translatex(-10%);
+      transform: translatex(-30%);
     }
 
     100% {
@@ -244,4 +263,25 @@
     }
 
   }
+  @keyframes content-view-animation {
+    0% {
+      transform: translatex(-5%);
+    }
+
+    100% {
+      transform: translatex(0);
+    }
+
+  }
+  @keyframes short-form-animation {
+    0% {
+      transform: translatex(10%);
+    }
+
+    100% {
+      transform: translatex(0%);
+    }
+
+  }
+
 }

@@ -37,6 +37,10 @@
       font-weight: 700;
       font-size: 25px;
     }
+
+    .comment-close-btn.close_animation {
+      animation: comment-close-animation 0.7s ease;
+    }
   }
 
   .comment-box {
@@ -90,4 +94,15 @@
 
     }
   }
+}
+
+@keyframes comment-close-animation {
+  0% {
+    transform: translatex(0%);
+  }
+
+  100% {
+    transform: translatex(-10%);
+  }
+
 }

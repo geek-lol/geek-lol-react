@@ -7,7 +7,8 @@ import {BsCaretLeftFill, BsPlusLg, BsSend} from "react-icons/bs";
 import data from "bootstrap/js/src/dom/data";
 import * as commentLists from "react-bootstrap/ElementChildren";
 
-const ShortsComment = (props) => {
+const ShortsComment = ({chkViewComment, viewComment}) => {
+
 
     return (
         <div className={'comment-container'}>
@@ -16,7 +17,8 @@ const ShortsComment = (props) => {
                     <span className={'comment-title'}>댓글</span>
                     <p className={'comment-count'}>2</p>
                 </div>
-                <BsPlusLg className={'comment-close-btn'} onClick={props.chkViewComment} />
+                <BsPlusLg className={cn('comment-close-btn', {close_animation: viewComment})} onClick={chkViewComment}
+                    />
             </div>
             <div className={'comment-box'}>
                 <ul className={'comment-list'}>
