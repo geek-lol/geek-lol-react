@@ -50,6 +50,7 @@
         padding: 5%;
 
         .produce {
+          width: 70%;
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
@@ -290,6 +291,26 @@
         display: flex;
         position: relative;
         z-index: 2000;
+
+        .overlap-front {
+          width: 90%;
+          height: 20%;
+          bottom: 0;
+          left: 0;
+          position: absolute;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: 5%;
+
+          .produce {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+          }
+
+        }
       }
     }
 
