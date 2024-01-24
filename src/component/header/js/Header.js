@@ -115,7 +115,7 @@ const Header = ({sendTouch}) => {
                                           onClick={modalTouchHandler}>LCK</Link>
                                 </li>
                                 <li>
-                                    <Link to="/" className="c3"
+                                    <Link to="/board/main/Solution" className="c3"
                                           onClick={modalTouchHandler}>공략게시판</Link>
                                 </li>
                                 <li>

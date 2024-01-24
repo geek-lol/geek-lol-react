@@ -10,6 +10,7 @@ import {
     MdOutlineKeyboardArrowRight
 } from "react-icons/md";
 import BoardGather from "./BoardGather";
+import {Link} from "react-router-dom";
 const FreeBoard = () => {
     const [hide,setHide]=useState(false);
     const [title,setTitle]=useState("제목");
@@ -24,8 +25,7 @@ const FreeBoard = () => {
         setTitle(e.target.value);
     }
     return (
-
-        <div id="board_wrap" onClick={offDiv}>
+        <div id="board_wrap" onClick={offDiv} style={{marginTop:'97.99px'}}>
             <section id="board_main">
                 <div className="board_list_box">
                     <div className="board_search_box">
@@ -73,7 +73,7 @@ const FreeBoard = () => {
                         {/*<LCKboard/>*/}
                         <nav className="page-box">
                             <div className="write-btn">
-                                <a>글쓰기</a>
+                                <Link to="/board/create">글쓰기</Link>
                             </div>
                             <ul className="arrowBox">
                                 <li className="arrow"><MdKeyboardDoubleArrowLeft size={12 * 2}/></li>

@@ -1,0 +1,62 @@
+.logo-nav {
+
+  .logo-BtnBox {
+    display: flex;
+    justify-content: center;
+    li {
+      display: flex;
+      align-items: center;
+      width: 150px;
+      margin: 24px 0;
+      height: 50px;
+      cursor: pointer;
+      button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        background-color: transparent;
+        background-image: none;
+        img{
+          width: 30px;
+          height: 30px;
+          margin-right: 12px;
+        }
+        span{
+
+        }
+
+      }
+    }
+    li:hover{
+      background-color: lightgray;
+    }
+
+  }
+}
+@media screen and (max-width:1400px) {
+  .logo-nav {
+
+    .logo-BtnBox {
+
+      li {
+
+        button {
+
+          img{
+
+          }
+          span{
+            display: none;
+          }
+
+        }
+      }
+      li:hover{
+        background-color: lightgray;
+      }
+
+    }
+  }
+}

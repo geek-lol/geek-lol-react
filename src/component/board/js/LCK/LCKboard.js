@@ -11,6 +11,8 @@ import {
     MdOutlineKeyboardArrowRight
 } from "react-icons/md";
 import LckGather from "./LCKGather";
+import LckNav from "./LckNav";
+import {Link} from "react-router-dom";
 
 const LcKboard = () => {
     const [hide,setHide]=useState(false);
@@ -27,6 +29,7 @@ const LcKboard = () => {
     }
     return (
         <>
+            <LckNav/>
             <div id="board_wrap" onClick={offDiv}>
                 <section id="board_main">
                     <div className="board_list_box">
@@ -74,7 +77,7 @@ const LcKboard = () => {
                             <LckGather/>
                             <nav className="page-box">
                                 <div className="write-btn">
-                                    <a>글쓰기</a>
+                                    <Link to="/board/create">글쓰기</Link>
                                 </div>
                                 <ul className="arrowBox">
                                     <li className="arrow"><MdKeyboardDoubleArrowLeft size={12 * 2}/></li>
