@@ -13,8 +13,8 @@
   .short-form {
     //padding: 10% 0;
     width: 100%;
-    //min-width: 850px;
-    //min-height: 950px;
+    min-width: 700px;
+    min-height: 950px;
     height: 80%;
 
     display: flex;
@@ -23,7 +23,7 @@
 
 
     .content {
-      width: 40%;
+      width: 30%;
       min-width: 200px;
       height: 100%;
       background: #ffffff;
@@ -116,7 +116,7 @@
     }
 
     .content.animation_content_view {
-      animation: short-form-animation 0.2s ease;
+      animation: short-form-animation 0.5s ease;
 
     }
 
@@ -161,7 +161,7 @@
     }
 
     .comment_form_view {
-      width: 30%;
+      width: 20%;
 
       .comment_view {
         opacity: 1;
