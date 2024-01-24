@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import '../scss/Shorts_header.scss'
 import cn from "classnames";
+import {BsAward, BsBinoculars, BsClipboard2, BsFillHouseFill, BsHouse, BsNintendoSwitch} from "react-icons/bs";
 
 const Shorts_header = () => {
 
@@ -18,11 +19,11 @@ const Shorts_header = () => {
             <div className={'title-bottom-line'}></div>
             <div className={'header-navbar'}>
                 <div className={'menubar'}>
-                    <Link to='/' className={'btn-b'}>홈</Link>
-                    <Link to='/rank' className={'btn-b'}>랭킹</Link>
-                    <Link to='/spector' className={'btn-b'}>관전</Link>
+                    <Link to='/' className={'btn-b'}><BsHouse className={'btn1'} /><p className={'btn2'}>홈</p></Link>
+                    <Link to='/rank' className={'btn-b'}><BsAward className={'btn1'} /><p className={'btn2'}>랭킹</p></Link>
+                    <Link to='/spector' className={'btn-b'}><BsBinoculars  className={'btn1'} /><p className={'btn2'}>관전</p></Link>
                     <div className={'board-menu-container'}>
-                        <div className={'dropdown-board btn-b'}>미니게임
+                        <div className={'dropdown-board btn-b'}><BsNintendoSwitch  className={'btn1'} /><p className={'btn2'}>미니게임</p>
                             <div className={'board-menu-bar'}>
                                 <div className={'board-menuline'}></div>
 
@@ -32,7 +33,7 @@ const Shorts_header = () => {
                         </div>
                     </div>
                     <div className={'board-menu-container'}>
-                        <div className={'dropdown-board btn-b'}>게시판
+                        <div className={'dropdown-board btn-b'}><BsClipboard2 className={'btn1'} /><p className={'btn2'}>게시판</p>
                             <div className={'board-menu-bar'}>
                                 <div className={'board-menuline'}></div>
 

@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {BiBlock, BiHeart, BiMessage} from "react-icons/bi";
 import '../scss/Shorts_content.scss'
 import Shorts_header from "./Shorts_header";
@@ -11,9 +11,22 @@ import Team2ItemDetail from "../../../spector/js/Team2ItemDetail";
 
 const ShortsContent = () => {
     const [viewComment, setViewComment] = useState(false);
+    const [viewAni, setViewAni] = useState(false);
+    const isMounted = useRef(false);
+    useEffect(() => {
+        if (isMounted.current === true) {
+            setViewAni(!viewComment);
+
+        } else if(isMounted.current === false){
+            setViewAni(false);
+            isMounted.current = true;
+        }
+    }, [viewComment]);
+
 
     const chkViewComment = e => {
         setViewComment(!viewComment);
+
     }
 
     //
@@ -25,7 +38,7 @@ const ShortsContent = () => {
 
     return (
             <div className={'content-container'}>
-                <div className={cn('short-form',{animation_view: !viewComment})}>
+                <div className={cn('short-form',{animation_view: viewAni})}>
                     <div className={cn('content',{animation_content_view: viewComment})}>
                         <video src="#" className={'short-video'}></video>
                         <div className={'overlap-front'}>

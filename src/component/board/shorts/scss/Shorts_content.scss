@@ -3,6 +3,7 @@
   width: 100%;
   min-width: 450px;
   height: 100vh;
+  min-height: 500px;
 
   display: flex;
   flex-direction: row;
@@ -12,8 +13,8 @@
   .short-form {
     //padding: 10% 0;
     width: 100%;
-    min-width: 850px;
-    min-height: 700px;
+    //min-width: 850px;
+    //min-height: 950px;
     height: 80%;
 
     display: flex;
@@ -22,10 +23,9 @@
 
 
     .content {
-      width: 30%;
-      min-width: 450px;
+      width: 40%;
+      min-width: 200px;
       height: 100%;
-      min-height: 700px;
       background: #ffffff;
       box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
       display: flex;
@@ -58,12 +58,14 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: 10px;
+            gap: 2%;
 
             .profile-img {
               img {
                 width: 50px;
+                min-width: 20px;
                 height: 50px;
+                min-height: 20px;
                 border-radius: 50%;
               }
             }
@@ -73,6 +75,7 @@
               font-style: normal;
               font-weight: 700;
               font-size: 15px;
+              min-font-size: 8px;
             }
           }
 
@@ -103,7 +106,7 @@
             align-items: center;
 
             .btn {
-              font-size: 20px;
+              font-size: 15px;
 
             }
           }
@@ -111,8 +114,9 @@
       }
 
     }
+
     .content.animation_content_view {
-      animation: short-form-animation 0.7s ease;
+      animation: short-form-animation 0.2s ease;
 
     }
 
@@ -122,7 +126,7 @@
       justify-content: flex-end;
       align-items: center;
       padding: 0 10px 35px 10px;
-      gap: 20px;
+      gap: 5%;
 
       .short-btn {
         display: flex;
@@ -131,7 +135,7 @@
         align-items: center;
 
         .btn {
-          font-size: 20px;
+          font-size: 15px;
 
         }
       }
@@ -157,12 +161,11 @@
     }
 
     .comment_form_view {
-      width: 25%;
+      width: 30%;
+
       .comment_view {
         opacity: 1;
-        min-width: 400px;
         height: 100%;
-        min-height: 700px;
         position: relative;
         z-index: 500;
 
@@ -170,20 +173,20 @@
         flex-direction: column;
         justify-content: space-between;
         background: #ffffff;
-        box-shadow: 4px 0 4px 2px rgba(0, 0, 0, 0.1);
+        box-shadow: 4px 0 4px 2px rgba(0, 0, 0, 0.05);
 
-        animation: comment-view-animation ease 0.7s;
+        animation: comment-view-animation ease 1s;
 
         .comment-wrapper {
           padding: 5%;
           height: 95%;
-          min-height: 670px;
 
         }
       }
 
     }
   }
+
   .short-form.animation_view {
     animation: content-view-animation ease 0.7s;
   }
@@ -252,36 +255,61 @@
     }
   }
 
+  @media screen and (min-width: 1900px) and (max-width: 2200px) {
+    .short-form {
+      height: 70%;
+      min-height: 750px;
 
-  @keyframes comment-view-animation {
-    0% {
-      transform: translatex(-30%);
+
+      .content {
+        min-width: 450px;
+
+        max-width: 500px;
+      }
     }
-
-    100% {
-      transform: translatex(0);
-    }
-
   }
-  @keyframes content-view-animation {
-    0% {
-      transform: translatex(-5%);
+  @media screen and (max-width: 1900px) {
+    .short-form {
+      height: 55%;
+      min-height: 700px;
+
+
+      .content {
+        min-width: 420px;
+      }
     }
 
-    100% {
-      transform: translatex(0);
-    }
 
+    @keyframes comment-view-animation {
+      0% {
+        transform: translatex(-100%);
+      }
+
+      100% {
+        transform: translatex(0);
+      }
+
+    }
+    @keyframes content-view-animation {
+      0% {
+        transform: translatex(-5%);
+      }
+
+      100% {
+        transform: translatex(0);
+      }
+
+    }
+    @keyframes short-form-animation {
+      0% {
+        transform: translatex(10%);
+      }
+
+      100% {
+        transform: translatex(0%);
+      }
+
+    }
   }
-  @keyframes short-form-animation {
-    0% {
-      transform: translatex(10%);
-    }
-
-    100% {
-      transform: translatex(0%);
-    }
-
-  }
-
 }
+
