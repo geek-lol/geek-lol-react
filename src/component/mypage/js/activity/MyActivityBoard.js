@@ -79,7 +79,7 @@ function stableSort(array, comparator) {
 const headCells = [
     {
         id: 'types',
-        numeric: true,
+        numeric: false,
         disablePadding: true,
         label: '게시판 ',
     },
@@ -91,15 +91,15 @@ const headCells = [
     },
     {
         id: 'titles',
-        numeric: true,
+        numeric: false,
         disablePadding: false,
         label: '제목 ',
     },
     {
         id: 'writers',
-        numeric: true,
+        numeric: false,
         disablePadding: false,
-        label: '작성자 ',
+        label: '작성자',
     },
     {
         id: 'dates',
@@ -240,7 +240,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-const MyActivityComment = () => {
+const MyActivityBoard = () => {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
@@ -254,9 +254,10 @@ const MyActivityComment = () => {
         setOrderBy(property);
     };
 
+    // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.id);
+            const newSelected = rows.map((n) => n.boardNo);
             setSelected(newSelected);
             return;
         }
@@ -291,9 +292,8 @@ const MyActivityComment = () => {
         setPage(0);
     };
 
-
-
     const isSelected = (id) => selected.indexOf(id) !== -1;
+
 
     // 테이블 데이터 갯수로 줄 계산
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -318,7 +318,7 @@ const MyActivityComment = () => {
                         <Table
                             sx={{ minWidth: 750 }}
                             aria-labelledby="tableTitle"
-                            size={dense ? 'small' : 'medium'}
+                            size={'medium'}
                         >
                             <EnhancedTableHead
                                 numSelected={selected.length}
@@ -389,4 +389,4 @@ const MyActivityComment = () => {
     );
 }
 
-export default MyActivityComment;
+export default MyActivityBoard;

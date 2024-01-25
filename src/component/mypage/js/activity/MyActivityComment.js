@@ -22,27 +22,21 @@ import { visuallyHidden } from '@mui/utils';
 import '../../sass/MyActivityMain.scss'
 
 //더미 데이터 생성자
-function createData(type, boardNo,boardTitle, writer
-    , uploadDate, viewCount, recommend) {
+function createData(type, boardNo,boardTitle,comment,uploadDate) {
     return {
         type,
         boardNo,
         boardTitle,
-        writer,
-        uploadDate,
-        viewCount,
-        recommend
+        comment,
+        uploadDate
     };
 }
 // 더미 데이터
 const rows = [
-    createData("자유",124,"ㅎ냫냉ㄴ래","하하하","1분전",3,0),
-    createData("자유",4,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",24,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",45,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",243,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",247,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",1,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5)
+    createData("자유",1,"ㅎ냫냉ㄴ래","하하하","1분전"),
+    createData("자유",3,"집이개추워어어","보일러떼면 되지않냑옹","1분전"),
+    createData("자유",4,"집이개추워어어","보일러떼면 되지않냑옹","1분전"),
+    createData("자유",2,"ㅎ냫냉ㄴ래","하하하","1분전")
 ];
 
 //정렬 계산식
@@ -93,32 +87,20 @@ const headCells = [
         id: 'titles',
         numeric: true,
         disablePadding: false,
-        label: '제목 ',
+        label: '글제목 ',
     },
     {
-        id: 'writers',
+        id: 'comments',
         numeric: true,
         disablePadding: false,
-        label: '작성자 ',
+        label: '댓글내용 ',
     },
     {
         id: 'dates',
         numeric: true,
         disablePadding: false,
         label: '날짜 ',
-    },
-    {
-        id: 'views',
-        numeric: true,
-        disablePadding: false,
-        label: '조회 ',
-    },
-    {
-        id: 'recommends',
-        numeric: true,
-        disablePadding: false,
-        label: '추천 ',
-    },
+    }
 ];
 
 function EnhancedTableHead(props) {
@@ -149,6 +131,13 @@ function EnhancedTableHead(props) {
                         align={'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
+                        style={{
+                            // "글제목"과 "번호" 열에 대한 스타일 추가
+                            width: headCell.id === 'titles' ? '30%' : (headCell.id === 'comments' ? '30%' : '10%'),
+                            whiteSpace: 'nowrap', // 텍스트 줄바꿈 방지
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                        }}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -212,7 +201,7 @@ function EnhancedTableToolbar(props) {
                         id="tableTitle"
                         component="div"
                     >
-                        내가 쓴 글
+                        내가 쓴 댓글
                     </Typography>
                 )}
 
@@ -240,12 +229,11 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-const MyActivityBoard = () => {
+const MyActivityComment = () => {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const handleRequestSort = (event, property) => {
@@ -255,8 +243,10 @@ const MyActivityBoard = () => {
     };
 
     const handleSelectAllClick = (event) => {
+        console.log(`올 클릭 실행 : ${event.target.checked}`)
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.id);
+            const newSelected = rows.map((n) => n.boardNo);
+            console.log(`newselect:${newSelected}`)
             setSelected(newSelected);
             return;
         }
@@ -291,8 +281,6 @@ const MyActivityBoard = () => {
         setPage(0);
     };
 
-
-
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
     // 테이블 데이터 갯수로 줄 계산
@@ -318,7 +306,7 @@ const MyActivityBoard = () => {
                         <Table
                             sx={{ minWidth: 750 }}
                             aria-labelledby="tableTitle"
-                            size={dense ? 'small' : 'medium'}
+                            size={'medium'}
                         >
                             <EnhancedTableHead
                                 numSelected={selected.length}
@@ -356,17 +344,15 @@ const MyActivityBoard = () => {
                                             <TableCell align="left">{row.type}</TableCell>
                                             <TableCell align="left">{row.boardNo}</TableCell>
                                             <TableCell align="left">{row.boardTitle}</TableCell>
-                                            <TableCell align="left">{row.writer}</TableCell>
+                                            <TableCell align="left">{row.comment}</TableCell>
                                             <TableCell align="left">{row.uploadDate}</TableCell>
-                                            <TableCell align="left">{row.viewCount}</TableCell>
-                                            <TableCell align="left">{row.recommend}</TableCell>
                                         </TableRow>
                                     );
                                 })}
                                 {emptyRows > 0 && (
                                     <TableRow
                                         style={{
-                                            height: (dense ? 33 : 53) * emptyRows,
+                                            height: (53) * emptyRows,
                                         }}
                                     >
                                         <TableCell colSpan={6} />
@@ -389,4 +375,4 @@ const MyActivityBoard = () => {
     );
 }
 
-export default MyActivityBoard;
+export default MyActivityComment;
