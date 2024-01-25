@@ -1,5 +1,5 @@
 import React from 'react';
-import MyProfile from '../sass/MyPageProfile.scss';
+import MyProfile from '../../sass/MyPageProfile.scss';
 
 const MyPageProfile = () => {
     return (
@@ -21,7 +21,7 @@ const MyPageProfile = () => {
                         <div className="active-count">3</div>
                     </div>
                     <div className="active-item">
-                        <div className="active-type">제제내역</div>
+                        <div className="active-type">제재내역</div>
                         <div className="active-count">3</div>
                     </div>
                 </div>

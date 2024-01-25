@@ -8,7 +8,8 @@ const MypageSideMenu = () => {
 
     const [selectType,setSelectType] = useState({
         profile : true,
-        info : false
+        info : false,
+        activity : false
     })
     const location = useLocation();
 
@@ -18,13 +19,22 @@ const MypageSideMenu = () => {
             case "/mypage" :
                 setSelectType({
                     profile: true,
-                    info: false
+                    info: false,
+                    activity : false
                 })
                 break;
             case "/mypage/info":
                 setSelectType({
                     profile: false,
-                    info: true
+                    info: true,
+                    activity : false
+                })
+                break;
+            case "/mypage/active":
+                setSelectType({
+                    profile: false,
+                    info: false,
+                    activity : true
                 })
                 break;
             default :
@@ -46,7 +56,7 @@ const MypageSideMenu = () => {
                 <li className={cn('menu-item', {sgray:selectType.info})}>
                     <Link className="item-text" to="/mypage/info">계정 관리</Link>
                 </li>
-                <li className="menu-item">
+                <li className={cn('menu-item', {sgray:selectType.activity})}>
                     <Link className="item-text" to="/mypage/active">내 활동</Link>
                 </li>
                 <li className="menu-item">

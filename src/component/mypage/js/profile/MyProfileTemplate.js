@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import MypageSideMenu from "./MypageSideMenu";
+import MypageSideMenu from "../MypageSideMenu";
 import MyPageProfile from "./MyPageProfile";
-import MyInformation from "./MyInformation";
+import MyInformation from "../info/MyInformation";
 
 const MyProfileTemplate= () => {
     return (
