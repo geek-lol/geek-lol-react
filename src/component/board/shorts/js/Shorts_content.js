@@ -1,13 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {BiBlock, BiHeart, BiMessage} from "react-icons/bi";
 import '../scss/Shorts_content.scss'
-import Shorts_header from "./Shorts_header";
 import {BsChatLeft, BsExclamationCircle, BsHeart} from "react-icons/bs";
 import cn from "classnames";
 import Shorts_comment from "./Shorts_comment";
-import Team1ItemDetail from "../../../spector/js/Team1ItemDetail";
-import BanPick from "../../../spector/js/BanPick";
-import Team2ItemDetail from "../../../spector/js/Team2ItemDetail";
+import {debounce} from "lodash";
 
 const ShortsContent = () => {
     const [viewComment, setViewComment] = useState(false);
@@ -16,8 +12,6 @@ const ShortsContent = () => {
     const [currentItemIndex, setCurrentItemIndex] = useState(0);
     const [viewScrollDownAni, setViewScrollDownAni] = useState(false);
     const [viewScrollUpAni, setViewScrollUpAni] = useState(false);
-
-
 
 
     // 신고 모달 띄우기
@@ -46,19 +40,25 @@ const ShortsContent = () => {
     }
 
 
+    const handleWheelDebounced = debounce((deltaY) => {
+        if (deltaY > 0 && currentItemIndex < shortsList.length - 1) {
+            setViewScrollDownAni(true);
+            setTimeout(() => {
+                setViewScrollDownAni(false);
+                setCurrentItemIndex((prevIndex) => prevIndex + 1);
+            }, 300);
+        } else if (deltaY < 0 && currentItemIndex > 0) {
+            setViewScrollUpAni(true);
+            setTimeout(() => {
+                setViewScrollUpAni(false);
+                setCurrentItemIndex((prevIndex) => prevIndex - 1);
+            }, 300);
+        }
+    }, 500);
+
     const handleWheel = (event) => {
         const deltaY = event.deltaY;
-
-        if (deltaY > 0 && currentItemIndex < shortsList.length - 1) { // 마우스 휠을 내릴때
-            setViewScrollDownAni(true);
-            setViewScrollUpAni(false);
-            setCurrentItemIndex((prevIndex) => prevIndex + 1);
-        } else if (deltaY < 0 && currentItemIndex > 0) { // 마우스 휠을 올릴때
-            setViewScrollDownAni(false);
-            setViewScrollUpAni(true);
-
-            setCurrentItemIndex((prevIndex) => prevIndex - 1);
-        }
+        handleWheelDebounced(deltaY);
     };
 
     useEffect(() => {
@@ -66,20 +66,13 @@ const ShortsContent = () => {
         return () => window.removeEventListener('wheel', handleWheel);
     }, [currentItemIndex]);
 
-    useEffect(() => {
-        if (isMounted.current) {
-            setViewAni(true);
-        } else {
-            isMounted.current = true;
-        }
-    }, [currentItemIndex]);
-
-
 
     return (
         <>
             {shortsList.slice(currentItemIndex, currentItemIndex + 1).map((title, index) => (
-                <li key={index} className={cn('content-container', {scrollDown_ani_view: viewScrollDownAni},{scrollUp_ani_view: viewScrollUpAni})} ref={contentRef}>
+                <li key={index}
+                    className={cn('content-container', {scrollDown_ani_view: viewScrollDownAni}, {scrollUp_ani_view: viewScrollUpAni})}
+                    ref={contentRef}>
                     <div className={cn('short-form', {animation_view: viewAni})}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
                             <video src="#" className={'short-video'}></video>
@@ -87,7 +80,8 @@ const ShortsContent = () => {
                                 <div className={'produce'}>
                                     <div className={'profile_box'}>
                                         <div className={'profile-img'}>
-                                            <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
+                                            <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'}
+                                                 alt="프로필이미지"/>
                                         </div>
                                         <div className={'profile-name'}>
                                             <p>우와앙아</p>
