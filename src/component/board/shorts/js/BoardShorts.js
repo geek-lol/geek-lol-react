@@ -9,9 +9,9 @@ const BoardShorts = () => {
             <div className={'shorts-header-wrapper'}>
                 <Shorts_header />
             </div>
-            <div className={'shorts-content-wrapper'}>
-            <Shorts_content />
-            </div>
+            <ul className={'shorts-content-wrapper'}>
+                <Shorts_content />
+            </ul>
         </div>
 
     );

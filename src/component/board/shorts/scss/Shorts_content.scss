@@ -1,3 +1,7 @@
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
 .content-container {
   //background: #cccccc;
   width: 100%;
@@ -9,6 +13,19 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+
+
+  // 애니메이션
+  .scrollDown_ani_view {
+    animation: scrollDownAni 0.5s;
+  }
+
+  .scrollUp_ani_view {
+    animation: scrollUpAni 0.5s;
+  }
+
+
+
 
   .short-form {
     //padding: 10% 0;
@@ -107,7 +124,7 @@
             align-items: center;
 
             .btn {
-              font-size: 15px;
+              font-size: 25px;
 
             }
           }
@@ -136,7 +153,7 @@
         align-items: center;
 
         .btn {
-          font-size: 15px;
+          font-size: 25px;
 
         }
       }
@@ -395,6 +412,27 @@
 
   100% {
     transform: translatex(0%);
+  }
+
+}
+
+@keyframes scrollDownAni {
+  0% {
+    transform: translateY(0%);
+  }
+
+  100% {
+    transform: translateY(-10%);
+  }
+
+}
+@keyframes scrollUpAni {
+  0% {
+    transform: translateY(0%);
+  }
+
+  100% {
+    transform: translateY(10%);
   }
 
 }
