@@ -1,5 +1,5 @@
 import React from 'react';
-import MyProfile from '../../sass/MyPageProfile.scss';
+import MyProfile from '../../scss/MyPageProfile.scss';
 
 const MyPageProfile = () => {
     return (

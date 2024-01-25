@@ -19,7 +19,7 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import '../../sass/MyActivityMain.scss'
+import '../../scss/MyActivityMain.scss'
 
 //더미 데이터 생성자
 function createData(type, boardNo,boardTitle,comment,uploadDate) {

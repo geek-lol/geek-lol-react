@@ -1,5 +1,5 @@
 import React from 'react';
-import './ResponseTime.scss';
+import '../scss/ResponseTime.scss';
 import Button from '@mui/material/Button';
 const ResponseTime = () => {
 

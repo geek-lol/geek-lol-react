@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import '../sass/MypageSideMenu.scss';
+import '../scss/MypageSideMenu.scss';
 import {Link, useLocation} from "react-router-dom";
 import cn from 'classnames';
 
