@@ -9,15 +9,18 @@ const ShortsContent = () => {
     const [viewComment, setViewComment] = useState(false);
     const [viewAni, setViewAni] = useState(false);
     const [shortsList, setShortsList] = useState(['어쩔띠', '캬캬캬캬', '집집 I wnat go home']);
-    const [currentItemIndex, setCurrentItemIndex] = useState(0);
+    // 휠 애니메이션
     const [viewScrollDownAni, setViewScrollDownAni] = useState(false);
     const [viewScrollUpAni, setViewScrollUpAni] = useState(false);
+    // 리스트 인덱스
+    const [currentItemIndex, setCurrentItemIndex] = useState(0);
+    // 휠 이벤트 시간
+    const lastWheelTime = useRef(0);
 
 
     // 신고 모달 띄우기
     const [viewReport, setViewReport] = useState(false);
     const modalBackground = useRef();
-
     const contentRef = useRef(null);
     const isMounted = useRef(false);
 
@@ -40,30 +43,67 @@ const ShortsContent = () => {
     }
 
 
-    const handleWheelDebounced = debounce((deltaY) => {
-        if (deltaY > 0 && currentItemIndex < shortsList.length - 1) {
-            setViewScrollDownAni(true);
-            setTimeout(() => {
-                setViewScrollDownAni(false);
-                setCurrentItemIndex((prevIndex) => prevIndex + 1);
-            }, 300);
-        } else if (deltaY < 0 && currentItemIndex > 0) {
-            setViewScrollUpAni(true);
-            setTimeout(() => {
-                setViewScrollUpAni(false);
-                setCurrentItemIndex((prevIndex) => prevIndex - 1);
-            }, 300);
-        }
-    }, 500);
-
+    // 휠을 내리거나 올렸을때 0.3s 기다리고 움직임
     const handleWheel = (event) => {
-        const deltaY = event.deltaY;
-        handleWheelDebounced(deltaY);
+        const currentTime = new Date().getTime();
+        // 이전 이벤트 시간 - 지금 이벤트 시간
+        const deltaTime = currentTime - lastWheelTime.current;
+
+        // 만약 0.4s이상이면 실행되도록
+        if (deltaTime > 400) {
+            const deltaY = event.deltaY;
+
+            if (deltaY > 0 && currentItemIndex < shortsList.length - 1) {
+                setViewScrollDownAni(true);
+                setTimeout(() => {
+                    setViewScrollDownAni(false);
+                    setCurrentItemIndex((prevIndex) => prevIndex + 1);
+                }, 300);
+            } else if (deltaY < 0 && currentItemIndex > 0) {
+                setViewScrollUpAni(true);
+                setTimeout(() => {
+                    setViewScrollUpAni(false);
+                    setCurrentItemIndex((prevIndex) => prevIndex - 1);
+                }, 300);
+            }
+
+            lastWheelTime.current = currentTime;
+        }
+    };
+
+    const handleKeyDown = (event) => {
+        const currentTime = new Date().getTime();
+        // 이전 이벤트 시간 - 지금 이벤트 시간
+        const deltaTime = currentTime - lastWheelTime.current;
+
+        // 만약 0.4s이상이면 실행되도록
+        if (deltaTime > 400) {
+            const deltaY = event.deltaY;
+
+            if (event.keyCode === 40 && currentItemIndex < shortsList.length - 1) {
+                setViewScrollDownAni(true);
+                setTimeout(() => {
+                    setViewScrollDownAni(false);
+                    setCurrentItemIndex((prevIndex) => prevIndex + 1);
+                }, 300);
+            } else if (event.keyCode === 38 && currentItemIndex > 0) {
+                setViewScrollUpAni(true);
+                setTimeout(() => {
+                    setViewScrollUpAni(false);
+                    setCurrentItemIndex((prevIndex) => prevIndex - 1);
+                }, 300);
+            }
+            lastWheelTime.current = currentTime;
+        }
     };
 
     useEffect(() => {
         window.addEventListener('wheel', handleWheel);
-        return () => window.removeEventListener('wheel', handleWheel);
+        window.addEventListener('keydown', handleKeyDown); // 키다운 이벤트 추가
+        return () => {
+            window.removeEventListener('wheel', handleWheel);
+            window.removeEventListener('keydown', handleKeyDown); // 이벤트 제거
+        };
     }, [currentItemIndex]);
 
 
