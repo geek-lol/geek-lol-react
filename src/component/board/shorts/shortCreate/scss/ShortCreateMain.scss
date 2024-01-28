@@ -1,0 +1,49 @@
+.sc-wrapper {
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+
+  .sc-container {
+    width: 60%;
+    margin: 10vh 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 50px;
+    
+    .sc-form {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+
+      .sc-board-title {
+        font-family: 'NanumGothic', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 25px;
+      }
+
+      .sc-create-title {
+        width: 100%;
+
+        input {
+          width: 100%;
+          border: 1px solid #cccccc;
+          border-radius: 10px;
+          height: 40px;
+          font-size: 18px;
+        }
+      }
+
+      .sc-create-content {
+
+      }
+    }
+
+    .btn-container {
+
+    }
+
+  }
+}
