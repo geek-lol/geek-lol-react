@@ -101,11 +101,16 @@
           }
 
 
-          .short-title {
+          .shortlist-title {
+            width: 100%;
             font-family: 'Nanum Gothic', sans-serif;
             font-style: normal;
             font-weight: 400;
             font-size: 17px;
+
+            .short-title {
+              word-break: break-all;
+            }
           }
         }
 

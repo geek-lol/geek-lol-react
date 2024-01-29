@@ -8,7 +8,11 @@ import {debounce} from "lodash";
 const ShortsContent = () => {
     const [viewComment, setViewComment] = useState(false);
     const [viewAni, setViewAni] = useState(false);
-    const [shortsList, setShortsList] = useState(['어쩔띠', '캬캬캬캬', '집집 I wnat go home']);
+
+    // 글자수 제한 70이 좋은듯
+    const [shortsList, setShortsList] = useState([
+        '가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하'
+        , '캬캬캬캬', '집집 I wnat go home']);
     // 휠 애니메이션
     const [viewScrollDownAni, setViewScrollDownAni] = useState(false);
     const [viewScrollUpAni, setViewScrollUpAni] = useState(false);
@@ -127,8 +131,8 @@ const ShortsContent = () => {
                                             <p>우와앙아</p>
                                         </div>
                                     </div>
-                                    <div className={'short-title'}>
-                                        <p>{title}</p>
+                                    <div className={'shortlist-title'}>
+                                        <p className={'short-title'}>{title}</p>
                                     </div>
                                 </div>
                                 <div className={cn('front-sidebar', {front_sidebar_view: viewComment})}>

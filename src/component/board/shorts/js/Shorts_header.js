@@ -56,7 +56,7 @@ const Shorts_header = () => {
                 </div>
             </div>
             <div className={'shorts-save-btn'}>
-                <Link to='/' className={'btn-b'}>
+                <Link to='/board/sc' className={'btn-b'}>
                     <ImUpload className={'btn1'}/>
                     <p className={'btn2'}>영상 업로드</p>
                 </Link>
