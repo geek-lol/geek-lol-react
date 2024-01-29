@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Phaser from 'phaser';
 import '../scss/CSGame.scss';
-import {linearProgressClasses} from "@mui/material";
-import {blue, red} from "@mui/material/colors";
 
 class MainScene extends Component{
     constructor(pros) {
@@ -73,7 +71,7 @@ class MainScene extends Component{
         this.blueMini.disableBody(true, false);
         this.blueMini.setScale(-0.1, 0.1);
         this.blueMini.setData('health', 100);
-        this.blueMini.setData('damage', 10);
+        this.blueMini.setData('damage', 20);
         this.blueHealthBars = [];
         for (let i = 0; i < 5; i++) {
              this.blueHealthBars[i] = this.add.rectangle(15*i, 450, 15, 10);
@@ -100,7 +98,7 @@ class MainScene extends Component{
         this.redMini = this.add.sprite(900, 100, "redMinion");
         this.redMini.setScale(0.1);
         this.redMini.setData('health', 100);
-        this.redMini.setData('damage', 10);
+        this.redMini.setData('damage', 20);
         const redHealthBars = this.add.rectangle(920, 50, 60, 10,0x00FF00);
         redHealthBars.setFillStyle(greens)
 
@@ -168,11 +166,11 @@ class MainScene extends Component{
 
 
         this.onRepeatCallbackAttack = ()=> {
-            console.log(`블루 체력:${this.blueMini.getData('health')}`);
+            //미니언 health-damage 처리
             this.blueMini.setData('health', this.blueMini.getData('health') - this.blueMini.getData('damage'));
-            console.log(`블루 깍인 체력:${this.blueMini.getData('health')}`);
+
+            //미니언 체력바 깍기
             const index = 4-this.repeatCount
-            console.log(`index:${index}`)
             this.blueHealthBars[index].setFillStyle(reds);
             this.repeatCount ++;
         }
@@ -182,12 +180,13 @@ class MainScene extends Component{
             targets: this.redAttack,
             x: this.blueMini.x,
             y: this.blueMini.y,
-            duration: 1000,
-            ease: 'Linear',
-            repeat:5,
+            duration: 700,
             delay:1000,
+            ease: 'Linear',
             paused: true, // 처음에는 일시 정지된 상태로 시작
-            onRepeat: this.onRepeatCallbackAttack,
+            loop:5,
+            onLoop: this.onRepeatCallbackAttack,
+
             onStart: () => {
                 // Tween이 시작되기 전에 호출되는 콜백
                 this.redAttack.x = this.redMini.x;
@@ -200,11 +199,13 @@ class MainScene extends Component{
                 // 현재 this.blueMini의 위치로 업데이트
                 this.redAttackTween.updateTo('x', this.blueMini.x);
                 this.redAttackTween.updateTo('y', this.blueMini.y);
+                // if (this.redAttack.x === this.redMini.x){
+                //     this.redAttack.visible = false;
+                // }
             },
             onComplete: () => {
                 // 애니메이션이 완료되면 실행되는 콜백
                 this.redAttack.visible = false; // 애니메이션이 완료되면 숨김
-
             }
         });
     }
