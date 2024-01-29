@@ -4,12 +4,12 @@ import {USER_URL} from "../../../../config/host-config";
 import {useNavigate} from "react-router-dom";
 
 const Signup = () => {
-    const API_BASE_URL = USER_URL
+    const API_BASE_URL = USER_URL;
     const SIGN_UP_URL = USER_URL + "/sign_up";
     const redirection = useNavigate(); // 리다이렉트 함수를 리턴
 
-    // 검증이 모두 통과되면 계정 샌성 버튼을 열어주는 논리 상태변수
-    const [lock, setLock] = useState(true);
+    // 검증이 모두 통과되면 계정 생성 버튼을 열어주는 논리 상태변수
+    // const [lock, setLock] = useState(true);
 
     // 상태변수로 회원가입 입력값 관리
     const [userValue, setUserValue] = useState({
@@ -182,10 +182,16 @@ const Signup = () => {
     // 계정 생성 버튼을 누르면 동작할 내용
     const joinClickHandler = e => {
         e.preventDefault();
-        // console.log("button clicked!!");
-        // console.log(userValue);
+
+        // 모든 검증이 통과했는지 확인
+        if (!correct.userName || !correct.password || !correct.passwordCheck || !correct.id) {
+            // 만약 어떤 검증이라도 실패하면 경고창 표시
+            alert('입력란을 다시 확인해주세요!');
+            return;
+        }
+
+        // 모든 검증이 통과했으면 회원가입 진행
         fetchSignUpPost();
-        // alert('입력란을 다시 확인해주세요!');
 
     };
 

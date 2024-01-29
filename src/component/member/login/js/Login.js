@@ -1,16 +1,37 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "../scss/Login.scss";
 import {Link, Route, Routes} from "react-router-dom";
+import {USER_URL} from "../../../../config/host-config";
 
 const Login = () => {
+    const SIGN_IN_URL = USER_URL + "/signin";
+
+    const [userValue, setUserValue] = useState({
+        id: '',
+        password: ''
+    });
+
+
+    // email확인
+    const emailHandler =  async (id) => {
+        const res = await fetch( SIGN_IN_URL);
+    }
+
+    // password확인
+    const passwordHandler = e => {
+
+    }
+
     return (
         <div className={'loginform'}>
             <div className={'loginform-container'}>
                 <div className={'login-box loginform-box'}>
                     <div className={'login-input-container'}>
-                        <input className={'login-inputbox'} type="text" placeholder={'account'}/>
+                        <input className={'login-inputbox'} type="text" placeholder={'account'}
+                               onChange={emailHandler}/>
                         <div className={'line'}></div>
-                        <input className={'login-inputbox'} type="text" placeholder={'password'}/>
+                        <input className={'login-inputbox'} type="text" placeholder={'password'}
+                                onChange={passwordHandler}/>
                     </div>
                     <div className={'signin-box'}><a>로그인</a></div>
                 </div>
