@@ -16,6 +16,7 @@ import {Route, Routes} from "react-router-dom";
 import FreeBoard from "./Freeboard/FreeBoard";
 import LcKboard from "./LCK/LCKboard";
 import Solution from "./solution/Solution";
+import RequestBoard from "./ requestBoard/RequestBoard";
 const Board = ({touch}) => {
     return (
         <>
@@ -24,6 +25,7 @@ const Board = ({touch}) => {
                 <Route path={'/FreeBoard'} element={<FreeBoard/>}/>
                 <Route path={'/LCK'} element={<LcKboard/>}/>
                 <Route path={'/Solution'} element={<Solution/>}/>
+                <Route path={'/Request'} element={<RequestBoard/>}/>
             </Routes>
 
         </>

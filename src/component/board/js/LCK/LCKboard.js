@@ -19,14 +19,14 @@ const LcKboard = () => {
     const [title,setTitle]=useState("제목");
     const relativeButtonHandler=(e)=>{
         setHide(!hide);
-    }
+    };
     const offDiv=()=>{
         if(hide===true)
             setHide(false);
-    }
+    };
     const hiddenHandler=(e)=>{
         setTitle(e.target.value);
-    }
+    };
     return (
         <>
             <LckNav/>
