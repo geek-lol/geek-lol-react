@@ -1,12 +1,22 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import BoardHeader from "../../../js/Board_header";
 import {CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import '../scss/ShortCreateMain.scss'
+import {SHORT_URL} from "../../../../../config/host-config";
+import {getCurrentLoginUser} from "../../../../../utils/login-util";
 
 
 const ShortCreateMain = () => {
+    const redirection = useNavigate();
+
+    // 토큰 가져오기
+    const [token, setToken] = useState(getCurrentLoginUser().token);
+
+    // 서버에서 할 일 목록 (JSON)을 요청해서 받아와야 함
+    const API_BASE_URL = SHORT_URL;
+
     // 이미지 파일을 상태변수로 관리
     const [thumbnailFile, setThumbnailFile] = useState(null);
 
@@ -22,6 +32,8 @@ const ShortCreateMain = () => {
     const shortClickHandler = e => {
         document.getElementById('video').click();
     };
+
+
 
 
     const showThumbnailHandler = e => {
@@ -51,6 +63,7 @@ const ShortCreateMain = () => {
             setShortFile(reader.result);
         };
     }
+
 
     const fetchShortUpload = e => {
 
