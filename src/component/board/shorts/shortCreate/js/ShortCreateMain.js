@@ -52,6 +52,16 @@ const ShortCreateMain = () => {
         };
     }
 
+    const fetchShortUpload = e => {
+
+    }
+
+    const uploadHandler = e => {
+        e.preventDefault();
+
+        fetchShortUpload();
+    }
+
     return (
         <div className={'sc-wrapper'}>
             <div className={'sc-container'}>
@@ -107,7 +117,7 @@ const ShortCreateMain = () => {
                             <Link to="/board/main" className={'btn-b'}>취소</Link>
                         </div>
                         <div className={'save-btn'}>
-                            <p className={'btn'}>등록</p>
+                            <p className={'btn'} onClick={uploadHandler}>등록</p>
                         </div>
                     </div>
                 </div>
