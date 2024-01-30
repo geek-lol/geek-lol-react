@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import Phaser from 'phaser';
 import '../scss/CSGame.scss';
 
+
+const greens = Phaser.Display.Color.GetColor(0,255,0);
+const reds = Phaser.Display.Color.GetColor(255,0,0);
+
 class MainScene extends Component{
     constructor(pros) {
         super(pros);
@@ -10,6 +14,7 @@ class MainScene extends Component{
         this.blueMini = null;
     }
 
+    // 게임 Config 함수
     componentDidMount() {
         // Phaser 초기화 및 게임 설정
         const config = {
@@ -42,6 +47,58 @@ class MainScene extends Component{
         this.game = new Phaser.Game(config);
     }
 
+    //공격함수
+    AttackMinion(){
+        this.redAttack = this.add.circle(0,0, 10, 0xFF0000);
+        this.redAttack.visible = false;
+
+
+        this.onRepeatCallbackAttack = ()=> {
+            //미니언 health-damage 처리
+            this.blueMini.setData('health', this.blueMini.getData('health') - this.blueMini.getData('damage'));
+
+            //미니언 체력바 깍기
+            const index = 4-this.repeatCount
+            this.blueHealthBars[index].setFillStyle(reds);
+            this.repeatCount ++;
+        }
+
+        //미니언 공격
+        this.redAttackTween = this.tweens.add({
+            targets: this.redAttack,
+            x: this.blueMini.x,
+            y: this.blueMini.y,
+            duration: 1800,
+            // delay:1000,
+            ease: 'Linear',
+            paused: true, // 처음에는 일시 정지된 상태로 시작
+            loop:5,
+            onLoop: this.onRepeatCallbackAttack,
+
+            onStart: () => {
+                // Tween이 시작되기 전에 호출되는 콜백
+                this.redAttack.x = this.redMini.x;
+                this.redAttack.y = this.redMini.y;
+                this.redAttack.visible = true;
+                this.repeatCount = 0;
+            },
+            onUpdate: () => {
+                // Tween이 업데이트될 때마다 호출되는 콜백
+                // 현재 this.blueMini의 위치로 업데이트
+                this.redAttackTween.updateTo('x', this.blueMini.x);
+                this.redAttackTween.updateTo('y', this.blueMini.y);
+                // if (this.redAttack.x === this.redMini.x){
+                //     this.redAttack.visible = false;
+                // }
+            },
+            onComplete: () => {
+                // 애니메이션이 완료되면 실행되는 콜백
+                this.redAttack.visible = false; // 애니메이션이 완료되면 숨김
+            }
+        });
+    }
+
+    //파일 불러오기
     preload() {
         this.load.image("redMinion", "assets/Chaos_Minion_Melee_Render.png");
         this.load.image("blueMinion", "assets/blueMinion.png");
@@ -63,8 +120,7 @@ class MainScene extends Component{
         this.cameras.main.setZoom(1.3);
         this.cameras.main.centerOn(0, 0);
 
-        const greens = Phaser.Display.Color.GetColor(0,255,0);
-        const reds = Phaser.Display.Color.GetColor(255,0,0);
+
 
         //롤 블루미니언
         this.blueMini = this.physics.add.sprite(20, 500, "blueMinion");
@@ -128,6 +184,10 @@ class MainScene extends Component{
         this.cameras.main.startFollow(this.player);
 
 
+        //미니언의 공격 함수
+        this.AttackMinion();
+
+
 
         // 게임 루프에서 실행되는 업데이트 로직
         this.input.on('pointerdown', (pointer) => {
@@ -161,53 +221,7 @@ class MainScene extends Component{
             }
 
         });
-        this.redAttack = this.add.circle(0,0, 10, 0xFF0000);
-        this.redAttack.visible = false;
 
-
-        this.onRepeatCallbackAttack = ()=> {
-            //미니언 health-damage 처리
-            this.blueMini.setData('health', this.blueMini.getData('health') - this.blueMini.getData('damage'));
-
-            //미니언 체력바 깍기
-            const index = 4-this.repeatCount
-            this.blueHealthBars[index].setFillStyle(reds);
-            this.repeatCount ++;
-        }
-
-        //미니언 공격
-        this.redAttackTween = this.tweens.add({
-            targets: this.redAttack,
-            x: this.blueMini.x,
-            y: this.blueMini.y,
-            duration: 700,
-            delay:1000,
-            ease: 'Linear',
-            paused: true, // 처음에는 일시 정지된 상태로 시작
-            loop:5,
-            onLoop: this.onRepeatCallbackAttack,
-
-            onStart: () => {
-                // Tween이 시작되기 전에 호출되는 콜백
-                this.redAttack.x = this.redMini.x;
-                this.redAttack.y = this.redMini.y;
-                this.redAttack.visible = true;
-                this.repeatCount = 0;
-            },
-            onUpdate: () => {
-                // Tween이 업데이트될 때마다 호출되는 콜백
-                // 현재 this.blueMini의 위치로 업데이트
-                this.redAttackTween.updateTo('x', this.blueMini.x);
-                this.redAttackTween.updateTo('y', this.blueMini.y);
-                // if (this.redAttack.x === this.redMini.x){
-                //     this.redAttack.visible = false;
-                // }
-            },
-            onComplete: () => {
-                // 애니메이션이 완료되면 실행되는 콜백
-                this.redAttack.visible = false; // 애니메이션이 완료되면 숨김
-            }
-        });
     }
 
     update() {
@@ -231,10 +245,14 @@ class MainScene extends Component{
         }
     }
 
+    // 우클릭 삭제 ㅂㅂ
+    handleContextMenu = (e) => {
+        e.preventDefault();
+    };
     render() {
         console.log("게임실행함니다")
         return (
-            <div id={'csgames'}>
+            <div id={'csgames'} onContextMenu={this.handleContextMenu}>
                 {/* Phaser 게임이 렌더링될 영역 */}
                 <div id="phaser-container" />
             </div>

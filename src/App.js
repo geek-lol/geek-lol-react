@@ -16,6 +16,7 @@ import MyProfileTemplate from "./component/mypage/js/profile/MyProfileTemplate";
 import MyInfoTemplate from "./component/mypage/js/info/MyInfoTemplate";
 import MyActivityTemplate from "./component/mypage/js/activity/MyActivityTemplate";
 import CSGame from "./component/game/js/CSGame";
+import MainScene from "./component/game/js/FcsGame";
 function App() {
     const [showHeader, setShowHeader] = useState(true);
     const location = useLocation();
@@ -42,7 +43,7 @@ function App() {
                 <Route path="/mypage/info" element={<MyInfoTemplate />} />
                 <Route path="/mypage/active" element={<MyActivityTemplate />}/>
                 <Route path="/resgame" element={<ResponseTime /> }/>
-                <Route path="/csgame" element={<CSGame />}/>
+                <Route path="/csgame" element={<MainScene />}/>
             </Routes>
         </>
     );
