@@ -64,7 +64,7 @@ const ShortCreateMain = () => {
         };
     }
 
-
+    // 쇼츠 업로드
     const fetchShortUpload = e => {
 
     }
@@ -72,8 +72,31 @@ const ShortCreateMain = () => {
     const uploadHandler = e => {
         e.preventDefault();
 
+        // 업로드를 허용하기 전에 사용자가 로그인되어 있는지 확인
+        if (!token) {
+            // 로그인되어 있지 않으면 로그인 페이지로 리디렉션
+            redirection('/template/login');
+            return;
+        }
+
+        // 업로드 로직 진행
         fetchShortUpload();
     }
+
+    // useEffect를 사용하여 컴포넌트가 마운트될 때 사용자가 로그인되어 있는지 확인
+    useEffect(() => {
+        const userToken = getCurrentLoginUser().token;
+        setToken(userToken);
+
+        // 사용자가 로그인되어 있지 않으면 로그인 페이지로 리디렉션
+        if (!userToken) {
+            alert("로그인이 필요한 기능입니다!");
+            redirection('/template/login');
+        }
+    }, []); // 빈 종속성 배열은 컴포넌트가 마운트될 때 이 효과가 한 번만 실행되도록 보장
+
+
+
 
     return (
         <div className={'sc-wrapper'}>
