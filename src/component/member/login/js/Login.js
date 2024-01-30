@@ -11,6 +11,8 @@ const Login = () => {
 
     // 로그인
     const fetchLoginProcess =  async () => {
+
+
         const res = await fetch(SIGN_IN_URL,{
             method: 'POST',
             headers: { 'content-type': 'application/json' },
@@ -19,6 +21,7 @@ const Login = () => {
                 password: document.getElementById('password').value
             })
         });
+
         if (res.status === 400) { // 가입이 안되었거나 비번이 틀린 경우
             // 서버에서 온 텍스트를 추출
             const text = await res.text();
@@ -53,14 +56,14 @@ const Login = () => {
 
     return (
         <div className={'loginform'}>
-            <form onSubmit={loginHandler} className={'loginform-container'}>
+            <form noValidate className={'loginform-container'}>
                 <div className={'login-box loginform-box'}>
                     <div className={'login-input-container'}>
                         <input className={'login-inputbox'} id={'email'} type="email" placeholder={'email'}/>
                         <div className={'line'}></div>
                         <input className={'login-inputbox'} id={'password'} type="password" placeholder={'password'}/>
                     </div>
-                    <button className={'signin-box'} type={"submit"} variant="contained"><a>로그인</a></button>
+                    <button className={'signin-box'} onClick={loginHandler}>로그인</button>
                 </div>
                 <div className={'login-box easylogin-box'}>
                     <div className={'easy-login-text'}><a>간편로그인</a></div>

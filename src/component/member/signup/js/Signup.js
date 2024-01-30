@@ -155,16 +155,13 @@ const Signup = () => {
     // 회원가입 비동기요청을 서버로 보내는 함수
     const fetchSignUpPost = async () => {
         console.log(userValue);
-        // JSON데이터를 formData에 넣기 위한 작업
-        const jsonBlob = new Blob(
-            [ JSON.stringify(userValue) ],
-            { type: 'application/json' }
-        );
-
 
         const res = await fetch(SIGN_UP_URL, {
             method: 'POST',
-            body: jsonBlob
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userValue)
         });
 
         if (res.status === 200) {
@@ -175,7 +172,7 @@ const Signup = () => {
             redirection('/template/login');
 
         } else {
-            alert('서버와의 통신이 원활하지 않습니다.')
+            alert('서버와의 통신이 원활하지 않습니다.');
         }
     }
 
@@ -184,7 +181,7 @@ const Signup = () => {
         e.preventDefault();
 
         // 모든 검증이 통과했는지 확인
-        if (!correct.userName || !correct.password || !correct.passwordCheck || !correct.id) {
+        if (!correct.password || !correct.passwordCheck || !correct.id) {
             // 만약 어떤 검증이라도 실패하면 경고창 표시
             alert('입력란을 다시 확인해주세요!');
             return;
