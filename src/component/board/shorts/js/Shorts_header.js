@@ -5,7 +5,8 @@ import cn from "classnames";
 import {BsAward, BsBinoculars, BsClipboard2, BsFillHouseFill, BsHouse, BsNintendoSwitch} from "react-icons/bs";
 import {ImUpload} from "react-icons/im";
 
-const Shorts_header = () => {
+const Shorts_header = ({onAdd}) => {
+
 
     return (
         <div className={'header-container'}>

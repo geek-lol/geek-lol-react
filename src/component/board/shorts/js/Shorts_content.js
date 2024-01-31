@@ -4,15 +4,12 @@ import {BsChatLeft, BsExclamationCircle, BsHeart} from "react-icons/bs";
 import cn from "classnames";
 import Shorts_comment from "./Shorts_comment";
 import {debounce} from "lodash";
+import {SHORT_URL} from "../../../../config/host-config";
 
-const ShortsContent = () => {
+const ShortsContent = ({item}) => {
     const [viewComment, setViewComment] = useState(false);
     const [viewAni, setViewAni] = useState(false);
-
-    // 글자수 제한 70이 좋은듯
-    const [shortsList, setShortsList] = useState([
-        '가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하'
-        , '캬캬캬캬', '집집 I wnat go home']);
+    
     // 휠 애니메이션
     const [viewScrollDownAni, setViewScrollDownAni] = useState(false);
     const [viewScrollUpAni, setViewScrollUpAni] = useState(false);
@@ -21,12 +18,38 @@ const ShortsContent = () => {
     // 휠 이벤트 시간
     const lastWheelTime = useRef(0);
 
+    const {shortsId, uploaderName,viewCount, upCount, title, context, videoLink, thumbnail} = item;
 
     // 신고 모달 띄우기
     const [viewReport, setViewReport] = useState(false);
     const modalBackground = useRef();
     const contentRef = useRef(null);
     const isMounted = useRef(false);
+
+    const [shortList, setShortList] = useState([]);
+    const API_BASE_URL = SHORT_URL
+
+
+    useEffect(() => {
+
+        fetch(API_BASE_URL, {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' }
+        })
+            .then(res => {
+                if (res.status === 200){
+                    return res.json();
+                }
+            })
+            .then(json => {
+                if (!json) return;
+
+                // console.log(json);
+                setShortList(json.shorts);
+
+            });
+
+    }, []);
 
     // 댓글 닫을때 애니메이션
     useEffect(() => {
@@ -111,15 +134,17 @@ const ShortsContent = () => {
     }, [currentItemIndex]);
 
 
+
+
     return (
         <>
-            {shortsList.slice(currentItemIndex, currentItemIndex + 1).map((title, index) => (
+            {[item].slice(currentItemIndex, currentItemIndex + 1).map((singleItem, index) => (
                 <li key={index}
                     className={cn('content-container', {scrollDown_ani_view: viewScrollDownAni}, {scrollUp_ani_view: viewScrollUpAni})}
                     ref={contentRef}>
                     <div className={cn('short-form', {animation_view: viewAni})}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
-                            <video src="#" className={'short-video'}></video>
+                            <video src={item.videoLink} className={'short-video'}></video>
                             <div className={'overlap-front'}>
                                 <div className={'produce'}>
                                     <div className={'profile_box'}>
@@ -128,22 +153,22 @@ const ShortsContent = () => {
                                                  alt="프로필이미지"/>
                                         </div>
                                         <div className={'profile-name'}>
-                                            <p>우와앙아</p>
+                                            <p>{item.uploaderName}</p>
                                         </div>
                                     </div>
                                     <div className={'shortlist-title'}>
-                                        <p className={'short-title'}>{title}</p>
+                                        <p className={'short-title'}>{item.title}</p>
                                     </div>
                                 </div>
                                 <div className={cn('front-sidebar', {front_sidebar_view: viewComment})}>
                                     <div className={'short-btn like-btn'}>
                                         <BsHeart className={'btn'}/>
                                         {/* <BsHeartFill /> */}
-                                        <p>1300</p>
+                                        <p>{item.viewCount}</p>
                                     </div>
                                     <div className={'short-btn comment-btn'}>
                                         <BsChatLeft className={'btn'} onClick={chkViewComment}/>
-                                        <p>2</p>
+                                        <p>{item.upCount}</p>
                                     </div>
                                     <div className={'short-btn report-btn'}>
                                         <BsExclamationCircle className={'btn'} onClick={() => setViewReport(true)}/>
@@ -155,11 +180,11 @@ const ShortsContent = () => {
                             <div className={'short-btn like-btn'}>
                                 <BsHeart className={'btn'}/>
                                 {/* <BsHeartFill /> */}
-                                <p>1300</p>
+                                <p>{item.viewCount}</p>
                             </div>
                             <div className={'short-btn comment-btn'}>
                                 <BsChatLeft className={'btn'} onClick={chkViewComment}/>
-                                <p>2</p>
+                                <p>{item.upCount}</p>
                             </div>
                             <div className={'short-btn report-btn'}>
                                 <BsExclamationCircle className={'btn'} onClick={() => setViewReport(true)}/>

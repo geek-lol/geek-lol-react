@@ -15,7 +15,6 @@ const BoardTemplate = () => {
         <>
             <Routes>
                 <Route path={'/main'} element={<Board />}/>
-
                 <Route path={'/create'} element={<BoardCreate />} />
                 <Route path={'/shorts'} element={<BoardShorts />} />
                 <Route path={'/sc'} element={<ShortCreateMain />}/>

@@ -1,16 +1,45 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../scss/BoardShorts.scss'
 import Shorts_header from "./Shorts_header";
 import Shorts_content from "./Shorts_content";
+import {Route, Routes} from "react-router-dom";
+import ShortCreateMain from "../shortCreate/js/ShortCreateMain";
+import {SHORT_URL} from "../../../../config/host-config";
 
 const BoardShorts = () => {
+    const [shortList, setShortList] = useState([]);
+    const API_BASE_URL = SHORT_URL
+
+
+    useEffect(() => {
+
+        fetch(API_BASE_URL, {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' }
+        })
+            .then(res => {
+                if (res.status === 200){
+                    return res.json();
+                }
+            })
+            .then(json => {
+                if (!json) return;
+
+                // console.log(json);
+                setShortList(json.shorts);
+
+            });
+
+    }, []);
+
+
     return (
         <div className={'short-container'}>
             <div className={'shorts-header-wrapper'}>
                 <Shorts_header />
             </div>
             <ul className={'shorts-content-wrapper'}>
-                <Shorts_content />
+               <Shorts_content />
             </ul>
         </div>
 
