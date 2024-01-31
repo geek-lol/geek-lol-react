@@ -11,6 +11,7 @@ const MainScene = ()=> {
     let playerAttack = null;
     let playerAttackTween = null;
 
+    let playerScore = 0;
     let center = null;
     let redMinions = null;
     let blueMinions = null;
@@ -94,7 +95,7 @@ const MainScene = ()=> {
 
         const blueHealthBars = [];
         for (let i = 0; i < 5; i++) {
-            blueHealthBars[i] = add.rectangle((x-5)+(15*i), y, 15, 10);
+            blueHealthBars[i] = add.rectangle((x-20)+(15*i), y-50, 15, 10);
             blueHealthBars[i].setFillStyle(greens);
         }
         const minionTween = MinionTween(tweens,blueMinion,1000,0);
@@ -121,7 +122,7 @@ const MainScene = ()=> {
 
        const redHealthBars = [];
        for (let i = 0; i < 5; i++) {
-           redHealthBars[i] = add.rectangle(880+(15*i),y-10, 15, 10);
+           redHealthBars[i] = add.rectangle(780+(15*i),y-10, 15, 10);
            redHealthBars[i].setFillStyle(greens);
        }
 
@@ -144,7 +145,7 @@ const MainScene = ()=> {
        return redMinion
     }
     //미니언 공격
-    function attackTween(tweens, attack, target, attacker){
+    function attackTween(tweens, attack, target, attacker,delay){
         const attacks = tweens.add({
             targets: attack,
             x:0,
@@ -152,12 +153,15 @@ const MainScene = ()=> {
             duration: 1800,
             ease: 'Linear',
             paused: true, // 처음에는 일시 정지된 상태로 시작
+            delay: delay,
             loop:5,
             onLoop:()=>{
+                attacker.getData('attack').visible = false;
+
                 if (target.getData('health')<=0){
-                    attacker.getData('attack').visible = false;
                     attacks.stop();
                 }else {
+                    attacker.getData('attack').visible = true;
                     //미니언 체력수치 깎기
                     target.setData('health', target.getData('health') -target.getData('damage'));
 
@@ -204,10 +208,10 @@ const MainScene = ()=> {
 
         // 블루 미니언
         for (let i = 0; i < 4; i++) {
-            blueMinions.add(createBlueMinion(this.physics,this.add,this.tweens,0,500+(100*i)),true);
+            blueMinions.add(createBlueMinion(this.physics,this.add,this.tweens,0,400+(120*i)),true);
         }
         for (let i = 0; i < 4; i++) {
-            redMinions.add(createRedMinion(this.physics,this.add,this.tweens,900,(100 * i)),true);
+            redMinions.add(createRedMinion(this.physics,this.add,this.tweens,800,(100 * i)),true);
         }
 
         // player를 클래스의 인스턴스 변수로 선언
@@ -230,12 +234,7 @@ const MainScene = ()=> {
         blueMinions.children.iterate(bm => {
             const targetRed = getRandomElement(redMinions);
             bm.setData('target', targetRed);
-            bm.setData('AttackTween' ,attackTween(this.tweens,bm.getData('attack'),targetRed,bm));
-        })
-        redMinions.children.iterate(rm => {
-            const targetBlue = blueMinions.getChildren()[0];
-            rm.setData('target',targetBlue);
-            rm.setData('AttackTween', attackTween(this.tweens,rm.getData('attack'),targetBlue,rm));
+            bm.setData('AttackTween' ,attackTween(this.tweens,bm.getData('attack'),targetRed,bm,1000));
         })
 
 
@@ -306,6 +305,10 @@ const MainScene = ()=> {
                                 const index = 4 - redMinion.getData('repeatCount')
                                 redMinion.getData('healthBar')[index].setFillStyle(reds)
                                 redMinion.setData('repeatCount',redMinion.getData('repeatCount') + 1);
+                                if ( redMinion.getData('health') <= 0){
+                                    playerScore += 10;
+                                    console.log(`점수:${playerScore}`);
+                                }
                             }
 
                             playerAttack.visible = false;
@@ -333,7 +336,6 @@ const MainScene = ()=> {
                          rm.getData('healthBar').forEach(h=> h.destroy());
                          rm.destroy();
                          redMinions.remove(rm)
-                         console.log(redMinions)
                      }
                  }
              }
@@ -342,10 +344,13 @@ const MainScene = ()=> {
          blueMinions.children.iterate((bm) => {
             if (bm.getData('moveTween').isPlaying()){
                 const distance = Phaser.Math.Distance.Between(bm.x, bm.y, center.x, center.y);
+                const bluedistance = Phaser.Math.Distance.Between(bm.getData('target').x, bm.getData('target').y, center.x, center.y);
 
                 if (distance <= 200) {
-                    bm.getData('moveTween').stop();
-                    bm.getData('healthBarTween').stop();
+                    if (bluedistance <= 200){
+                        bm.getData('moveTween').stop();
+                        bm.getData('healthBarTween').stop();
+                    }
                 }
             }else{
                 if (bm.getData('target') != null){
@@ -356,13 +361,18 @@ const MainScene = ()=> {
                     } else{
                         bm.getData('AttackTween').stop();
                         bm.getData('attack').visible = false;
+                        bm.setData('target',null);
                     }
+                }else{
+                    const targetRed = getRandomElement(redMinions);
+                    bm.setData('target', targetRed);
+                    bm.setData('AttackTween' ,attackTween(this.tweens,bm.getData('attack'),targetRed,bm,1000));
                 }
             }
         });
          if (redMinions.children.entries.length === 0){
              for (let i = 0; i < 4; i++) {
-                 redMinions.add(createRedMinion(this.physics,this.add,this.tweens,900,(100 * i)),true);
+                 redMinions.add(createRedMinion(this.physics,this.add,this.tweens,800,(100 * i)),true);
              }
          }
     }
