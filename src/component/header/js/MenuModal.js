@@ -6,7 +6,6 @@ import cn from "classnames";
 import Profile from "./Profile";
 
 const MenuModal = ({menu}) => {
-    console.log(menu)
     return (
         <>
             <div id='menuModal' className={cn("menuModal", {active: menu})}>
