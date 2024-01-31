@@ -39,7 +39,11 @@ const BoardShorts = () => {
                 <Shorts_header />
             </div>
             <ul className={'shorts-content-wrapper'}>
-               <Shorts_content />
+                {shortList.map((shorts) => (
+                    <Shorts_content
+                        key={shorts.shortsId}
+                        item={shorts} />
+                ))}
             </ul>
         </div>
 

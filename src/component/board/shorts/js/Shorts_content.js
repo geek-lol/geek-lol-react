@@ -42,10 +42,9 @@ const ShortsContent = ({item}) => {
                 }
             })
             .then(json => {
-                if (!json) return;
-
-                // console.log(json);
-                setShortList(json.shorts);
+                if (json && json.shorts) {
+                    setShortList(json.shorts);
+                }
 
             });
 
@@ -80,7 +79,7 @@ const ShortsContent = ({item}) => {
         if (deltaTime > 400) {
             const deltaY = event.deltaY;
 
-            if (deltaY > 0 && currentItemIndex < shortsList.length - 1) {
+            if (deltaY > 0 && currentItemIndex < shortList.length - 1) {
                 setViewScrollDownAni(true);
                 setTimeout(() => {
                     setViewScrollDownAni(false);
@@ -107,7 +106,7 @@ const ShortsContent = ({item}) => {
         if (deltaTime > 400) {
             const deltaY = event.deltaY;
 
-            if (event.keyCode === 40 && currentItemIndex < shortsList.length - 1) {
+            if (event.keyCode === 40 && currentItemIndex < shortList.length - 1) {
                 setViewScrollDownAni(true);
                 setTimeout(() => {
                     setViewScrollDownAni(false);
@@ -138,8 +137,8 @@ const ShortsContent = ({item}) => {
 
     return (
         <>
-            {[item].slice(currentItemIndex, currentItemIndex + 1).map((singleItem, index) => (
-                <li key={index}
+            {[item].slice(currentItemIndex, currentItemIndex + 1).map((item, shortsId) => (
+                <li key={shortsId}
                     className={cn('content-container', {scrollDown_ani_view: viewScrollDownAni}, {scrollUp_ani_view: viewScrollUpAni})}
                     ref={contentRef}>
                     <div className={cn('short-form', {animation_view: viewAni})}>
