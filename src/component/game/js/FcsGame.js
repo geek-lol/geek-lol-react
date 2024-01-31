@@ -11,6 +11,7 @@ const MainScene = ()=> {
     let playerAttack = null;
     let playerAttackTween = null;
 
+    let center = null;
     let redMinions = null;
     let blueMinions = null;
 
@@ -191,7 +192,7 @@ const MainScene = ()=> {
 
         const backImg = this.add.image(500,300,"background");
         backImg.setScale(2);
-
+        center = this.add.rectangle(500,300,10);
         // 게임 화면의 가로, 세로 크기
         const gameWidth = 1000;
         const gameHeight = 600;
@@ -232,7 +233,7 @@ const MainScene = ()=> {
             bm.setData('AttackTween' ,attackTween(this.tweens,bm.getData('attack'),targetRed,bm));
         })
         redMinions.children.iterate(rm => {
-            const targetBlue = getRandomElement(blueMinions);
+            const targetBlue = blueMinions.getChildren()[0];
             rm.setData('target',targetBlue);
             rm.setData('AttackTween', attackTween(this.tweens,rm.getData('attack'),targetBlue,rm));
         })
@@ -269,59 +270,60 @@ const MainScene = ()=> {
             }
         });
 
-        redMinions.children.iterate(redMinion => {
-            redMinion.on('pointerdown',(pointer)=>{
-                const minionPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
-                const distance = Phaser.Math.Distance.Between(player.x, player.y, minionPoint.x, minionPoint.y);
-                // 일정한 속도로 이동하도록 duration 계산
-                const speed = 200; // 이동 속도 (픽셀/초)
-                if(pointer.rightButtonDown()){
-                    if (!playerAttackTween||!playerAttackTween.isPlaying()){
-                        playerAttackTween = this.tweens.add({
-                            targets: playerAttack,
-                            x: redMinion.x,
-                            y: redMinion.y,
-                            duration: distance / speed * 1000,
-                            ease: 'Linear',
-                            paused: true, // 처음에는 일시 정지된 상태로 시작
-                            onStart: () => {
-                                // Tween이 시작되기 전에 호출되는 콜백
-                                playerAttack.x = player.x;
-                                playerAttack.y = player.y;
-                                playerAttack.visible = true;
 
-                            },
-                            onComplete: ()=>{
-
-                                //미니언 체력바 깍기
-                                if (redMinion.getData('repeatCount') <= 4){
-                                    //미니언 체력수치 깎기
-                                    redMinion.setData('health', redMinion.getData('health') - redMinion.getData('damage'));
-
-                                    const index = 4 - redMinion.getData('repeatCount')
-                                    redMinion.getData('healthBar')[index].setFillStyle(reds)
-                                    redMinion.setData('repeatCount',redMinion.getData('repeatCount') + 1);
-                                }
-
-                                playerAttack.visible = false;
-                            }
-                        });
-                    }
-
-                    if (redMinion.getData('health') > 0){
-                        playerAttackTween.play();
-                    }
-                }
-
-            })
-        })
     }
 
     function update(){
+        redMinions.children.iterate(redMinion => {
+        redMinion.on('pointerdown',(pointer)=>{
+            const minionPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+            const distance = Phaser.Math.Distance.Between(player.x, player.y, minionPoint.x, minionPoint.y);
+            // 일정한 속도로 이동하도록 duration 계산
+            const speed = 200; // 이동 속도 (픽셀/초)
+            if(pointer.rightButtonDown()){
+                if (!playerAttackTween||!playerAttackTween.isPlaying()){
+                    playerAttackTween = this.tweens.add({
+                        targets: playerAttack,
+                        x: redMinion.x,
+                        y: redMinion.y,
+                        duration: distance / speed * 1000,
+                        ease: 'Linear',
+                        paused: true, // 처음에는 일시 정지된 상태로 시작
+                        onStart: () => {
+                            // Tween이 시작되기 전에 호출되는 콜백
+                            playerAttack.x = player.x;
+                            playerAttack.y = player.y;
+                            playerAttack.visible = true;
+
+                        },
+                        onComplete: ()=>{
+
+                            //미니언 체력바 깍기
+                            if (redMinion.getData('repeatCount') <= 4){
+                                //미니언 체력수치 깎기
+                                redMinion.setData('health', redMinion.getData('health') - redMinion.getData('damage'));
+
+                                const index = 4 - redMinion.getData('repeatCount')
+                                redMinion.getData('healthBar')[index].setFillStyle(reds)
+                                redMinion.setData('repeatCount',redMinion.getData('repeatCount') + 1);
+                            }
+
+                            playerAttack.visible = false;
+                        }
+                    });
+                }
+
+                if (redMinion.getData('health') > 0){
+                    playerAttackTween.play();
+                }
+            }
+
+        })
+    })
          redMinions.children.iterate((rm)=>{
              if (rm !=null){
-                 if (rm.getData('target') !=null && rm.getData('moveTween').isPlaying()){
-                     const distance = Phaser.Math.Distance.Between(rm.x, rm.y, rm.getData('target').x,  rm.getData('target').y);
+                 if (rm.getData('moveTween').isPlaying()){
+                     const distance = Phaser.Math.Distance.Between(rm.x, rm.y, center.x,  center.y);
                      if (distance <= 200) {
                          rm.getData('moveTween').stop();
                          rm.getData('healthBarTween').stop();
@@ -339,7 +341,7 @@ const MainScene = ()=> {
          });
          blueMinions.children.iterate((bm) => {
             if (bm.getData('moveTween').isPlaying()){
-                const distance = Phaser.Math.Distance.Between(bm.x, bm.y, bm.getData('target').x, bm.getData('target').y);
+                const distance = Phaser.Math.Distance.Between(bm.x, bm.y, center.x, center.y);
 
                 if (distance <= 200) {
                     bm.getData('moveTween').stop();
