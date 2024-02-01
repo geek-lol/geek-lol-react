@@ -56,6 +56,17 @@
       }
     }
 
+    .img-box {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      #board_detail_img {
+        width: 180px;
+      }
+    }
+
     .btn-container {
       width: 100%;
       display: flex;
