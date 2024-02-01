@@ -152,13 +152,14 @@ const Header = ({sendTouch}) => {
                         {isInput === true && <SearchBox/>}
                     </div>
                     <ul className="certification__box">
-                        {isLoggedIn?<Profile/>:<LoginBtn/>}
+                        {isLoggedIn ? <Profile/> : <LoginBtn/>}
                     </ul>
-                    <div className="nav_toggle_Btn" onClick={menuHandler}>
-                        <TiThMenu/>
-                    </div>
+
                 </nav>
             </header>
+            <div className="nav_toggle_Btn" onClick={menuHandler} modalTouchHandler={modalTouchHandler}>
+                <TiThMenu/>
+            </div>
             <MenuModal menu={menu} isLogin={isLoggedIn}/>
         </div>
     );
