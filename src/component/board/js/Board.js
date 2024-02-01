@@ -4,6 +4,14 @@ import "../scss/board.scss";
 import {CiSearch} from "react-icons/ci";
 import { GoChevronDown } from "react-icons/go";
 import cn from "classnames";
+import BoardContent from "./BoardContent";
+import BoardHeader from "./Board_header";
+import {
+    MdKeyboardArrowLeft,
+    MdKeyboardDoubleArrowLeft,
+    MdKeyboardDoubleArrowRight,
+    MdOutlineKeyboardArrowRight
+} from "react-icons/md";
 const Board = () => {
     const [hide,setHide]=useState(false);
     const [title,setTitle]=useState("제목");
@@ -20,21 +28,9 @@ const Board = () => {
     }
     return (
         <>
-            <Header/>
+            <BoardHeader/>
             <div id="board_wrap" onClick={offDiv}>
-                <div id="board_header"></div>
                 <section id="board_main">
-                    <div className="board_nav_bar">
-                        <div className="aside">
-                            <a className="WritePost">게시글 작성</a>
-                            <ul className="nav_bar_listBox">
-                                <li className="nav_bar_list click">자유게시판</li>
-                                <li className="nav_bar_list">LCK 게시판</li>
-                                <li className="nav_bar_list">공략게시판</li>
-                                <li className="nav_bar_list">하이라이트</li>
-                            </ul>
-                        </div>
-                    </div>
                     <div className="board_list_box">
                         <div className="board_search_box">
                             <div className="toggleBtn">
@@ -70,18 +66,34 @@ const Board = () => {
                                 <span className="s-title5 py-1">조회</span>
                                 <span className="s-title6 py-1">추천</span>
                             </div>
-                            <a className="table-content">
-                                <div className="num">27687</div>
-                                <div className="num">27687</div>
-                                <div className="contents">
-                                    <span>쇼진/기회/불경 방관 헤카림.</span>
-                                    <span>[0]</span>
-                                </div>
-                                <div className="num">넌 감동이었던 케이틀린</div>
-                                <div className="num">1시간 전</div>
-                                <div className="num">23</div>
-                                <div className="num">0</div>
-                            </a>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <BoardContent/>
+                            <nav className="page-box">
+                                <ul className="arrowBox">
+                                    <li className="arrow"><MdKeyboardDoubleArrowLeft size={12 * 2}/></li>
+                                    <li className="arrow"><MdKeyboardArrowLeft size={12 * 2}/></li>
+                                    <li className="arrow">1</li>
+                                    <li className="arrow">2</li>
+                                    <li className="arrow"><MdOutlineKeyboardArrowRight size={12 * 2}/></li>
+                                    <li className="arrow"><MdKeyboardDoubleArrowRight size={12 * 2}/></li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </section>

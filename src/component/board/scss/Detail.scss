@@ -1,0 +1,126 @@
+#detail-body{
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  .detail-content{
+    border: lightgray solid 2px;
+    border-radius: 4px;
+    background: white;
+    display: flex;
+    margin:  50px auto;
+    width: 1080px;
+    flex-direction: column;
+    .content-top{
+      display: flex;
+      flex-direction: column;
+      padding: 32px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid black;
+      h1{
+        justify-content: start;
+        font-weight: 700;
+        font-size: 30px;
+        margin: 16px 0;
+      }
+      .detail-info-box{
+        display: flex;
+        justify-content: flex-start;
+        .info-front{
+          display: flex;
+          margin-right: auto;
+        }
+        .info-back{
+          display: flex;
+        }
+        p{
+          margin: 4px;
+        }
+      }
+    }
+    .content-center{
+      padding: 100px;
+      border-bottom: 1px solid black;
+      margin-bottom: 32px;
+    }
+    .content-bottom{
+      margin:  25px 50px;
+      display: flex;
+      justify-content: end;
+      p{
+        margin: 16px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      p:hover{
+        border: 1px solid lightgray;
+      }
+
+      .correction{
+      }
+      .delete{
+        color: red;
+      }
+    }
+  }
+  .detail-comment{
+    width: 1080px;
+    .detail-comment-form{
+      width: 90%;
+      margin: 50px auto;
+      display: flex;
+      border-bottom: lightgray solid 1px;
+      #outlined-basic{
+        border-radius: 16px;
+      }
+      button{
+        font-weight: 700;
+        color: black;
+        border: lightgray solid 1px;
+        font-size: 18px;
+      }
+    }
+    .comment-box{
+      width: 90%;
+      margin: auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .comment{
+        width: 100%;
+        padding: 12px;
+        border-radius: 16px;
+        border: solid lightgray 1px;
+        display: flex;
+        flex-direction: column;
+        margin: 5px;
+        .comment-top{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .tqbox{
+            display: flex;
+          }
+          p{
+            padding: 5px;
+          }
+        }
+        .comment-content{
+          display: flex;
+          justify-content: space-between;
+          padding: 8px;
+          .ctt{
+            padding: 16px;
+          }
+        }
+      }
+      .moveBox{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+}

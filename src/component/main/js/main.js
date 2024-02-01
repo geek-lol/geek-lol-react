@@ -39,12 +39,15 @@ const Main = () => {
       setSplitValue([splitInput[0], splitInput[1] ? splitInput[1] : 'KR1']);
     };
 
+
     return (
         <>
-            <Header/>
+
             <div className='mainBox'>
                 <div className='main__Title'>
-                    <a href='#' className='title__logo'></a>
+                    <a href='#' className='title__logo'>
+                        <img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지" />
+                    </a>
                 </div>
                 <div className='input__Title'>
                     <Input value={inputValue} onChange={handleChange} onSubmit={handleSubmit}/>
