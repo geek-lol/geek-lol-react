@@ -5,6 +5,7 @@ import '../scss/MenuModal.scss';
 import cn from "classnames";
 import Profile from "./Profile";
 
+
 const MenuModal = ({menu, isLogin, isProfile}) => {
     console.log(isLogin)
     return (

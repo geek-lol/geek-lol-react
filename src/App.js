@@ -17,6 +17,8 @@ import MyInfoTemplate from "./component/mypage/js/info/MyInfoTemplate";
 import MyActivityTemplate from "./component/mypage/js/activity/MyActivityTemplate";
 import CSGame from "./component/game/js/CSGame";
 import MainScene from "./component/game/js/FcsGame";
+import InfoTemplate from "./component/summonerInfo/js/InfoTemplate";
+
 function App() {
     const [showHeader, setShowHeader] = useState(true);
     const location = useLocation();
@@ -37,6 +39,8 @@ function App() {
                 <Route path="/template/*" element={<Template />} />
                 <Route path="/" element={<Main />} />
                 <Route path="/rank" element={<Rank />} />
+                <Route path="/find/:searchValue/:tag" element={<InfoTemplate />} />
+                <Route path="/find/:riotIdGameName/:riotIdTagline" element={<InfoTemplate />} />
                 <Route path="/spector" element={<SpectorMain />} />
                 <Route path="/board/*" element={<BoardTemplate />} />
                 <Route path="/mypage/*" element={<MyProfileTemplate />} />
