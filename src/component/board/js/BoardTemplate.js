@@ -7,7 +7,6 @@ import Detail from "./Detail";
 import LCKBoard from "./LCK/LCKContent";
 import ShortCreateMain from "../shorts/shortCreate/js/ShortCreateMain";
 
-
 const BoardTemplate = ({touch}) => {
     return (
         <>

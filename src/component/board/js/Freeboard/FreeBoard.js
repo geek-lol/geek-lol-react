@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {GoChevronDown} from "react-icons/go";
 import cn from "classnames";
 import {CiSearch} from "react-icons/ci";
-import LCKboard from "../LCK/LCKboard";
 import {
     MdKeyboardArrowLeft,
     MdKeyboardDoubleArrowLeft,
@@ -11,19 +10,42 @@ import {
 } from "react-icons/md";
 import BoardGather from "./BoardGather";
 import {Link} from "react-router-dom";
+import {BOARD_URL} from "../../../../config/host-config";
+import Board from "../Board";
 const FreeBoard = () => {
-    const [hide,setHide]=useState(false);
-    const [title,setTitle]=useState("제목");
-    const relativeButtonHandler=(e)=>{
+    const [boardList, setBoardList] = useState([]);
+    const API_BASE_URL = BOARD_URL
+    const [hide, setHide] = useState(false);
+    const [title, setTitle] = useState("제목");
+    const relativeButtonHandler = (e) => {
         setHide(!hide);
     }
-    const offDiv=()=>{
-        if(hide===true)
+    const offDiv = () => {
+        if (hide === true)
             setHide(false);
     }
-    const hiddenHandler=(e)=>{
+    const hiddenHandler = (e) => {
         setTitle(e.target.value);
     }
+    useEffect(() => {
+        fetch(API_BASE_URL, {
+            method: 'GET',
+            headers: {'content-type': 'application/json'}
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json();
+                }
+            })
+            .then(json => {
+                if (!json) return;
+
+                // console.log(json);
+                setBoardList(json.board);
+                console.log(json.board);
+            });
+        }, []);
+
     return (
         <div id="board_wrap" onClick={offDiv} style={{marginTop:'97.99px'}}>
             <section id="board_main">
@@ -89,6 +111,5 @@ const FreeBoard = () => {
             </section>
         </div>
     );
-};
-
+}
 export default FreeBoard;
