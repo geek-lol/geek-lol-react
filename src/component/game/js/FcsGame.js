@@ -13,12 +13,21 @@ const MainScene = ()=> {
 
     let playerScore = 0;
     let scoreText = null;
-    let timeTest = null;
-    let center = null;
+    let timeText = null;    let center = null;
     let redMinions = null;
     let blueMinions = null;
 
-    let timeCount = 10000;
+    let gametimer = null;
+    let timeCount =  5000; //180000;
+    //시간 format 함수
+    function formatTime(seconds) { // 100000 = 100초 = 1분 40초
+        const s = Math.floor(seconds / 1000); // 100초
+        const minutes = Math.floor(s/60); // 1
+        const remainingSeconds = s % 60; // 40
+        const formattedTime = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+        return formattedTime;
+    };
+
     useEffect(() => {
         const config = {
             type: Phaser.AUTO,
@@ -49,12 +58,6 @@ const MainScene = ()=> {
         };
     }, []);
 
-    function preload () {
-        this.load.image("redMinion", "assets/Chaos_Minion_Melee_Render.png");
-        this.load.image("blueMinion", "assets/blueMinion.png");
-        this.load.image("player", "assets/temo.png");
-        this.load.image("background", "assets/lol_game_back.jpg");
-    }
 
     //미니언 이동 애니메이션
     function MinionTween(twee, target, x,y ){
@@ -193,6 +196,13 @@ const MainScene = ()=> {
 
         return attacks
     }
+
+    function preload () {
+        this.load.image("redMinion", "assets/Chaos_Minion_Melee_Render.png");
+        this.load.image("blueMinion", "assets/blueMinion.png");
+        this.load.image("player", "assets/temo.png");
+        this.load.image("background", "assets/lol_game_back.jpg");
+    }
     function create () {
         redMinions = this.physics.add.group();
         blueMinions = this.physics.add.group();
@@ -232,8 +242,8 @@ const MainScene = ()=> {
         playerAttack =  this.add.circle(200,500, 10, 0xFF0000);
         playerAttack.visible = false;
 
-        timeTest = this.add.text(150,120,`남은시간:03:00`,{ font: '16px Arial', fill: '#ffffff' });
-        timeTest.setScrollFactor(0);
+        timeText = this.add.text(150,120,`남은시간:03:00`,{ font: '16px Arial', fill: '#ffffff' });
+        timeText.setScrollFactor(0);
 
         scoreText = this.add.text(150,150,`점수:${playerScore}`,{ font: '16px Arial', fill: '#ffffff' });
         scoreText.setScrollFactor(0);
@@ -277,6 +287,17 @@ const MainScene = ()=> {
             }
         });
 
+        function timerCallback() {
+            timeText.text= `남은시간:${formatTime(timeCount)}`;
+            timeCount = (timeCount-1000);
+        }
+
+        gametimer= this.time.addEvent({
+            delay: 1000,      // 밀리초 단위의 지연 시간
+            callback: timerCallback,
+            callbackScope: this,
+            loop: true
+        })
 
     }
 
@@ -383,18 +404,14 @@ const MainScene = ()=> {
                  redMinions.add(createRedMinion(this.physics,this.add,this.tweens,800,(100 * i)),true);
              }
          }
-        this.time.delayedCall(1000, () => {
-            console.log(formatTime(timeCount-=1))
 
-        }, [], this);
-
+         if (timeCount <=0){
+             gametimer.paused = true;
+             this.scene.stop();
+             this.scene.start(StartScene);
+         }
     }
-    const formatTime = (seconds) => {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        const formattedTime = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-        return formattedTime;
-    };
+
     const handleContextMenu = (e) => {
         e.preventDefault();
     };
