@@ -11,8 +11,6 @@ const Login = () => {
 
     // 로그인
     const fetchLoginProcess =  async () => {
-
-
         const res = await fetch(SIGN_IN_URL,{
             method: 'POST',
             headers: { 'content-type': 'application/json' },
@@ -50,7 +48,6 @@ const Login = () => {
 
     const loginHandler = e => {
         e.preventDefault();
-
         fetchLoginProcess();
     }
 

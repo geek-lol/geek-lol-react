@@ -7,6 +7,7 @@ import Profile from "./Profile";
 import MenuModal from "./MenuModal";
 import {Link} from "react-router-dom";
 import cn from "classnames";
+import {getCurrentLoginUser, isLogin} from "../../../utils/login-util";
 
 const Header = ({sendTouch}) => {
     //boardHeader 상태변수
@@ -54,7 +55,6 @@ const Header = ({sendTouch}) => {
             left: `${el.offsetLeft}px`,
             backgroundColor: el.getAttribute('active-color'),
         };
-
         setIndicatorStyle(newStyle);
 
         // is-active 클래스와 color 속성을 설정하는 부분은 CSS에서 처리하도록 합니다.
@@ -62,8 +62,12 @@ const Header = ({sendTouch}) => {
     //nav 끝
     const [menu, setMenu] = useState(false);
     const [isInput, setIsInput] = useState(true);
-    const [isProfile, setProfile] = useState(false);
-    const [isLogin, setLogin] = useState(true);
+    const [isLoggedIn,setIsLogin]=useState(false)
+    useEffect(() => {
+        setIsLogin(isLogin());
+        const a=getCurrentLoginUser();
+        console.log(a.role);
+    }, [isLogin()]);
     const findPage = () => {
         if (window.location.href.includes("main")) {
             setIsInput(false);
@@ -148,16 +152,14 @@ const Header = ({sendTouch}) => {
                         {isInput === true && <SearchBox/>}
                     </div>
                     <ul className="certification__box">
-                        {isLogin === true && <LoginBtn/>}
-                        {isProfile === true && <Profile/>}
-
+                        {isLoggedIn?<Profile/>:<LoginBtn/>}
                     </ul>
                     <div className="nav_toggle_Btn" onClick={menuHandler}>
                         <TiThMenu/>
                     </div>
                 </nav>
             </header>
-            <MenuModal menu={menu} isProfile={isProfile} isLogin={isLogin}/>
+            <MenuModal menu={menu} isLogin={isLoggedIn}/>
         </div>
     );
 }

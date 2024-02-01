@@ -6,7 +6,7 @@ import cn from "classnames";
 import Profile from "./Profile";
 
 
-const MenuModal = ({menu, isLogin, isProfile}) => {
+const MenuModal = ({menu, isLogin}) => {
     console.log(isLogin)
     return (
         <>
@@ -19,8 +19,10 @@ const MenuModal = ({menu, isLogin, isProfile}) => {
                     <a className='modalContent' href="#">챔피언 분석</a>
                 </div>
                 <div className="infoBox">
-                    {isLogin === true &&
-                        <>
+                    {isLogin ?<Profile/>
+                        : <>
+
+
                             <a className="sign_in_a">
                                 <div className="sign_in_M">로그인</div>
                             </a>
@@ -29,8 +31,6 @@ const MenuModal = ({menu, isLogin, isProfile}) => {
                             </a>
                         </>
                     }
-
-                    {isProfile === true && <a className="profile_a"><Profile/></a>}
                 </div>
             </div>
         </>
