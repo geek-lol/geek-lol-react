@@ -1,5 +1,5 @@
 import React from 'react';
-import './ResponseTime.scss';
+import '../scss/ResponseTime.scss';
 import Button from '@mui/material/Button';
 const ResponseTime = () => {
 
@@ -33,13 +33,11 @@ const ResponseTime = () => {
             document.getElementById('gameCount').textContent = `진행도 : 0/5`;
             $screen.classList.replace('ready', 'waiting');
 
-        } else if ($screen.classList.contains("now")) {
+        } else if ($screen.classList.contains("now")) { // 초록일때 클릭시
             // console.log(records)
             endTime = new Date();
             responseTime = endTime - startTime; // 측정시간
-            console.log(`start:${startTime} , end: ${endTime}, res: ${responseTime}`)
             records.push(responseTime)
-            console.log(`records: ${records}, len : ${records.length}`)
             let Avg = records.reduce((acc, cur) => { return acc + cur; }, 0) / records.length; // 평균 반응 속도
 
             // 결과 누적 코드
@@ -53,6 +51,7 @@ const ResponseTime = () => {
             gameLoading(1000,Avg)
         }
 
+        //초록 화면 클릭 후 지정 초 동안 멈춤
         function gameLoading(s,Avg){
             setTimeout(()=>{
                 if (records.length < 5){
@@ -63,7 +62,16 @@ const ResponseTime = () => {
                 }
             },s)
         }
+    }
+    // 게임 다시 하는 클릭 이벤트
+    function resetButtonClickHandler(){
+        const $screen = document.querySelector("#screen");
+        const $result = document.querySelector("#result");
 
+        records=[];
+        $screen.textContent = "클릭해서 시작하세요!";
+        $result.innerHTML=``;
+        document.getElementById('gameCount').textContent = `진행도 : 0/5`;
     }
 
     return (
@@ -72,26 +80,26 @@ const ResponseTime = () => {
                 <h1 className="game-title"> 반응 속도 테스트 </h1>
                 <div id="gameCount">진행도 : 0/5</div>
                 <div id="screen" className="waiting" onClick={startClick}>클릭해서 시작하세요</div>
-                <div id="testReset" className="btn-reset non">
+                <div id="testReset" className="btn-reset non" onClick={resetButtonClickHandler}>
                     <Button variant="contained">테스트 다시하기</Button>
                 </div>
                 <div id="result"></div>
             </div>
             <table className="game-rank">
-                <thead>
-                    <tr>
-                        <td>순위</td>
-                        <td>닉네임</td>
-                        <td>반응 속도</td>
-                        <td>날짜</td>
+                <thead className="game-rank-head">
+                    <tr className="game-rank-row">
+                        <td className="game-rank-item">순위</td>
+                        <td className="game-rank-item" >닉네임</td>
+                        <td className="game-rank-item">반응 속도</td>
+                        <td className="game-rank-item">날짜</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>하이</td>
-                        <td>2</td>
-                        <td>2024-01-01 33:22:11</td>
+                    <tr className="game-rank-row">
+                        <td className="game-rank-item">1</td>
+                        <td className="game-rank-item">하이</td>
+                        <td className="game-rank-item">2</td>
+                        <td className="game-rank-item">2024-01-01 33:22:11</td>
                     </tr>
                 </tbody>
             </table>

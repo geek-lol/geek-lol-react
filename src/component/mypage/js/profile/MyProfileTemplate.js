@@ -1,16 +1,15 @@
 import React, {useState} from 'react';
-import MypageSideMenu from "./MypageSideMenu";
+import MypageSideMenu from "../MypageSideMenu";
 import MyPageProfile from "./MyPageProfile";
+import MyInformation from "../info/MyInformation";
 
-const MypageTemplate= () => {
-    const [mains, setMains]=useState(1);
+const MyProfileTemplate= () => {
     return (
         <div className="mypage">
             <MypageSideMenu />
-
             <MyPageProfile />
         </div>
     );
 };
 
-export default MypageTemplate;
+export default MyProfileTemplate;
