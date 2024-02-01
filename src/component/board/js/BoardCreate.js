@@ -3,7 +3,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {Link, useNavigate} from "react-router-dom";
 import "../scss/BoardCreate.scss"
-import BoardHeader from "./Board_header";
+import BoardHeader from "./BoardHeader";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import {SHORT_URL} from "../../../config/host-config";
 

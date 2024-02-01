@@ -408,7 +408,7 @@ const MainScene = ()=> {
          if (timeCount <=0){
              gametimer.paused = true;
              this.scene.stop();
-             this.scene.start(StartScene);
+             // this.scene.start(StartScene);
          }
     }
 
