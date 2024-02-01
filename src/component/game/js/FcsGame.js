@@ -12,10 +12,13 @@ const MainScene = ()=> {
     let playerAttackTween = null;
 
     let playerScore = 0;
+    let scoreText = null;
+    let timeTest = null;
     let center = null;
     let redMinions = null;
     let blueMinions = null;
 
+    let timeCount = 10000;
     useEffect(() => {
         const config = {
             type: Phaser.AUTO,
@@ -229,12 +232,17 @@ const MainScene = ()=> {
         playerAttack =  this.add.circle(200,500, 10, 0xFF0000);
         playerAttack.visible = false;
 
+        timeTest = this.add.text(150,120,`남은시간:03:00`,{ font: '16px Arial', fill: '#ffffff' });
+        timeTest.setScrollFactor(0);
+
+        scoreText = this.add.text(150,150,`점수:${playerScore}`,{ font: '16px Arial', fill: '#ffffff' });
+        scoreText.setScrollFactor(0);
 
         //미니언이 공격할 대상 랜덤지정
         blueMinions.children.iterate(bm => {
             const targetRed = getRandomElement(redMinions);
             bm.setData('target', targetRed);
-            bm.setData('AttackTween' ,attackTween(this.tweens,bm.getData('attack'),targetRed,bm,1000));
+            bm.setData('AttackTween' ,attackTween(this.tweens,bm.getData('attack'),targetRed,bm,1000+bm.y));
         })
 
 
@@ -307,7 +315,7 @@ const MainScene = ()=> {
                                 redMinion.setData('repeatCount',redMinion.getData('repeatCount') + 1);
                                 if ( redMinion.getData('health') <= 0){
                                     playerScore += 10;
-                                    console.log(`점수:${playerScore}`);
+                                    scoreText.text = `점수: ${playerScore}`;
                                 }
                             }
 
@@ -366,7 +374,7 @@ const MainScene = ()=> {
                 }else{
                     const targetRed = getRandomElement(redMinions);
                     bm.setData('target', targetRed);
-                    bm.setData('AttackTween' ,attackTween(this.tweens,bm.getData('attack'),targetRed,bm,1000));
+                    bm.setData('AttackTween' ,attackTween(this.tweens,bm.getData('attack'),targetRed,bm,1000+bm.y));
                 }
             }
         });
@@ -375,8 +383,18 @@ const MainScene = ()=> {
                  redMinions.add(createRedMinion(this.physics,this.add,this.tweens,800,(100 * i)),true);
              }
          }
-    }
+        this.time.delayedCall(1000, () => {
+            console.log(formatTime(timeCount-=1))
 
+        }, [], this);
+
+    }
+    const formatTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        const formattedTime = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+        return formattedTime;
+    };
     const handleContextMenu = (e) => {
         e.preventDefault();
     };
