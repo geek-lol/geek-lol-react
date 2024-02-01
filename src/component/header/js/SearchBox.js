@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {FaSearch} from "react-icons/fa";
+import {CiSearch} from "react-icons/ci";
+import {RxCross2} from "react-icons/rx";
 
 const SearchBox = props => {
     return (
         <>
             <div className="input__box">
-                <form name="search">
+                <div className="searchBox">
+                    <CiSearch className="searchI" size={14*2}/>
                     <input type="text" className="input" placeholder="소환사명을 입력해주세요"/>
-                    <FaSearch className='i'/>
-                </form>
-
+                    <RxCross2 className="crossI" size={14*2}/>
+                </div>
             </div>
         </>
     );

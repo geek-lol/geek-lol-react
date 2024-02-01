@@ -1,0 +1,62 @@
+
+.non{
+  display: none;
+}
+
+// 다시 테스트
+.btn-reset{
+  width: fit-content;
+  margin: 0 auto 10px;
+}
+
+// 페이지 제목 (반응 속도 테스트)
+.game-title{
+  margin-top: 50px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+//게임 화면
+#screen {
+  width: 800px;
+  height: 400px;
+
+  text-align: center;
+  user-select: none;
+  margin: 10px auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+
+  border-radius: 10px;
+}
+
+#screen.waiting {
+  background-color: #c7ffff;
+}
+
+#screen.ready {
+  background-color: red;
+  color: white;
+}
+
+#screen.now {
+  background-color: #00ff3c;
+}
+
+// 기록 화면
+#result{
+  width: fit-content;
+  margin: 0 auto;
+  .result-item{
+  }
+}
+
+// 게임 진행도
+#gameCount {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 1.2em;
+}

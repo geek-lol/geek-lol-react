@@ -1,0 +1,67 @@
+.mainBox{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: calc(100vh - 240px);
+  .main__Title{
+    font-size: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'NEXONFootballGothicBA1', sans-serif;
+    img{
+      width: 400px;
+      height: 220px;
+      //background: url('/public/assets/logo.png') no-repeat;
+      background-size: contain;
+    }
+  }
+  .input__Title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    background: none;
+    width: 600px;
+    border: 2px solid #00FFF0;
+    border-radius: 50px;
+    box-sizing: border-box;
+    font-size: 40px;
+    color: #00FFF0;
+    outline: none;
+    box-shadow: 0 2px 20px lightgray;
+    .title{
+      width: 90%;
+      border-radius: 24px;
+      border: none;
+      outline: none;
+      top: 5px;
+      font-size: 24px;
+      height: 48px;
+      margin-left: 10px;
+    }
+    .a{
+      font-size: 24px;
+      cursor: pointer;
+    }
+  }
+}
+@media screen and (max-width:768px) {
+  .mainBox{
+    width: 100%;
+    .main__Title {
+      .title__logo{
+        width: 200px;
+        height: 110px;
+      }
+    }
+    .input__Title{
+      width: 300px;
+      .title{
+        font-size: 15px;
+        height: 36px;
+      }
+    }
+  }
+}

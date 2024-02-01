@@ -1,5 +1,6 @@
 import React from 'react';
 import "../scss/Login.scss";
+import {Link, Route, Routes} from "react-router-dom";
 
 const Login = () => {
     return (
@@ -22,12 +23,17 @@ const Login = () => {
                 </div>
                 <div className={'login-box loginhelper'}>
                     <div className={'login-helper-box'}>
-                        <div className={'login-helper'}>비밀번호 찾기</div>
+                        <div className={'login-helper'}>
+                            <Link to='/template/pwreset' >비밀번호 찾기</Link>
+                        </div>
                         <div className={'line2'}></div>
-                        <div className={'login-helper sign-up'}>회원가입</div>
+                        <div className={'login-helper sign-up'}>
+                            <Link to='/template/signup' >회원가입</Link>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     );
 };

@@ -1,0 +1,33 @@
+
+
+.spector-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Nanum Gothic', sans-serif;
+
+
+  .spector-form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 900px;
+    margin-top: 15vh;
+
+    .title-box {
+      font-style: normal;
+      font-weight: 700;
+      font-size: 30px;
+
+    }
+
+    .spector-lists {
+      width: 100%;
+      margin-top: 50px;
+    }
+
+  }
+
+}
