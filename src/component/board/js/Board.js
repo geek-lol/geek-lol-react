@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "../scss/board.scss";
 
 import {Route, Routes} from "react-router-dom";
@@ -7,6 +7,7 @@ import LcKboard from "./LCK/LCKboard";
 import Solution from "./solution/Solution";
 import RequestBoard from "./ requestBoard/RequestBoard";
 import BoardHeader from "./BoardHeader";
+
 const Board = ({touch}) => {
     return (
         <>
