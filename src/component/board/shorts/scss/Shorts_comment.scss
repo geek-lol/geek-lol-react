@@ -4,57 +4,60 @@
   flex-direction: column;
   justify-content: space-between;
 
-  .comment-title-box {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    padding: 20px;
-
-    .comment-title {
-      font-family: 'Nanum Gothic', sans-serif;
-      font-style: normal;
-      font-weight: 700;
-      font-size: 20px;
-    }
-
-    .comment-count {
-      font-family: 'Nanum Gothic', sans-serif;
-      font-style: normal;
-      font-weight: 700;
-      font-size: 15px;
-    }
-  }
-
-  .comment-box {
-    width: 360px;
-    height: 450px;
-    padding: 0 20px;
-    overflow-y: scroll;
-  }
-  .comment-box::-webkit-scrollbar {
-    width: 5px;  /* 스크롤바의 너비 */
-  }
-
-  .comment-box::-webkit-scrollbar-thumb {
-    height: 30%; /* 스크롤바의 길이 */
-    background: #cccccc; /* 스크롤바의 색상 */
-
-    border-radius: 10px;
-  }
-
-  .comment-box::-webkit-scrollbar-track {
-    background: rgba(33, 122, 244, .1);  /*스크롤바 뒷 배경 색상*/
-  }
-
-  .comment-save {
-    height: 50px;
+  .comment-top {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px 20px 20px;
+
+    .comment-title-box {
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+
+      .comment-title {
+        font-family: 'Nanum Gothic', sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+      }
+
+      .comment-count {
+        font-family: 'Nanum Gothic', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+      }
+    }
+
+    .comment-close-btn {
+      rotate: 45deg;
+      font-family: 'Nanum Gothic', sans-serif;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 25px;
+    }
+
+    .comment-close-btn.close_animation {
+      animation: comment-close-animation 0.7s ease;
+    }
+  }
+
+  .comment-box {
+    height: 80%;
+
+    .comment-list {
+      height: 100%;
+    }
+  }
+
+  .comment-save {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     border-top: 1px solid #cccccc;
+    padding-top: 2%;
 
     .comment-save-profile {
       img {
@@ -65,14 +68,9 @@
     }
 
     .comment-input-box {
-      width: 300px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-
-      input{
-        width: 270px;
+      width: 80%;
+      input {
+        width: 80%;
         border: none;
         border-bottom: 1px solid #cccccc;
         padding: 5px;
@@ -93,16 +91,19 @@
         height: 18px;
         right: 250px;
       }
-    }
-    position: relative;
-    .leftArrow{
-      position: absolute;
-      left: 0;
-      width: 50px;
-      height: 50px;
-      background: black;
-      border-radius: 12px 0 0 12px;
-    }
 
+    }
   }
+}
+
+
+@keyframes comment-close-animation {
+  0% {
+    transform: translatex(0%);
+  }
+
+  100% {
+    transform: translatex(-10%);
+  }
+
 }
