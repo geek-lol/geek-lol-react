@@ -67,8 +67,8 @@ const Detail = () => {
                                     <p>작성자</p><p>|</p>
                                     <p>1분전</p>
                                 </div>
-                                {/*<p style={{paddingRight:'20px' ,color:'red'}}>삭제</p>*/}
-                                <p style={{paddingRight: '20px', color: 'black'}}><AiFillAlert/>신고하기</p>
+                                <p style={{paddingRight:'20px' ,color:'red'}}>삭제</p>
+                                {/*<p style={{paddingRight: '20px', color: 'black'}}><AiFillAlert/>신고하기</p>*/}
                             </div>
                             <div className="comment-content">
                                 <span className="ctt">안녕하세욯ㅇㅎㅇㅎㅇㅎㅇㅎㅇ</span>
@@ -101,11 +101,10 @@ const Detail = () => {
                             </div>
                         </div>
                         <div className="moveBox">
-                            <button>이전글</button>
-                            <button>게시판으로</button>
-                            <button>다음 글</button>
+                            <button className="move-button clicked">이전글</button>
+                            <button className="move-button">게시판으로</button>
+                            <button className="move-button">다음 글</button>
                         </div>
-
                     </div>
                 </div>
             </section>

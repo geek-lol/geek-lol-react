@@ -22,6 +22,8 @@ import InfoTemplate from "./component/summonerInfo/js/InfoTemplate";
 function App() {
     const [showHeader, setShowHeader] = useState(true);
     const location = useLocation();
+    const [touch, setTouch] = useState("");
+
 
     useEffect(() => {
         if (window.location.pathname === "/board/shorts") {
@@ -30,11 +32,26 @@ function App() {
             setShowHeader(true);
         }
     }, [location.pathname]);
+    const sendTouch=(e)=>{
+        console.log(e.target);
+        const classToClickMap = {
+            "c1": "c1",
+            "c2": "c2",
+            "c3": "c3",
+            "c4": "c4",
+        };
+        for (const className in classToClickMap) {
+            if (e.target.className.includes(className)) {
+                setTouch(classToClickMap[className]);
+                break;
+            }
+        }
+    }
 
     return (
         <>
             <Reset />
-            {showHeader && <Header />}
+            {showHeader && <Header sendTouch={sendTouch} />}
             <Routes>
                 <Route path="/template/*" element={<Template />} />
                 <Route path="/" element={<Main />} />
