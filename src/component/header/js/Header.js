@@ -115,15 +115,11 @@ const Header = ({sendTouch}) => {
                                           onClick={modalTouchHandler}>자유게시판</Link>
                                 </li>
                                 <li>
-                                    <Link to="/board/main/LCK" className="c2"
-                                          onClick={modalTouchHandler}>LCK</Link>
+                                    <Link to="/board/main/Request" className="c2"
+                                          onClick={modalTouchHandler}>트롤재판소</Link>
                                 </li>
                                 <li>
-                                    <Link to="/board/main/Solution" className="c3"
-                                          onClick={modalTouchHandler}>공략게시판</Link>
-                                </li>
-                                <li>
-                                    <Link to="/" className="c4"
+                                    <Link to="/board/shorts" className="c3"
                                           onClick={modalTouchHandler}>하이라이트</Link>
                                 </li>
                             </ul>
@@ -135,10 +131,10 @@ const Header = ({sendTouch}) => {
                               }}>
                             <ul className={cn("hide-btn btn2", {hovers2: hovers2})}>
                                 <li>
-                                    <Link to="/">민희언 주기깅</Link>
+                                    <Link to="/csgame">민희언 주기깅</Link>
                                 </li>
                                 <li>
-                                    <Link to="/">킹컴타자연습</Link>
+                                    <Link to="/resgame">반응속도테스트</Link>
                                 </li>
                             </ul>
                             미니게임</Link>

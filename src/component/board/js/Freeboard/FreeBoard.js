@@ -39,7 +39,6 @@ const FreeBoard = () => {
             })
             .then(json => {
                 if (!json) return;
-
                 // console.log(json);
                 setBoardList(json.board);
                 console.log(json.board);

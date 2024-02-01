@@ -38,7 +38,6 @@ function App() {
             "c1": "c1",
             "c2": "c2",
             "c3": "c3",
-            "c4": "c4",
         };
         for (const className in classToClickMap) {
             if (e.target.className.includes(className)) {
