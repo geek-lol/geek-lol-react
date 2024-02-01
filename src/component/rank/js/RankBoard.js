@@ -4,8 +4,7 @@ import "../scss/RankBoard.scss"
 
 const RankBoard = () => {
     return (
-
-        <table>
+        <table className={'rank-table'}>
             <thead>
                 <tr className={'table'}>
                     <th>순위</th>

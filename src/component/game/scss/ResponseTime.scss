@@ -19,7 +19,7 @@
 //게임 화면
 #screen {
   width: 800px;
-  height: 400px;
+  height: 300px;
 
   text-align: center;
   user-select: none;
@@ -59,4 +59,16 @@
   margin-top: 30px;
   text-align: center;
   font-size: 1.2em;
+}
+
+//랭킹 목록
+.game-rank{
+  margin: 20px auto;
+  .game-rank-row{
+    border: 1px solid black;
+  }
+  .game-rank-item{
+     padding: 10px;
+     margin: 10px;
+   }
 }
