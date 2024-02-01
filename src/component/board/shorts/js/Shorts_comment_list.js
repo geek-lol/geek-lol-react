@@ -5,7 +5,7 @@ import data from "bootstrap/js/src/dom/data";
 const ShortsCommentList = () => {
     const [showMore, setShowMore] = useState(false);
     const comment = 'sdfasdfsdafsdafsadfsdafsdfsdaf';
-    const [commentList, setCommentList] = useState(data);
+
 
     // 원본에 글자수 만큼 잘라서 짧은문장 만들기
     const textLimit = useRef(65);
@@ -23,46 +23,25 @@ const ShortsCommentList = () => {
     }, [showMore]);
 
     return (
-        <ul className={'comment-list'}>
-            <li className={'comment-item'} id={'commentNo'}>
-                <div className={'comment-user-profile'}>
-                    <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
+        <li className={'comment-item'} id={'commentNo'}>
+            <div className={'comment-user-profile'}>
+                <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
+            </div>
+            <div className={'comment-user-data'}>
+                <div className={'user-data'}>
+                    <div className={'user-name'}>작성자</div>
+                    <div className={'user-comment-date'}>1분전</div>
                 </div>
-                <div className={'comment-user-data'}>
-                    <div className={'user-data'}>
-                        <div className={'user-name'}>작성자</div>
-                        <div className={'user-comment-date'}>1분전</div>
-                    </div>
-                    <div className={'user-comment'}>{commenter}
+                <div className={'user-comment'}>{commenter}
 
-                    <div className={'comment-show'} onClick={ e => setShowMore(!showMore)}>
+                    <div className={'comment-show'} onClick={e => setShowMore(!showMore)}>
                         {(comment.length > textLimit.current) &&
                             (showMore ? '[닫기]' : '[더보기]')}
                     </div>
-                    </div>
-
                 </div>
-            </li>
-            <li className={'comment-item'}>
-                <div className={'comment-user-profile'}>
-                    <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
-                </div>
-                <div className={'comment-user-data'}>
-                    <div className={'user-data'}>
-                        <div className={'user-name'}>작성자</div>
-                        <div className={'user-comment-date'}>1분전</div>
-                    </div>
-                    <div className={'user-comment'}>{commenter}
 
-                        <div className={'comment-show'} onClick={e => setShowMore(!showMore)}>
-                            {(comment.length > textLimit.current) &&
-                                (showMore ? '[닫기]' : '[더보기]')}
-                        </div>
-                    </div>
-
-                </div>
-            </li>
-        </ul>
+            </div>
+        </li>
     );
 };
 

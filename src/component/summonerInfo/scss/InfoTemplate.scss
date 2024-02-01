@@ -1,0 +1,30 @@
+.summoner-info-container {
+  display: flex;
+  //justify-content: center;
+  //align-items: center;
+  height: 100vh;
+  flex-direction: row;
+
+  .box {
+    flex: 1 1 0%;
+  }
+
+  .summoner-info-content {
+    //position: absolute;
+    //top: 15%;
+    //background-color: yellowgreen;
+    margin: 30px 0;
+    min-width: 1080px;
+    height: 50vh;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+
+  .loading {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+  }
+}
+

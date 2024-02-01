@@ -1,19 +1,29 @@
-import React from 'react';
+import React, {useState} from 'react';
 import cn from "classnames";
 import {dividerClasses} from "@mui/material";
 import Shorts_comment_list from "./Shorts_comment_list";
 import '../scss/Shorts_comment.scss'
-import {BsSend} from "react-icons/bs";
+import {BsCaretLeftFill, BsPlusLg, BsSend} from "react-icons/bs";
+import data from "bootstrap/js/src/dom/data";
+import * as commentLists from "react-bootstrap/ElementChildren";
 
-const ShortsComment = () => {
+const ShortsComment = ({chkViewComment, viewComment}) => {
+
+
     return (
         <div className={'comment-container'}>
-            <div className={'comment-title-box'}>
-                <span className={'comment-title'}>댓글</span>
-                <p className={'comment-count'}>2</p>
+            <div className={'comment-top'}>
+                <div className={'comment-title-box'}>
+                    <span className={'comment-title'}>댓글</span>
+                    <p className={'comment-count'}>2</p>
+                </div>
+                <BsPlusLg className={cn('comment-close-btn', {close_animation: viewComment})} onClick={chkViewComment}
+                    />
             </div>
             <div className={'comment-box'}>
-                <Shorts_comment_list />
+                <ul className={'comment-list'}>
+                        <Shorts_comment_list />
+                </ul>
             </div>
             <div className={'comment-save'}>
                 <div className={'comment-save-profile'}>
@@ -23,10 +33,6 @@ const ShortsComment = () => {
                     <input type="text" placeholder={'댓글추가...'}/>
                     <BsSend className={'comment-send'}/>
                 </div>
-                <div className="leftArrow">
-
-                </div>
-
             </div>
         </div>
     );
