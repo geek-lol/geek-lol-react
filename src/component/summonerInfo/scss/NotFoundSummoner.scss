@@ -1,0 +1,63 @@
+@media screen and (max-width: 1100px) {
+  #nav-box {
+    min-width: 1300px;
+  }
+}
+
+.not-found-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 1300px;
+  height: 80vh;
+  flex-direction: column;
+
+
+  .not-found-container {
+    width: 1080px;
+    height: 40vh;
+    border: 2px solid grey;
+    border-radius: 10px;
+    margin: 30px 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+
+    .not-found-title {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      position: absolute;
+      top: 30px;
+
+      span {
+        font-size: 50px;
+        font-family: 'NEXONFootballGothicBA1', sans-serif;
+        color: red;
+      }
+    }
+
+    .not-found-value {
+      font-size: 40px;
+      font-family: "BM Dohyeon", "sans-serif";
+      margin-bottom: 20px;
+    }
+
+    .not-found-description {
+      font-size: 20px;
+    }
+
+    img {
+      position: absolute;
+      bottom: 15px;
+      width: 150px;
+    }
+  }
+}
+

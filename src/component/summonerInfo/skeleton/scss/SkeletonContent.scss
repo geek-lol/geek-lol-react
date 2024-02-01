@@ -1,0 +1,16 @@
+.summoner-info-container {
+  display: flex;
+  //justify-content: center;
+  //align-items: center;
+  height: 100vh;
+  flex-direction: row;
+
+  .summoner-info-content {
+    margin: 30px 0;
+    min-width: 1080px;
+    height: 50vh;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+}

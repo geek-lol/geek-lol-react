@@ -6,7 +6,7 @@ const BanPick = () => {
         <div className={'banpick-border'}>
             <div className={'banpick-container'}>
                 <div className={'bp-text-box'}>
-                    <a>Ban Pick</a>
+                    <p>Ban Pick</p>
                 </div>
                 <div className={'team-banpick-box'}>
                     <div className={'t1-banpicks'}>
