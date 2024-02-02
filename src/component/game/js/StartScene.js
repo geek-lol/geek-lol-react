@@ -14,15 +14,20 @@ export default class StartScene extends Phaser.Scene {
             const backImg = this.add.image(500,500,"startBack");
             backImg.setScale(1.5);
 
-            this.add.text(200,200,`미니언 막타 치기 게임`);
-            const startText = this.add.text(200,400,`게임시작`);
+            this.add.text(100,150,`미니언 막타 치기 게임`,{ font: '36px Arial', fill: '#ffffff' });
+            const startText = this.add.text(100,300,`게임시작`,{ font: '36px Arial', fill: '#ffffff' });
             startText.setInteractive();
 
             startText.on('pointerdown',(pointer)=>{
                 this.scene.stop();
                 this.scene.start('mainScene');
             })
-            this.add.text(200,500,`랭킹`);
+            const ranking = this.add.text(100,400,`랭킹`,{ font: '36px Arial', fill: '#ffffff' });
+            ranking.setInteractive();
+            ranking.on('pointerdown',(pointer)=>{
+                this.scene.stop();
+                this.scene.start('rankScene');
+            })
         }
     };
 

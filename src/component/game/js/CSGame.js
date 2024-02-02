@@ -16,7 +16,7 @@ let redMinions = null;
 let blueMinions = null;
 
 let gametimer = null;
-let timeCount =  10000; //180000;
+let timeCount =  180000;
 //시간 format 함수
 function formatTime(seconds) { // 100000 = 100초 = 1분 40초
     const s = Math.floor(seconds / 1000); // 100초
@@ -62,7 +62,8 @@ function getRandomElement(group) {
 function createBlueMinion (physics,add,tweens,x,y){
     const blueMinion = physics.add.sprite(x, y, "blueMinion");
 
-    const Attack = add.circle(0,0, 10, 0xFF0000);
+    const Attack = physics.add.sprite(0,0,"attackImg");
+    Attack.setScale(0.7);
     Attack.visible = false;
 
     const blueHealthBars = [];
@@ -101,9 +102,6 @@ function createRedMinion (physics,add,tweens,x,y){
     const redMinionTween = MinionTween(tweens,redMinion,0,600);
     const redHealthBarsTween = HealthBarsTween(tweens,redHealthBars,0,550);
 
-    const Attack = add.circle(0,0, 10, 0xFF0000);
-    Attack.visible = false;
-
     redMinion.setScale(0.1);
     redMinion.setData('repeatCount', 0);
     redMinion.setData('health', 100);
@@ -111,7 +109,6 @@ function createRedMinion (physics,add,tweens,x,y){
     redMinion.setData('damage', 20);
     redMinion.setData('moveTween',redMinionTween)
     redMinion.setData('healthBarTween',redHealthBarsTween)
-    redMinion.setData('attack',Attack)
     redMinion.setInteractive(); //마우스 이벤트에 응답 가능하게
 
     return redMinion
@@ -174,6 +171,7 @@ class CsGame extends Phaser.Scene {
         this.load.image("blueMinion", "assets/blueMinion.png");
         this.load.image("player", "assets/temo.png");
         this.load.image("background", "assets/lol_game_back.jpg");
+        this.load.image("attackImg","assets/attack1.png");
     }
     create () {
         redMinions = this.physics.add.group();

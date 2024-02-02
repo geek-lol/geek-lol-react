@@ -5,13 +5,12 @@ import CsGame from "./CSGame";
 
 class endScene extends Phaser.Scene {
     constructor() {
-        super('endScene');
+        super('rankScene');
     }
     preload () {
     }
-    create (data) {
-        this.score = data.score;
-        console.log(this.score);
+    create () {
+        this.add.text('500','500',`랭크페이지요!!`,{ font: '36px Arial', fill: '#ffffff' });
     }
 };
 export default endScene;

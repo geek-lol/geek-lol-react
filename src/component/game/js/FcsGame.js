@@ -4,6 +4,7 @@ import '../scss/CSGame.scss';
 import CSGame from "./CSGame";
 import StartScene from "./StartScene";
 import CSRank from "./CSRank";
+import CSEnd from "./CSEnd";
 
 
 const MainScene = ()=> {
@@ -14,7 +15,7 @@ const MainScene = ()=> {
         const config = {
             type: Phaser.AUTO,
             parent: 'phaser-container',
-            width:1000,
+            width:1400,
             height: 600,
             physics: {
                 default: 'arcade',
@@ -23,7 +24,7 @@ const MainScene = ()=> {
                     debug: false
                 },
             },
-            scene: [StartScene,CSGame,CSRank],
+            scene: [StartScene,CSGame,CSRank,CSEnd],
             scale: {
                 mode: Phaser.Scale.RESIZE,
                 autoCenter: Phaser.Scale.CENTER_BOTH,
