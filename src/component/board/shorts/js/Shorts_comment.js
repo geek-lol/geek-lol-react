@@ -8,6 +8,7 @@ import data from "bootstrap/js/src/dom/data";
 import * as commentLists from "react-bootstrap/ElementChildren";
 import {BOARD_REPLY_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
+import Shorts_content from "./Shorts_content";
 
 const ShortsComment = ({item, chkViewComment, viewComment}) => {
 
@@ -27,26 +28,7 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
 
     const [shortReplyList, setShortReplyList] = useState([]);
 
-    //
-    // useEffect(() => {
-    //
-    //     fetch(API_BASE_URL, {
-    //         method: 'GET',
-    //         headers: { 'content-type': 'application/json' }
-    //     })
-    //         .then(res => {
-    //             if (res.status === 200){
-    //                 return res.json();
-    //             }
-    //         })
-    //         .then(json => {
-    //             if (json && json.reply) {
-    //                 shortReplyList(json.reply);
-    //             }
-    //
-    //         });
-    //
-    // }, []);
+
 
     const [replyValue, setReplyValue] = useState({
         context:''
@@ -60,21 +42,21 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
         });
     };
 
-    const addReply = () => {
+    const addReply = async () => {
 
-        fetch(API_BASE_URL, {
+        const res = await fetch(API_BASE_URL, {
             method: 'POST',
             headers: requestHeader,
             body: JSON.stringify(replyValue)
         })
-            .then(res => {
-                if (res.status===200) return res.json();
 
-
-            })
-            .then(json => {
-                json && setShortReplyList(json.reply);
-            });
+        if (res.status === 200) {
+            // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
+            const json = await res.json().catch(() => ({}));
+            setShortReplyList(json.reply);
+        } else {
+            console.error('Error:',  res.status);
+        }
 
     }
 
@@ -84,6 +66,28 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
         // 폼이 제출되면 입력창 비우기
         setShortReply('');
     }
+
+    useEffect(() => {
+        fetch(API_BASE_URL, {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' }
+        })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! Status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(json => {
+                if (json && json.reply) {
+                    setShortReplyList(json.reply);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+
+    }, []);
 
 
     return (
@@ -98,7 +102,13 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
             </div>
             <div className={'comment-box'}>
                 <ul className={'comment-list'}>
-                        <Shorts_comment_list shortReplyList={shortReplyList} />
+                    {shortReplyList.map((reply) => (
+                        <Shorts_comment_list
+                            key={reply.replyId}
+                            shortReplyList={reply}
+                            item={item}/>
+                    ))}
+
                 </ul>
             </div>
             <div className={'comment-save'}>

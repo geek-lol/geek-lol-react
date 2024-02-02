@@ -8,6 +8,8 @@ import {SHORT_URL} from "../../../../config/host-config";
 
 const ShortsContent = ({item}) => {
     const [viewComment, setViewComment] = useState(false);
+    const [voteShort, setVoteShort] = useState(false);
+    const [voteCount,setVoteCount] = useState(item.upCount);
     const [viewAni, setViewAni] = useState(false);
     
     // 휠 애니메이션
@@ -43,6 +45,8 @@ const ShortsContent = ({item}) => {
             })
             .then(json => {
                 if (json && json.shorts) {
+                    item({replyCount: json.replyCount,
+                        upCount: json.replyCount})
                     setShortList(json.shorts);
                 }
             })
@@ -69,6 +73,40 @@ const ShortsContent = ({item}) => {
         setViewComment(!viewComment);
 
     }
+
+    const voteShortVideo = e => {
+        setVoteShort(!voteShort);
+        console.log(voteShort);
+        if (voteShort === true) {
+            setVoteCount({upCount} + 1);
+        } else {
+            setVoteCount({upCount} - 1);
+        }
+    }
+
+    // useEffect(() => {
+    //     fetch(API_BASE_URL, {
+    //         method: 'PUT',
+    //         headers: { 'content-type': 'application/json' }
+    //     })
+    //         .then(res => {
+    //             if (!res.ok) {
+    //                 throw new Error(`HTTP error! Status: ${res.status}`);
+    //             }
+    //             return res.json();
+    //         })
+    //         .then(json => {
+    //             if (json && json.shorts) {
+    //                 item({replyCount: json.replyCount,
+    //                     upCount: json.upCount})
+    //                 setShortList(json.shorts);
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching data:', error);
+    //         });
+    //
+    // }, []);
 
 
     // 휠을 내리거나 올렸을때 0.3s 기다리고 움직임
@@ -136,6 +174,10 @@ const ShortsContent = ({item}) => {
 
 
 
+        const videoRef= useRef();
+        const setPlayBackRate = () => {
+            videoRef.current.playbackRate = 0.5;
+        };
 
     return (
         <>
@@ -145,7 +187,10 @@ const ShortsContent = ({item}) => {
                     ref={contentRef}>
                     <div className={cn('short-form', {animation_view: viewAni})}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
-                            <video src={item.videoLink} className={'short-video'}></video>
+                            <video className={'short-video'} ref={videoRef} autoPlay
+                                   loop onCanPlay={() => setPlayBackRate()}>
+                                <source src={item.videoLink} type="video/mp4" />
+                            </video>
                             <div className={'overlap-front'}>
                                 <div className={'produce'}>
                                     <div className={'profile_box'}>
@@ -163,9 +208,9 @@ const ShortsContent = ({item}) => {
                                 </div>
                                 <div className={cn('front-sidebar', {front_sidebar_view: viewComment})}>
                                     <div className={'short-btn like-btn'}>
-                                        <BsHeart className={'btn'}/>
+                                        <BsHeart className={'btn'} onClick={voteShortVideo}/>
                                         {/* <BsHeartFill /> */}
-                                        <p>{item.viewCount}</p>
+                                        <p>{item.upCount}</p>
                                     </div>
                                     <div className={'short-btn comment-btn'}>
                                         <BsChatLeft className={'btn'} onClick={chkViewComment}/>
@@ -179,9 +224,9 @@ const ShortsContent = ({item}) => {
                         </div>
                         <div className={cn('sidebar', {sidebar_view: viewComment})}>
                             <div className={'short-btn like-btn'}>
-                                <BsHeart className={'btn'}/>
+                                <BsHeart className={'btn'} onClick={voteShortVideo}/>
                                 {/* <BsHeartFill /> */}
-                                <p>{item.viewCount}</p>
+                                <p>{item.upCount}</p>
                             </div>
                             <div className={'short-btn comment-btn'}>
                                 <BsChatLeft className={'btn'} onClick={chkViewComment}/>
