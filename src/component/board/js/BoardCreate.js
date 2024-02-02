@@ -34,7 +34,6 @@ const BoardCreate = () => {
     };
 
 
-
     const [boardValue, setBoardValue] = useState({
         title: '',
         context:''
@@ -51,6 +50,8 @@ const BoardCreate = () => {
 
     // 보드 업로드
     const fetchBoardUpload = async () => {
+
+
 
         // JSON데이터를 formData에 넣기 위한 작업
         const jsonBlob = new Blob(
@@ -126,14 +127,16 @@ const BoardCreate = () => {
                 <div className={'bc-create-content'} >
                     <CKEditor
                         editor={ ClassicEditor }
-                        data="<p name='context' value={explanation} onChange={onChange}></p>"
+                        data=""
                         onReady={ editor => {
                             // You can store the "editor" and use when it is needed.
                             console.log( 'Editor is ready to use!', editor );
                         } }
                         onChange={ ( event, editor ) => {
                             const data = editor.getData();
-                            console.log( { event, editor, data } );
+                            const cleanData = data.replace(/<p>/g, '').replace(/<\/p>/g, '');
+                            onChange({ target: { name: 'content', value: cleanData}});
+                            console.log( { event, editor, cleanData } );
                         } }
                         onBlur={ ( event, editor ) => {
                             console.log( 'Blur.', editor );
