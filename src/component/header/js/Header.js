@@ -89,29 +89,6 @@ const Header = ({sendTouch}) => {
     const modalTouchHandler = (e) => {
         sendTouch(e);
     }
-    const [inputValue, setInputValue] = useState('');
-    const [splitValue, setSplitValue] = useState(['', 'KR1']);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if(splitValue[0] !== '') {
-            console.log(splitValue);
-            navigate(`/find/${splitValue[0]}/${splitValue[1]}`);
-        }
-    }, [splitValue, navigate]);
-
-    const handleChange = e => {
-        setInputValue(e.target.value);
-    };
-    const handleSubmit = e => {
-        e.preventDefault();
-        const splitInput = inputValue.split('#');
-        if(!splitInput[0]) {
-            alert('소환사명을 입력해주세요.');
-            return;
-        }
-        setSplitValue([splitInput[0], splitInput[1] ? splitInput[1] : 'KR1']);
-    };
 
     return (
         <div>
@@ -168,7 +145,7 @@ const Header = ({sendTouch}) => {
                             left: indicatorStyle.left,
                             backgroundColor: indicatorStyle.backgroundColor
                         }}></span>
-                        {isInput === true && <SearchBox value={inputValue} onChange={handleChange} onSubmit={handleSubmit}/>}
+                        {isInput === true && <SearchBox/>}
                     </div>
                     <ul className="certification__box">
                         {isLoggedIn ? <Profile/> : <LoginBtn/>}
