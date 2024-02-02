@@ -18,7 +18,7 @@ const ShortsContent = ({item}) => {
     // 휠 이벤트 시간
     const lastWheelTime = useRef(0);
 
-    const {shortsId, uploaderName,viewCount, upCount, title, context, videoLink, thumbnail} = item;
+    const {shortsId, uploaderName,replyCount,viewCount, upCount, title, context, videoLink} = item;
 
     // 신고 모달 띄우기
     const [viewReport, setViewReport] = useState(false);
@@ -31,21 +31,23 @@ const ShortsContent = ({item}) => {
 
 
     useEffect(() => {
-
         fetch(API_BASE_URL, {
             method: 'GET',
             headers: { 'content-type': 'application/json' }
         })
             .then(res => {
-                if (res.status === 200){
-                    return res.json();
+                if (!res.ok) {
+                    throw new Error(`HTTP error! Status: ${res.status}`);
                 }
+                return res.json();
             })
             .then(json => {
                 if (json && json.shorts) {
                     setShortList(json.shorts);
                 }
-
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
             });
 
     }, []);
@@ -167,7 +169,7 @@ const ShortsContent = ({item}) => {
                                     </div>
                                     <div className={'short-btn comment-btn'}>
                                         <BsChatLeft className={'btn'} onClick={chkViewComment}/>
-                                        <p>{item.upCount}</p>
+                                        <p>{item.replyCount}</p>
                                     </div>
                                     <div className={'short-btn report-btn'}>
                                         <BsExclamationCircle className={'btn'} onClick={() => setViewReport(true)}/>
@@ -183,7 +185,7 @@ const ShortsContent = ({item}) => {
                             </div>
                             <div className={'short-btn comment-btn'}>
                                 <BsChatLeft className={'btn'} onClick={chkViewComment}/>
-                                <p>{item.upCount}</p>
+                                <p>{item.replyCount}</p>
                             </div>
                             <div className={'short-btn report-btn'}>
                                 <BsExclamationCircle className={'btn'} onClick={() => setViewReport(true)}/>
@@ -192,7 +194,7 @@ const ShortsContent = ({item}) => {
                         <div className={cn('comment-form', {comment_form_view: viewComment})}>
                             <div className={cn("comment", {comment_view: viewComment})}>
                                 <div className={'comment-wrapper'}>
-                                    <Shorts_comment chkViewComment={chkViewComment} viewComment={viewComment}/>
+                                    <Shorts_comment item ={item} chkViewComment={chkViewComment} viewComment={viewComment}/>
                                 </div>
                             </div>
                         </div>

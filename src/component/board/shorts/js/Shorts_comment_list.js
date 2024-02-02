@@ -2,9 +2,12 @@ import React, {useMemo, useRef, useState} from 'react';
 import '../scss/Shorts_comment_list.scss'
 import data from "bootstrap/js/src/dom/data";
 
-const ShortsCommentList = () => {
+const ShortsCommentList = ({shortReplyList}) => {
+
+
+
     const [showMore, setShowMore] = useState(false);
-    const comment = 'sdfasdfsdafsdafsadfsdafsdfsdaf';
+    const comment = shortReplyList;
 
 
     // 원본에 글자수 만큼 잘라서 짧은문장 만들기
@@ -23,6 +26,7 @@ const ShortsCommentList = () => {
     }, [showMore]);
 
     return (
+        // {[item].slice(currentItemIndex, currentItemIndex + 1).map((item, shortsId) => (
         <li className={'comment-item'} id={'commentNo'}>
             <div className={'comment-user-profile'}>
                 <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
