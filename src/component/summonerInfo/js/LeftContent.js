@@ -37,12 +37,12 @@ const LeftContent = ({userInfo, infoLoading, tag}) => {
                     </button>
                 </div>
             </div>
-            <div className="rank">
+            <div className="player-info-rank">
                 <div className="solo-rank-title title-container">
                     <span>솔로랭크</span>
                 </div>
                 <div className="rankInfo">
-                    <div className="solo-rank-content content-container">
+                    <div className="solo-rank-content player-info-content-container">
                         {leagueInfo[soloRankIndex] ? (
                                 <>
                                     {leagueInfo[soloRankIndex].tier === "IRON" ? (
@@ -94,12 +94,12 @@ const LeftContent = ({userInfo, infoLoading, tag}) => {
                     </div>
                 </div>
             </div>
-            <div className="rank">
+            <div className="player-info-rank">
                 <div className="rank-title title-container">
                     <span>자유랭크</span>
                 </div>
                 <div className="rankInfo">
-                    <div className="rank-content content-container">
+                    <div className="player-info-rank-content player-info-content-container">
                         {leagueInfo[flexRankIndex] ? (
                             <>
                                 {leagueInfo[flexRankIndex].tier === "IRON" ? (

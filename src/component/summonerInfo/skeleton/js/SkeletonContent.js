@@ -7,7 +7,6 @@ import Header from "../../../header/js/Header";
 const SkeletonContent = ({infoLoading, gamesLoading}) => {
     return (
         <>
-            <Header/>
             <div className="summoner-info-container">
                 <div className="left-ad box"></div>
 
