@@ -9,6 +9,7 @@ import ShortCreateMain from "../shorts/shortCreate/js/ShortCreateMain";
 import RequestBoard from "./ requestBoard/RequestBoard";
 
 const BoardTemplate = ({touch}) => {
+
     return (
         <>
             <Routes>

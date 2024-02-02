@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import "../scss/Detail.scss";
 import {AiFillAlert, AiOutlineLike} from "react-icons/ai";
 import {Button, TextField} from "@mui/material";
+import {BOARD_URL} from "../../../config/host-config";
 
 const Detail = () => {
     return (
