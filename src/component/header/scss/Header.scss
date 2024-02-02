@@ -178,16 +178,19 @@ a{
 
     }
 
+
   }
-  .nav_toggle_Btn{
-    position: absolute;
-    right: 32px;
-    font-size: 24px;
-    top: 28px;
-    color: black;
-    display: none;
-    cursor: pointer;
-  }
+.nav_toggle_Btn{
+  position: absolute;
+  right: 32px;
+  font-size: 24px;
+  top: 28px;
+  color: black;
+  display: none;
+  cursor: pointer;
+  z-index: 99999999999;
+}
+
   @media screen and (max-width:1400px) {
     #nav-box{
       display: flex;
@@ -200,9 +203,10 @@ a{
       .certification__box{
         display: none;
       }
-      .nav_toggle_Btn{
-        display: block;
-      }
+
+    }
+    .nav_toggle_Btn{
+      display: block;
     }
   }
 

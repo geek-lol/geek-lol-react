@@ -5,8 +5,9 @@ import LoginBtn from "./LoginBtn";
 import SearchBox from "./SearchBox";
 import Profile from "./Profile";
 import MenuModal from "./MenuModal";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import cn from "classnames";
+import {getCurrentLoginUser, isLogin} from "../../../utils/login-util";
 
 const Header = ({sendTouch}) => {
     //boardHeader 상태변수
@@ -54,7 +55,6 @@ const Header = ({sendTouch}) => {
             left: `${el.offsetLeft}px`,
             backgroundColor: el.getAttribute('active-color'),
         };
-
         setIndicatorStyle(newStyle);
 
         // is-active 클래스와 color 속성을 설정하는 부분은 CSS에서 처리하도록 합니다.
@@ -62,8 +62,12 @@ const Header = ({sendTouch}) => {
     //nav 끝
     const [menu, setMenu] = useState(false);
     const [isInput, setIsInput] = useState(true);
-    const [isProfile, setProfile] = useState(false);
-    const [isLogin, setLogin] = useState(true);
+    const [isLoggedIn,setIsLogin]=useState(false)
+    useEffect(() => {
+        setIsLogin(isLogin());
+        const a=getCurrentLoginUser();
+        console.log(a.role);
+    }, [isLogin()]);
     const findPage = () => {
         if (window.location.href.includes("main")) {
             setIsInput(false);
@@ -111,15 +115,11 @@ const Header = ({sendTouch}) => {
                                           onClick={modalTouchHandler}>자유게시판</Link>
                                 </li>
                                 <li>
-                                    <Link to="/board/main/LCK" className="c2"
-                                          onClick={modalTouchHandler}>LCK</Link>
+                                    <Link to="/board/main/Request" className="c2"
+                                          onClick={modalTouchHandler}>트롤재판소</Link>
                                 </li>
                                 <li>
-                                    <Link to="/board/main/Solution" className="c3"
-                                          onClick={modalTouchHandler}>공략게시판</Link>
-                                </li>
-                                <li>
-                                    <Link to="/" className="c4"
+                                    <Link to="/board/shorts" className="c3"
                                           onClick={modalTouchHandler}>하이라이트</Link>
                                 </li>
                             </ul>
@@ -131,10 +131,10 @@ const Header = ({sendTouch}) => {
                               }}>
                             <ul className={cn("hide-btn btn2", {hovers2: hovers2})}>
                                 <li>
-                                    <Link to="/">민희언 주기깅</Link>
+                                    <Link to="/csgame">민희언 주기깅</Link>
                                 </li>
                                 <li>
-                                    <Link to="/">킹컴타자연습</Link>
+                                    <Link to="/resgame">반응속도테스트</Link>
                                 </li>
                             </ul>
                             미니게임</Link>
@@ -148,16 +148,15 @@ const Header = ({sendTouch}) => {
                         {isInput === true && <SearchBox/>}
                     </div>
                     <ul className="certification__box">
-                        {isLogin === true && <LoginBtn/>}
-                        {isProfile === true && <Profile/>}
-
+                        {isLoggedIn ? <Profile/> : <LoginBtn/>}
                     </ul>
-                    <div className="nav_toggle_Btn" onClick={menuHandler}>
-                        <TiThMenu/>
-                    </div>
+
                 </nav>
             </header>
-            <MenuModal menu={menu} isProfile={isProfile} isLogin={isLogin}/>
+            <div className="nav_toggle_Btn" onClick={menuHandler} modalTouchHandler={modalTouchHandler}>
+                <TiThMenu/>
+            </div>
+            <MenuModal menu={menu} isLogin={isLoggedIn}/>
         </div>
     );
 }
