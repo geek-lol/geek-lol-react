@@ -1,10 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import '../scss/MypageSideMenu.scss';
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import cn from 'classnames';
 
 
 const MypageSideMenu = () => {
+
+    //리다이렉션 변수
+    const redirection = useNavigate();
+
 
     const [selectType,setSelectType] = useState({
         profile : true,
@@ -46,6 +50,10 @@ const MypageSideMenu = () => {
         }
     }, [location]);
 
+    const logOutHandler = () => {
+        localStorage.clear()
+        redirection('/login');
+    };
     return (
         <div className="my-sidemenu-wrapper">
             <div className="my-side-head">내 계정</div>
@@ -60,7 +68,7 @@ const MypageSideMenu = () => {
                     <Link className="item-text" to="/mypage/active">내 활동</Link>
                 </li>
                 <li className="menu-item">
-                    <Link className="item-text" to="/logout">로그아웃</Link>
+                    <div onClick={logOutHandler} className="item-text" to="/logout">로그아웃</div>
                 </li>
             </ul>
         </div>

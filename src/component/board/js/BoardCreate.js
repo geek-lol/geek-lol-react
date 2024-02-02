@@ -7,6 +7,7 @@ import BoardHeader from "./BoardHeader";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import {BOARD_URL} from "../../../config/host-config";
 
+
 const BoardCreate = () => {
     const redirection = useNavigate();
 
