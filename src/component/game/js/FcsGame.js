@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import '../scss/CSGame.scss';
 import CSGame from "./CSGame";
 import StartScene from "./StartScene";
+import CSRank from "./CSRank";
 
 
 const MainScene = ()=> {
@@ -22,7 +23,7 @@ const MainScene = ()=> {
                     debug: false
                 },
             },
-            scene: [StartScene,CSGame],
+            scene: [StartScene,CSGame,CSRank],
             scale: {
                 mode: Phaser.Scale.RESIZE,
                 autoCenter: Phaser.Scale.CENTER_BOTH,

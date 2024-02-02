@@ -1,17 +1,18 @@
 import React from 'react';
 import Phaser from "phaser";
+import CsGame from "./CSGame";
 
 
-export default class endScene extends Phaser.Scene {
+class endScene extends Phaser.Scene {
     constructor() {
-        super('startScene');
+        super('endScene');
     }
-
     preload () {
-        this.load.image("startBack","assets/Teemo_0.jpg");
     }
-    create () {
+    create (data) {
+        this.score = data.score;
+        console.log(this.score);
     }
 };
-
+export default endScene;
 

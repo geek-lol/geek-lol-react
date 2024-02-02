@@ -1,5 +1,6 @@
 import React from 'react';
 import Phaser from "phaser";
+import endScene from "./CSRank";
 
 const greens = Phaser.Display.Color.GetColor(0, 255, 0);
 const reds = Phaser.Display.Color.GetColor(255, 0, 0);
@@ -15,7 +16,7 @@ let redMinions = null;
 let blueMinions = null;
 
 let gametimer = null;
-let timeCount = 180000;
+let timeCount =  10000; //180000;
 //시간 format 함수
 function formatTime(seconds) { // 100000 = 100초 = 1분 40초
     const s = Math.floor(seconds / 1000); // 100초
@@ -163,6 +164,7 @@ function attackTween(tweens, attack, target, attacker,delay){
 }
 
 class CsGame extends Phaser.Scene {
+
     constructor() {
         super('mainScene');
     }
@@ -379,7 +381,7 @@ class CsGame extends Phaser.Scene {
         if (timeCount <=0){
             gametimer.paused = true;
             this.scene.stop();
-            // this.scene.start(StartScene);
+            this.scene.start('endScene', {score: playerScore});
         }
     }
 };
