@@ -13,12 +13,12 @@ const ItemDisplay = ({itemKey, itemIndex, toggleDescription, getItemByKey, showI
             <div
                 className={`item-description ${isHovered ? "show" : ""}`}
                 dangerouslySetInnerHTML={{
-                    __html: `<p style="font-weight: 700;">${item.name}</p><br><p>${item.description}</p><br>${item.gold.total}골드`,
+                    __html: `<p style="font-weight: 700;">${item.name}</p><hr><p>${item.description}</p><hr>${item.gold.total}골드`,
                 }}
             />
             <img
                 src={`https://ddragon.leagueoflegends.com/cdn/14.2.1/img/item/${itemKey}.png`}
-                alt=""
+                alt={`${item.name}`}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             />

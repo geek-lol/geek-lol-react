@@ -30,21 +30,23 @@ const PlayerSearchInfo = ({
                 return itemData.data[key];
             }
         }
-        return null
+        return null;
     };
 
     return (
         <div className="my-game-data">
             <div className={"player-info"}>
                 <img
-                    src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/champion/${player.championName}.png`}
-                    alt=""
+                    src={`https://ddragon.leagueoflegends.com/cdn/14.2.1/img/champion/${player.championName}.png`}
+                    alt={`${player.championName}`}
                 />
                 {player.summoner1Id && (
                     <div className="summoner-spell-info" style={{position: 'relative'}}>
                         <div
                             className={`spell-description ${showSpellDescription1 ? 'show' : ''}`}>
-                            <span>{getSpellByKey(player.summoner1Id.toString()).description}</span>
+                            <p>{getSpellByKey(player.summoner1Id.toString()).name}</p>
+                            <hr></hr>
+                            <p>{getSpellByKey(player.summoner1Id.toString()).description}</p>
                         </div>
                         <img
                             src={`https://ddragon.leagueoflegends.com/cdn/14.2.1/img/spell/${getSpellByKey(player.summoner1Id.toString()).image.full}`}
@@ -55,7 +57,9 @@ const PlayerSearchInfo = ({
                         />
                         <div
                             className={`spell-description1 ${showSpellDescription2 ? 'show' : ''}`}>
-                            <span>{getSpellByKey(player.summoner2Id.toString()).description}</span>
+                            <p>{getSpellByKey(player.summoner2Id.toString()).name}</p>
+                            <hr></hr>
+                            <p>{getSpellByKey(player.summoner2Id.toString()).description}</p>
                         </div>
                         <img
                             src={`https://ddragon.leagueoflegends.com/cdn/14.2.1/img/spell/${getSpellByKey(player.summoner2Id.toString()).image.full}`}
@@ -75,7 +79,7 @@ const PlayerSearchInfo = ({
                                      onMouseLeave={() => setIsViewMainRuneDesc(false)}>
                                     <div className={`rune-description ${isViewMainRuneDesc ? 'show' : ''}`}>
                                         <div className="is-view-mainrune-desc-container"
-                                             dangerouslySetInnerHTML={{__html: getMainRuneById(perk.selections[0].perk).longDesc}}/>
+                                             dangerouslySetInnerHTML={{__html:  `<p>${getMainRuneById(perk.selections[0].perk).name}</p><hr> <p>${getMainRuneById(perk.selections[0].perk).longDesc}</p>`}}/>
                                     </div>
                                     <img
                                         src={`https://ddragon.leagueoflegends.com/cdn/img/${getMainRuneById(perk.selections[0].perk).icon}`}
@@ -95,7 +99,7 @@ const PlayerSearchInfo = ({
                                     </div>
                                     <img
                                         src={`https://ddragon.leagueoflegends.com/cdn/img/${getSubRuneData(perk.style).icon}`}
-                                        alt="c"
+                                        alt={`${getSubRuneData(perk.style).name}`}
                                     />
                                 </div>
                             );

@@ -4,20 +4,18 @@ import DetailPlayerInfo from "./DetailPlayerInfo";
 import {gameTimeFunc, longToDate, secondsToMinutesAndSeconds} from "../functions/gameTimeFunc";
 import PlayerSearchInfo from "./PlayerSearchInfo";
 import RightChampionInfo from "./RightChampionInfo";
-
+import TeamInfoTable from "./TeamInfoTable";
+import useStateForViewLayer from "./UseStateForViewLayer";
 
 const Game = ({gameData, searchValue, spellData, key, itemData, runeData}) => {
-
+    const maxParticipantCount = 5; // Maximum participant count
 
     const filteredParticipants = gameData.participants.filter(participant =>
         participant.riotIdGameName.toLowerCase().replace(/ /g, "").includes(searchValue.toLowerCase().replace(/ /g, ""))
     );
-
     const teamOnePlayers = gameData.participants.filter(participant => participant.teamId === 100);
     const teamTwoPlayers = gameData.participants.filter(participant => participant.teamId === 200);
-
     const [gameTimestamp, setGameTimestamp] = useState(false);
-
     const getSubRuneData = (id) => {
         for (const category of runeData) {
             if (category.id === id) {
@@ -26,7 +24,6 @@ const Game = ({gameData, searchValue, spellData, key, itemData, runeData}) => {
         }
         return null;
     };
-
     const getMainRuneById = (id) => {
         for (const category of runeData) {
             if (category.slots) {
@@ -44,7 +41,6 @@ const Game = ({gameData, searchValue, spellData, key, itemData, runeData}) => {
         return null;
     };
 
-
     const getSpellByKey = (key) => {
         for (const summonerSpell in spellData.data) {
             if (spellData.data.hasOwnProperty(summonerSpell) && spellData.data[summonerSpell].key === key) {
@@ -53,25 +49,14 @@ const Game = ({gameData, searchValue, spellData, key, itemData, runeData}) => {
         }
         return null;
     };
-
     const [isViewDetailGameInfo, setIsViewDetailGameInfo] = useState(false);
     const showDetailGameInfo = e => {
         setIsViewDetailGameInfo(!isViewDetailGameInfo);
     };
 
-    const maxParticipantCount = 5; // Maximum participant count
-    const [viewTeamBlueFirstSpell, setViewTeamBlueFirstSpell] = useState(Array(maxParticipantCount).fill(false));
-    const [viewTeamBlueSecondSpell, setViewTeamBlueSecondSpell] = useState(Array(maxParticipantCount).fill(false));
 
-    const [viewTeamRedFirstSpell, setViewTeamRedFirstSpell] = useState(Array(maxParticipantCount).fill(false));
-    const [viewTeamRedSecondSpell, setViewTeamRedSecondSpell] = useState(Array(maxParticipantCount).fill(false));
-
-    const [viewTeamBlueMainRune, setViewTeamBlueMainRune] = useState(Array(maxParticipantCount).fill(false));
-    const [viewTeamBlueSubRune, setViewTeamBlueSubRune] = useState(Array(maxParticipantCount).fill(false));
-
-    const [viewTeamRedMainRune, setViewTeamRedMainRune] = useState(Array(maxParticipantCount).fill(false));
-    const [viewTeamRedSubRune, setViewTeamRedSubRune] = useState(Array(maxParticipantCount).fill(false));
-
+    const [viewTeamBlueFirstSpell, setViewTeamBlueFirstSpell, viewTeamBlueSecondSpell, setViewTeamBlueSecondSpell, viewTeamBlueMainRune, setViewTeamBlueMainRune, viewTeamBlueSubRune, setViewTeamBlueSubRune] = useStateForViewLayer(maxParticipantCount);
+    const [viewTeamRedFirstSpell, setViewTeamRedFirstSpell, viewTeamRedSecondSpell, setViewTeamRedSecondSpell, viewTeamRedMainRune, setViewTeamRedMainRune, viewTeamRedSubRune, setViewTeamRedSubRune] = useStateForViewLayer(maxParticipantCount);
 
     return (
         filteredParticipants.map((player, index) => (
@@ -87,12 +72,12 @@ const Game = ({gameData, searchValue, spellData, key, itemData, runeData}) => {
                                             switch (gameData.info.queueId) {
                                                 case 420:
                                                     return '솔로랭크';
-                                                case 430:
-                                                    return '일반게임';
                                                 case 440:
                                                     return '자유랭크';
                                                 case 450:
                                                     return '칼바람 나락';
+                                                case 490:
+                                                    return '일반게임';
                                                 default:
                                                     return '몰라요';
                                             }
@@ -139,106 +124,40 @@ const Game = ({gameData, searchValue, spellData, key, itemData, runeData}) => {
                         filteredParticipants={filteredParticipants}
                         gameData={gameData}
                     />
-
                 </div>
                 <div className={`detail-game-info ${isViewDetailGameInfo ? 'show' : ''}`}>
-                    {/* 팀1 */}
-                    <table>
-                        <colgroup>
-                            <col width={"33%"}/>
-                            <col width={"12%"}/>
-                            <col width={"8%"}/>
-                            <col width={"7%"}/>
-                            <col width={"7%"}/>
-                            <col width={"22%"}/>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th>{teamOnePlayers[0].teamId === 100 ? '블루팀 ' : '레드팀 '}{teamOnePlayers[0].win ? '승리' : '패배'}</th>
-                            <th>KDA</th>
-                            <th>피해량</th>
-                            <th>CS</th>
-                            <th>와드</th>
-                            <th>아이템</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {teamOnePlayers.map((player, index) => (
-                            <tr>
-                                <td>
-                                    <DetailPlayerInfo
-                                        player={player}
-                                        index={index}
-                                        team='team-blue'
-                                        setViewFirstSpell={setViewTeamBlueFirstSpell}
-                                        setViewSecondSpell={setViewTeamBlueSecondSpell}
-                                        setViewMainRune={setViewTeamBlueMainRune}
-                                        setViewSubRune={setViewTeamBlueSubRune}
-                                        viewFirstSpell={viewTeamBlueFirstSpell}
-                                        viewSecondSpell={viewTeamBlueSecondSpell}
-                                        viewMainRune={viewTeamBlueMainRune}
-                                        viewSubRune={viewTeamBlueSubRune}
-                                        getSubRuneData={getSubRuneData}
-                                        getMainRuneById={getMainRuneById}
-                                        getSpellByKey={getSpellByKey}
-                                    />
-                                </td>
-                                <td className={"detail-kda-td"}>
-                                    {player.kills} / {player.deaths} / {player.assists}
-                                </td>
-                                <td>
-                                    {player.totalDamageDealtToChampions}
-                                </td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
-
-                    {/* 팀2 */}
-                    <table>
-                        <colgroup>
-                            <col width={"33%"}/>
-                            <col width={"12%"}/>
-                            <col width={"8%"}/>
-                            <col width={"7%"}/>
-                            <col width={"7%"}/>
-                            <col width={"22%"}/>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th>{teamTwoPlayers[0].teamId === 200 ? '레드팀 ' : '블루팀 '} {teamTwoPlayers[0].win ? '승리' : '패배'}</th>
-                            <th>KDA</th>
-                            <th>피해량</th>
-                            <th>CS</th>
-                            <th>와드</th>
-                            <th>아이템</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th>
-                                {teamTwoPlayers.map((player, index) => (
-                                    <DetailPlayerInfo
-                                        player={player}
-                                        index={index}
-                                        team='team-red'
-                                        setViewFirstSpell={setViewTeamRedFirstSpell}
-                                        setViewSecondSpell={setViewTeamRedSecondSpell}
-                                        setViewMainRune={setViewTeamRedMainRune}
-                                        setViewSubRune={setViewTeamRedSubRune}
-                                        viewFirstSpell={viewTeamRedFirstSpell}
-                                        viewSecondSpell={viewTeamRedSecondSpell}
-                                        viewMainRune={viewTeamRedMainRune}
-                                        viewSubRune={viewTeamRedSubRune}
-                                        getSubRuneData={getSubRuneData}
-                                        getMainRuneById={getMainRuneById}
-                                        getSpellByKey={getSpellByKey}
-                                    />
-                                ))}
-                            </th>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <TeamInfoTable
+                        teamPlayers={teamOnePlayers}
+                        teamColor="team-blue"
+                        gameMode={gameData.info.gameMode}
+                        getSubRuneData={getSubRuneData}
+                        getMainRuneById={getMainRuneById}
+                        getSpellByKey={getSpellByKey}
+                        viewFirstSpell={viewTeamBlueFirstSpell}
+                        setViewFirstSpell={setViewTeamBlueFirstSpell}
+                        viewSecondSpell={viewTeamBlueSecondSpell}
+                        setViewSecondSpell={setViewTeamBlueSecondSpell}
+                        viewMainRune={viewTeamBlueMainRune}
+                        setViewMainRune={setViewTeamBlueMainRune}
+                        viewSubRune={viewTeamBlueSubRune}
+                        setViewSubRune={setViewTeamBlueSubRune}
+                    />
+                    <TeamInfoTable
+                        teamPlayers={teamTwoPlayers}
+                        teamColor="team-red"
+                        gameMode={gameData.info.gameMode}
+                        getSubRuneData={getSubRuneData}
+                        getMainRuneById={getMainRuneById}
+                        getSpellByKey={getSpellByKey}
+                        viewFirstSpell={viewTeamRedFirstSpell}
+                        setViewFirstSpell={setViewTeamRedFirstSpell}
+                        viewSecondSpell={viewTeamRedSecondSpell}
+                        setViewSecondSpell={setViewTeamRedSecondSpell}
+                        viewMainRune={viewTeamRedMainRune}
+                        setViewMainRune={setViewTeamRedMainRune}
+                        viewSubRune={viewTeamRedSubRune}
+                        setViewSubRune={setViewTeamRedSubRune}
+                    />
                 </div>
             </>
         ))

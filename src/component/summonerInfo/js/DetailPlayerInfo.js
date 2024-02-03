@@ -21,8 +21,8 @@ const DetailPlayerInfo = ({
     return (
         <div className={`detail-game-info-champion ${team}`} key={index}>
             <img
-                src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/champion/${player.championName}.png`}
-                alt="c"
+                src={`https://ddragon.leagueoflegends.com/cdn/14.2.1/img/champion/${player.championName}.png`}
+                alt={`${player.championName}`}
                 style={{width: "40px"}}
             />
             <div className="detail-spell-container">

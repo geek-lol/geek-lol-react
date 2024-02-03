@@ -22,6 +22,7 @@ const InfoTemplate = () => {
         try {
             const response = await axios.get(`http://localhost:8686/find/${searchValue}/${tag ? tag : 'KR1'}`);
             setUserInfo(response.data.userInfo != null ? response.data : null);
+            console.log(response.data);
             await getRecentGames();
         } catch (e) {
             console.error(e);
@@ -38,7 +39,7 @@ const InfoTemplate = () => {
             if (response.status === 200) {
                 setRecentGames(response.data);
                 // recentGames 출력 로직
-                // console.log(response.data);
+                console.log(response.data);
             }
         } catch (e) {
             console.error(e);
@@ -99,7 +100,7 @@ const InfoTemplate = () => {
 
     if (userInfo === undefined) {
         return <SkeletonContent/>
-    } else if (userInfo == null) {
+    } else if (!userInfo || userInfo.length === 0) {
         return <NotFoundSummoner searchValue={searchValue} tag={tag}/>
     }
 

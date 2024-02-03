@@ -2,9 +2,6 @@ import React from 'react';
 import "../scss/LeftContent.scss"
 
 const LeftContent = ({userInfo, infoLoading, tag}) => {
-    if (infoLoading) {
-        return `<div>Loading...</div>`;
-    }
     const leagueInfo = userInfo.leagueInfo;
     const flexRankIndex = leagueInfo.findIndex(item => item.queueType === 'RANKED_FLEX_SR');
     const soloRankIndex = leagueInfo.findIndex(item => item.queueType === 'RANKED_SOLO_5x5')
@@ -12,23 +9,24 @@ const LeftContent = ({userInfo, infoLoading, tag}) => {
         <div className={"left-content"}>          {/* flex-direction: column */}
             <div className={"summoner-profile"}>    {/* row  */}
                 <div className={"profile-image-container"}>
-                    {userInfo !== null ? (
-                        <>
-                            <img
-                                src={`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${userInfo.userInfo.profileIconId}.jpg`}
-                                alt="profile icon"/>
-                            <div className={"summoner-level"}><span>{userInfo.userInfo.summonerLevel}</span></div>
-                        </>
-                    ) : (<></>)}
+                    <>
+                        <img
+                            src={`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${userInfo.userInfo.profileIconId}.jpg`}
+                            alt="profile icon"/>
+                        <div className={"summoner-level"}><span>{userInfo.userInfo.summonerLevel}</span></div>
+                    </>
                 </div>
                 {/* column */}
                 <div className="ranking-nickname-container">
                     <div className="nickname-prev-ranking">
-                                <span
-                                    className="nickname">{tag !== 'KR1' ? userInfo.userInfo.gameName : userInfo.leagueInfo[0].summonerName}
-                                    <p>#{tag}</p></span>
+                                <span className="nickname">
+                                    {tag === "KR1" ? userInfo.userInfo.name : userInfo.userInfo.gameName}
+                                    <p>#{tag}</p>
+                                </span>
                         <div className="prev-ranking">
-                            <span className="prev-nickname">prev. {userInfo.userInfo.name}</span>
+                            <span className="prev-nickname">
+                                {/*prev. {userInfo.userInfo.name}*/}
+                            </span>
                             <span className="ranking">랭킹 : 000,000위</span>
                         </div>
                     </div>
