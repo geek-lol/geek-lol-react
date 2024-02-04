@@ -51,9 +51,6 @@ const BoardCreate = () => {
 
     // 보드 업로드
     const fetchBoardUpload = async () => {
-
-
-
         // JSON데이터를 formData에 넣기 위한 작업
         const jsonBlob = new Blob(
             [ JSON.stringify(boardValue) ],
