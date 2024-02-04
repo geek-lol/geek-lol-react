@@ -4,9 +4,11 @@ import {BsChatLeft, BsExclamationCircle, BsHeart} from "react-icons/bs";
 import cn from "classnames";
 import Shorts_comment from "./Shorts_comment";
 import {debounce} from "lodash";
-import {SHORT_URL} from "../../../../config/host-config";
+import {SHORT_URL, SHORT_VOTE_URL} from "../../../../config/host-config";
+import {getCurrentLoginUser} from "../../../../utils/login-util";
 
 const ShortsContent = ({item}) => {
+    const [token, setToken] = useState(getCurrentLoginUser().token);
     const [viewComment, setViewComment] = useState(false);
     const [voteShort, setVoteShort] = useState(false);
     const [voteCount,setVoteCount] = useState(item.upCount);
@@ -29,32 +31,86 @@ const ShortsContent = ({item}) => {
     const isMounted = useRef(false);
 
     const [shortList, setShortList] = useState([]);
-    const API_BASE_URL = SHORT_URL
+    const [shortVote, setShortVote] = useState([]);
+    const API_BASE_URL = SHORT_URL;
+    const API_VOTE_URL = SHORT_VOTE_URL;
 
 
-    useEffect(() => {
-        fetch(API_BASE_URL, {
-            method: 'GET',
-            headers: { 'content-type': 'application/json' }
+    // useEffect(() => {
+    //     fetch(API_VOTE_URL, {
+    //         method: 'GET',
+    //         headers: { 'content-type': 'application/json' }
+    //     })
+    //         .then(res => {
+    //             if (res.status === 200){
+    //                 return res.json();
+    //             }
+    //         })
+    //         .then(json => {
+    //             if (!json) return;
+    //
+    //             // console.log(json);
+    //             setShortList(json.vote);
+    //         });
+    // }, [currentItemIndex]);
+
+    const patchVoteVideo = async () => {
+
+        const res = await fetch(API_VOTE_URL, {
+            method: 'PATCH',
+            headers: { 'content-type': 'application/json',
+                Authorization: `Bearer ${token}`},
+            body: JSON.stringify(shortsId)
         })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! Status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(json => {
-                if (json && json.shorts) {
-                    item({replyCount: json.replyCount,
-                        upCount: json.replyCount})
-                    setShortList(json.shorts);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
+        if (res.status === 200) {
+            // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
+            const json = await res.json().catch(() => ({}));
+            setShortVote(json.vote);
+        } else {
+            console.error('Error:',  res.status);
+        }
 
-    }, []);
+    };
+
+    const postVoteVideo = async () => {
+
+        const res = await fetch(API_VOTE_URL, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json',
+                Authorization: `Bearer ${token}`},
+            body: JSON.stringify(shortsId)
+        })
+        if (res.status === 200) {
+            // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
+            const json = await res.json().catch(() => ({}));
+            setShortVote(json.vote);
+        } else {
+            console.error('Error:',  res.status);
+        }
+    }
+
+
+
+    const voteShortVideo = e => {
+        setVoteShort(!voteShort);
+        console.log(voteShort)
+
+        if (!token) {
+            alert("로그인 회원만 할수있음")
+            return;
+        }
+
+        if (voteShort === true) {
+
+            patchVoteVideo();
+
+        }else {
+            postVoteVideo();
+        }
+    }
+
+
+
 
     // 댓글 닫을때 애니메이션
     useEffect(() => {
@@ -74,39 +130,7 @@ const ShortsContent = ({item}) => {
 
     }
 
-    const voteShortVideo = e => {
-        setVoteShort(!voteShort);
-        console.log(voteShort);
-        if (voteShort === true) {
-            setVoteCount({upCount} + 1);
-        } else {
-            setVoteCount({upCount} - 1);
-        }
-    }
 
-    // useEffect(() => {
-    //     fetch(API_BASE_URL, {
-    //         method: 'PUT',
-    //         headers: { 'content-type': 'application/json' }
-    //     })
-    //         .then(res => {
-    //             if (!res.ok) {
-    //                 throw new Error(`HTTP error! Status: ${res.status}`);
-    //             }
-    //             return res.json();
-    //         })
-    //         .then(json => {
-    //             if (json && json.shorts) {
-    //                 item({replyCount: json.replyCount,
-    //                     upCount: json.upCount})
-    //                 setShortList(json.shorts);
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching data:', error);
-    //         });
-    //
-    // }, []);
 
 
     // 휠을 내리거나 올렸을때 0.3s 기다리고 움직임
