@@ -79,7 +79,10 @@ const Detail = () => {
     const [totalPage,setTotalPage]=useState();
     // 댓글 리스트 가져오기
     useEffect(() => {
-        fetch(`${REPLY_URL}/${data.bulletinId}?page=${page}`, {
+        Replyrendering();
+    }, [inputText,data,page,totalReply]);
+    const Replyrendering= async ()=>{
+        await fetch(`${REPLY_URL}/${data.bulletinId}?page=${page}`, {
             method: 'GET',
             headers: {'content-type': 'application/json'},
         })
@@ -95,8 +98,7 @@ const Detail = () => {
                 setTotalPage(json.totalPages);
                 console.log(json);
             });
-    }, [inputText,data,page]);
-    //토큰 가져오기
+    }
 
     const replyOnChangeHandler = (e) => {
         setReplyText(e.target.value);
@@ -105,12 +107,19 @@ const Detail = () => {
         setInputText(replyText);
         if(!token) {alert("로그인이 필요한 서비스입니다.");return}
         fetchBoardUpload();
+        console.log(replyText);
         setReplyText("");
+        setTotalReply(totalReply+1);
         alert("댓글이 등록되었습니다.");
     };
     const pageHandler = (e) => {
         setPage(+e.target.innerText);
     };
+    //값을 끌어올 함수
+    const getReplyCount=(TotalReply)=>{
+        if(totalReply<=0) setTotalReply(0);
+        setTotalReply(totalReply-1);
+    }
     return (
         <>
             <section id="detail-body">
@@ -169,7 +178,7 @@ const Detail = () => {
                     </form>
                     <div className="comment-box">
                         {replyList.map(con=>
-                            <BoardReply item={con}/>
+                            <BoardReply item={con} getReplyCount={getReplyCount}/>
                         )}
                         <Pagination
                             activePage={page}
