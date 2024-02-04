@@ -44,7 +44,7 @@ function BoardContent({item}) {
     }, [localDateTime]);  // localDateTime이 변경될 때마다 useEffect 실행
     return (
         <>
-            <Link className="table-content btn-b" to="/board/detail">
+            <Link className="table-content btn-b" to={`/board/detail/${bulletinId}`} >
                 <div className="num">{bulletinId}</div>
                 <div className="empty"></div>
                 <div className="contents">

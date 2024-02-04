@@ -2,6 +2,7 @@
 export const TOKEN = 'ACCESS_TOKEN';
 export const USERNAME = 'USER_NAME';
 export const ROLE = 'ROLE';
+// export const ID = 'ID';
 
 // 로그인 여부를 확인하는 함수
 export const isLogin = () => !!localStorage.getItem(TOKEN);
@@ -12,5 +13,6 @@ export const getCurrentLoginUser = () => {
         token: localStorage.getItem(TOKEN),
         username: localStorage.getItem(USERNAME),
         role: localStorage.getItem(ROLE)
+        // ,id:localStorage.getItem(ID)
     };
 };
