@@ -28,9 +28,13 @@ const Login = () => {
         }
 
         if (res.status === 200) {
-            const {token, userName, role, userId} = await res.json();
+            const {token, userName, role, id} = await res.json();
             // const responseData = await res.json();
-            console.log(responseData);
+            // console.log(responseData)
+            console.log(token);
+            console.log(userName);
+            console.log(role);
+            console.log(id);
 
             // 클라이언트에서 로그인을 했다는 사실을 알게 해야함
             // 서버에서 받은 토큰을 브라우저에 저장할것.
@@ -39,7 +43,7 @@ const Login = () => {
             localStorage.setItem('ACCESS_TOKEN', token);
             localStorage.setItem('USER_NAME', userName);
             localStorage.setItem('ROLE', role);
-            localStorage.setItem('USER_ID', userId);
+            localStorage.setItem('USER_ID', id);
 
 
             redirection('/');
