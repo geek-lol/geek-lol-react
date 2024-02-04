@@ -6,6 +6,7 @@ import Shorts_comment from "./Shorts_comment";
 import {debounce} from "lodash";
 import {SHORT_URL, SHORT_VOTE_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
+import axios from "axios";
 
 const ShortsContent = ({item}) => {
     const [token, setToken] = useState(getCurrentLoginUser().token);
@@ -54,12 +55,39 @@ const ShortsContent = ({item}) => {
     //         });
     // }, [currentItemIndex]);
 
+    const requestHeader = {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+
+    const [voteVideoState, setVoteVideoState] = useState(null);
+    const getVoteVideo = async () => {
+        const response = await axios.get(API_VOTE_URL, {
+            headers: requestHeader,
+            params: {
+                shortsId,
+            }
+        });
+
+        const data = await response.data;
+
+        if(response.status === 200) {
+            setVoteVideoState(data);
+        }
+
+        console.log(data);
+    };
+
+    useEffect(() => {
+        getVoteVideo();
+    }, []);
+
+    // console.log(token);
     const patchVoteVideo = async () => {
 
         const res = await fetch(API_VOTE_URL, {
             method: 'PATCH',
-            headers: { 'content-type': 'application/json',
-                Authorization: `Bearer ${token}`},
+            headers: requestHeader,
             body: JSON.stringify(shortsId)
         })
         if (res.status === 200) {
@@ -75,15 +103,15 @@ const ShortsContent = ({item}) => {
     const postVoteVideo = async () => {
 
         const res = await fetch(API_VOTE_URL, {
-            method: 'POST',
-            headers: { 'content-type': 'application/json',
-                Authorization: `Bearer ${token}`},
+            method: voteVideoState.isEmpty ? 'POST' : "PATCH",
+            headers: requestHeader,
             body: JSON.stringify(shortsId)
         })
         if (res.status === 200) {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
             setShortVote(json.vote);
+            console.log(json.vote);
         } else {
             console.error('Error:',  res.status);
         }
@@ -100,8 +128,7 @@ const ShortsContent = ({item}) => {
             return;
         }
 
-        if (voteShort === true) {
-
+        if (voteShort) {
             patchVoteVideo();
 
         }else {
