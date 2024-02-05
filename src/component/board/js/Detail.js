@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import "../scss/Detail.scss";
 import {AiFillAlert, AiOutlineLike} from "react-icons/ai";
 import {Button, Pagination, TextField} from "@mui/material";
-import {DETAIL_URL, REPLY_URL} from "../../../config/host-config";
+import {BOARD_URL, DETAIL_URL, REPLY_URL} from "../../../config/host-config";
 import {useParams} from "react-router-dom";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import BoardReply from "../BoardReply";
@@ -20,11 +20,13 @@ const GetData=(Id)=>{
             .then(res => {
                 if (res.status === 200) {
                     return res.json();
+
                 }
             })
             .then(json => {
                 if (!json) return json;
                 setDetailList(json);
+                console.log(json);
             });
     }, []);
     return detailList;
@@ -40,7 +42,7 @@ const Detail = () => {
     const [page,setPage]=useState(1);
     useEffect(() => {
         setData({...item});
-        console.log(data);
+
     }, [item]);
 
 
@@ -122,6 +124,27 @@ const Detail = () => {
         if(totalReply<=0) setTotalReply(0);
         setTotalReply(totalReply-1);
     }
+    const detailDelete= async ()=>{
+        await fetch(`${BOARD_URL}`,{
+            method:'DELETE',
+            headers: {
+                'content-type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body:JSON.stringify({
+                bulletinId:data.bulletinId,
+                title:data.title,
+                posterId:data.posterId
+            })
+
+        }).then(res=>{
+            console.log(res.status)});
+    };
+
+    const detailDeleteHandler = () => {
+        console.log("클릭됨");
+        detailDelete();
+    };
     return (
         <>
             <section id="detail-body">
@@ -131,11 +154,11 @@ const Detail = () => {
                         <div className="detail-info-box">
                             <div className="info-front">
                                 <p>{data.localDateTime}</p><p>|</p>
-                                <p>{data.posterId}</p>
+                                <p>{data.posterName}</p>
                             </div>
                             <div className="info-back">
                                 <p>조회수 {data.viewCount-1}</p><p>|</p>
-                                <p>댓글 12345</p><p>|</p>
+                                <p>댓글 {totalReply}</p><p>|</p>
                                 <p>추천 1255</p>
                             </div>
                         </div>
@@ -147,7 +170,7 @@ const Detail = () => {
                     <div className="content-bottom">
                         <p><AiOutlineLike size={8 * 2}/></p>
                         <p className="correction">수정</p>
-                        <p className="delete">삭제</p>
+                        <p className="delete" onClick={detailDeleteHandler}>삭제</p>
                     </div>
                 </div>
                 <div className="detail-comment">
