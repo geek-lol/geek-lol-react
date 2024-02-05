@@ -77,9 +77,9 @@ const BoardCreate = () => {
         if (res.status === 200) {
             const json = await res.json();
             setBoardList(json.boardInfo);
-            redirection('/board/main')
+            redirection('/board/main/FreeBoard')
         } else {
-
+            alert("입력값이 유효하지 않습니다.")
             console.error('Error:',  res.status);
         }
     }
@@ -93,6 +93,7 @@ const BoardCreate = () => {
             redirection('/template/login');
             return;
         }
+
 
         // 업로드 로직 진행
         fetchBoardUpload();
@@ -159,8 +160,8 @@ const BoardCreate = () => {
                         <div className={'cancel-btn'}>
                             <Link to="/board/main" className={'btn-b'}>취소</Link>
                         </div>
-                        <div className={'save-btn'}>
-                            <p className={'btn'} onClick={uploadHandler}>등록</p>
+                        <div className={'save-btn'} onClick={uploadHandler}>
+                            <p className={'btn'}>등록</p>
                         </div>
                     </div>
                 </div>
