@@ -1,6 +1,16 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../scss/ResponseTime.scss';
 import Button from '@mui/material/Button';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import {getCurrentLoginUser} from "../../../utils/login-util";
+import axios from "axios";
+
 const ResponseTime = () => {
 
     let startTime; // 시작시간
@@ -10,6 +20,46 @@ const ResponseTime = () => {
     let records = [];
     let timeoutId; // setTimeout 함수를 담을 변수;
 
+    // 토큰 가져오기
+    const [token, setToken] = useState(getCurrentLoginUser().token);
+
+    //요청 URL
+    const API_URL = "http://localhost:8686/game/res";
+
+    // 요청 헤더 객체
+    const requestHeader = {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+
+    const [rankList,setRankList] = useState([]);
+
+    useEffect(async () => {
+
+        const response = await axios.get(API_URL, {
+            headers: {"content-type": "application/json"}
+        })
+
+        const data = await response.data.gameRankList;
+        setRankList(data);
+        console.log(data);
+    }, []);
+
+    // 게임 점수 DB저장 처리 fetch
+    const addRank = async (score)=>{
+        const payload = {
+            score : `${score}`
+        }
+        const res = await fetch(API_URL,{
+            method:"POST",
+            headers : requestHeader,
+            body : JSON.stringify(payload)
+        })
+        const json = await res.json();
+
+        setRankList(json.gameRankList);
+
+    }
     // 게임 처리 함수
     function startClick(){
         console.log('start 함수 시작')
@@ -57,6 +107,7 @@ const ResponseTime = () => {
                 if (records.length < 5){
                     startClick();
                 }else{
+                    addRank(Avg);
                     $screen.textContent = `당신의 평균속도 : ${Avg}`;
                     document.getElementById("testReset").classList.remove('non');
                 }
@@ -85,24 +136,33 @@ const ResponseTime = () => {
                 </div>
                 <div id="result"></div>
             </div>
-            <table className="game-rank">
-                <thead className="game-rank-head">
-                    <tr className="game-rank-row">
-                        <td className="game-rank-item">순위</td>
-                        <td className="game-rank-item" >닉네임</td>
-                        <td className="game-rank-item">반응 속도</td>
-                        <td className="game-rank-item">날짜</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr className="game-rank-row">
-                        <td className="game-rank-item">1</td>
-                        <td className="game-rank-item">하이</td>
-                        <td className="game-rank-item">2</td>
-                        <td className="game-rank-item">2024-01-01 33:22:11</td>
-                    </tr>
-                </tbody>
-            </table>
+            <TableContainer sx={{width:'65%', mx:'auto', mt:30}} component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table" >
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">순위</TableCell>
+                            <TableCell align="left">닉네임(아이디)</TableCell>
+                            <TableCell align="left">반응 속도</TableCell>
+                            <TableCell align="left">날짜</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rankList.map((row) => (
+                            <TableRow
+                                key={row.gameId}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                                <TableCell component="th" scope="row">
+                                    {row.gameId}
+                                </TableCell>
+                                <TableCell align="left">{`${row.userName}(${row.userId})`}</TableCell>
+                                <TableCell align="left">{row.score}</TableCell>
+                                <TableCell align="left">{row.recordDate}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </>
      
     );
