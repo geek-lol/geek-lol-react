@@ -8,6 +8,7 @@ import {getCurrentLoginUser} from "../../../utils/login-util";
 import BoardReply from "../BoardReply";
 
 const GetData=(Id)=>{
+    console.log(Id);
     const API_BASE_URL = DETAIL_URL;
     const [detailList, setDetailList] = useState(null);
 
@@ -39,6 +40,7 @@ const Detail = () => {
     const [page,setPage]=useState(1);
     useEffect(() => {
         setData({...item});
+        console.log(data);
     }, [item]);
 
 

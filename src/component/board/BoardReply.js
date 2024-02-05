@@ -122,7 +122,6 @@ const BoardReply = ({item,getReplyCount}) => {
                         <p style={{paddingRight: '20px', color: 'red'}} onClick={deleteHandler}>삭제</p>
                         :
                         <p style={{paddingRight: '20px', color: 'black'}}><AiFillAlert/>신고하기</p>
-
                     }
                 </div>
                 <div className="comment-content">
