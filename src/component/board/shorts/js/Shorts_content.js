@@ -226,10 +226,8 @@ const ShortsContent = ({item}) => {
 
 
 
-        const videoRef= useRef();
-        const setPlayBackRate = () => {
-            videoRef.current.playbackRate = 0.5;
-        };
+
+
 
     return (
         <>
@@ -239,9 +237,8 @@ const ShortsContent = ({item}) => {
                     ref={contentRef}>
                     <div className={cn('short-form', {animation_view: viewAni})}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
-                            <video className={'short-video'} ref={videoRef} autoPlay
-                                   loop onCanPlay={() => setPlayBackRate()}>
-                                <source src={item.videoLink} type="video/mp4" />
+                            <video ref={item.videoLink} className={'short-video'} loop autoPlay muted controls id="vid">
+                                {/*<source src={item.videoLink} type="video/mp4" />*/}
                             </video>
                             <div className={'overlap-front'}>
                                 <div className={'produce'}>
