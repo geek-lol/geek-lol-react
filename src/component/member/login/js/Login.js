@@ -31,10 +31,8 @@ const Login = () => {
         }
 
         if (res.status === 200) {
-            const {token, userName, role} = await res.json();
+            const {token, userName, role, id} = await res.json();
             // const responseData = await res.json();
-            // console.log(responseData);
-
             // 클라이언트에서 로그인을 했다는 사실을 알게 해야함
             // 서버에서 받은 토큰을 브라우저에 저장할것.
             // 1. 로컬 스토리지 - 데이터를 브라우저가 종료되어도 계속 보관
@@ -42,7 +40,7 @@ const Login = () => {
             localStorage.setItem('ACCESS_TOKEN', token);
             localStorage.setItem('USER_NAME', userName);
             localStorage.setItem('ROLE', role);
-
+            localStorage.setItem('USER_ID', id);
 
             redirection('/');
         }

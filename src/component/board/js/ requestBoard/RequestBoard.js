@@ -12,6 +12,7 @@ import {
 import RequestContent from "./RequestContent";
 import RequestGather from "./RequestGather";
 import ReactPlayer from "react-player";
+import {ProgressBar} from "react-bootstrap";
 
 const RequestBoard = () => {
     const [hide,setHide]=useState(false);
@@ -66,7 +67,7 @@ const RequestBoard = () => {
                             <p>현재투표 글</p>
                         </div>
                     </div>
-
+                    <ProgressBar completed={180} maxCompleted={200} />
                 </div>
 
                 <div className="board_list_box">

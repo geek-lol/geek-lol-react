@@ -270,29 +270,7 @@
 
             }
           }
-          .arrowBox{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            .arrow{
-              height: 40px;
-              border: 1px solid #9FE8FF;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              padding-left: 6px;
-              padding-right: 6px;
-              font-size: 24px;
-              font-weight: 100;
-              border-radius: 8px;
-              margin: 3px;
-              cursor: pointer;
-            }
-            .arrow:hover{
-              background: #9FE8FF;
-            }
-          }
+
         }
       }
     }
