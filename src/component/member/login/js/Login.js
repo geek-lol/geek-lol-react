@@ -7,6 +7,8 @@ const Login = () => {
     const SIGN_IN_URL = USER_URL + "/signin";
     const redirection = useNavigate();
 
+    const [autoLogin, setAutoLogin] = useState(false);
+
 
 
     // 로그인
@@ -16,7 +18,8 @@ const Login = () => {
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
                 id: document.getElementById('email').value,
-                password: document.getElementById('password').value
+                password: document.getElementById('password').value,
+                autoLogin: autoLogin
             })
         });
 
@@ -51,6 +54,11 @@ const Login = () => {
         fetchLoginProcess();
     }
 
+    const autoLoginHandler = e => {
+        setAutoLogin(!autoLogin);
+        console.log(autoLogin)
+    }
+
     return (
         <div className={'loginform'}>
             <form noValidate className={'loginform-container'}>
@@ -59,6 +67,10 @@ const Login = () => {
                         <input className={'login-inputbox'} id={'email'} type="email" placeholder={'email'}/>
                         <div className={'line'}></div>
                         <input className={'login-inputbox'} id={'password'} type="password" placeholder={'password'}/>
+                    </div>
+                    <div className={'auto-login-check'}>
+                        <input type="checkbox" onClick={autoLoginHandler}/>
+                        <p>자동로그인</p>
                     </div>
                     <button className={'signin-box'} onClick={loginHandler}>로그인</button>
                 </div>
