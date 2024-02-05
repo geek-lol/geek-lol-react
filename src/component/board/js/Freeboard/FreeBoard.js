@@ -1,29 +1,52 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {GoChevronDown} from "react-icons/go";
 import cn from "classnames";
 import {CiSearch} from "react-icons/ci";
-import LCKboard from "../LCK/LCKboard";
-import {
-    MdKeyboardArrowLeft,
-    MdKeyboardDoubleArrowLeft,
-    MdKeyboardDoubleArrowRight,
-    MdOutlineKeyboardArrowRight
-} from "react-icons/md";
-import BoardGather from "./BoardGather";
+
 import {Link} from "react-router-dom";
+import {BOARD_URL} from "../../../../config/host-config";
+import Board from "../Board";
+import BoardContent from "./BoardContent";
+import { Pagination } from '@mui/material';
 const FreeBoard = () => {
-    const [hide,setHide]=useState(false);
-    const [title,setTitle]=useState("제목");
-    const relativeButtonHandler=(e)=>{
+    const [boardList, setBoardList] = useState([]);
+    const API_BASE_URL = BOARD_URL
+    const [hide, setHide] = useState(false);
+    const [title, setTitle] = useState("제목");
+    const [totalPage,setTotalPage]=useState(1);
+    const [page,setPage]=useState(1);
+    const relativeButtonHandler = (e) => {
         setHide(!hide);
     }
-    const offDiv=()=>{
-        if(hide===true)
+    const offDiv = () => {
+        if (hide === true)
             setHide(false);
     }
-    const hiddenHandler=(e)=>{
+    const hiddenHandler = (e) => {
         setTitle(e.target.value);
     }
+    useEffect(() => {
+        fetch(`${API_BASE_URL}?page=${page}`, {
+            method: 'GET',
+            headers: {'content-type': 'application/json'},
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json();
+                }
+            })
+            .then(json => {
+                if (!json) return;
+                setBoardList(json.board);
+                setTotalPage(json.totalPages);
+            });
+        }, [page]);
+
+
+    const pageHandler = (e) => {
+        setPage(+e.target.innerText);
+        console.log(+e.target.innerText);
+    };
     return (
         <div id="board_wrap" onClick={offDiv} style={{marginTop:'97.99px'}}>
             <section id="board_main">
@@ -69,26 +92,28 @@ const FreeBoard = () => {
                             <span className="s-title5 py-1">조회</span>
                             <span className="s-title6 py-1">추천</span>
                         </div>
-                        <BoardGather/>
-                        {/*<LCKboard/>*/}
+                        {boardList.map(con=>
+                            <BoardContent
+                            item={con}
+                            />
+                        )}
                         <nav className="page-box">
                             <div className="write-btn">
                                 <Link to="/board/create">글쓰기</Link>
                             </div>
-                            <ul className="arrowBox">
-                                <li className="arrow"><MdKeyboardDoubleArrowLeft size={12 * 2}/></li>
-                                <li className="arrow"><MdKeyboardArrowLeft size={12 * 2}/></li>
-                                <li className="arrow">1</li>
-                                <li className="arrow">2</li>
-                                <li className="arrow"><MdOutlineKeyboardArrowRight size={12 * 2}/></li>
-                                <li className="arrow"><MdKeyboardDoubleArrowRight size={12 * 2}/></li>
-                            </ul>
+                            <Pagination
+                                activePage={page}
+                                count={totalPage}
+                                variant="outlined"
+                                color="primary"
+                                shape="rounded"
+                                onChange={pageHandler}
+                            />
                         </nav>
                     </div>
                 </div>
             </section>
         </div>
     );
-};
-
+}
 export default FreeBoard;

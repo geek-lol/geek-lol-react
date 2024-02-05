@@ -105,7 +105,6 @@ const InfoTemplate = () => {
 
     return (
         <>
-            <Header/>
             <div className={"summoner-info-container"}>
                 <div className="left-ad box"></div>
                 <div className={"summoner-info-content"}>
