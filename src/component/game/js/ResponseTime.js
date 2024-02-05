@@ -34,15 +34,17 @@ const ResponseTime = () => {
 
     const [rankList,setRankList] = useState([]);
 
-    useEffect(async () => {
+    useEffect(() => {
+        async function fetchData(){
+            const response = await axios.get(API_URL, {
+                headers: {"content-type": "application/json"}
+            })
 
-        const response = await axios.get(API_URL, {
-            headers: {"content-type": "application/json"}
-        })
-
-        const data = await response.data.gameRankList;
-        setRankList(data);
-        console.log(data);
+            const data = await response.data.gameRankList;
+            setRankList(data);
+            console.log(data);
+        }
+        fetchData();
     }, []);
 
     // 게임 점수 DB저장 처리 fetch
@@ -147,13 +149,13 @@ const ResponseTime = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rankList.map((row) => (
+                        {rankList.map((row,index) => (
                             <TableRow
                                 key={row.gameId}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell component="th" scope="row">
-                                    {row.gameId}
+                                <TableCell align="center" component="th" scope="row">
+                                    {index+1}
                                 </TableCell>
                                 <TableCell align="left">{`${row.userName}(${row.userId})`}</TableCell>
                                 <TableCell align="left">{row.score}</TableCell>

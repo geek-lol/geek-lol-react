@@ -258,7 +258,7 @@ class CsGame extends Phaser.Scene {
         });
 
         function timerCallback() {
-            timeText.text= `남은시간:${formatTime(timeCount)}`;
+            timeText.setText(`남은시간:${formatTime(timeCount)}`);
             timeCount = (timeCount-1000);
         }
 
@@ -307,7 +307,7 @@ class CsGame extends Phaser.Scene {
                                     redMinion.setData('repeatCount',redMinion.getData('repeatCount') + 1);
                                     if ( redMinion.getData('health') <= 0){
                                         playerScore += 10;
-                                        scoreText.text = `점수: ${playerScore}`;
+                                        scoreText.setText(`점수: ${playerScore}`);
                                     }
                                 }
 
@@ -333,9 +333,13 @@ class CsGame extends Phaser.Scene {
                     }
                 } else{
                     if (rm.getData('health') <= 0){
-                        rm.getData('healthBar').forEach(h=> h.destroy());
+
+                        rm.getData('healthBar').forEach(h=> {
+                            if(h != null) h.destroy();
+                        })
                         rm.destroy();
                         redMinions.remove(rm)
+
                     }
                 }
             }

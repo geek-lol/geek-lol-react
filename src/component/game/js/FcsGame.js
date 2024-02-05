@@ -12,6 +12,7 @@ const MainScene = ()=> {
 
 
     useEffect(() => {
+
         const config = {
             type: Phaser.AUTO,
             parent: 'phaser-container',
@@ -30,11 +31,9 @@ const MainScene = ()=> {
                 autoCenter: Phaser.Scale.CENTER_BOTH,
             },
         };
-
         game.current = new Phaser.Game(config);
-        return () => {
-            game.current.destroy(true);
-        };
+
+
     }, []);
 
     const handleContextMenu = (e) => {
