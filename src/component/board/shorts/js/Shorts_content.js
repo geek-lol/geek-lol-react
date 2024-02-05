@@ -101,9 +101,10 @@ const ShortsContent = ({item}) => {
     };
 
     const postVoteVideo = async () => {
+        console.log('voteVideoState.isEmpty:', voteVideoState.isInteger());
 
         const res = await fetch(API_VOTE_URL, {
-            method: voteVideoState.isEmpty ? 'POST' : "PATCH",
+            method: voteVideoState.isInteger ? 'POST' : "PATCH",
             headers: requestHeader,
             body: JSON.stringify(shortsId)
         })
@@ -128,10 +129,10 @@ const ShortsContent = ({item}) => {
             return;
         }
 
-        if (voteShort) {
+        if (!voteShort) {
             patchVoteVideo();
 
-        }else {
+        }else if (voteShort){
             postVoteVideo();
         }
     }

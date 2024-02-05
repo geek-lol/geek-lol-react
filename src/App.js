@@ -3,7 +3,7 @@ import axios from "axios";
 import Header from "./component/header/js/Header";
 import { Reset } from "styled-reset";
 import Template from "./component/member/template/js/Template";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import {BrowserRouter, json, Route, Routes, useLocation} from "react-router-dom";
 import Main from "./component/main/js/main";
 import Board from "./component/board/js/Board";
 import Rank from "./component/rank/js/Rank";
@@ -18,11 +18,41 @@ import MyActivityTemplate from "./component/mypage/js/activity/MyActivityTemplat
 import CSGame from "./component/game/js/CSGame";
 import MainScene from "./component/game/js/FcsGame";
 import InfoTemplate from "./component/summonerInfo/js/InfoTemplate";
+import {getCurrentLoginUser} from "./utils/login-util";
 
 function App() {
     const [showHeader, setShowHeader] = useState(true);
     const location = useLocation();
     const [touch, setTouch] = useState("");
+    const [autoLogin, setAutoLogin] = useState(null);
+
+
+
+    // useEffect(() => {
+    //     console.count(getCurrentLoginUser().autologin);
+    //     setAutoLogin(getCurrentLoginUser().autologin);
+    // }, []);
+    useEffect(() => {
+
+        if(getCurrentLoginUser().autologin === "true"){
+            console.log("true 뜸");
+        }else if(getCurrentLoginUser().autologin === "false"){
+            console.log("false아닌 무언가");
+            window.addEventListener('beforeunload', e => {
+                console.log(autoLogin);
+                localStorage.clear();
+                }
+            )
+        }
+        setAutoLogin(getCurrentLoginUser().autologin);
+
+    }, []);
+
+
+
+
+
+
 
 
     useEffect(() => {
