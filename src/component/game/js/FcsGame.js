@@ -17,7 +17,7 @@ const MainScene = ()=> {
             type: Phaser.AUTO,
             parent: 'phaser-container',
             width:1400,
-            height: 600,
+            height: 800,
             physics: {
                 default: 'arcade',
                 arcade: {
