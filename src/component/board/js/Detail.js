@@ -3,7 +3,7 @@ import "../scss/Detail.scss";
 import {AiFillAlert, AiOutlineLike} from "react-icons/ai";
 import {Button, Pagination, TextField} from "@mui/material";
 import {BOARD_URL, DETAIL_URL, REPLY_URL} from "../../../config/host-config";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import BoardReply from "../BoardReply";
 
@@ -168,9 +168,9 @@ const Detail = () => {
                         <p>{data.content}</p>
                     </div>
                     <div className="content-bottom">
-                        <p><AiOutlineLike size={8 * 2}/></p>
-                        <p className="correction">수정</p>
-                        <p className="delete" onClick={detailDeleteHandler}>삭제</p>
+                        <p className="p"><AiOutlineLike size={8 * 2}/></p>
+                        <Link className="correction p" to={`/board/modify/${data.bulletinId}`}>수정</Link>
+                        <p className="delete p" onClick={detailDeleteHandler}>삭제</p>
                     </div>
                 </div>
                 <div className="detail-comment">

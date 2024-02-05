@@ -1,6 +1,6 @@
 
 const LOCAL_PORT = '8686'
-const API_BASE_URL = 'http://localhost:' + LOCAL_PORT;
+const API_BASE_URL = '`http://localhost:`' + LOCAL_PORT;
 
 const USER = '/user';
 const BOARD = '/board/bulletin'
