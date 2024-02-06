@@ -1,20 +1,22 @@
 import React, {useEffect, useRef, useState} from 'react';
 import '../scss/Shorts_content.scss'
-import {BsChatLeft, BsExclamationCircle, BsHeart} from "react-icons/bs";
+import {BsChatLeft, BsExclamationCircle, BsHeart, BsHeartFill} from "react-icons/bs";
 import cn from "classnames";
 import Shorts_comment from "./Shorts_comment";
 import {debounce} from "lodash";
 import {SHORT_URL, SHORT_VOTE_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import axios from "axios";
+import {json} from "react-router-dom";
 
-const ShortsContent = ({item}) => {
+const ShortsContent = ({item, upVote}) => {
+    const {shortsId, uploaderName,replyCount,viewCount, upCount, title, context, videoLink} = item;
     const [token, setToken] = useState(getCurrentLoginUser().token);
     const [viewComment, setViewComment] = useState(false);
-    const [voteShort, setVoteShort] = useState(false);
-    const [voteCount,setVoteCount] = useState(item.upCount);
+
+
     const [viewAni, setViewAni] = useState(false);
-    
+
     // 휠 애니메이션
     const [viewScrollDownAni, setViewScrollDownAni] = useState(false);
     const [viewScrollUpAni, setViewScrollUpAni] = useState(false);
@@ -23,7 +25,7 @@ const ShortsContent = ({item}) => {
     // 휠 이벤트 시간
     const lastWheelTime = useRef(0);
 
-    const {shortsId, uploaderName,replyCount,viewCount, upCount, title, context, videoLink} = item;
+
 
     // 신고 모달 띄우기
     const [viewReport, setViewReport] = useState(false);
@@ -32,55 +34,67 @@ const ShortsContent = ({item}) => {
     const isMounted = useRef(false);
 
     const [shortList, setShortList] = useState([]);
-    const [shortVote, setShortVote] = useState([]);
+    // const [shortVote, setShortVote] = useState([]);
     const API_BASE_URL = SHORT_URL;
     const API_VOTE_URL = SHORT_VOTE_URL;
 
-
-    // useEffect(() => {
-    //     fetch(API_VOTE_URL, {
-    //         method: 'GET',
-    //         headers: { 'content-type': 'application/json' }
-    //     })
-    //         .then(res => {
-    //             if (res.status === 200){
-    //                 return res.json();
-    //             }
-    //         })
-    //         .then(json => {
-    //             if (!json) return;
-    //
-    //             // console.log(json);
-    //             setShortList(json.vote);
-    //         });
-    // }, [currentItemIndex]);
 
     const requestHeader = {
         'content-type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
 
-    const [voteVideoState, setVoteVideoState] = useState(null);
+    //전체 upCount
+    const [voteVideoState, setVoteVideoState] = useState({up: upCount});
+    const [voteCount,setVoteCount] = useState(); // 각각의upCount
+    const [voteShort, setVoteShort] = useState(false);
+    // const getVoteVideo = async () => {
+    //     const response = await axios.get(API_VOTE_URL, {
+    //         headers: requestHeader,
+    //         params: {
+    //             shortsId,
+    //         }
+    //     });
+    //
+    //     const data = await response.data;
+    //
+    //     if(response.status === 200) {
+    //         setVoteVideoState(data);
+    //     }
+    //
+    //     console.log(data);
+    // };
+
     const getVoteVideo = async () => {
-        const response = await axios.get(API_VOTE_URL, {
-            headers: requestHeader,
-            params: {
-                shortsId,
-            }
-        });
+        fetch(API_BASE_URL, {
+            method: 'GET',
+            headers: requestHeader
+        })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! Status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(json => {
+                if (json && json.up) {
+                    setVoteCount(json.up);
 
-        const data = await response.data;
 
-        if(response.status === 200) {
-            setVoteVideoState(data);
-        }
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
 
-        console.log(data);
+
     };
 
     useEffect(() => {
         getVoteVideo();
-    }, []);
+        console.log('vc:', voteVideoState);
+
+    }, [voteVideoState]);
 
     // console.log(token);
     const patchVoteVideo = async () => {
@@ -93,36 +107,44 @@ const ShortsContent = ({item}) => {
         if (res.status === 200) {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
-            setShortVote(json.vote);
+            setVoteCount(json.up);
+            console.log(voteCount);
         } else {
             console.error('Error:',  res.status);
         }
 
     };
 
+    const isEmpty = (value) => {
+        return !Boolean(value);
+    };
+
     const postVoteVideo = async () => {
-        console.log('voteVideoState.isEmpty:', voteVideoState.isInteger());
+        console.log('voteVideoState.isEmpty:', isEmpty(voteCount));
 
         const res = await fetch(API_VOTE_URL, {
-            method: voteVideoState.isInteger ? 'POST' : "PATCH",
+            method: isEmpty(voteCount) ? 'POST' : "PATCH",
             headers: requestHeader,
             body: JSON.stringify(shortsId)
         })
         if (res.status === 200) {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
-            setShortVote(json.vote);
-            console.log(json.vote);
+            setVoteCount(json.up);
+            console.log(voteCount);
         } else {
             console.error('Error:',  res.status);
         }
+
     }
+
+
 
 
 
     const voteShortVideo = e => {
         setVoteShort(!voteShort);
-        console.log(voteShort)
+        console.log('voteShort: ', voteShort)
 
         if (!token) {
             alert("로그인 회원만 할수있음")
@@ -135,6 +157,8 @@ const ShortsContent = ({item}) => {
         }else if (voteShort){
             postVoteVideo();
         }
+
+
     }
 
 
@@ -226,11 +250,11 @@ const ShortsContent = ({item}) => {
 
 
 
-        const videoRef= useRef();
-        const setPlayBackRate = () => {
-            document.getElementById('vid').play();
-            videoRef.current.playbackRate = 0.5;
-        };
+    const videoRef= useRef();
+    const setPlayBackRate = () => {
+        document.getElementById('vid').play();
+        videoRef.current.playbackRate = 0.5;
+    };
 
     return (
         <>
@@ -238,7 +262,7 @@ const ShortsContent = ({item}) => {
                 <li key={shortsId}
                     className={cn('content-container', {scrollDown_ani_view: viewScrollDownAni}, {scrollUp_ani_view: viewScrollUpAni})}
                     ref={contentRef}>
-                    <div className={cn('short-form', {animation_view: viewAni})}>
+                    <div className={cn('short-form', {animation_view: viewAni})} id={'root'}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
                             <video className={'short-video'} ref={videoRef} autoPlay muted controls
                                    loop id={'vid'} onCanPlay={setPlayBackRate}>
@@ -261,9 +285,18 @@ const ShortsContent = ({item}) => {
                                 </div>
                                 <div className={cn('front-sidebar', {front_sidebar_view: viewComment})}>
                                     <div className={'short-btn like-btn'}>
-                                        <BsHeart className={'btn'} onClick={voteShortVideo}/>
-                                        {/* <BsHeartFill /> */}
-                                        <p>{item.upCount}</p>
+                                        {voteCount === 1 ? (
+                                            <>
+                                                <BsHeart className={cn('btn-none',{btn: voteShort})} onClick={voteShortVideo}/>
+                                                <BsHeartFill className={cn('btn-none',{btn: !voteShort})} onClick={voteShortVideo}/>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <BsHeart className={cn('btn-none',{btn: !voteShort})} onClick={voteShortVideo}/>
+                                                <BsHeartFill className={cn('btn-none',{btn: voteShort})} onClick={voteShortVideo}/>
+                                            </>
+                                        )}
+                                        <p>{upCount}</p>
                                     </div>
                                     <div className={'short-btn comment-btn'}>
                                         <BsChatLeft className={'btn'} onClick={chkViewComment}/>
@@ -277,9 +310,18 @@ const ShortsContent = ({item}) => {
                         </div>
                         <div className={cn('sidebar', {sidebar_view: viewComment})}>
                             <div className={'short-btn like-btn'}>
-                                <BsHeart className={'btn'} onClick={voteShortVideo}/>
-                                {/* <BsHeartFill /> */}
-                                <p>{item.upCount}</p>
+                                {voteCount === 1 ? (
+                                    <>
+                                        <BsHeart className={cn('btn-none',{btn: voteShort})} onClick={voteShortVideo}/>
+                                        <BsHeartFill className={cn('btn-none',{btn: !voteShort})} onClick={voteShortVideo}/>
+                                    </>
+                                ) : (
+                                    <>
+                                        <BsHeart className={cn('btn-none',{btn: !voteShort})} onClick={voteShortVideo}/>
+                                        <BsHeartFill className={cn('btn-none',{btn: voteShort})} onClick={voteShortVideo}/>
+                                    </>
+                                )}
+                                <p>{upCount}</p>
                             </div>
                             <div className={'short-btn comment-btn'}>
                                 <BsChatLeft className={'btn'} onClick={chkViewComment}/>

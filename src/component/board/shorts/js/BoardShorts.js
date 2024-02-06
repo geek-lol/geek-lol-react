@@ -39,7 +39,9 @@ const BoardShorts = () => {
                 {shortList.map((shorts) => (
                     <Shorts_content
                         key={shorts.shortsId}
-                        item={shorts} />
+                        item={shorts}
+                        upVote={shorts.upCount}
+                    />
                 ))}
             </ul>
         </div>
