@@ -7,6 +7,7 @@ import Detail from "./Detail";
 import LCKBoard from "./LCK/LCKContent";
 import ShortCreateMain from "../shorts/shortCreate/js/ShortCreateMain";
 import RequestBoard from "./ requestBoard/RequestBoard";
+import Modify from "./Modify";
 
 const BoardTemplate = ({touch}) => {
 
@@ -15,6 +16,7 @@ const BoardTemplate = ({touch}) => {
             <Routes>
                 <Route path={'/main/*'} element={<Board touch={touch} />}/>
                 <Route path={'/create'} element={<BoardCreate />} />
+                <Route path={'/modify'} element={<Modify />} />
                 <Route path={'/shorts'} element={<BoardShorts />} />
                 <Route path={'/sc'} element={<ShortCreateMain />}/>
                 <Route path={'/detail/:Id'} element={<Detail />}/>

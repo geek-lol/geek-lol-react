@@ -48,16 +48,17 @@
       margin:  25px 50px;
       display: flex;
       justify-content: end;
-      p{
+      .p{
         margin: 16px;
         font-size: 16px;
         cursor: pointer;
       }
-      p:hover{
+      .p:hover{
         //border: 1px solid lightgray;
       }
 
       .correction{
+        color: black;
       }
       .delete{
         color: red;

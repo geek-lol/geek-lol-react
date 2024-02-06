@@ -3,12 +3,11 @@ import "../scss/Detail.scss";
 import {AiFillAlert, AiOutlineLike} from "react-icons/ai";
 import {Button, Pagination, TextField} from "@mui/material";
 import {BOARD_URL, DETAIL_URL, REPLY_URL} from "../../../config/host-config";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import BoardReply from "../BoardReply";
 
-const GetData=(Id)=>{
-    console.log(Id);
+const GetData = (Id) => {
     const API_BASE_URL = DETAIL_URL;
     const [detailList, setDetailList] = useState(null);
 
@@ -26,20 +25,19 @@ const GetData=(Id)=>{
             .then(json => {
                 if (!json) return json;
                 setDetailList(json);
-                console.log(json);
             });
     }, []);
     return detailList;
 }
 
 const Detail = () => {
-    const {Id}=useParams();
-    const item= GetData(Id);
+    const {Id} = useParams();
+    const item = GetData(Id);
     const [inputText, setInputText] = useState();
-    const [data,setData]= useState({});
+    const [data, setData] = useState({});
     const [token, setToken] = useState(getCurrentLoginUser().token);
-    const [replyText,setReplyText]=useState();
-    const [page,setPage]=useState(1);
+    const [replyText, setReplyText] = useState();
+    const [page, setPage] = useState(1);
     useEffect(() => {
         setData({...item});
 
@@ -78,14 +76,14 @@ const Detail = () => {
             // 예외 처리 로직 추가
         }
     };
-    const [replyList,setReplyList]=useState([]);
-    const [totalReply,setTotalReply]=useState(0);
-    const [totalPage,setTotalPage]=useState();
+    const [replyList, setReplyList] = useState([]);
+    const [totalReply, setTotalReply] = useState(0);
+    const [totalPage, setTotalPage] = useState();
     // 댓글 리스트 가져오기
     useEffect(() => {
         Replyrendering();
-    }, [inputText,data,page,totalReply]);
-    const Replyrendering= async ()=>{
+    }, [inputText, data, page, totalReply]);
+    const Replyrendering = async () => {
         await fetch(`${REPLY_URL}/${data.bulletinId}?page=${page}`, {
             method: 'GET',
             headers: {'content-type': 'application/json'},
@@ -109,36 +107,40 @@ const Detail = () => {
     };
     const inputTextHandler = () => {
         setInputText(replyText);
-        if(!token) {alert("로그인이 필요한 서비스입니다.");return}
+        if (!token) {
+            alert("로그인이 필요한 서비스입니다.");
+            return
+        }
         fetchBoardUpload();
         console.log(replyText);
         setReplyText("");
-        setTotalReply(totalReply+1);
+        setTotalReply(totalReply + 1);
         alert("댓글이 등록되었습니다.");
     };
     const pageHandler = (e) => {
         setPage(+e.target.innerText);
     };
     //값을 끌어올 함수
-    const getReplyCount=(TotalReply)=>{
-        if(totalReply<=0) setTotalReply(0);
-        setTotalReply(totalReply-1);
+    const getReplyCount = (TotalReply) => {
+        if (totalReply <= 0) setTotalReply(0);
+        setTotalReply(totalReply - 1);
     }
-    const detailDelete= async ()=>{
-        await fetch(`${BOARD_URL}`,{
-            method:'DELETE',
+    const detailDelete = async () => {
+        await fetch(`${BOARD_URL}`, {
+            method: 'DELETE',
             headers: {
                 'content-type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
-            body:JSON.stringify({
-                bulletinId:data.bulletinId,
-                title:data.title,
-                posterId:data.posterId
+            body: JSON.stringify({
+                bulletinId: data.bulletinId,
+                title: data.title,
+                posterId: data.posterId
             })
 
-        }).then(res=>{
-            console.log(res.status)});
+        }).then(res => {
+            console.log(res.status)
+        });
     };
 
     const detailDeleteHandler = () => {
@@ -157,7 +159,7 @@ const Detail = () => {
                                 <p>{data.posterName}</p>
                             </div>
                             <div className="info-back">
-                                <p>조회수 {data.viewCount-1}</p><p>|</p>
+                                <p>조회수 {data.viewCount - 1}</p><p>|</p>
                                 <p>댓글 {totalReply}</p><p>|</p>
                                 <p>추천 1255</p>
                             </div>
@@ -168,13 +170,16 @@ const Detail = () => {
                         <p>{data.content}</p>
                     </div>
                     <div className="content-bottom">
-                        <p><AiOutlineLike size={8 * 2}/></p>
-                        <p className="correction">수정</p>
-                        <p className="delete" onClick={detailDeleteHandler}>삭제</p>
+                        <p className="p"><AiOutlineLike size={8 * 2}/></p>
+                        <Link className="correction p" to="/board/modify"
+                              state={{
+                                  data:data
+                        }}>수정</Link>
+                        <p className="delete p" onClick={detailDeleteHandler}>삭제</p>
                     </div>
                 </div>
                 <div className="detail-comment">
-                    <form className="detail-comment-form" onChange={replyOnChangeHandler} >
+                    <form className="detail-comment-form" onChange={replyOnChangeHandler}>
                         <TextField
                             id="outlined-basic"
                             label="댓글 쓰기"
@@ -202,7 +207,7 @@ const Detail = () => {
                         >등록</Button>
                     </form>
                     <div className="comment-box">
-                        {replyList.map(con=>
+                        {replyList.map(con =>
                             <BoardReply item={con} getReplyCount={getReplyCount}/>
                         )}
                         <Pagination
