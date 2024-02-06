@@ -4,7 +4,10 @@ import {getCurrentLoginUser} from "../../../../utils/login-util";
 import async from "async";
 import axios from "axios";
 
-const MyPageProfile = ({userInfo,imgUrl,changeImg}) => {
+const MyPageProfile = ({userInfo,imgUrl,changeImg,alterImgFetch}) => {
+
+    //프로필 이미지 파일을 상태변수로 관리
+    const [imgFile, setImgFile] = useState(null);
 
     function formatDate(inputDate) {
         const date = new Date(inputDate);
@@ -16,19 +19,22 @@ const MyPageProfile = ({userInfo,imgUrl,changeImg}) => {
     }
     //파일 선택시 썸넬 화면에 렌더링
     function showThumbnailHandler(e) {
+        alterImgFetch()
         // 첨부된 파일의 데이터를 가져오기
         const file = document.getElementById('profile-img').files[0];
+        changeImg(file);
         // console.log(file)
         const reader = new FileReader();
         reader.readAsDataURL(file);
 
         reader.onloadend = () =>{
-            changeImg(reader.result)
+            setImgFile(reader.result)
         }
     }
     function thumbnailCLickHandler() {
         document.getElementById('profile-img').click();
     }
+
     return (
         <div className="my-user-wrapper">
             <div className="profile-img-box">
