@@ -10,7 +10,12 @@ const MyPageTemplate = () => {
     const [pageType, setPageType] = useState(1);
 
     // 유저 정보를 저장할
-    const [userInfo , setUerInfo] = useState({});
+    const [userInfo , setUserInfo] = useState({
+        joinMembershipDate:"",
+        profileImage:null,
+        userId: "",
+        userName:""
+    });
 
     // 이미지 URL을 저장할 상태변수
     const [imgUrl, setImgUrl] = useState(null);
@@ -21,11 +26,6 @@ const MyPageTemplate = () => {
     //요청 URL
     const API_URL = "http://localhost:8686/user";
 
-    // 요청 헤더 객체
-    const requestHeader = {
-        'content-type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    };
     const userInfoFetch = async () =>{
         try {
             const response = await fetch(API_URL, {
@@ -40,7 +40,7 @@ const MyPageTemplate = () => {
             }
 
             const json = await response.json();
-            setUerInfo(json);
+            setUserInfo(json);
         } catch (error) {
             console.error('사용자 정보를 불러오는 중 오류 발생:', error);
         }
@@ -58,12 +58,12 @@ const MyPageTemplate = () => {
         userInfoFetch();
     }, []);
 
+
     const changeUser = (user) =>{
-        setUerInfo(prevState =>({
-            ...prevState,
-                user
-        }));
+        setUserInfo(user)
     }
+
+
     const changeType = (type)=>{
         setPageType(type)
     }

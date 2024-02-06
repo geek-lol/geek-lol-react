@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../scss/MyInformation.scss';
 import {TextField} from "@mui/material";
 import Button from "@mui/material/Button";
@@ -10,11 +10,17 @@ const MyInformation = ({userInfo,changeUser}) => {
     const [alterPw,setAlterPw] = useState(false);
     // 비밀번호 수정 버튼 클릭 확인 변수
     const [alterName,setAlterName] = useState(false);
-    const [user,setUser] = useState({
-        id : userInfo.userId,
-        password : null,
-        userName : userInfo.userName,
-    });
+
+    //입력 닉네임 저장
+    const [newName,setNewName] = useState(userInfo.userName);
+
+    const [user,setUser] = useState(userInfo);
+    /*
+    joinMembershipDate:"",
+        profileImage:null,
+        userId: "",
+        userName:""
+    * */
     //요청 URL
     const API_URL = "http://localhost:8686/user/modify";
     // 토큰 가져오기
@@ -27,14 +33,15 @@ const MyInformation = ({userInfo,changeUser}) => {
         'Authorization': `Bearer ${token}`
     };
 
-    const alterNameFetch = async (name) =>{
-        const payload = {
+    const alterNameFetch = async () =>{
+        console.log('fetch 됐지롱ㅎㅎ')
+        const newUser = {
             id : userId,
-            userName : name
+            userName : newName
         }
-        changeUser(payload);
+
         const jsonBlob = new Blob(
-            [JSON.stringify(payload)],
+            [JSON.stringify(newUser)],
             {type:'application/json'});
 
         const formData = new FormData();
@@ -47,7 +54,6 @@ const MyInformation = ({userInfo,changeUser}) => {
 
         if (res.status === 200) {
             const json = await res.json();
-            console.log(json);
             localStorage.clear();
 
             const {token, userName, role, id} = json;
@@ -55,6 +61,8 @@ const MyInformation = ({userInfo,changeUser}) => {
             localStorage.setItem('USER_NAME', userName);
             localStorage.setItem('ROLE', role);
             localStorage.setItem('USER_ID', id);
+
+            changeUser(user);
         } else {
             alert('서버와의 통신이 원활하지 않습니다.');
         }
@@ -68,14 +76,26 @@ const MyInformation = ({userInfo,changeUser}) => {
             ...prevUser,
             password: pw
         }));
-        console.log(user);
     }
     const alterPwClikHandler = ()=>{
         setAlterPw(!alterPw);
     }
+    useEffect(() => {
+        setUser(prev=>(
+            {
+                ...prev,
+                userName: newName
+            }))
+    }, [newName]);
     const alterNameClikHandler = ()=>{
-        alterName && alterNameFetch(document.getElementById('alterUserName').value)
+
+        alterName && alterNameFetch();
         setAlterName(!alterName);
+
+    }
+    const inputNameHandler = (e) =>{
+        setNewName(e.target.value);
+
     }
     return (
         <div className="my-info-wrapper">
@@ -108,7 +128,7 @@ const MyInformation = ({userInfo,changeUser}) => {
                         <>
                             <div className="my-pw-title">닉네임</div>
                             <div className="my-alter-main">
-                                <div className="my-info-item">{userInfo.userName}</div>
+                                <div className="my-info-item">{newName}</div>
                                 <div className="alter-text" onClick={alterNameClikHandler}>수정</div>
                             </div>
                         </>
@@ -119,8 +139,9 @@ const MyInformation = ({userInfo,changeUser}) => {
                                 className="my-info-item"
                                 id="alterUserName"
                                 label="닉네임"
-                                defaultValue={userInfo.userName}
-                                variant="standard"/>
+                                value={newName}
+                                variant="standard"
+                                onChange={inputNameHandler}/>
                                 <div className="alter-text" onClick={alterNameClikHandler}>완료</div>
                             </div>
                           
