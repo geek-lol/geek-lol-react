@@ -33,17 +33,16 @@ const ResponseTime = () => {
     };
 
     const [rankList,setRankList] = useState([]);
+    async function fetchData(){
+        const response = await axios.get(API_URL, {
+            headers: {"content-type": "application/json"}
+        })
 
+        const data = await response.data.gameRankList;
+        setRankList(data);
+        console.log(data);
+    }
     useEffect(() => {
-        async function fetchData(){
-            const response = await axios.get(API_URL, {
-                headers: {"content-type": "application/json"}
-            })
-
-            const data = await response.data.gameRankList;
-            setRankList(data);
-            console.log(data);
-        }
         fetchData();
     }, []);
 

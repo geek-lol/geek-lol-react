@@ -4,7 +4,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import cn from 'classnames';
 
 
-const MypageSideMenu = () => {
+const MypageSideMenu = ({changeType}) => {
 
     //리다이렉션 변수
     const redirection = useNavigate();
@@ -15,40 +15,41 @@ const MypageSideMenu = () => {
         info : false,
         activity : false
     })
-    const location = useLocation();
-
-    useEffect(() => {
-        console.log(location.pathname)
-        switch (location.pathname){
-            case "/mypage" :
+    const onClickHandler = (e)=>{
+        const target = e.target;
+        switch (target.id){
+            case "profile":
+                changeType(1);
                 setSelectType({
                     profile: true,
                     info: false,
                     activity : false
                 })
                 break;
-            case "/mypage/info":
+            case "userSetting":
+                changeType(2);
                 setSelectType({
                     profile: false,
                     info: true,
                     activity : false
                 })
                 break;
-            case "/mypage/active":
+            case "activity":
+                changeType(3)
                 setSelectType({
                     profile: false,
                     info: false,
                     activity : true
                 })
                 break;
-            default :
+            default:
                 setSelectType({
                     profile: true,
-                    info: false
+                    info: false,
+                    activity: false
                 })
-
         }
-    }, [location]);
+    }
 
     const logOutHandler = () => {
         localStorage.clear()
@@ -58,14 +59,14 @@ const MypageSideMenu = () => {
         <div className="my-sidemenu-wrapper">
             <div className="my-side-head">내 계정</div>
             <ul className="my-sidemenu">
-                <li className={cn('menu-item', {sgray:selectType.profile})}>
-                    <Link className="item-text" to="/mypage" >프로필</Link>
+                <li id="profile" className={cn('menu-item', {sgray:selectType.profile})} onClick={onClickHandler}>
+                    <button className="item-text">프로필</button>
                 </li>
-                <li className={cn('menu-item', {sgray:selectType.info})}>
-                    <Link className="item-text" to="/mypage/info">계정 관리</Link>
+                <li id="userSetting" className={cn('menu-item', {sgray:selectType.info})}  onClick={onClickHandler}>
+                    <button className="item-text">계정 관리</button>
                 </li>
-                <li className={cn('menu-item', {sgray:selectType.activity})}>
-                    <Link className="item-text" to="/mypage/active">내 활동</Link>
+                <li id="activity" className={cn('menu-item', {sgray:selectType.activity})}  onClick={onClickHandler}>
+                    <button className="item-text">내 활동</button>
                 </li>
                 <li className="menu-item">
                     <div onClick={logOutHandler} className="item-text" to="/logout">로그아웃</div>

@@ -1,13 +1,13 @@
 import React from 'react';
 import MyActivityBoard from "./MyActivityBoard";
 import MyAcitivityComment from "./MyActivityComment";
-import MyActivityReport from "./MyActivityReport";
+// import MyActivityReport from "./MyActivityReport";
 const MyActivityMain = () => {
     return (
         <div>
             <MyActivityBoard />
             <MyAcitivityComment />
-            <MyActivityReport />
+            {/*<MyActivityReport />*/}
         </div>
     );
 };
