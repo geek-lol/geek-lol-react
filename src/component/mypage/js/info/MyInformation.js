@@ -34,7 +34,6 @@ const MyInformation = ({userInfo,changeUser}) => {
     };
 
     const alterNameFetch = async () =>{
-        console.log('fetch 됐지롱ㅎㅎ')
         const newUser = {
             id : userId,
             userName : newName
@@ -77,9 +76,7 @@ const MyInformation = ({userInfo,changeUser}) => {
             password: pw
         }));
     }
-    const alterPwClikHandler = ()=>{
-        setAlterPw(!alterPw);
-    }
+
     useEffect(() => {
         setUser(prev=>(
             {
@@ -113,12 +110,11 @@ const MyInformation = ({userInfo,changeUser}) => {
             </div>
             <div className="my-info-container">
                 <div className="my-pw-title">비밀번호</div>
-                {alterPw ? <MyInfoAlterPw cancle={alterPwClikHandler}
-                                          changePwStatus={changePwStatus}
+                {alterPw ? <MyInfoAlterPw changePwStatus={changePwStatus}
                                           changeUser={changeUser}/>
                     : <div className="my-alter-main">
                     <div className="my-info-item">***********</div>
-                    <div className="alter-text" onClick={alterPwClikHandler}>수정</div>
+                    <div className="alter-text" onClick={changePwStatus}>수정</div>
                     </div>
                 }
             </div>

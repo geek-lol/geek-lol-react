@@ -2,7 +2,7 @@ import React from 'react';
 import {TextField} from "@mui/material";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 
-const MyInfoAlterPw = ({cancle,changePwStatus,changeUser}) => {
+const MyInfoAlterPw = ({changePwStatus,changeUser}) => {
     //요청 URL
     const API_URL = "http://localhost:8686/user/modify";
     // 토큰 가져오기
@@ -25,7 +25,7 @@ const MyInfoAlterPw = ({cancle,changePwStatus,changeUser}) => {
             id : userId,
             password : pw
         }
-        changeUser()
+
         const jsonBlob = new Blob(
             [JSON.stringify(payload)],
             {type:'application/json'});
@@ -78,7 +78,7 @@ const MyInfoAlterPw = ({cancle,changePwStatus,changeUser}) => {
                 variant="standard"
             />
             <div className="pw-alter-text">
-                <div className="pw-text cancle-text" onClick={cancle}>취소</div>
+                <div className="pw-text cancle-text" onClick={changePwStatus}>취소</div>
                 <div className="pw-text okay-text" onClick={okayClickHandler}>완료</div>
             </div>
         </div>
