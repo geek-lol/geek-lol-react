@@ -4,7 +4,7 @@ import {getCurrentLoginUser} from "../../../../utils/login-util";
 import async from "async";
 import axios from "axios";
 
-const MyPageProfile = ({userInfo,imgUrl}) => {
+const MyPageProfile = ({userInfo,imgUrl,changeImg}) => {
 
     function formatDate(inputDate) {
         const date = new Date(inputDate);
@@ -14,11 +14,40 @@ const MyPageProfile = ({userInfo,imgUrl}) => {
 
         return `${year}-${month}-${day}`;
     }
+    //파일 선택시 썸넬 화면에 렌더링
+    function showThumbnailHandler(e) {
+        // 첨부된 파일의 데이터를 가져오기
+        const file = document.getElementById('profile-img').files[0];
+        // console.log(file)
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
 
+        reader.onloadend = () =>{
+            changeImg(reader.result)
+        }
+    }
+    function thumbnailCLickHandler() {
+        document.getElementById('profile-img').click();
+    }
     return (
         <div className="my-user-wrapper">
-            <img className="my-user-img" src={{imgUrl}}
-                 alt="프로필 이미지" />
+            <div className="profile-img-box">
+                <div className=" thumbnail-box" onClick={thumbnailCLickHandler}>
+                    <img className="my-user-img"
+                         src={imgUrl}
+                         alt="profile"
+                    />
+                </div>
+                <label className='signup-img-label' htmlFor='profile-img'>프로필 이미지 수정</label>
+                <input
+                    id='profile-img'
+                    type='file'
+                    style={{display: 'none'}}
+                    accept='image/*'
+                    onChange={showThumbnailHandler}
+                />
+            </div>
+
             <div>
                 <div className="my-user-info">
                     <div className="my-user-name">{userInfo.userName}</div>

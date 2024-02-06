@@ -26,6 +26,7 @@ const MyPageTemplate = () => {
     //요청 URL
     const API_URL = "http://localhost:8686/user";
 
+    //회원정보 가져오기 fetch
     const userInfoFetch = async () =>{
         try {
             const response = await fetch(API_URL, {
@@ -54,23 +55,30 @@ const MyPageTemplate = () => {
         });
     };
 
+    //회원 이미지 변경 fetch
+
+
     useEffect(() => {
         userInfoFetch();
     }, []);
 
 
+    //하위 컴포넌트에서 imgUrl변경
+    const changeImg = (img)=>{
+        setImgUrl(img)
+    }
+    //하위 컴포넌트에서 userInfo변경
     const changeUser = (user) =>{
         setUserInfo(user)
     }
-
-
+    //하위 컴포넌트에서 type 변경
     const changeType = (type)=>{
         setPageType(type)
     }
     return (
         <div className="mypage">
             <MypageSideMenu changeType={changeType} />
-            {pageType === 1 && <MyPageProfile userInfo={userInfo} imgUrl={imgUrl}/>}
+            {pageType === 1 && <MyPageProfile userInfo={userInfo} imgUrl={imgUrl} changeImg={changeImg}/>}
             {pageType === 2 && <MyInformation userInfo={userInfo} changeUser ={changeUser} />}
             {pageType === 3 && <MyActivityMain/>}
         </div>

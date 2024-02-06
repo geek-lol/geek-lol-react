@@ -60,13 +60,13 @@ const MypageSideMenu = ({changeType}) => {
             <div className="my-side-head">내 계정</div>
             <ul className="my-sidemenu">
                 <li id="profile" className={cn('menu-item', {sgray:selectType.profile})} onClick={onClickHandler}>
-                    <button className="item-text">프로필</button>
+                    프로필
                 </li>
                 <li id="userSetting" className={cn('menu-item', {sgray:selectType.info})}  onClick={onClickHandler}>
-                    <button className="item-text">계정 관리</button>
+                    계정 관리
                 </li>
                 <li id="activity" className={cn('menu-item', {sgray:selectType.activity})}  onClick={onClickHandler}>
-                    <button className="item-text">내 활동</button>
+                    내 활동
                 </li>
                 <li className="menu-item">
                     <div onClick={logOutHandler} className="item-text" to="/logout">로그아웃</div>
