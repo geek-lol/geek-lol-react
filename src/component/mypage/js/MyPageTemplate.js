@@ -52,24 +52,18 @@ const MyPageTemplate = () => {
                 'Authorization': 'Bearer ' + getCurrentLoginUser().token
             }
         });
-
-        if (res.status === 200) {
-            const profileData = await res.blob();
-
-            // blob이미지를 url로 변환
-            const imgUrl = window.URL.createObjectURL(profileData);
-
-            setImgUrl(imgUrl);
-        } else {
-            const errMsg = await res.text();
-            setImgUrl(null);
-        }
     };
 
     useEffect(() => {
         userInfoFetch();
     }, []);
 
+    const changeUser = (user) =>{
+        setUerInfo(prevState =>({
+            ...prevState,
+                user
+        }));
+    }
     const changeType = (type)=>{
         setPageType(type)
     }
@@ -77,7 +71,7 @@ const MyPageTemplate = () => {
         <div className="mypage">
             <MypageSideMenu changeType={changeType} />
             {pageType === 1 && <MyPageProfile userInfo={userInfo} imgUrl={imgUrl}/>}
-            {pageType === 2 && <MyInformation userInfo={userInfo} />}
+            {pageType === 2 && <MyInformation userInfo={userInfo} changeUser ={changeUser} />}
             {pageType === 3 && <MyActivityMain/>}
         </div>
     );

@@ -2,7 +2,7 @@ import React from 'react';
 import {TextField} from "@mui/material";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 
-const MyInfoAlterPw = ({cancle,changePwStatus}) => {
+const MyInfoAlterPw = ({cancle,changePwStatus,changeUser}) => {
     //요청 URL
     const API_URL = "http://localhost:8686/user/modify";
     // 토큰 가져오기
@@ -16,18 +16,18 @@ const MyInfoAlterPw = ({cancle,changePwStatus}) => {
     };
 
     const okayClickHandler = () =>{
-
         alterFetch(document.getElementById('newPw').value);
         changePwStatus();
     }
 
     const alterFetch= async (pw)=>{
-
+        const payload = {
+            id : userId,
+            password : pw
+        }
+        changeUser()
         const jsonBlob = new Blob(
-            [JSON.stringify({
-                id : userId,
-                password : pw
-            })],
+            [JSON.stringify(payload)],
             {type:'application/json'});
 
         const formData = new FormData();
@@ -41,7 +41,13 @@ const MyInfoAlterPw = ({cancle,changePwStatus}) => {
         if (res.status === 200) {
             const json = await res.json();
             console.log(json);
-            localStorage.clear()
+            localStorage.clear();
+
+            const {token, userName, role, id} = json;
+            localStorage.setItem('ACCESS_TOKEN', token);
+            localStorage.setItem('USER_NAME', userName);
+            localStorage.setItem('ROLE', role);
+            localStorage.setItem('USER_ID', id);
         } else {
             alert('서버와의 통신이 원활하지 않습니다.');
         }
