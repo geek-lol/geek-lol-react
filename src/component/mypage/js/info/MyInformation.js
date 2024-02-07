@@ -9,18 +9,13 @@ const MyInformation = ({userInfo,changeUser}) => {
     // 비밀번호 수정 버튼 클릭 확인 변수
     const [alterPw,setAlterPw] = useState(false);
     // 비밀번호 수정 버튼 클릭 확인 변수
-    const [alterName,setAlterName] = useState(false);
+    const [alterName,setAlterName] = useState(false);;
 
     //입력 닉네임 저장
     const [newName,setNewName] = useState(userInfo.userName);
 
     const [user,setUser] = useState(userInfo);
-    /*
-    joinMembershipDate:"",
-        profileImage:null,
-        userId: "",
-        userName:""
-    * */
+
     //요청 URL
     const API_URL = "http://localhost:8686/user/modify";
     // 토큰 가져오기
@@ -70,12 +65,6 @@ const MyInformation = ({userInfo,changeUser}) => {
     const changePwStatus = ()=>{
         setAlterPw(!alterPw);
     }
-    const chagePwUser = (pw) =>{
-        setUser(prevUser => ({
-            ...prevUser,
-            password: pw
-        }));
-    }
 
     useEffect(() => {
         setUser(prev=>(
@@ -84,15 +73,13 @@ const MyInformation = ({userInfo,changeUser}) => {
                 userName: newName
             }))
     }, [newName]);
-    const alterNameClikHandler = ()=>{
 
+    const alterNameClikHandler = ()=>{
         alterName && alterNameFetch();
         setAlterName(!alterName);
-
     }
     const inputNameHandler = (e) =>{
         setNewName(e.target.value);
-
     }
     return (
         <div className="my-info-wrapper">

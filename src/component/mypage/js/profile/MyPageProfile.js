@@ -1,13 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import MyProfile from '../../scss/MyPageProfile.scss';
 import {getCurrentLoginUser} from "../../../../utils/login-util";
-import async from "async";
-import axios from "axios";
+import defaultImg from "../../../../image/profile.jpg";
 
-const MyPageProfile = ({userInfo,imgUrl,changeImg,alterImgFetch}) => {
+const MyPageProfile = ({userInfo}) => {
+
+    // 이미지 URL을 저장할 상태변수
+    const [imgUrl, setImgUrl] = useState(null)
 
     //프로필 이미지 파일을 상태변수로 관리
     const [imgFile, setImgFile] = useState(null);
+
+    // 토큰 가져오기
+    const token= getCurrentLoginUser().token;
+    const userId = getCurrentLoginUser().token;
+
+    //요청 URL
+    const API_URL = "http://localhost:8686/user";
 
     function formatDate(inputDate) {
         const date = new Date(inputDate);
@@ -17,19 +26,70 @@ const MyPageProfile = ({userInfo,imgUrl,changeImg,alterImgFetch}) => {
 
         return `${year}-${month}-${day}`;
     }
+
+    useEffect(() => {
+        userProfileFetch();
+    }, []);
+
+    //회원 이미지 가져오기 fetch
+    const userProfileFetch = async () =>{
+        const url = API_URL + "/load-profile";
+        console.log(`url:${url}`);
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (res.status === 200) {
+            const profileData = await res.blob();
+
+            // blob이미지를 url로 변환
+            const imgUrl = window.URL.createObjectURL(profileData);
+            console.log('imgUrl DB에서 넘어온거')
+            console.log(imgUrl)
+            setImgUrl(imgUrl);
+        }
+    }
+    //회원 이미지 변경 fetch
+    const alterImgFetch= async (file)=>{
+        const payload = {
+            id : userId
+        }
+        const jsonBlob = new Blob(
+            [JSON.stringify(payload)],
+            {type:'application/json'});
+
+        const formData = new FormData();
+        formData.append('user',jsonBlob);
+        formData.append('profileImage',file);
+        const res = await fetch(API_URL+"/modify",{
+            method:"POST",
+            headers: {"Authorization" : `Bearer ${token}`},
+            body: formData
+        })
+
+        if (res.status === 200) {
+            const json = await res.json();
+
+        } else {
+            alert('서버와의 통신이 원활하지 않습니다.');
+        }
+    }
     //파일 선택시 썸넬 화면에 렌더링
     function showThumbnailHandler(e) {
-        alterImgFetch()
+
         // 첨부된 파일의 데이터를 가져오기
         const file = document.getElementById('profile-img').files[0];
-        changeImg(file);
+
         // console.log(file)
         const reader = new FileReader();
         reader.readAsDataURL(file);
 
         reader.onloadend = () =>{
-            setImgFile(reader.result)
+            setImgUrl(reader.result);
         }
+        alterImgFetch(file)
     }
     function thumbnailCLickHandler() {
         document.getElementById('profile-img').click();
@@ -40,7 +100,7 @@ const MyPageProfile = ({userInfo,imgUrl,changeImg,alterImgFetch}) => {
             <div className="profile-img-box">
                 <div className=" thumbnail-box" onClick={thumbnailCLickHandler}>
                     <img className="my-user-img"
-                         src={imgUrl}
+                         src={imgUrl || defaultImg}
                          alt="profile"
                     />
                 </div>
