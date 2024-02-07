@@ -45,7 +45,7 @@ const ShortsContent = ({item, upVote}) => {
     };
 
     //전체 upCount
-    const [voteVideoState, setVoteVideoState] = useState({up: upCount});
+    const [voteVideoState, setVoteVideoState] = useState(upVote);
     const [voteCount,setVoteCount] = useState(); // 각각의upCount
     const [voteShort, setVoteShort] = useState(false);
     // const getVoteVideo = async () => {
@@ -71,17 +71,18 @@ const ShortsContent = ({item, upVote}) => {
             headers: requestHeader
         })
             .then(res => {
+                console.log(res.status);
                 if (!res.ok) {
                     throw new Error(`HTTP error! Status: ${res.status}`);
                 }
                 return res.json();
             })
             .then(json => {
-                if (json && json.up) {
-                    setVoteCount(json.up);
+                // console.log(item);
 
+                setVoteVideoState(item.upCount);
+                console.log('upCount', item.upCount);
 
-                }
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -90,11 +91,14 @@ const ShortsContent = ({item, upVote}) => {
 
     };
 
+
+
+
+
     useEffect(() => {
         getVoteVideo();
-        console.log('vc:', voteVideoState);
 
-    }, [voteVideoState]);
+    }, []);
 
     // console.log(token);
     const patchVoteVideo = async () => {
@@ -107,8 +111,12 @@ const ShortsContent = ({item, upVote}) => {
         if (res.status === 200) {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
+            console.log('jsonup',json.up);
             setVoteCount(json.up);
-            console.log(voteCount);
+            setVoteVideoState(item.upCount);
+            console.log('upCount', voteVideoState);
+
+
         } else {
             console.error('Error:',  res.status);
         }
@@ -116,7 +124,7 @@ const ShortsContent = ({item, upVote}) => {
     };
 
     const isEmpty = (value) => {
-        return !Boolean(value);
+        return !Boolean(1);
     };
 
     const postVoteVideo = async () => {
@@ -130,8 +138,12 @@ const ShortsContent = ({item, upVote}) => {
         if (res.status === 200) {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
+            console.log('jsonup',json.up);
+
             setVoteCount(json.up);
-            console.log(voteCount);
+            setVoteVideoState(item.upCount);
+            console.log('upCount', voteVideoState);
+
         } else {
             console.error('Error:',  res.status);
         }
@@ -158,6 +170,8 @@ const ShortsContent = ({item, upVote}) => {
             postVoteVideo();
         }
 
+        // console.log('vc:', voteCount);
+        // console.log('vvs:', voteVideoState);
 
     }
 
@@ -296,7 +310,7 @@ const ShortsContent = ({item, upVote}) => {
                                                 <BsHeartFill className={cn('btn-none',{btn: voteShort})} onClick={voteShortVideo}/>
                                             </>
                                         )}
-                                        <p>{upCount}</p>
+                                        <p>{voteVideoState}</p>
                                     </div>
                                     <div className={'short-btn comment-btn'}>
                                         <BsChatLeft className={'btn'} onClick={chkViewComment}/>
@@ -321,7 +335,7 @@ const ShortsContent = ({item, upVote}) => {
                                         <BsHeartFill className={cn('btn-none',{btn: voteShort})} onClick={voteShortVideo}/>
                                     </>
                                 )}
-                                <p>{upCount}</p>
+                                <p>{voteVideoState}</p>
                             </div>
                             <div className={'short-btn comment-btn'}>
                                 <BsChatLeft className={'btn'} onClick={chkViewComment}/>

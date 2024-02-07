@@ -28,12 +28,7 @@ const BoardCreate = () => {
     const [boardTitle, setBoardTitle] = useState();
     const [explanation, setExplanation] = useState();
 
-
-
-    const imgClickHandler = e => {
-        document.getElementById('board_detail_img').click();
-    };
-
+    
 
     const [boardValue, setBoardValue] = useState({
         title: '',
@@ -145,7 +140,7 @@ const BoardCreate = () => {
                         } }
                     />
                 </div>
-                <div className={'img-box'} onClick={imgClickHandler}>
+                <div className={'img-box'} >
                     <input
                         id='board_detail_img'
                         type='file'
