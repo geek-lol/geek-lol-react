@@ -10,7 +10,7 @@ import axios from "axios";
 import {json} from "react-router-dom";
 
 const ShortsContent = ({item, upVote}) => {
-    const {shortsId, uploaderName,replyCount,viewCount, upCount, title, context, videoLink} = item;
+    const {shortsId, uploaderName, replyCount, viewCount, upCount, title, context, videoLink} = item;
     const [token, setToken] = useState(getCurrentLoginUser().token);
     const [viewComment, setViewComment] = useState(false);
 
@@ -24,7 +24,6 @@ const ShortsContent = ({item, upVote}) => {
     const [currentItemIndex, setCurrentItemIndex] = useState(0);
     // 휠 이벤트 시간
     const lastWheelTime = useRef(0);
-
 
 
     // 신고 모달 띄우기
@@ -45,9 +44,10 @@ const ShortsContent = ({item, upVote}) => {
     };
 
     //전체 upCount
-    const [voteVideoState, setVoteVideoState] = useState(upVote);
-    const [voteCount,setVoteCount] = useState(); // 각각의upCount
+    const [voteVideoState, setVoteVideoState] = useState();
+    const [voteCount, setVoteCount] = useState(); // 각각의upCount
     const [voteShort, setVoteShort] = useState(false);
+
     // const getVoteVideo = async () => {
     //     const response = await axios.get(API_VOTE_URL, {
     //         headers: requestHeader,
@@ -83,6 +83,7 @@ const ShortsContent = ({item, upVote}) => {
                 setVoteVideoState(item.upCount);
                 console.log('upCount', item.upCount);
 
+
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -92,13 +93,10 @@ const ShortsContent = ({item, upVote}) => {
     };
 
 
-
-
-
     useEffect(() => {
         getVoteVideo();
 
-    }, []);
+    }, [voteCount]);
 
     // console.log(token);
     const patchVoteVideo = async () => {
@@ -111,14 +109,14 @@ const ShortsContent = ({item, upVote}) => {
         if (res.status === 200) {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
-            console.log('jsonup',json.up);
+            console.log('jsonup', json.up);
             setVoteCount(json.up);
             setVoteVideoState(item.upCount);
             console.log('upCount', voteVideoState);
 
 
         } else {
-            console.error('Error:',  res.status);
+            console.error('Error:', res.status);
         }
 
     };
@@ -127,36 +125,38 @@ const ShortsContent = ({item, upVote}) => {
         return !Boolean(1);
     };
 
-    const postVoteVideo = async () => {
-        console.log('voteVideoState.isEmpty:', isEmpty(voteCount));
+    const postVoteVideo = async (selectedShortsId) => {
+        // 만약 누른 shortsId와 비교한 shrotsId가 같다면 실행되게
 
-        const res = await fetch(API_VOTE_URL, {
-            method: isEmpty(voteCount) ? 'POST' : "PATCH",
-            headers: requestHeader,
-            body: JSON.stringify(shortsId)
-        })
-        if (res.status === 200) {
-            // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
-            const json = await res.json().catch(() => ({}));
-            console.log('jsonup',json.up);
+        // console.log('voteVideoState.isEmpty:', isEmpty(voteCount));
 
-            setVoteCount(json.up);
-            setVoteVideoState(item.upCount);
-            console.log('upCount', voteVideoState);
+        if (selectedShortsId === item.shortsId) {
 
-        } else {
-            console.error('Error:',  res.status);
+
+
+            const res = await fetch(API_VOTE_URL, {
+                method: isEmpty(voteCount) ? 'POST' : "PATCH",
+                headers: requestHeader,
+                body: JSON.stringify(selectedShortsId)
+            })
+            if (res.status === 200) {
+                // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
+                const json = await res.json().catch(() => ({}));
+                console.log('jsonup', json.up);
+
+                setVoteCount(json.up);
+                setVoteVideoState(item.upCount);
+                console.log('upCount', voteVideoState);
+
+            } else {
+                console.error('Error:', res.status);
+            }
         }
-
     }
 
 
-
-
-
-    const voteShortVideo = e => {
+    const voteShortVideo = (selectedShortsId) => {
         setVoteShort(!voteShort);
-        console.log('voteShort: ', voteShort)
 
         if (!token) {
             alert("로그인 회원만 할수있음")
@@ -166,16 +166,14 @@ const ShortsContent = ({item, upVote}) => {
         if (!voteShort) {
             patchVoteVideo();
 
-        }else if (voteShort){
-            postVoteVideo();
+        } else if (voteShort) {
+            postVoteVideo(selectedShortsId);
         }
 
         // console.log('vc:', voteCount);
         // console.log('vvs:', voteVideoState);
 
     }
-
-
 
 
     // 댓글 닫을때 애니메이션
@@ -195,8 +193,6 @@ const ShortsContent = ({item, upVote}) => {
         setViewComment(!viewComment);
 
     }
-
-
 
 
     // 휠을 내리거나 올렸을때 0.3s 기다리고 움직임
@@ -263,8 +259,7 @@ const ShortsContent = ({item, upVote}) => {
     }, [currentItemIndex]);
 
 
-
-    const videoRef= useRef();
+    const videoRef = useRef();
     const setPlayBackRate = () => {
         document.getElementById('vid').play();
         videoRef.current.playbackRate = 0.5;
@@ -280,7 +275,7 @@ const ShortsContent = ({item, upVote}) => {
                         <div className={cn('content', {animation_content_view: viewComment})}>
                             <video className={'short-video'} ref={videoRef} autoPlay muted controls
                                    loop id={'vid'} onCanPlay={setPlayBackRate}>
-                                <source src={item.videoLink} type="video/mp4" />
+                                <source src={item.videoLink} type="video/mp4"/>
                             </video>
                             <div className={'overlap-front'}>
                                 <div className={'produce'}>
@@ -301,13 +296,17 @@ const ShortsContent = ({item, upVote}) => {
                                     <div className={'short-btn like-btn'}>
                                         {voteCount === 1 ? (
                                             <>
-                                                <BsHeart className={cn('btn-none',{btn: voteShort})} onClick={voteShortVideo}/>
-                                                <BsHeartFill className={cn('btn-none',{btn: !voteShort})} onClick={voteShortVideo}/>
+                                                <BsHeart className={cn('btn-none', {btn: voteShort})}
+                                                         onClick={() => voteShortVideo(item.shortsId)}/>
+                                                <BsHeartFill className={cn('btn-none', {btn: !voteShort})}
+                                                             onClick={() => voteShortVideo(item.shortsId)}/>
                                             </>
                                         ) : (
                                             <>
-                                                <BsHeart className={cn('btn-none',{btn: !voteShort})} onClick={voteShortVideo}/>
-                                                <BsHeartFill className={cn('btn-none',{btn: voteShort})} onClick={voteShortVideo}/>
+                                                <BsHeart className={cn('btn-none', {btn: !voteShort})}
+                                                         onClick={() => voteShortVideo(item.shortsId)}/>
+                                                <BsHeartFill className={cn('btn-none', {btn: voteShort})}
+                                                             onClick={() => voteShortVideo(item.shortsId)}/>
                                             </>
                                         )}
                                         <p>{voteVideoState}</p>
@@ -326,13 +325,16 @@ const ShortsContent = ({item, upVote}) => {
                             <div className={'short-btn like-btn'}>
                                 {voteCount === 1 ? (
                                     <>
-                                        <BsHeart className={cn('btn-none',{btn: voteShort})} onClick={voteShortVideo}/>
-                                        <BsHeartFill className={cn('btn-none',{btn: !voteShort})} onClick={voteShortVideo}/>
+                                        <BsHeart className={cn('btn-none', {btn: voteShort})}  onClick={() => voteShortVideo(item.shortsId)}/>
+                                        <BsHeartFill className={cn('btn-none', {btn: !voteShort})}
+                                                     onClick={() => voteShortVideo(item.shortsId)}/>
                                     </>
                                 ) : (
                                     <>
-                                        <BsHeart className={cn('btn-none',{btn: !voteShort})} onClick={voteShortVideo}/>
-                                        <BsHeartFill className={cn('btn-none',{btn: voteShort})} onClick={voteShortVideo}/>
+                                        <BsHeart className={cn('btn-none', {btn: !voteShort})}
+                                                 onClick={() => voteShortVideo(item.shortsId)}/>
+                                        <BsHeartFill className={cn('btn-none', {btn: voteShort})}
+                                                     onClick={() => voteShortVideo(item.shortsId)}/>
                                     </>
                                 )}
                                 <p>{voteVideoState}</p>
@@ -348,7 +350,8 @@ const ShortsContent = ({item, upVote}) => {
                         <div className={cn('comment-form', {comment_form_view: viewComment})}>
                             <div className={cn("comment", {comment_view: viewComment})}>
                                 <div className={'comment-wrapper'}>
-                                    <Shorts_comment item ={item} chkViewComment={chkViewComment} viewComment={viewComment}/>
+                                    <Shorts_comment item={item} chkViewComment={chkViewComment}
+                                                    viewComment={viewComment}/>
                                 </div>
                             </div>
                         </div>

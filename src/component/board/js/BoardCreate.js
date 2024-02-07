@@ -28,7 +28,7 @@ const BoardCreate = () => {
     const [boardTitle, setBoardTitle] = useState();
     const [explanation, setExplanation] = useState();
 
-    
+
 
     const [boardValue, setBoardValue] = useState({
         title: '',
@@ -128,7 +128,7 @@ const BoardCreate = () => {
                         } }
                         onChange={ ( event, editor ) => {
                             const data = editor.getData();
-                            const cleanData = data.replace(/<p>/g, '').replace(/<\/p>/g, '');
+                            const cleanData = data.replace(/<p>/g, '').replace(/<\/p>/g, '').replace(/&nbsp;/g,' ');
                             onChange({ target: { name: 'content', value: cleanData}});
                             console.log( { event, editor, cleanData } );
                         } }

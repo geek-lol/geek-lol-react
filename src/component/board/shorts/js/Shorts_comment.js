@@ -55,34 +55,13 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
             setShortReplyList(json.reply);
-            // 댓글이 추가되면 다시 데이터를 가져와서 업데이트
-            refetchData();
 
         } else {
             console.error('Error:',  res.status);
         }
 
     }
-    const refetchData = () => {
-        fetch(API_BASE_URL, {
-            method: 'GET',
-            headers: { 'content-type': 'application/json' }
-        })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! Status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(json => {
-                if (json && json.reply) {
-                    setShortReplyList(json.reply);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    };
+
 
 
 
@@ -94,7 +73,6 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
 
         // 폼이 제출되면 입력창 비우기
         setShortReply('');
-        refetchData();
     }
 
     useEffect(() => {
@@ -110,6 +88,7 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
             })
             .then(json => {
                 if (json && json.reply) {
+                    console.log(json.reply);
                     setShortReplyList(json.reply);
                 }
             })
@@ -117,7 +96,7 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
                 console.error('Error fetching data:', error);
             });
 
-    }, []);
+    }, [shortReply]);
 
 
     return (
