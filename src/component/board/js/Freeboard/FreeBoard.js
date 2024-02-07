@@ -15,6 +15,8 @@ const FreeBoard = () => {
     const [title, setTitle] = useState("제목");
     const [totalPage,setTotalPage]=useState(1);
     const [page,setPage]=useState(1);
+    const[inputContent,setInputContent]=useState("");
+    const [cleantitle, setCleantitle] = useState("title");
     const relativeButtonHandler = (e) => {
         setHide(!hide);
     }
@@ -26,7 +28,19 @@ const FreeBoard = () => {
         setTitle(e.target.value);
     }
     useEffect(() => {
-        fetch(`${API_BASE_URL}?page=${page}`, {
+        if(title==='제목'){
+            setCleantitle('title');
+
+        }else if(title==='내용'){
+            setCleantitle('content');
+        }else if(title==='작성자'){
+            setCleantitle('poster');
+
+        }
+    }, [title]);
+
+    useEffect(() => {
+        fetch(`${API_BASE_URL}?page=${page}&upCount=0`, {
             method: 'GET',
             headers: {'content-type': 'application/json'},
         })
@@ -45,7 +59,35 @@ const FreeBoard = () => {
 
     const pageHandler = (e) => {
         setPage(+e.target.innerText);
-        console.log(+e.target.innerText);
+        // console.log(+e.target.innerText);
+    };
+    const search=async ()=> {
+        const formData = new FormData();
+
+        const res = await fetch(`${BOARD_URL}?${cleantitle}=${inputContent}`, {
+            method: 'GET',
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json();
+                }
+            })
+            .then(json => {
+                if (!json) return;
+                setBoardList(json.board);
+                setTotalPage(json.totalPages);
+                console.log(inputContent);
+                console.log(cleantitle);
+                console.log(json);
+            });
+    }
+
+    const inputHandler = (e) => {
+        setInputContent(e.target.value);
+    };
+    const onSearchHandler = (e) => {
+        e.preventDefault();
+        search();
     };
     return (
         <div id="board_wrap" onClick={offDiv} style={{marginTop:'97.99px'}}>
@@ -67,7 +109,7 @@ const FreeBoard = () => {
                                                 <button onClick={hiddenHandler} value="제목">제목</button>
                                             </li>
                                             <li>
-                                                <button onClick={hiddenHandler} value="제목 + 내용">제목 + 내용</button>
+                                                <button onClick={hiddenHandler} value="내용">내용</button>
                                             </li>
                                             <li>
                                                 <button onClick={hiddenHandler} value="작성자">작성자</button>
@@ -76,7 +118,7 @@ const FreeBoard = () => {
                                     </div>
                                 </button>
                             </div>
-                            <form>
+                            <form onChange={inputHandler} onSubmit={onSearchHandler}>
                                 <input placeholder="게시물 검색"/>
                                 <button><CiSearch className="SearchIcon" size={12 * 2}/></button>
                             </form>

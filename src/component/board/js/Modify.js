@@ -18,8 +18,9 @@ const Modify = () => {
     const redirection = useNavigate();
 
     const modifyFetch = async () => {
+        console.log(data);
         const formData = new FormData();
-        formData.append('boardInfo', new Blob([JSON.stringify({ bulletinId: data.bulletinId, title: data.title, boardContent: data.boardContent })], { type: 'application/json' }));
+        formData.append('boardInfo', new Blob([JSON.stringify({ bulletinId: data.bulletinId, title: Title, content: modifyContent,posterId:data.posterId })], { type: 'application/json' }));
         formData.append('fileUrl', document.getElementById('board_detail_img').files[0]);
 
         try {
@@ -58,9 +59,6 @@ const Modify = () => {
         setModifyContent(value);
         console.log(modifyContent);
     };
-    const imgClickHandler = e => {
-        document.getElementById('board_detail_img').click();
-    };
     return (
         <>
         <BoardHeader/>
@@ -98,7 +96,7 @@ const Modify = () => {
                         } }
                     />
                 </div>
-                <div className={'img-box'} onClick={imgClickHandler} >
+                <div className={'img-box'} >
                     <input
                         id='board_detail_img'
                         type='file'

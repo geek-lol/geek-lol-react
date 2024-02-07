@@ -9,7 +9,6 @@ import {
     MdKeyboardDoubleArrowRight,
     MdOutlineKeyboardArrowRight
 } from "react-icons/md";
-import RequestContent from "./RequestContent";
 import RequestGather from "./RequestGather";
 import ReactPlayer from "react-player";
 import {ProgressBar} from "react-bootstrap";
@@ -27,6 +26,9 @@ const RequestBoard = () => {
     const hiddenHandler=(e)=>{
         setTitle(e.target.value);
     };
+    function BasicExample() {
+        return <ProgressBar now={60} />;
+    }
     return (
         <div id="board_wrap" onClick={offDiv}>
             <section id="board_main">
@@ -67,7 +69,11 @@ const RequestBoard = () => {
                             <p>현재투표 글</p>
                         </div>
                     </div>
-                    <ProgressBar completed={180} maxCompleted={200} />
+
+
+                </div>
+                <div>
+                    {BasicExample()}
                 </div>
 
                 <div className="board_list_box">
@@ -83,7 +89,7 @@ const RequestBoard = () => {
                                     <GoChevronDown size={12 * 2}/>
                                     <div className={cn("hiddenSelect", {hide: hide})}>
                                         <ul>
-                                        <li>
+                                            <li>
                                                 <button onClick={hiddenHandler} value="제목">제목</button>
                                             </li>
                                             <li>
