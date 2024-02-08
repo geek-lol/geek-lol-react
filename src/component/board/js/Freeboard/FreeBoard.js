@@ -12,11 +12,14 @@ const FreeBoard = () => {
     const [boardList, setBoardList] = useState([]);
     const API_BASE_URL = BOARD_URL
     const [hide, setHide] = useState(false);
+    const [toggle1, setToggle1] = useState(true);
+    const [toggle2, setToggle2] = useState(false);
     const [title, setTitle] = useState("제목");
     const [totalPage,setTotalPage]=useState(1);
     const [page,setPage]=useState(1);
     const[inputContent,setInputContent]=useState("");
     const [cleantitle, setCleantitle] = useState("title");
+    const [SortPage,setSortPage]=useState("0");
     const relativeButtonHandler = (e) => {
         setHide(!hide);
     }
@@ -40,7 +43,7 @@ const FreeBoard = () => {
     }, [title]);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}?page=${page}&upCount=0`, {
+        fetch(`${API_BASE_URL}?page=${page}&upCount=1`, {
             method: 'GET',
             headers: {'content-type': 'application/json'},
         })
@@ -62,9 +65,8 @@ const FreeBoard = () => {
         // console.log(+e.target.innerText);
     };
     const search=async ()=> {
-        const formData = new FormData();
 
-        const res = await fetch(`${BOARD_URL}?${cleantitle}=${inputContent}`, {
+        const res = await fetch(`${BOARD_URL}?${cleantitle}=${inputContent}&upCount=${SortPage}`, {
             method: 'GET',
         })
             .then(res => {
@@ -89,14 +91,25 @@ const FreeBoard = () => {
         e.preventDefault();
         search();
     };
+    const toggleHandler = () => {
+        setToggle1(!toggle1);
+        setToggle2(!toggle2);
+        if(toggle1){
+            setSortPage("0");
+        }else if(toggle2){
+            setSortPage("1");
+        }
+        console.log(SortPage);
+        search();
+    };
     return (
         <div id="board_wrap" onClick={offDiv} style={{marginTop:'97.99px'}}>
             <section id="board_main">
                 <div className="board_list_box">
                     <div className="board_search_box">
                         <div className="toggleBtn">
-                            <button className="sorting-button toggle">최신글</button>
-                            <button className="sorting-button">인기글</button>
+                            <button className={cn("sorting-button", {toggle: toggle1})} onClick={toggleHandler}>최신글</button>
+                            <button className={cn("sorting-button", {toggle: toggle2})} onClick={toggleHandler}>인기글</button>
                         </div>
                         <div className="searchT">
                             <div className="relative">
