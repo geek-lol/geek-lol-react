@@ -62,7 +62,6 @@ const FreeBoard = () => {
 
     const pageHandler = (e) => {
         setPage(+e.target.innerText);
-        // console.log(+e.target.innerText);
     };
     const search=async ()=> {
 
@@ -99,7 +98,6 @@ const FreeBoard = () => {
         }else if(toggle2){
             setSortPage("1");
         }
-        console.log(SortPage);
         search();
     };
     return (

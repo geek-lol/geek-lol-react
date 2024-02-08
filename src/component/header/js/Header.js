@@ -18,7 +18,7 @@ const Header = ({sendTouch}) => {
         sethover1(!hovers1);
     }
     const boardClickHandler2 = (e) => {
-        console.log(e.target);
+        // console.log(e.target);
         sethover2(!hovers2);
     }
     const boardOtherClickHandler = (e) => {
@@ -66,7 +66,7 @@ const Header = ({sendTouch}) => {
     useEffect(() => {
         setIsLogin(isLogin());
         const a=getCurrentLoginUser();
-        console.log(a.role);
+        // console.log(a.role);
     }, [isLogin()]);
     const findPage = () => {
         if (window.location.href.includes("main")) {
@@ -90,21 +90,27 @@ const Header = ({sendTouch}) => {
         sendTouch(e);
     }
 
+    const redirect = useNavigate();
+
+    const moveToHome = (e) => {
+      redirect("/")
+    };
+
     return (
         <div>
             <header id="header">
                 <nav id="nav-box">
                     <div className="logo__box">
-                        <Link className="logo" to="/">
+                        <p className="logo" onClick={moveToHome}>
                             <img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지"/>
-                        </Link>
+                        </p>
                     </div>
                     <div className="content__box">
-                        <Link to="/" className="nav-item is-active" active-color="orange"
-                              onClick={(e) => handleIndicator(e.target)}>홈</Link>
+                        <p className="nav-item is-active" active-color="orange"
+                              onClick={(e) => handleIndicator(e.target)}>홈</p>
                         <Link to="/rank" className="nav-item" active-color="green"
                               onClick={(e) => handleIndicator(e.target)}>랭킹</Link>
-                        <Link to="#" className="nav-item board-btn b1" active-color="blue"
+                        <div className="nav-item board-btn b1" active-color="blue"
                               onClick={(e) => {
                                   handleIndicator(e.target);
                                   boardClickHandler1(e);
@@ -123,8 +129,8 @@ const Header = ({sendTouch}) => {
                                           onClick={modalTouchHandler}>하이라이트</Link>
                                 </li>
                             </ul>
-                        </Link>
-                        <Link to="#" className="nav-item board-btn b2" active-color="red"
+                        </div>
+                        <div className="nav-item board-btn b2" active-color="red"
                               onClick={(e) => {
                                   handleIndicator(e.target);
                                   boardClickHandler2(e);
@@ -137,9 +143,9 @@ const Header = ({sendTouch}) => {
                                     <Link to="/resgame">반응속도테스트</Link>
                                 </li>
                             </ul>
-                            미니게임</Link>
-                        <Link to="/" className="nav-item" active-color="yellowgreen"
-                              onClick={(e) => handleIndicator(e.target)}>트롤사형투표</Link>
+                            미니게임</div>
+                        <p className="nav-item" active-color="yellowgreen"
+                              onClick={(e) => handleIndicator(e.target)}>트롤사형투표</p>
                         <span className="nav-indicator" style={{
                             width: indicatorStyle.width,
                             left: indicatorStyle.left,
