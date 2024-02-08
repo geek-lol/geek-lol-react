@@ -8,9 +8,10 @@ import {SHORT_URL, SHORT_VOTE_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import axios from "axios";
 import {json} from "react-router-dom";
+import ReactPlayer from "react-player";
 
-const ShortsContent = ({item, upVote}) => {
-    const {shortsId, uploaderName, replyCount, viewCount, upCount, title, context, videoLink} = item;
+const ShortsContent = ({id, item, upVote}) => {
+    const {shortsId, uploaderName, replyCount, viewCount, upCount, title, context} = item;
     const [token, setToken] = useState(getCurrentLoginUser().token);
     const [viewComment, setViewComment] = useState(false);
 
@@ -18,6 +19,10 @@ const ShortsContent = ({item, upVote}) => {
     const [viewAni, setViewAni] = useState(false);
 
     // 휠 애니메이션
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [displayCount, setDisplayCount] = useState(1);
+
+
     const [viewScrollDownAni, setViewScrollDownAni] = useState(false);
     const [viewScrollUpAni, setViewScrollUpAni] = useState(false);
     // 리스트 인덱스
@@ -45,25 +50,41 @@ const ShortsContent = ({item, upVote}) => {
 
     //전체 upCount
     const [voteVideoState, setVoteVideoState] = useState();
+    const [videoLink, setVideoLink] = useState();
     const [voteCount, setVoteCount] = useState(); // 각각의upCount
     const [voteShort, setVoteShort] = useState(false);
 
-    // const getVoteVideo = async () => {
-    //     const response = await axios.get(API_VOTE_URL, {
-    //         headers: requestHeader,
-    //         params: {
-    //             shortsId,
-    //         }
-    //     });
-    //
-    //     const data = await response.data;
-    //
-    //     if(response.status === 200) {
-    //         setVoteVideoState(data);
-    //     }
-    //
-    //     console.log(data);
-    // };
+
+    // 이미지 URL을 저장할 상태변수
+    const [videoUrl, setVideoUrl] = useState(null);
+    const fetchShortVideo = async () => {
+
+
+        const url = `http://localhost:8686/api/shorts/load-video/${shortsId}`;
+        const res = await fetch(url, {
+            method: "GET",
+            param: shortsId
+        });
+
+        if (res.status === 200) {
+            const videoData = await res.blob();
+
+            // blob이미지를 url로 변환
+            const shortUrl = window.URL.createObjectURL(videoData);
+
+            setVideoUrl(shortUrl);
+        } else {
+            const errMsg = await res.text();
+            alert(errMsg);
+            setVideoUrl(null);
+        }
+
+    };
+
+
+    useEffect(() => {
+        fetchShortVideo();
+    }, []);
 
     const getVoteVideo = async () => {
         fetch(API_BASE_URL, {
@@ -71,18 +92,20 @@ const ShortsContent = ({item, upVote}) => {
             headers: requestHeader
         })
             .then(res => {
-                console.log(res.status);
+                // console.log(res.status);
                 if (!res.ok) {
                     throw new Error(`HTTP error! Status: ${res.status}`);
                 }
+
                 return res.json();
             })
             .then(json => {
-                // console.log(item);
 
-                setVoteVideoState(item.upCount);
-                console.log('upCount', item.upCount);
-
+                    const startIndex = currentIndex;
+                    const endIndex = Math.min(startIndex + displayCount, json.shorts.length);
+                    const displayedShorts = json.shorts.slice(startIndex, endIndex);
+                    setShortList(displayedShorts);
+                    console.log('shorts', displayedShorts);
 
             })
             .catch(error => {
@@ -259,11 +282,6 @@ const ShortsContent = ({item, upVote}) => {
     }, [currentItemIndex]);
 
 
-    const videoRef = useRef();
-    const setPlayBackRate = () => {
-        document.getElementById('vid').play();
-        videoRef.current.playbackRate = 0.5;
-    };
 
     return (
         <>
@@ -273,9 +291,8 @@ const ShortsContent = ({item, upVote}) => {
                     ref={contentRef}>
                     <div className={cn('short-form', {animation_view: viewAni})} id={'root'}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
-                            <video className={'short-video'} ref={videoRef} autoPlay muted controls
-                                   loop id={'vid'} onCanPlay={setPlayBackRate}>
-                                <source src={item.videoLink} type="video/mp4"/>
+                            <video autoPlay={true} muted={true}>
+                                <source src={videoUrl} type="video/mp4"/>
                             </video>
                             <div className={'overlap-front'}>
                                 <div className={'produce'}>

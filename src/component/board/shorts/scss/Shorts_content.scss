@@ -53,10 +53,13 @@
       z-index: 2000;
 
 
-      .short-video {
+      video {
         width: 100%;
         height: 100%;
+        object-fit: cover;
+
       }
+
 
       .overlap-front {
         width: 90%;
@@ -333,6 +336,14 @@
         position: relative;
         z-index: 2000;
 
+        video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+
+        }
+
+
         .overlap-front {
           width: 90%;
           height: 20%;
@@ -396,6 +407,13 @@
         display: flex;
         position: relative;
         z-index: 2000;
+
+        video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+
+        }
       }
     }
 

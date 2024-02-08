@@ -96,7 +96,7 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
                 console.error('Error fetching data:', error);
             });
 
-    }, [shortReply]);
+    }, []);
 
 
     return (
