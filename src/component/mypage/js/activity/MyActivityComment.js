@@ -17,26 +17,38 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import '../../scss/MyActivityMain.scss'
+import {useEffect, useState} from "react";
+import {getCurrentLoginUser} from "../../../../utils/login-util";
+import {formatDate} from "../../../../utils/format-date";
 
-//더미 데이터 생성자
-function createData(type, boardNo,boardTitle,comment,uploadDate) {
-    return {
-        type,
-        boardNo,
-        boardTitle,
-        comment,
-        uploadDate
-    };
-}
-// 더미 데이터
-const rows = [
-    createData("자유",1,"ㅎ냫냉ㄴ래","하하하","1분전"),
-    createData("자유",3,"집이개추워어어","보일러떼면 되지않냑옹","1분전"),
-    createData("자유",4,"집이개추워어어","보일러떼면 되지않냑옹","1분전"),
-    createData("자유",2,"ㅎ냫냉ㄴ래","하하하","1분전")
+//테이블 헤더
+const headCells = [
+    {
+        id: 'bnos',
+        numeric: true,
+        disablePadding: false,
+        label: '번호',
+    },
+    {
+        id: 'titles',
+        numeric: true,
+        disablePadding: false,
+        label: '글제목 ',
+    },
+    {
+        id: 'comments',
+        numeric: true,
+        disablePadding: false,
+        label: '댓글내용 ',
+    },
+    {
+        id: 'dates',
+        numeric: true,
+        disablePadding: false,
+        label: '날짜 ',
+    }
 ];
 
 //정렬 계산식
@@ -69,40 +81,6 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-//테이블 헤더
-const headCells = [
-    {
-        id: 'types',
-        numeric: true,
-        disablePadding: true,
-        label: '게시판 ',
-    },
-    {
-        id: 'bnos',
-        numeric: true,
-        disablePadding: false,
-        label: '번호',
-    },
-    {
-        id: 'titles',
-        numeric: true,
-        disablePadding: false,
-        label: '글제목 ',
-    },
-    {
-        id: 'comments',
-        numeric: true,
-        disablePadding: false,
-        label: '댓글내용 ',
-    },
-    {
-        id: 'dates',
-        numeric: true,
-        disablePadding: false,
-        label: '날짜 ',
-    }
-];
-
 function EnhancedTableHead(props) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
         props;
@@ -131,13 +109,6 @@ function EnhancedTableHead(props) {
                         align={'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
-                        style={{
-                            // "글제목"과 "번호" 열에 대한 스타일 추가
-                            width: headCell.id === 'titles' ? '30%' : (headCell.id === 'comments' ? '30%' : '10%'),
-                            whiteSpace: 'nowrap', // 텍스트 줄바꿈 방지
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                        }}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -201,23 +172,17 @@ function EnhancedTableToolbar(props) {
                         id="tableTitle"
                         component="div"
                     >
-                        내가 쓴 댓글
+                        내가 쓴 트롤사형투표 댓글
                     </Typography>
                 )}
 
 
             {/*헤더 맨 오른쪽 아이콘 */}
             {/*체크박스에 1개 이상체크 됐을때*/}
-            {numSelected > 0 ? (
+            {numSelected > 0 && (
                 <Tooltip title="Delete">
                     <IconButton>
                         <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <FilterListIcon />
                     </IconButton>
                 </Tooltip>
             )}
@@ -230,11 +195,30 @@ EnhancedTableToolbar.propTypes = {
 };
 
 const MyActivityComment = () => {
+
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [dense, setDense] = React.useState(false);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rows,setRows] = useState([]);
+
+    //요청 URL
+    const API_URL = "http://localhost:8686/troll";
+
+    // 토큰 가져오기
+    const token= getCurrentLoginUser().token;
+
+    const applyReplyFetch = async () =>{
+        const res = await fetch(API_URL+"/apply/reply/my",{
+            method : "GET",
+            headers: {"Authorization" : `Bearer ${token}`},
+        })
+        const json = await res.json()
+        setRows(json.reply);
+        console.log(json.reply)
+    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -242,11 +226,10 @@ const MyActivityComment = () => {
         setOrderBy(property);
     };
 
+    // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
-        console.log(`올 클릭 실행 : ${event.target.checked}`)
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.boardNo);
-            console.log(`newselect:${newSelected}`)
+            const newSelected = rows.map((n) => n.replyId);
             setSelected(newSelected);
             return;
         }
@@ -283,20 +266,23 @@ const MyActivityComment = () => {
 
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
+
     // 테이블 데이터 갯수로 줄 계산
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
     const visibleRows = React.useMemo(
         () =>
             stableSort(rows, getComparator(order, orderBy)).slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage,
             ),
-        [order, orderBy, page, rowsPerPage],
+        [rows,order, orderBy, page, rowsPerPage],
     );
 
+    useEffect(() => {
+        applyReplyFetch();
+    }, []);
     return (
         <div className={'my-act-wrapper'}>
             <Box sx={{ width: '100%' }}>
@@ -318,17 +304,17 @@ const MyActivityComment = () => {
                             />
                             <TableBody>
                                 {visibleRows.map((row, index) => {
-                                    const isItemSelected = isSelected(row.boardNo);
+                                    const isItemSelected = isSelected(row.replyId);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.boardNo)}
+                                            onClick={(event) => handleClick(event, row.replyId)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.id}
+                                            key={row.replyId}
                                             selected={isItemSelected}
                                             sx={{ cursor: 'pointer' }}
                                         >
@@ -341,18 +327,18 @@ const MyActivityComment = () => {
                                                     }}
                                                 />
                                             </TableCell>
-                                            <TableCell align="left">{row.type}</TableCell>
-                                            <TableCell align="left">{row.boardNo}</TableCell>
-                                            <TableCell align="left">{row.boardTitle}</TableCell>
-                                            <TableCell align="left">{row.comment}</TableCell>
-                                            <TableCell align="left">{row.uploadDate}</TableCell>
+
+                                            <TableCell align="left">{row.applyId}</TableCell>
+                                            <TableCell align="left">{row.applyTitle}</TableCell>
+                                            <TableCell align="left">{row.context}</TableCell>
+                                            <TableCell align="left">{formatDate(row.replyDate,null)}</TableCell>
                                         </TableRow>
                                     );
                                 })}
                                 {emptyRows > 0 && (
                                     <TableRow
                                         style={{
-                                            height: (53) * emptyRows,
+                                            height: (dense ? 33 : 53) * emptyRows,
                                         }}
                                     >
                                         <TableCell colSpan={6} />

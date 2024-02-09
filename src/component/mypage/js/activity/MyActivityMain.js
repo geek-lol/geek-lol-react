@@ -1,10 +1,9 @@
 import React from 'react';
 import MyActivityBoard from "./MyActivityBoard";
 import MyAcitivityComment from "./MyActivityComment";
-// import MyActivityReport from "./MyActivityReport";
 const MyActivityMain = () => {
     return (
-        <div>
+        <div className="my-activity-wrapper">
             <MyActivityBoard />
             <MyAcitivityComment />
             {/*<MyActivityReport />*/}

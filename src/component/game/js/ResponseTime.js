@@ -11,7 +11,6 @@ import Paper from '@mui/material/Paper';
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import axios from "axios";
 import {formatDate} from "../../../utils/format-date";
-import Poro from "../scss/poro.jpg";
 const ResponseTime = () => {
 
     let startTime; // 시작시간

@@ -20,30 +20,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import '../../scss/MyActivityMain.scss'
-
-//더미 데이터 생성자
-function createData(type, boardNo,boardTitle, writer
-    , uploadDate, viewCount, recommend) {
-    return {
-        type,
-        boardNo,
-        boardTitle,
-        writer,
-        uploadDate,
-        viewCount,
-        recommend
-    };
-}
-// 더미 데이터
-const rows = [
-    createData("자유",124,"ㅎ냫냉ㄴ래","하하하","1분전",3,0),
-    createData("자유",4,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",24,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",45,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",243,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",247,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",1,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5)
-];
+import {getCurrentLoginUser} from "../../../../utils/login-util";
+import {useEffect, useState} from "react";
+import {formatDate} from "../../../../utils/format-date";
 
 //정렬 계산식
 function descendingComparator(a, b, orderBy) {
@@ -77,12 +56,6 @@ function stableSort(array, comparator) {
 
 //테이블 헤더
 const headCells = [
-    {
-        id: 'types',
-        numeric: false,
-        disablePadding: true,
-        label: '게시판 ',
-    },
     {
         id: 'bnos',
         numeric: true,
@@ -212,23 +185,17 @@ function EnhancedTableToolbar(props) {
                         id="tableTitle"
                         component="div"
                     >
-                        내가 쓴 글
+                        내가 쓴 자유게시판
                     </Typography>
                 )}
 
 
             {/*헤더 맨 오른쪽 아이콘 */}
             {/*체크박스에 1개 이상체크 됐을때*/}
-            {numSelected > 0 ? (
+            {numSelected > 0 && (
                 <Tooltip title="Delete">
                     <IconButton>
                         <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <FilterListIcon />
                     </IconButton>
                 </Tooltip>
             )}
@@ -241,12 +208,25 @@ EnhancedTableToolbar.propTypes = {
 };
 
 const MyActivityBoard = () => {
+
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rows,setRows] = useState([]);
+    //요청 URL
+    const API_URL = "http://localhost:8686/board/bulletin";
+    // 토큰 가져오기
+    const token= getCurrentLoginUser().token;
+
+    const boardFetch = async () =>{
+        const res = await fetch(API_URL)
+        const json = await res.json()
+        setRows(json.board);
+        console.log(json.board)
+    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -299,16 +279,18 @@ const MyActivityBoard = () => {
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
     const visibleRows = React.useMemo(
         () =>
             stableSort(rows, getComparator(order, orderBy)).slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage,
             ),
-        [order, orderBy, page, rowsPerPage],
+        [rows,order, orderBy, page, rowsPerPage],
     );
 
+    useEffect(() => {
+        boardFetch();
+    }, []);
     return (
         <div className={'my-act-wrapper'}>
             <Box sx={{ width: '100%' }}>
@@ -330,17 +312,17 @@ const MyActivityBoard = () => {
                             />
                             <TableBody>
                                 {visibleRows.map((row, index) => {
-                                    const isItemSelected = isSelected(row.boardNo);
+                                    const isItemSelected = isSelected(row.bulletinId);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.boardNo)}
+                                            onClick={(event) => handleClick(event, row.bulletinId)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.id}
+                                            key={row.bulletinId}
                                             selected={isItemSelected}
                                             sx={{ cursor: 'pointer' }}
                                         >
@@ -353,13 +335,13 @@ const MyActivityBoard = () => {
                                                     }}
                                                 />
                                             </TableCell>
-                                            <TableCell align="left">{row.type}</TableCell>
-                                            <TableCell align="left">{row.boardNo}</TableCell>
-                                            <TableCell align="left">{row.boardTitle}</TableCell>
-                                            <TableCell align="left">{row.writer}</TableCell>
-                                            <TableCell align="left">{row.uploadDate}</TableCell>
+
+                                            <TableCell align="left">{row.bulletinId}</TableCell>
+                                            <TableCell align="left">{row.title}</TableCell>
+                                            <TableCell align="left">{row.posterName}</TableCell>
+                                            <TableCell align="left">{formatDate(row.localDateTime,null)}</TableCell>
                                             <TableCell align="left">{row.viewCount}</TableCell>
-                                            <TableCell align="left">{row.recommend}</TableCell>
+                                            {/*<TableCell align="left">{row.recommend}</TableCell>*/}
                                         </TableRow>
                                     );
                                 })}
