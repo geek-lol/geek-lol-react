@@ -4,8 +4,22 @@ import {TextField} from "@mui/material";
 import Button from "@mui/material/Button";
 import MyInfoAlterPw from "./MyInfoAlterPw";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import Slide from "@mui/material/Slide";
+import {useNavigate} from "react-router-dom";
+
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const MyInformation = ({userInfo,changeUser}) => {
+    //리다이렉션 변수
+    const redirection = useNavigate();
     // 비밀번호 수정 버튼 클릭 확인 변수
     const [alterPw,setAlterPw] = useState(false);
     // 비밀번호 수정 버튼 클릭 확인 변수
@@ -17,7 +31,7 @@ const MyInformation = ({userInfo,changeUser}) => {
     const [user,setUser] = useState(userInfo);
 
     //요청 URL
-    const API_URL = "http://localhost:8686/user/modify";
+    const API_URL = "http://localhost:8686/user";
     // 토큰 가져오기
     const token= getCurrentLoginUser().token;
     const userId = getCurrentLoginUser().userId;
@@ -40,7 +54,7 @@ const MyInformation = ({userInfo,changeUser}) => {
 
         const formData = new FormData();
         formData.append('user',jsonBlob);
-        const res = await fetch(API_URL,{
+        const res = await fetch(API_URL+"/modify",{
             method:"POST",
             headers: {"Authorization" : `Bearer ${token}`},
             body: formData
@@ -81,6 +95,37 @@ const MyInformation = ({userInfo,changeUser}) => {
     const inputNameHandler = (e) =>{
         setNewName(e.target.value);
     }
+
+    const deleteFetch = async () =>{
+        const payload = {
+            id : userId
+        }
+        const res = await fetch(API_URL+"/delete",{
+            method: "POST",
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(payload)
+        })
+        if (res.status === 200){
+            localStorage.clear()
+            redirection('/');
+        }
+    }
+
+    //모달 관련
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const deleteAndHandleClose = () => {
+        setOpen(false);
+        deleteFetch();
+    };
     return (
         <div className="my-info-wrapper">
             <div className="info-title">기본정보</div>
@@ -106,38 +151,52 @@ const MyInformation = ({userInfo,changeUser}) => {
                 }
             </div>
             <div className="my-info-container">
+                <div className="my-pw-title">닉네임</div>
+                <div className="my-alter-main">
                 {!alterName
                     ? 
                         <>
-                            <div className="my-pw-title">닉네임</div>
-                            <div className="my-alter-main">
                                 <div className="my-info-item">{newName}</div>
                                 <div className="alter-text" onClick={alterNameClikHandler}>수정</div>
-                            </div>
                         </>
                     : 
                         <>
-                            <div className="my-alter-main">  
                                 <TextField
                                 className="my-info-item"
                                 id="alterUserName"
-                                label="닉네임"
                                 value={newName}
                                 variant="standard"
                                 onChange={inputNameHandler}/>
                                 <div className="alter-text" onClick={alterNameClikHandler}>완료</div>
-                            </div>
-                          
                         </>
                 }
-
-
+                </div>
             </div>
             <div className="my-info-container user-delete">
-                <Button variant="outlined" color="error">
+                <Button variant="outlined" color="error" onClick={handleClickOpen}>
                     회원탈퇴
                 </Button>
             </div>
+            <React.Fragment>
+                <Dialog
+                    open={open}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleClose}
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle>{"정말 탈퇴 하시겠습니까?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                           탈퇴하면 되돌릴 수 없습니다.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Disagree</Button>
+                        <Button onClick={deleteAndHandleClose}>Agree</Button>
+                    </DialogActions>
+                </Dialog>
+            </React.Fragment>
         </div>
     );
 };
