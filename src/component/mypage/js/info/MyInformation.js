@@ -9,7 +9,7 @@ const MyInformation = ({userInfo,changeUser}) => {
     // 비밀번호 수정 버튼 클릭 확인 변수
     const [alterPw,setAlterPw] = useState(false);
     // 비밀번호 수정 버튼 클릭 확인 변수
-    const [alterName,setAlterName] = useState(false);;
+    const [alterName,setAlterName] = useState(false);
 
     //입력 닉네임 저장
     const [newName,setNewName] = useState(userInfo.userName);

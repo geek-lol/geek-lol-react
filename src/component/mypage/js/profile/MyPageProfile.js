@@ -2,14 +2,12 @@ import React, {useEffect, useState} from 'react';
 import MyProfile from '../../scss/MyPageProfile.scss';
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import defaultImg from "../../../../image/profile.jpg";
+import {formatDate} from "../../../../utils/format-date";
 
 const MyPageProfile = ({userInfo}) => {
 
     // 이미지 URL을 저장할 상태변수
-    const [imgUrl, setImgUrl] = useState(null)
-
-    //프로필 이미지 파일을 상태변수로 관리
-    const [imgFile, setImgFile] = useState(null);
+    const [imgUrl, setImgUrl] = useState(null);
 
     // 토큰 가져오기
     const token= getCurrentLoginUser().token;
@@ -17,15 +15,6 @@ const MyPageProfile = ({userInfo}) => {
 
     //요청 URL
     const API_URL = "http://localhost:8686/user";
-
-    function formatDate(inputDate) {
-        const date = new Date(inputDate);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-
-        return `${year}-${month}-${day}`;
-    }
 
     useEffect(() => {
         userProfileFetch();
@@ -117,7 +106,7 @@ const MyPageProfile = ({userInfo}) => {
             <div>
                 <div className="my-user-info">
                     <div className="my-user-name">{userInfo.userName}</div>
-                    <div className="my-start-date">GEEKLOL 가입날짜:{formatDate(userInfo.joinMembershipDate)}</div>
+                    <div className="my-start-date">GEEKLOL 가입날짜:{formatDate(userInfo.joinMembershipDate,'day')}</div>
                 </div>
                 <div className="my-profile-active">
                     <div className="active-item">

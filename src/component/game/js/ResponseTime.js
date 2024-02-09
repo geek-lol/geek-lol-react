@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import axios from "axios";
+import {formatDate} from "../../../utils/format-date";
 
 const ResponseTime = () => {
 
@@ -124,6 +125,7 @@ const ResponseTime = () => {
         $screen.textContent = "클릭해서 시작하세요!";
         $result.innerHTML=``;
         document.getElementById('gameCount').textContent = `진행도 : 0/5`;
+        document.getElementById("testReset").classList.add('non');
     }
 
     return (
@@ -137,7 +139,7 @@ const ResponseTime = () => {
                 </div>
                 <div id="result"></div>
             </div>
-            <TableContainer sx={{width:'65%', mx:'auto', mt:30}} component={Paper}>
+            <TableContainer sx={{width:'65%', mx:'auto', mt:30, mb:30}} component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table" >
                     <TableHead>
                         <TableRow>
@@ -158,7 +160,7 @@ const ResponseTime = () => {
                                 </TableCell>
                                 <TableCell align="left">{`${row.userName}(${row.userId})`}</TableCell>
                                 <TableCell align="left">{row.score}</TableCell>
-                                <TableCell align="left">{row.recordDate}</TableCell>
+                                <TableCell align="left">{formatDate(row.recordDate,null)}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
