@@ -69,12 +69,6 @@ const headCells = [
         label: '제목 ',
     },
     {
-        id: 'writers',
-        numeric: false,
-        disablePadding: false,
-        label: '작성자',
-    },
-    {
         id: 'dates',
         numeric: true,
         disablePadding: false,
@@ -185,7 +179,7 @@ function EnhancedTableToolbar(props) {
                         id="tableTitle"
                         component="div"
                     >
-                        내가 쓴 자유게시판
+                        내가 쓴 글
                     </Typography>
                 )}
 
@@ -207,7 +201,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-const MyActivityBoard = () => {
+const MyActivityBoard = ({rows}) => {
 
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -215,18 +209,6 @@ const MyActivityBoard = () => {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [rows,setRows] = useState([]);
-    //요청 URL
-    const API_URL = "http://localhost:8686/board/bulletin";
-    // 토큰 가져오기
-    const token= getCurrentLoginUser().token;
-
-    const boardFetch = async () =>{
-        const res = await fetch(API_URL)
-        const json = await res.json()
-        setRows(json.board);
-        console.log(json.board)
-    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -237,7 +219,7 @@ const MyActivityBoard = () => {
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.boardNo);
+            const newSelected = rows.map((n) => n.id);
             setSelected(newSelected);
             return;
         }
@@ -288,11 +270,9 @@ const MyActivityBoard = () => {
         [rows,order, orderBy, page, rowsPerPage],
     );
 
-    useEffect(() => {
-        boardFetch();
-    }, []);
+
     return (
-        <div className={'my-act-wrapper'}>
+        <div>
             <Box sx={{ width: '100%' }}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
                     <EnhancedTableToolbar numSelected={selected.length} />
@@ -312,17 +292,17 @@ const MyActivityBoard = () => {
                             />
                             <TableBody>
                                 {visibleRows.map((row, index) => {
-                                    const isItemSelected = isSelected(row.bulletinId);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.bulletinId)}
+                                            onClick={(event) => handleClick(event, row.id)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.bulletinId}
+                                            key={row.id}
                                             selected={isItemSelected}
                                             sx={{ cursor: 'pointer' }}
                                         >
@@ -336,12 +316,11 @@ const MyActivityBoard = () => {
                                                 />
                                             </TableCell>
 
-                                            <TableCell align="left">{row.bulletinId}</TableCell>
+                                            <TableCell align="left">{row.id}</TableCell>
                                             <TableCell align="left">{row.title}</TableCell>
-                                            <TableCell align="left">{row.posterName}</TableCell>
-                                            <TableCell align="left">{formatDate(row.localDateTime,null)}</TableCell>
+                                            <TableCell align="left">{formatDate(row.localDateTime,'day')}</TableCell>
                                             <TableCell align="left">{row.viewCount}</TableCell>
-                                            {/*<TableCell align="left">{row.recommend}</TableCell>*/}
+                                            <TableCell align="left">{row.upCount}</TableCell>
                                         </TableRow>
                                     );
                                 })}

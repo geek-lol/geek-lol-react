@@ -4,7 +4,7 @@ import {getCurrentLoginUser} from "../../../../utils/login-util";
 import defaultImg from "../../../../image/profile.jpg";
 import {formatDate} from "../../../../utils/format-date";
 
-const MyPageProfile = ({userInfo}) => {
+const MyPageProfile = ({userInfo,myActivity}) => {
 
     // 이미지 URL을 저장할 상태변수
     const [imgUrl, setImgUrl] = useState(null);
@@ -111,15 +111,15 @@ const MyPageProfile = ({userInfo}) => {
                 <div className="my-profile-active">
                     <div className="active-item">
                         <div className="active-type">내 글</div>
-                        <div className="active-count">3</div>
+                        <div className="active-count">{myActivity.boards}</div>
                     </div>
                     <div className="active-item">
                         <div className="active-type">내 댓글</div>
-                        <div className="active-count">3</div>
+                        <div className="active-count">{myActivity.comments}</div>
                     </div>
                     <div className="active-item">
                         <div className="active-type">제재내역</div>
-                        <div className="active-count">3</div>
+                        <div className="active-count">{myActivity.reports}</div>
                     </div>
                 </div>
             </div>

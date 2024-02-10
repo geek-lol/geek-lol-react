@@ -17,39 +17,12 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import '../../scss/MyActivityMain.scss'
-import {useEffect, useState} from "react";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
+import {useEffect, useState} from "react";
 import {formatDate} from "../../../../utils/format-date";
-
-//테이블 헤더
-const headCells = [
-    {
-        id: 'bnos',
-        numeric: true,
-        disablePadding: false,
-        label: '번호',
-    },
-    {
-        id: 'titles',
-        numeric: true,
-        disablePadding: false,
-        label: '글제목 ',
-    },
-    {
-        id: 'comments',
-        numeric: true,
-        disablePadding: false,
-        label: '댓글내용 ',
-    },
-    {
-        id: 'dates',
-        numeric: true,
-        disablePadding: false,
-        label: '날짜 ',
-    }
-];
 
 //정렬 계산식
 function descendingComparator(a, b, orderBy) {
@@ -80,6 +53,46 @@ function stableSort(array, comparator) {
     });
     return stabilizedThis.map((el) => el[0]);
 }
+
+//테이블 헤더
+const headCells = [
+    {
+        id: 'bnos',
+        numeric: true,
+        disablePadding: false,
+        label: '번호',
+    },
+    {
+        id: 'titles',
+        numeric: false,
+        disablePadding: false,
+        label: '제목 ',
+    },
+    {
+        id: 'writers',
+        numeric: false,
+        disablePadding: false,
+        label: '작성자',
+    },
+    {
+        id: 'dates',
+        numeric: true,
+        disablePadding: false,
+        label: '날짜 ',
+    },
+    {
+        id: 'views',
+        numeric: true,
+        disablePadding: false,
+        label: '조회 ',
+    },
+    {
+        id: 'recommends',
+        numeric: true,
+        disablePadding: false,
+        label: '추천 ',
+    },
+];
 
 function EnhancedTableHead(props) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
@@ -172,7 +185,7 @@ function EnhancedTableToolbar(props) {
                         id="tableTitle"
                         component="div"
                     >
-                        내가 쓴 댓글
+                        나의 제재내역
                     </Typography>
                 )}
 
@@ -194,15 +207,14 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-const MyActivityComment = ({rows}) => {
+const MyActivityBoard = ({rows}) => {
 
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -250,6 +262,7 @@ const MyActivityComment = ({rows}) => {
 
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
+
     // 테이블 데이터 갯수로 줄 계산
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -265,7 +278,7 @@ const MyActivityComment = ({rows}) => {
 
 
     return (
-        <div className={'my-act-wrapper'}>
+        <div>
             <Box sx={{ width: '100%' }}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
                     <EnhancedTableToolbar numSelected={selected.length} />
@@ -309,10 +322,12 @@ const MyActivityComment = ({rows}) => {
                                                 />
                                             </TableCell>
 
-                                            <TableCell align="left" sx={{ width: '12%' }}>{row.id}</TableCell>
+                                            <TableCell align="left">{row.id}</TableCell>
                                             <TableCell align="left">{row.title}</TableCell>
-                                            <TableCell align="left">{row.context}</TableCell>
-                                            <TableCell align="left">{formatDate(row.replyDate,"day")}</TableCell>
+                                            <TableCell align="left">{row.posterName}</TableCell>
+                                            <TableCell align="left">{formatDate(row.localDateTime,'day')}</TableCell>
+                                            <TableCell align="left">{row.viewCount}</TableCell>
+                                            <TableCell align="left">{row.upCount}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -342,4 +357,4 @@ const MyActivityComment = ({rows}) => {
     );
 }
 
-export default MyActivityComment;
+export default MyActivityBoard;
