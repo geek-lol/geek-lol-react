@@ -7,19 +7,19 @@ import {Link} from "react-router-dom";
 import {BOARD_URL} from "../../../../config/host-config";
 import Board from "../Board";
 import BoardContent from "./BoardContent";
-import { Pagination } from '@mui/material';
+import {Pagination} from '@mui/material';
+
 const FreeBoard = () => {
     const [boardList, setBoardList] = useState([]);
     const API_BASE_URL = BOARD_URL
     const [hide, setHide] = useState(false);
-    const [toggle1, setToggle1] = useState(true);
-    const [toggle2, setToggle2] = useState(false);
+    const [toggle, setToggle] = useState(true);
     const [title, setTitle] = useState("제목");
-    const [totalPage,setTotalPage]=useState(1);
-    const [page,setPage]=useState(1);
-    const[inputContent,setInputContent]=useState("");
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    const [inputContent, setInputContent] = useState("");
     const [cleantitle, setCleantitle] = useState("title");
-    const [SortPage,setSortPage]=useState("0");
+    const [SortPage, setSortPage] = useState("0");
     const relativeButtonHandler = (e) => {
         setHide(!hide);
     }
@@ -31,19 +31,19 @@ const FreeBoard = () => {
         setTitle(e.target.value);
     }
     useEffect(() => {
-        if(title==='제목'){
+        if (title === '제목') {
             setCleantitle('title');
 
-        }else if(title==='내용'){
+        } else if (title === '내용') {
             setCleantitle('content');
-        }else if(title==='작성자'){
+        } else if (title === '작성자') {
             setCleantitle('poster');
 
         }
     }, [title]);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}?page=${page}&upCount=1`, {
+        fetch(`${API_BASE_URL}?page=${page}&upCount=${SortPage}`, {
             method: 'GET',
             headers: {'content-type': 'application/json'},
         })
@@ -57,14 +57,13 @@ const FreeBoard = () => {
                 setBoardList(json.board);
                 setTotalPage(json.totalPages);
             });
-        }, [page]);
+    }, [page]);
 
 
     const pageHandler = (e) => {
         setPage(+e.target.innerText);
     };
-    const search=async ()=> {
-
+    const search = async () => {
         const res = await fetch(`${BOARD_URL}?${cleantitle}=${inputContent}&upCount=${SortPage}`, {
             method: 'GET',
         })
@@ -77,11 +76,11 @@ const FreeBoard = () => {
                 if (!json) return;
                 setBoardList(json.board);
                 setTotalPage(json.totalPages);
-                console.log(inputContent);
-                console.log(cleantitle);
-                console.log(json);
             });
     }
+    useEffect(() => {
+        search();
+    }, [SortPage]);
 
     const inputHandler = (e) => {
         setInputContent(e.target.value);
@@ -90,24 +89,24 @@ const FreeBoard = () => {
         e.preventDefault();
         search();
     };
-    const toggleHandler = () => {
-        setToggle1(!toggle1);
-        setToggle2(!toggle2);
-        if(toggle1){
-            setSortPage("0");
-        }else if(toggle2){
-            setSortPage("1");
-        }
-        search();
+    const toggleHandler1 = () => {
+        setToggle(true);
+        setSortPage("0");
+    };
+    const toggleHandler2 = () => {
+        setToggle(false);
+        setSortPage("1");
     };
     return (
-        <div id="board_wrap" onClick={offDiv} style={{marginTop:'97.99px'}}>
+        <div id="board_wrap" onClick={offDiv} style={{marginTop: '97.99px'}}>
             <section id="board_main">
                 <div className="board_list_box">
                     <div className="board_search_box">
                         <div className="toggleBtn">
-                            <button className={cn("sorting-button", {toggle: toggle1})} onClick={toggleHandler}>최신글</button>
-                            <button className={cn("sorting-button", {toggle: toggle2})} onClick={toggleHandler}>인기글</button>
+                            <button className={cn("sorting-button", {toggle: toggle})} onClick={toggleHandler1}>최신글
+                            </button>
+                            <button className={cn("sorting-button", {toggle: !toggle})} onClick={toggleHandler2}>인기글
+                            </button>
                         </div>
                         <div className="searchT">
                             <div className="relative">
@@ -145,9 +144,9 @@ const FreeBoard = () => {
                             <span className="s-title5 py-1">조회</span>
                             <span className="s-title6 py-1">추천</span>
                         </div>
-                        {boardList.map(con=>
+                        {boardList.map(con =>
                             <BoardContent
-                            item={con}
+                                item={con}
                             />
                         )}
                         <nav className="page-box">

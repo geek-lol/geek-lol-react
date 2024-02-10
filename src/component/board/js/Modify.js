@@ -5,7 +5,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import "../scss/BoardCreate.scss"
 import BoardHeader from "./BoardHeader";
 import {getCurrentLoginUser} from "../../../utils/login-util";
-import {BOARD_URL, DETAIL_URL, MODIFY_URL} from "../../../config/host-config";
+import {BOARD_URL, DETAIL_URL, LOAD_PROFILE_URL, MODIFY_URL} from "../../../config/host-config";
 import { useLocation } from 'react-router-dom';
 import {value} from "lodash/seq";
 import async from "async";
@@ -18,7 +18,6 @@ const Modify = () => {
     const redirection = useNavigate();
 
     const modifyFetch = async () => {
-        console.log(data);
         const formData = new FormData();
         formData.append('boardInfo', new Blob([JSON.stringify({ bulletinId: data.bulletinId, title: Title, content: modifyContent,posterId:data.posterId })], { type: 'application/json' }));
         formData.append('fileUrl', document.getElementById('board_detail_img').files[0]);
@@ -34,8 +33,9 @@ const Modify = () => {
 
             if (res.status === 200) {
                 const json = await res.json();
-                console.log("res.status : 200 수정 완료");
-                // redirection("/board/main/FreeBoard");
+                alert('수정되었습니다.');
+                redirection(`/board/detail/${data.bulletinId}`);
+
 
             } else {
                 const errorMessage = await res.text();
@@ -59,6 +59,33 @@ const Modify = () => {
         setModifyContent(value);
         console.log(modifyContent);
     };
+    const getImg=async ()=>{
+        await fetch(`${LOAD_PROFILE_URL}?bulletinId=${data.bulletinId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.arrayBuffer(); // 바이너리 데이터로 변환된 응답 받기
+            })
+            .then(arrayBuffer => {
+                // Blob 객체로 변환
+                const blob = new Blob([arrayBuffer]);
+
+                // Blob URL 생성
+                const imageUrl = URL.createObjectURL(blob);
+
+                // 이미지를 표시할 DOM 요소에 설정
+                const imageElement = document.createElement('img');
+                imageElement.className='imgTag';
+                imageElement.src = imageUrl;
+                // 이미지를 표시할 DOM 요소에 추가
+                const contentCenter = document.querySelector('.img-box');
+                contentCenter.insertBefore(imageElement, contentCenter.firstChild);
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    }
     return (
         <>
         <BoardHeader/>

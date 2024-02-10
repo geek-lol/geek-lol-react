@@ -11,6 +11,7 @@ const SHORT_VOTE = '/api/vote'
 const BOARD_REPLY = '/api/shorts/reply'
 const MODIFY='/modify'
 const BOARD_VOTE='/board/vote'
+const LOAD_PROFILE='/load-profile'
 
 export const USER_URL = API_BASE_URL + USER;
 export const SHORT_URL = API_BASE_URL + SHORT;
@@ -21,4 +22,5 @@ export const MODIFY_URL = API_BASE_URL +BOARD+ MODIFY;
 export const REPLY_URL = API_BASE_URL +BOARD+ DETAIL+REPLY;
 export const BOARD_REPLY_URL = API_BASE_URL + BOARD_REPLY;
 export const BOARD_VOTE_URL = API_BASE_URL + BOARD_VOTE;
+export const LOAD_PROFILE_URL = API_BASE_URL + BOARD +LOAD_PROFILE;
 

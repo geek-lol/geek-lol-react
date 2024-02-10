@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import "../scss/Detail.scss";
 import {Button, Pagination, TextField} from "@mui/material";
-import {BOARD_URL, BOARD_VOTE_URL, DETAIL_URL, REPLY_URL} from "../../../config/host-config";
-import {json, Link, useParams} from "react-router-dom";
+import {BOARD_URL, BOARD_VOTE_URL, DETAIL_URL, LOAD_PROFILE_URL, REPLY_URL} from "../../../config/host-config";
+import {json, Link, useNavigate, useParams} from "react-router-dom";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import BoardReply from "../BoardReply";
 import {GoHeart, GoHeartFill} from "react-icons/go";
-
-
-
 const Detail = () => {
     const GetData = (Id) => {
         const API_BASE_URL = DETAIL_URL;
@@ -43,9 +40,11 @@ const Detail = () => {
     const [totalReply, setTotalReply] = useState(0);
     const [totalPage, setTotalPage] = useState();
     const [likeToggle,setLikeToggle]=useState();
+    const redirection = useNavigate();
+
     useEffect(() => {
         setData({...item});
-    }, [item]);
+        }, [item]);
     //댓글 입력
     const fetchBoardUpload = async () => {
         try {
@@ -81,12 +80,13 @@ const Detail = () => {
     // 댓글 리스트 가져오기
     useEffect(() => {
         Replyrendering();
-    }, [inputText, data, page, totalReply]);
+    }, [inputText, page, totalReply]);
     useEffect(() => {
-        createLike();
         findLike();
-    }, [data.upCount]);
-
+    }, [data]);
+    useEffect(() => {
+        getImg();
+    }, []);
     const Replyrendering = async () => {
         await fetch(`${REPLY_URL}/${data.bulletinId}?page=${page}`, {
             method: 'GET',
@@ -145,9 +145,43 @@ const Detail = () => {
             console.log(res.status)
         });
     };
+    const useConfirm = (message = null, onConfirm, onCancel) => {
+        if (!onConfirm || typeof onConfirm !== "function") {
+            return;
+        }
+        if (onCancel && typeof onCancel !== "function") {
+            return;
+        }
+
+        const confirmAction = () => {
+            if (window.confirm(message)) {
+                onConfirm();
+            } else {
+                onCancel();
+            }
+        };
+
+        return confirmAction;
+    };
+    const deleteConfirm = () => {
+        detailDelete();
+        getReplyCount();
+        console.log("삭제했습니다.");
+        redirection('/board/main/FreeBoard');
+    };
+    const cancelConfirm = () => console.log("취소했습니다.");
+    const confirmDelete = useConfirm(
+        "삭제하시겠습니까?",
+        deleteConfirm,
+        cancelConfirm
+    );
 
     const detailDeleteHandler = () => {
-        detailDelete();
+        if(data.posterId===getCurrentLoginUser().userId){
+            confirmDelete();
+        }else{
+            alert("권한이 없습니다.");
+        }
     };
     const createLike=async ()=>{
         const res= await fetch(`${BOARD_VOTE_URL}`,{
@@ -160,6 +194,7 @@ const Detail = () => {
         }).then(res=>{
             if(res.status===200){
                 console.log("잘 만들어짐");
+                findLike();
             }
             if(res.status===400){
                 console.log('이미 만들어짐');
@@ -177,6 +212,7 @@ const Detail = () => {
         }).then(res=>{
             if(res.status===200){
                 console.log("좋아요 수정 됨");
+                findLike();
             }
         })
     }
@@ -190,7 +226,6 @@ const Detail = () => {
                 },
             });
             if (res.status === 200) {
-                console.log("조회됨");
                 const json = await res.json(); // JSON 형식으로 파싱
                 setLikeToggle(json.up);
                 console.log(json.up);
@@ -198,16 +233,41 @@ const Detail = () => {
                 console.log("조회 실패");
             }
         } catch (error) {
+            createLike();
             console.error("오류 발생:", error);
         }
     }
     const likeHanlder = () => {
         modifyLike();
-        findLike();
+        console.log("클릭됨");
     };
-    useEffect(() => {
-        setLikeToggle(likeToggle);
-    }, [likeToggle,likeHanlder]);
+    const getImg=async ()=>{
+        await fetch(`${LOAD_PROFILE_URL}?bulletinId=${Id}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.arrayBuffer(); // 바이너리 데이터로 변환된 응답 받기
+            })
+            .then(arrayBuffer => {
+                // Blob 객체로 변환
+                const blob = new Blob([arrayBuffer]);
+
+                // Blob URL 생성
+                const imageUrl = URL.createObjectURL(blob);
+
+                // 이미지를 표시할 DOM 요소에 설정
+                const imageElement = document.createElement('img');
+                imageElement.className='imgTag';
+                imageElement.src = imageUrl;
+                // 이미지를 표시할 DOM 요소에 추가
+                const contentCenter = document.querySelector('.content-center');
+                contentCenter.insertBefore(imageElement, contentCenter.firstChild); // 이미지를 첫 번째 자식으로 삽입
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    }
     return (
         <>
             <section id="detail-body">
@@ -227,19 +287,26 @@ const Detail = () => {
                         </div>
                     </div>
                     <div className="content-center">
-                        {/*<img src={imageUrl} alt="sadf"/>*/}
                         <p>{data.content}</p>
                     </div>
                     <div className="content-bottom">
-                        {likeToggle===0 ?
+                        {
+                            likeToggle===0 ?
                             <GoHeart className="p" size={12 * 2} onClick={likeHanlder} />
                             :
                             <GoHeartFill className="p" color="red" size={12 * 2} onClick={likeHanlder}/>
                     }
-                        <Link className="correction p" to="/board/modify"
-                              state={{
-                                  data:data
-                        }}>수정</Link>
+                        {data.posterId===getCurrentLoginUser().userId
+                            ?                        <Link className="correction p" to="/board/modify"
+                                                           state={{
+                                                               data:data
+                                                           }}>수정</Link>
+                            :
+                            <span className="p" onClick={()=>{
+                                alert('권한이 없습니다.')
+                            }}>수정</span>
+                        }
+
                         <p className="delete p" onClick={detailDeleteHandler}>삭제</p>
                     </div>
                 </div>
@@ -292,7 +359,6 @@ const Detail = () => {
                     </div>
                 </div>
             </section>
-
         </>
     );
 };
