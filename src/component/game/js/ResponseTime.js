@@ -34,6 +34,16 @@ const ResponseTime = () => {
 
     const [rankList,setRankList] = useState([]);
     const [myRank, setMyRank] = useState({});
+    const [myRankFlag, setRankFlag] = useState(false);
+    //랭킹 리스트에 순위 추가하기
+    function caluRank(){
+        const updateList = rankList.map((rank, index)=>({...rank,rank:index+1}));
+        setRankList(updateList)
+        console.log('updateList')
+        console.log(updateList)
+    }
+
+    //랭킹 조회하기
     async function fetchData(){
         const response = await axios.get(API_URL, {
             headers: {"content-type": "application/json"}
@@ -41,6 +51,7 @@ const ResponseTime = () => {
 
         const data = await response.data.gameRankList;
         setRankList(data);
+        console.log('data');
         console.log(data);
     }
 
@@ -49,8 +60,16 @@ const ResponseTime = () => {
         console.log(filter);
         setMyRank(...filter);
     }, [rankList]);
+    useEffect(()=>{
+        caluRank();
+    },[myRankFlag])
     useEffect(() => {
-        fetchData();
+        const fetchs = async ()=>{
+            await fetchData();
+
+            setRankFlag(!myRankFlag);
+        }
+        fetchs();
     }, []);
 
     // 게임 점수 DB저장 처리 fetch
@@ -116,6 +135,7 @@ const ResponseTime = () => {
                     startClick();
                 }else{
                     addRank(Avg);
+                    setRankFlag(!myRankFlag);
                     $screen.textContent = `당신의 평균속도 : ${Avg}`;
                     document.getElementById("testReset").classList.remove('non');
                 }
@@ -152,18 +172,22 @@ const ResponseTime = () => {
                 <div className="rank-title"> 내 점수 </div>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table" >
                     <TableHead>
-                        <TableCell align="center">순위</TableCell>
-                        <TableCell align="left">닉네임(아이디)</TableCell>
-                        <TableCell align="left">반응 속도</TableCell>
-                        <TableCell align="left">날짜</TableCell>
+                        <TableRow>
+                            <TableCell align="center">순위</TableCell>
+                            <TableCell align="left">닉네임(아이디)</TableCell>
+                            <TableCell align="left">반응 속도</TableCell>
+                            <TableCell align="left">날짜</TableCell>
+                        </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableCell align="center" component="th" scope="row">
-                            tlqkf
-                        </TableCell>
-                        <TableCell align="left">{`${myRank.userName}(${myRank.userId})`}</TableCell>
-                        <TableCell align="left">{myRank.score}</TableCell>
-                        <TableCell align="left">{formatDate(myRank.recordDate,null)}</TableCell>
+                        {myRank !== {} &&  <TableRow>
+                            <TableCell align="center" component="th" scope="row">
+                                {myRank.rank}
+                            </TableCell>
+                            <TableCell align="left">{`${myRank.userName}(${myRank.userId})`}</TableCell>
+                            <TableCell align="left">{myRank.score}</TableCell>
+                            <TableCell align="left">{formatDate(myRank.recordDate,null)}</TableCell>
+                        </TableRow>}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -180,13 +204,13 @@ const ResponseTime = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rankList.map((row,index) => (
+                    {rankList.map((row) => (
                         <TableRow
                             key={row.gameId}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell align="center" component="th" scope="row">
-                                {index+1}
+                                {row.rank}
                             </TableCell>
                             <TableCell align="left">{`${row.userName}(${row.userId})`}</TableCell>
                             <TableCell align="left">{row.score}</TableCell>
