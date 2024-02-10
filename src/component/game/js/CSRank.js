@@ -2,9 +2,11 @@ import React, {useState} from 'react';
 import Phaser from "phaser";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import axios from "axios";
+import {formatDate} from "../../../utils/format-date";
 
 // 토큰 가져오기
 const token= getCurrentLoginUser().token;
+const tokenUserId= getCurrentLoginUser().userId;
 
 //요청 URL
 const API_URL = "http://localhost:8686/game/cs";
@@ -16,7 +18,7 @@ const requestHeader = {
 };
 
 let rankList= [];
-
+let myRankRecord = {};
 const loads = () =>{
     console.log("fetch함니더")
     fetch(API_URL, {
@@ -26,8 +28,23 @@ const loads = () =>{
         .then(json => {
             console.log(json)
             rankList = json.gameRankList
+            addRankKey();
+            myRank();
         })
 
+}
+
+const addRankKey= () =>{
+    console.log('addRankKey : rankList')
+    console.log(rankList)
+    const map = rankList.map((rank, index) => ({...rank, rank:index+1}));
+    rankList = map;
+}
+const myRank = () =>{
+    const filter = rankList.filter(rank=> rank.userId === tokenUserId);
+    console.log('filter')
+    console.log(...filter)
+    myRankRecord = filter[0];
 }
 
 export default class rankScene extends Phaser.Scene {
@@ -35,21 +52,26 @@ export default class rankScene extends Phaser.Scene {
         super('rankScene');
     }
     preload () {
+        loads();
     }
     create () {
-        loads()
+
         this.time.delayedCall(1000,()=>{
-            this.add.text('80','100',`나의:`,{ font: '20px Arial', fill: '#ffffff' });
+            this.add.text('80','100',`나의 랭킹:`,{ font: '20px Arial', fill: '#ffffff' });
+            this.add.text('210','100',`${myRankRecord.rank}`,{ font: '20px Arial', fill: '#ffffff' });
+            this.add.text('350','100',`${myRankRecord.userName}(${myRankRecord.userId}):`,{ font: '20px Arial', fill: '#ffffff' });
+            this.add.text('830','100',`${myRankRecord.score}`,{ font: '20px Arial', fill: '#ffffff' });
+            this.add.text('1100','100',`${formatDate(myRankRecord.recordDate)}`,{ font: '20px Arial', fill: '#ffffff' });
 
             this.add.text('200','200',`순위`,{ font: '20px Arial', fill: '#ffffff' });
             this.add.text('400','200',`닉네임(아이디)`,{ font: '20px Arial', fill: '#ffffff' });
             this.add.text('830','200',`점수`,{ font: '20px Arial', fill: '#ffffff' });
             this.add.text('1100','200',`기록일`,{ font: '20px Arial', fill: '#ffffff' });
             rankList.map((rankList,index)=>{
-                this.add.text('210',`${250+(50*index)}`,`${index+1}`,{ font: '20px Arial', fill: '#ffffff' });
+                this.add.text('210',`${250+(50*index)}`,`${rankList.rank}`,{ font: '20px Arial', fill: '#ffffff' });
                 this.add.text('350',`${250+(50*index)}`,`${rankList.userName}(${rankList.userId})`,{ font: '20px Arial', fill: '#ffffff' });
                 this.add.text('830',`${250 + (50 * index)}`,`${rankList.score}`,{ font: '20px Arial', fill: '#ffffff' });
-                this.add.text('1100',`${250+(50*index)}`,`${rankList.recordDate}`,{ font: '20px Arial', fill: '#ffffff' });
+                this.add.text('1100',`${250+(50*index)}`,`${formatDate(rankList.recordDate)}`,{ font: '20px Arial', fill: '#ffffff' });
             })
         })
 

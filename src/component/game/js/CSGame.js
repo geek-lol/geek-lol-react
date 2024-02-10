@@ -17,7 +17,7 @@ let redMinions = null;
 let blueMinions = null;
 
 let gametimer = null;
-let timeCount =  180000;
+let timeCount =  120000;
 //시간 format 함수
 function formatTime(seconds) { // 100000 = 100초 = 1분 40초
     const s = Math.floor(seconds / 1000); // 100초

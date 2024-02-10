@@ -35,13 +35,8 @@ const ResponseTime = () => {
     const [rankList,setRankList] = useState([]);
     const [myRank, setMyRank] = useState({});
     const [myRankFlag, setRankFlag] = useState(false);
-    //랭킹 리스트에 순위 추가하기
-    function caluRank(){
-        const updateList = rankList.map((rank, index)=>({...rank,rank:index+1}));
-        setRankList(updateList)
-        console.log('updateList')
-        console.log(updateList)
-    }
+
+    const [isRendered, setIsRendered] = useState(false);
 
     //랭킹 조회하기
     async function fetchData(){
@@ -61,15 +56,28 @@ const ResponseTime = () => {
         setMyRank(...filter);
     }, [rankList]);
     useEffect(()=>{
-        caluRank();
+        const updateList = rankList.map((rank, index)=>({...rank,rank:index+1}));
+        setRankList(updateList)
+        console.log('updateList')
+        console.log(updateList)
     },[myRankFlag])
-    useEffect(() => {
-        const fetchs = async ()=>{
-            await fetchData();
 
-            setRankFlag(!myRankFlag);
-        }
+    useEffect(() => {
+        const fetchs = async ()=> {
+            try {
+                await fetchData();
+                setRankFlag(!myRankFlag);
+            } catch (error) {
+                console.error("Error during fetchData:", error);
+                // 에러
+            }
+        };
         fetchs();
+        const timer = setTimeout(() => {
+            setIsRendered(true);
+        }, 1000); // 1초 후에 렌더링
+
+        return () => clearTimeout(timer); // 컴포넌트가 언마운트되면 타이머를 제거하여 메모리 누수 방지
     }, []);
 
     // 게임 점수 DB저장 처리 fetch
@@ -152,6 +160,11 @@ const ResponseTime = () => {
         $result.innerHTML=``;
         document.getElementById('gameCount').textContent = `진행도 : 0/5`;
         document.getElementById("testReset").classList.add('non');
+    }
+
+
+    if (!isRendered) {
+        return null; // 렌더링을 지연시키려면 초기에 null 또는 로딩 스피너 등을 반환
     }
 
     return (
