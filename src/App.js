@@ -10,9 +10,7 @@ import Rank from "./component/rank/js/Rank";
 import BoardTemplate from "./component/board/js/BoardTemplate";
 import ResponseTime from "./component/game/js/ResponseTime";
 import SpectorMain from "./component/spector/js/SpectorMain";
-import BoardShorts from "./component/board/shorts/js/BoardShorts";
 import "./component/LinkReset.scss"
-import CSGame from "./component/game/js/CSGame";
 import MainScene from "./component/game/js/FcsGame";
 import InfoTemplate from "./component/summonerInfo/js/InfoTemplate";
 import MyPageTemplate from "./component/mypage/js/MyPageTemplate";

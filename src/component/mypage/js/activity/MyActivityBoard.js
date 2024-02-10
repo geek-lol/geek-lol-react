@@ -17,11 +17,8 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import '../../scss/MyActivityMain.scss'
-import {getCurrentLoginUser} from "../../../../utils/login-util";
-import {useEffect, useState} from "react";
 import {formatDate} from "../../../../utils/format-date";
 
 //정렬 계산식
