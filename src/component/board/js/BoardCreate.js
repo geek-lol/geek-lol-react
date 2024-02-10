@@ -134,7 +134,7 @@ const BoardCreate = () => {
                         onChange={ ( event, editor ) => {
                             const data = editor.getData();
                             const cleanData = data.replace(/<p>/g, '').replace(/<\/p>/g, '');
-                            onChange({ target: { name: 'content', value: cleanData}});
+                            onChange({ target: { name: 'content', value: cleanData.trim()}});
                             console.log( { event, editor, cleanData } );
                         } }
                         onBlur={ ( event, editor ) => {
@@ -142,7 +142,7 @@ const BoardCreate = () => {
                         } }
                         onFocus={ ( event, editor ) => {
                             console.log( 'Focus.', editor );
-                        } }
+                        }}
                     />
                 </div>
                 <div className={'img-box'} onClick={imgClickHandler}>
