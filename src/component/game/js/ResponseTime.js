@@ -22,7 +22,7 @@ const ResponseTime = () => {
 
     // 토큰 가져오기
     const [token, setToken] = useState(getCurrentLoginUser().token);
-
+    const tokenId = getCurrentLoginUser().userId;
     //요청 URL
     const API_URL = "http://localhost:8686/game/res";
 
@@ -33,6 +33,7 @@ const ResponseTime = () => {
     };
 
     const [rankList,setRankList] = useState([]);
+    const [myRank, setMyRank] = useState({});
     async function fetchData(){
         const response = await axios.get(API_URL, {
             headers: {"content-type": "application/json"}
@@ -42,6 +43,12 @@ const ResponseTime = () => {
         setRankList(data);
         console.log(data);
     }
+
+    useEffect(() => {
+        const filter = rankList.filter(rank => rank.userId === tokenId);
+        console.log(filter);
+        setMyRank(...filter);
+    }, [rankList]);
     useEffect(() => {
         fetchData();
     }, []);
@@ -141,8 +148,27 @@ const ResponseTime = () => {
                 <Button variant="contained">테스트 다시하기</Button>
             </div>
         </div>
+            <TableContainer sx={{width:'65%', mx:'auto', mt:30}} component={Paper}>
+                <div className="rank-title"> 내 점수 </div>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table" >
+                    <TableHead>
+                        <TableCell align="center">순위</TableCell>
+                        <TableCell align="left">닉네임(아이디)</TableCell>
+                        <TableCell align="left">반응 속도</TableCell>
+                        <TableCell align="left">날짜</TableCell>
+                    </TableHead>
+                    <TableBody>
+                        <TableCell align="center" component="th" scope="row">
+                            tlqkf
+                        </TableCell>
+                        <TableCell align="left">{`${myRank.userName}(${myRank.userId})`}</TableCell>
+                        <TableCell align="left">{myRank.score}</TableCell>
+                        <TableCell align="left">{formatDate(myRank.recordDate,null)}</TableCell>
+                    </TableBody>
+                </Table>
+            </TableContainer>
 
-        <TableContainer sx={{width:'65%', mx:'auto', mt:30, mb:30}} component={Paper}>
+        <TableContainer sx={{width:'65%', mx:'auto',mt:10,mb:30}} component={Paper}>
             <div className="rank-title"> 순위표 </div>
             <Table sx={{ minWidth: 650 }} aria-label="simple table" >
                 <TableHead>
