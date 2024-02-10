@@ -48,6 +48,7 @@
       margin-top: 10px;
       padding-left: 10px;
     }
+
   }
   .user-delete{
     margin-top: 50px;
@@ -62,7 +63,10 @@
     padding-left: 10px;
     .standard-password-input{
       max-width: 400px;
-      margin-top: 10px;
+      margin: 10px 0 5px;
     }
+    .message {
+       font-size: 13px;
+     }
   }
 }

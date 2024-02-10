@@ -11,7 +11,8 @@ let playerAttackTween = null;
 
 let playerScore = 0;
 let scoreText = null;
-let timeText = null;    let center = null;
+let timeText = null;
+let center = null;
 let redMinions = null;
 let blueMinions = null;
 
@@ -212,10 +213,10 @@ class CsGame extends Phaser.Scene {
         playerAttack =  this.add.circle(200,500, 10, 0xFF0000);
         playerAttack.visible = false;
 
-        timeText = this.add.text(150,120,`남은시간:03:00`,{ font: '16px Arial', fill: '#ffffff' });
+        timeText = this.add.text(200,180,`남은시간:03:00`,{ font: '16px Arial', fill: '#ffffff' });
         timeText.setScrollFactor(0);
 
-        scoreText = this.add.text(150,150,`점수:${playerScore}`,{ font: '16px Arial', fill: '#ffffff' });
+        scoreText = this.add.text(200,200,`점수:${playerScore}`,{ font: '16px Arial', fill: '#ffffff' });
         scoreText.setScrollFactor(0);
 
         //미니언이 공격할 대상 랜덤지정
@@ -258,7 +259,7 @@ class CsGame extends Phaser.Scene {
         });
 
         function timerCallback() {
-            timeText.text= `남은시간:${formatTime(timeCount)}`;
+            timeText.setText(`남은시간:${formatTime(timeCount)}`);
             timeCount = (timeCount-1000);
         }
 
@@ -272,7 +273,6 @@ class CsGame extends Phaser.Scene {
     }
 
     update(){
-        console.log('실행중')
         redMinions.children.iterate(redMinion => {
             redMinion.on('pointerdown',(pointer)=>{
                 const minionPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
@@ -307,7 +307,7 @@ class CsGame extends Phaser.Scene {
                                     redMinion.setData('repeatCount',redMinion.getData('repeatCount') + 1);
                                     if ( redMinion.getData('health') <= 0){
                                         playerScore += 10;
-                                        scoreText.text = `점수: ${playerScore}`;
+                                        scoreText.setText(`점수: ${playerScore}`);
                                     }
                                 }
 
@@ -333,9 +333,13 @@ class CsGame extends Phaser.Scene {
                     }
                 } else{
                     if (rm.getData('health') <= 0){
-                        rm.getData('healthBar').forEach(h=> h.destroy());
+
+                        rm.getData('healthBar').forEach(h=> {
+                            if(h != null) h.destroy();
+                        })
                         rm.destroy();
                         redMinions.remove(rm)
+
                     }
                 }
             }
@@ -382,6 +386,6 @@ class CsGame extends Phaser.Scene {
             this.scene.start('endScene', {score: playerScore});
         }
     }
-};
+}
 
 export default CsGame;

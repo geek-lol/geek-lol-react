@@ -20,30 +20,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import '../../scss/MyActivityMain.scss'
-
-//더미 데이터 생성자
-function createData(type, boardNo,boardTitle, writer
-    , uploadDate, viewCount, recommend) {
-    return {
-        type,
-        boardNo,
-        boardTitle,
-        writer,
-        uploadDate,
-        viewCount,
-        recommend
-    };
-}
-// 더미 데이터
-const rows = [
-    createData("자유",124,"ㅎ냫냉ㄴ래","하하하","1분전",3,0),
-    createData("자유",4,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",24,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",45,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",243,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",247,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5),
-    createData("자유",1,"존나 집가고 싶다악","맨발의직장인","1시간전",30,5)
-];
+import {getCurrentLoginUser} from "../../../../utils/login-util";
+import {useEffect, useState} from "react";
+import {formatDate} from "../../../../utils/format-date";
 
 //정렬 계산식
 function descendingComparator(a, b, orderBy) {
@@ -78,12 +57,6 @@ function stableSort(array, comparator) {
 //테이블 헤더
 const headCells = [
     {
-        id: 'types',
-        numeric: false,
-        disablePadding: true,
-        label: '게시판 ',
-    },
-    {
         id: 'bnos',
         numeric: true,
         disablePadding: false,
@@ -94,12 +67,6 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: '제목 ',
-    },
-    {
-        id: 'writers',
-        numeric: false,
-        disablePadding: false,
-        label: '작성자',
     },
     {
         id: 'dates',
@@ -219,16 +186,10 @@ function EnhancedTableToolbar(props) {
 
             {/*헤더 맨 오른쪽 아이콘 */}
             {/*체크박스에 1개 이상체크 됐을때*/}
-            {numSelected > 0 ? (
+            {numSelected > 0 && (
                 <Tooltip title="Delete">
                     <IconButton>
                         <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <FilterListIcon />
                     </IconButton>
                 </Tooltip>
             )}
@@ -240,7 +201,8 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-const MyActivityBoard = () => {
+const MyActivityBoard = ({rows}) => {
+
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
@@ -257,7 +219,7 @@ const MyActivityBoard = () => {
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.boardNo);
+            const newSelected = rows.map((n) => n.id);
             setSelected(newSelected);
             return;
         }
@@ -299,18 +261,18 @@ const MyActivityBoard = () => {
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
     const visibleRows = React.useMemo(
         () =>
             stableSort(rows, getComparator(order, orderBy)).slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage,
             ),
-        [order, orderBy, page, rowsPerPage],
+        [rows,order, orderBy, page, rowsPerPage],
     );
 
+
     return (
-        <div className={'my-act-wrapper'}>
+        <div>
             <Box sx={{ width: '100%' }}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
                     <EnhancedTableToolbar numSelected={selected.length} />
@@ -330,13 +292,13 @@ const MyActivityBoard = () => {
                             />
                             <TableBody>
                                 {visibleRows.map((row, index) => {
-                                    const isItemSelected = isSelected(row.boardNo);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.boardNo)}
+                                            onClick={(event) => handleClick(event, row.id)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
@@ -353,13 +315,12 @@ const MyActivityBoard = () => {
                                                     }}
                                                 />
                                             </TableCell>
-                                            <TableCell align="left">{row.type}</TableCell>
-                                            <TableCell align="left">{row.boardNo}</TableCell>
-                                            <TableCell align="left">{row.boardTitle}</TableCell>
-                                            <TableCell align="left">{row.writer}</TableCell>
-                                            <TableCell align="left">{row.uploadDate}</TableCell>
+
+                                            <TableCell align="left">{row.id}</TableCell>
+                                            <TableCell align="left">{row.title}</TableCell>
+                                            <TableCell align="left">{formatDate(row.localDateTime,'day')}</TableCell>
                                             <TableCell align="left">{row.viewCount}</TableCell>
-                                            <TableCell align="left">{row.recommend}</TableCell>
+                                            <TableCell align="left">{row.upCount}</TableCell>
                                         </TableRow>
                                     );
                                 })}

@@ -2,12 +2,12 @@ import React from 'react';
 import MyActivityBoard from "./MyActivityBoard";
 import MyAcitivityComment from "./MyActivityComment";
 import MyActivityReport from "./MyActivityReport";
-const MyActivityMain = () => {
+const MyActivityMain = ({boardRows,replyRows,reportRows}) => {
     return (
-        <div>
-            <MyActivityBoard />
-            <MyAcitivityComment />
-            <MyActivityReport />
+        <div className="my-activity-wrapper">
+            <MyActivityBoard rows={boardRows}/>
+            <MyAcitivityComment rows={replyRows}/>
+            <MyActivityReport rows={reportRows}/>
         </div>
     );
 };

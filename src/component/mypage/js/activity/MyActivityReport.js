@@ -20,23 +20,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import '../../scss/MyActivityMain.scss'
-
-//더미 데이터 생성자
-function createData(type, boardNo,boardTitle,comment,uploadDate) {
-    return {
-        type,
-        boardNo,
-        boardTitle,
-        comment,
-        uploadDate
-    };
-}
-// 더미 데이터
-const rows = [
-    createData("자유",1,"ㅎ냫냉ㄴ래","하하하","1분전"),
-    createData("자유",3,"집이개추워어어","보일러떼면 되지않냑옹","1분전"),
-    createData("자유",2,"ㅎ냫냉ㄴ래","하하하","1분전")
-];
+import {getCurrentLoginUser} from "../../../../utils/login-util";
+import {useEffect, useState} from "react";
+import {formatDate} from "../../../../utils/format-date";
 
 //정렬 계산식
 function descendingComparator(a, b, orderBy) {
@@ -71,12 +57,6 @@ function stableSort(array, comparator) {
 //테이블 헤더
 const headCells = [
     {
-        id: 'types',
-        numeric: true,
-        disablePadding: true,
-        label: '게시판 ',
-    },
-    {
         id: 'bnos',
         numeric: true,
         disablePadding: false,
@@ -84,22 +64,34 @@ const headCells = [
     },
     {
         id: 'titles',
-        numeric: true,
+        numeric: false,
         disablePadding: false,
-        label: '글제목 ',
+        label: '제목 ',
     },
     {
-        id: 'comments',
-        numeric: true,
+        id: 'writers',
+        numeric: false,
         disablePadding: false,
-        label: '댓글내용 ',
+        label: '작성자',
     },
     {
         id: 'dates',
         numeric: true,
         disablePadding: false,
         label: '날짜 ',
-    }
+    },
+    {
+        id: 'views',
+        numeric: true,
+        disablePadding: false,
+        label: '조회 ',
+    },
+    {
+        id: 'recommends',
+        numeric: true,
+        disablePadding: false,
+        label: '추천 ',
+    },
 ];
 
 function EnhancedTableHead(props) {
@@ -130,13 +122,6 @@ function EnhancedTableHead(props) {
                         align={'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
-                        style={{
-                            // "글제목"과 "번호" 열에 대한 스타일 추가
-                            width: headCell.id === 'titles' ? '30%' : (headCell.id === 'comments' ? '30%' : '10%'),
-                            whiteSpace: 'nowrap', // 텍스트 줄바꿈 방지
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                        }}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -200,23 +185,17 @@ function EnhancedTableToolbar(props) {
                         id="tableTitle"
                         component="div"
                     >
-                        내가 쓴 댓글
+                        나의 제재내역
                     </Typography>
                 )}
 
 
             {/*헤더 맨 오른쪽 아이콘 */}
             {/*체크박스에 1개 이상체크 됐을때*/}
-            {numSelected > 0 ? (
+            {numSelected > 0 && (
                 <Tooltip title="Delete">
                     <IconButton>
                         <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <FilterListIcon />
                     </IconButton>
                 </Tooltip>
             )}
@@ -228,11 +207,13 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-const MyActivityReport = () => {
+const MyActivityBoard = ({rows}) => {
+
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
+    const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const handleRequestSort = (event, property) => {
@@ -241,11 +222,10 @@ const MyActivityReport = () => {
         setOrderBy(property);
     };
 
+    // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
-        console.log(`올 클릭 실행 : ${event.target.checked}`)
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.boardNo);
-            console.log(`newselect:${newSelected}`)
+            const newSelected = rows.map((n) => n.id);
             setSelected(newSelected);
             return;
         }
@@ -282,22 +262,23 @@ const MyActivityReport = () => {
 
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
+
     // 테이블 데이터 갯수로 줄 계산
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
     const visibleRows = React.useMemo(
         () =>
             stableSort(rows, getComparator(order, orderBy)).slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage,
             ),
-        [order, orderBy, page, rowsPerPage],
+        [rows,order, orderBy, page, rowsPerPage],
     );
 
+
     return (
-        <div className={'my-act-wrapper'}>
+        <div>
             <Box sx={{ width: '100%' }}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
                     <EnhancedTableToolbar numSelected={selected.length} />
@@ -317,13 +298,13 @@ const MyActivityReport = () => {
                             />
                             <TableBody>
                                 {visibleRows.map((row, index) => {
-                                    const isItemSelected = isSelected(row.boardNo);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.boardNo)}
+                                            onClick={(event) => handleClick(event, row.id)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
@@ -340,18 +321,20 @@ const MyActivityReport = () => {
                                                     }}
                                                 />
                                             </TableCell>
-                                            <TableCell align="left">{row.type}</TableCell>
-                                            <TableCell align="left">{row.boardNo}</TableCell>
-                                            <TableCell align="left">{row.boardTitle}</TableCell>
-                                            <TableCell align="left">{row.comment}</TableCell>
-                                            <TableCell align="left">{row.uploadDate}</TableCell>
+
+                                            <TableCell align="left">{row.id}</TableCell>
+                                            <TableCell align="left">{row.title}</TableCell>
+                                            <TableCell align="left">{row.posterName}</TableCell>
+                                            <TableCell align="left">{formatDate(row.localDateTime,'day')}</TableCell>
+                                            <TableCell align="left">{row.viewCount}</TableCell>
+                                            <TableCell align="left">{row.upCount}</TableCell>
                                         </TableRow>
                                     );
                                 })}
                                 {emptyRows > 0 && (
                                     <TableRow
                                         style={{
-                                            height: (53) * emptyRows,
+                                            height: (dense ? 33 : 53) * emptyRows,
                                         }}
                                     >
                                         <TableCell colSpan={6} />
@@ -374,4 +357,4 @@ const MyActivityReport = () => {
     );
 }
 
-export default MyActivityReport;
+export default MyActivityBoard;
