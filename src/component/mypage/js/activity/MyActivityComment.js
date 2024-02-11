@@ -16,6 +16,8 @@ import {
     EnhancedTableHead,
     EnhancedTableToolbar
 } from "../../../../utils/create-table-header";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 //테이블 헤더
 const headCells = [
@@ -48,19 +50,13 @@ const headCells = [
 
 const MyActivityComment = ({rows}) => {
 
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
+    const [page, setPage] = React.useState(1);
+    const [totalPage, setTotalPage] = React.useState(1);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
 
-    const handleRequestSort = (event, property) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
 
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
@@ -91,21 +87,25 @@ const MyActivityComment = ({rows}) => {
         setSelected(newSelected);
     };
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
 
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
     // 테이블 데이터 갯수로 줄 계산
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 1 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+    const prevPageHandler= ()=>{
+        if(page === 1)
+            return;
+        setPage(page-1)
+    }
+    const nextPageHandler= ()=>{
+        if(totalPage === page)
+            return;
+
+        setPage(page+1)
+    }
 
 
     return (
@@ -121,13 +121,9 @@ const MyActivityComment = ({rows}) => {
                         >
                             <EnhancedTableHead
                                 numSelected={selected.length}
-                                order={order}
-                                orderBy={orderBy}
-                                onSelectAllClick={handleSelectAllClick}
-                                onRequestSort={handleRequestSort}
                                 rowCount={rows.length}
                                 headCells={headCells}
-                            />
+                                onSelectAllClick={handleSelectAllClick}/>
                             <TableBody>
                                 {rows.map((row, index) => {
                                     const isItemSelected = isSelected(row.id);
@@ -167,9 +163,27 @@ const MyActivityComment = ({rows}) => {
                                             height: (dense ? 33 : 53) * emptyRows,
                                         }}
                                     >
-                                        <TableCell colSpan={6} />
+                                        <TableCell colSpan={4} />
                                     </TableRow>
                                 )}
+                                <TableRow
+                                    sx={{height:20}}
+                                >
+                                    <TableCell colSpan={3}></TableCell>
+                                    <TableCell align="right">
+                                        {`${page} - ${totalPage}`}
+                                    </TableCell>
+                                    <TableCell >
+
+                                        <KeyboardArrowLeftIcon color={page === 1 ? 'disabled' : 'default'}
+                                                               fontSize={"small"}
+                                                               onClick={prevPageHandler}
+                                        />
+                                        <KeyboardArrowRightIcon color={page === totalPage ? 'disabled' : 'default'} fontSize={"small"}
+                                                                onClick={nextPageHandler}
+                                        />
+                                    </TableCell>
+                                </TableRow>
                             </TableBody>
                         </Table>
                     </TableContainer>

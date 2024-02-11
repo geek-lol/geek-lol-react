@@ -1,55 +1,17 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { visuallyHidden } from '@mui/utils';
 import '../../scss/MyActivityMain.scss'
 import {formatDate} from "../../../../utils/format-date";
-
-//정렬 계산식
-function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-// 정렬 오름차 내림차 선택
-function getComparator(order, orderBy) {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// 테이블 정렬하기
-function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
+import {EnhancedTableHead, EnhancedTableToolbar} from "../../../../utils/create-table-header";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 //테이블 헤더
 const headCells = [
@@ -85,133 +47,12 @@ const headCells = [
     },
 ];
 
-function EnhancedTableHead(props) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
-        props;
-    const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
-    };
-
-    return (
-        <TableHead>
-            <TableRow>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        color="primary"
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{
-                            'aria-label': 'select all desserts',
-                        }}
-                    />
-                </TableCell>
-                {/* 테이블 헤더 삽입 */}
-                {headCells.map((headCell) => (
-                    <TableCell
-                        key={headCell.id}
-                        align={'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                    >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
-    );
-}
-
-EnhancedTableHead.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-    onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-    orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired,
-};
-
-function EnhancedTableToolbar(props) {
-    const { numSelected } = props;
-
-    return (
-        <Toolbar
-            sx={{
-                pl: { sm: 2 },
-                pr: { xs: 1, sm: 1 },
-                ...(numSelected > 0 && {
-                    bgcolor: (theme) =>
-                        alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-                }),
-            }}
-        >
-            {/* 테이블 헤더 상태*/}
-            {/*체크박스에 아무것도 체크 안되어 있을때*/}
-            {numSelected > 0 ? (
-                    <Typography
-                        sx={{ flex: '1 1 100%' }}
-                        color="inherit"
-                        variant="subtitle1"
-                        component="div"
-                    >
-                        {numSelected} selected
-                    </Typography>
-                )
-                // 체크박스에 1개 이상 체크 되어있을때 테이블 헤더 상태
-                : (
-                    <Typography
-                        sx={{ flex: '1 1 100%' }}
-                        variant="h6"
-                        id="tableTitle"
-                        component="div"
-                    >
-                        내가 쓴 글
-                    </Typography>
-                )}
-
-
-            {/*헤더 맨 오른쪽 아이콘 */}
-            {/*체크박스에 1개 이상체크 됐을때*/}
-            {numSelected > 0 && (
-                <Tooltip title="Delete">
-                    <IconButton>
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            )}
-        </Toolbar>
-    );
-}
-
-EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-};
-
 const MyActivityBoard = ({rows}) => {
-
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
+    const [page, setPage] = React.useState(1);
+    const [totalPage, setTotalPage] = React.useState(1);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-    const handleRequestSort = (event, property) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
 
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
@@ -242,37 +83,31 @@ const MyActivityBoard = ({rows}) => {
         setSelected(newSelected);
     };
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
 
     // 테이블 데이터 갯수로 줄 계산
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-    const visibleRows = React.useMemo(
-        () =>
-            stableSort(rows, getComparator(order, orderBy)).slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
-            ),
-        [rows,order, orderBy, page, rowsPerPage],
-    );
+        page > 1 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+    const prevPageHandler= ()=>{
+        if(page === 1)
+            return;
+        setPage(page-1)
+    }
+    const nextPageHandler= ()=>{
+        if(totalPage === page)
+            return;
+
+        setPage(page+1)
+    }
 
     return (
         <div>
             <Box sx={{ width: '100%' }}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length} />
+                    <EnhancedTableToolbar numSelected={selected.length} title={"내가 쓴 글"} />
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
@@ -281,14 +116,12 @@ const MyActivityBoard = ({rows}) => {
                         >
                             <EnhancedTableHead
                                 numSelected={selected.length}
-                                order={order}
-                                orderBy={orderBy}
                                 onSelectAllClick={handleSelectAllClick}
-                                onRequestSort={handleRequestSort}
                                 rowCount={rows.length}
+                                headCells={headCells}
                             />
                             <TableBody>
-                                {visibleRows.map((row, index) => {
+                                {rows.map((row, index) => {
                                     const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -330,17 +163,28 @@ const MyActivityBoard = ({rows}) => {
                                         <TableCell colSpan={6} />
                                     </TableRow>
                                 )}
+                                <TableRow
+                                    sx={{height:20}}
+                                >
+                                    <TableCell colSpan={4}></TableCell>
+                                    <TableCell align="right">
+                                        {`${page} - ${totalPage}`}
+                                    </TableCell>
+                                    <TableCell >
+
+                                        <KeyboardArrowLeftIcon color={page === 1 ? 'disabled' : 'default'}
+                                                               fontSize={"small"}
+                                                               onClick={prevPageHandler}
+                                        />
+                                        <KeyboardArrowRightIcon color={page === totalPage ? 'disabled' : 'default'} fontSize={"small"}
+                                                                onClick={nextPageHandler}
+                                        />
+                                    </TableCell>
+                                </TableRow>
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <TablePagination
-                        component="div"
-                        count={rows.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
+
                 </Paper>
             </Box>
         </div>
