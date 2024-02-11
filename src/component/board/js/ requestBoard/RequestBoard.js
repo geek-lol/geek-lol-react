@@ -1,34 +1,53 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {GoChevronDown} from "react-icons/go";
 import cn from "classnames";
 import {CiSearch} from "react-icons/ci";
 import {Link} from "react-router-dom";
-import {
-    MdKeyboardArrowLeft,
-    MdKeyboardDoubleArrowLeft,
-    MdKeyboardDoubleArrowRight,
-    MdOutlineKeyboardArrowRight
-} from "react-icons/md";
 import RequestGather from "./RequestGather";
 import ReactPlayer from "react-player";
 import {ProgressBar} from "react-bootstrap";
+import {TROLL_APPLY_URL} from "../../../../config/host-config";
+import RequestContent from "./RequestContent";
 
 const RequestBoard = () => {
-    const [hide,setHide]=useState(false);
-    const [title,setTitle]=useState("제목");
-    const relativeButtonHandler=(e)=>{
+    const [hide, setHide] = useState(false);
+    const [title, setTitle] = useState("제목");
+    const [requestBoard, SetRequestBoard] = useState([]);
+    const relativeButtonHandler = (e) => {
         setHide(!hide);
     };
-    const offDiv=()=>{
-        if(hide===true)
+    const offDiv = () => {
+        if (hide === true)
             setHide(false);
     };
-    const hiddenHandler=(e)=>{
+    const hiddenHandler = (e) => {
         setTitle(e.target.value);
     };
+    useEffect(() => {
+        fetch(`${TROLL_APPLY_URL}`, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+                'Apply-Order-Header': 'like'
+            },
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json();
+                }
+            })
+            .then(json => {
+                if (!json) return;
+                SetRequestBoard(json.boardApply);
+                console.log(requestBoard);
+                // setTotalPage(json.totalPages);
+            });
+    }, []);
+
     function BasicExample() {
-        return <ProgressBar now={60} />;
+        return <ProgressBar now={60}/>;
     }
+
     return (
         <div id="board_wrap" onClick={offDiv}>
             <section id="board_main">
@@ -109,19 +128,13 @@ const RequestBoard = () => {
                         </div>
                     </div>
                     <div className="board_table_box">
-                        <RequestGather/>
+                        {requestBoard.map(con =>
+                            <RequestContent item={con}/>
+                        )}
                         <nav className="page-box">
                             <div className="write-btn">
-                                <Link to="/board/create">글쓰기</Link>
+                                <Link to="/board/RequestCreate">글쓰기</Link>
                             </div>
-                            <ul className="arrowBox">
-                                <li className="arrow"><MdKeyboardDoubleArrowLeft size={12 * 2}/></li>
-                                <li className="arrow"><MdKeyboardArrowLeft size={12 * 2}/></li>
-                                <li className="arrow">1</li>
-                                <li className="arrow">2</li>
-                                <li className="arrow"><MdOutlineKeyboardArrowRight size={12 * 2}/></li>
-                                <li className="arrow"><MdKeyboardDoubleArrowRight size={12 * 2}/></li>
-                            </ul>
                         </nav>
                     </div>
                 </div>

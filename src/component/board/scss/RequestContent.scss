@@ -3,7 +3,7 @@
   margin: 32px;
   .content-box{
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     .video-box{
       border-radius: 5px;
@@ -24,7 +24,7 @@
     }
   }
   .info-Box{
-    margin: 24px 0 24px 16px;
+    margin: 24px 0 24px 0;
     display: flex;
     gap: 6px;
     justify-content: start;
