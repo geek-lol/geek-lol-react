@@ -1,33 +1,28 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { visuallyHidden } from '@mui/utils';
-import '../../scss/MyActivityMain.scss'
-import {useEffect, useState} from "react";
-import {getCurrentLoginUser} from "../../../../utils/login-util";
-import {formatDate} from "../../../../utils/format-date";
-import {
-    EnhancedTableHead,
-    EnhancedTableToolbar,
-    getComparator,
-    stableSort
-} from "../../../../utils/create-table-header";
+import React, {useState} from 'react';
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import {EnhancedTableHead, EnhancedTableToolbar, getComparator, stableSort} from "../../../utils/create-table-header";
+import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Checkbox from "@mui/material/Checkbox";
+import {formatDate} from "../../../utils/format-date";
+import Button from "@mui/material/Button";
+import TablePagination from "@mui/material/TablePagination";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import {FormControl, InputLabel, NativeSelect} from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import Slide from "@mui/material/Slide";
+
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 //테이블 헤더
 const headCells = [
@@ -35,30 +30,43 @@ const headCells = [
         id: 'bnos',
         numeric: true,
         disablePadding: false,
-        label: '번호',
+        label: '계정명',
     },
     {
         id: 'titles',
-        numeric: true,
+        numeric: false,
         disablePadding: false,
-        label: '글제목 ',
-    },
-    {
-        id: 'comments',
-        numeric: true,
-        disablePadding: false,
-        label: '댓글내용 ',
+        label: '닉네임',
     },
     {
         id: 'dates',
         numeric: true,
         disablePadding: false,
-        label: '날짜 ',
-    }
+        label: '계정 생성일자',
+    },
+    {
+        id: 'views',
+        numeric: true,
+        disablePadding: false,
+        label: '누적신고횟수',
+    },
+    {
+        id: 'recommends',
+        numeric: true,
+        disablePadding: false,
+        label: '권한',
+    },
 ];
 
 
-const MyActivityComment = ({rows}) => {
+const UserManagement = () => {
+    const [userList,setUserList] = useState([{
+        userId : "seonjin123@gami.com",
+        userName : "선딩",
+        joinMembershipDate : "2022-04-02 11:22:33",
+        report : 2,
+        role : "COMMON"
+    }]);
 
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -67,6 +75,15 @@ const MyActivityComment = ({rows}) => {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+    const [open, setOpen] = React.useState(false);
+//모달
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -77,7 +94,7 @@ const MyActivityComment = ({rows}) => {
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.id);
+            const newSelected = userList.map((n) => n.userId);
             setSelected(newSelected);
             return;
         }
@@ -117,22 +134,20 @@ const MyActivityComment = ({rows}) => {
     // 테이블 데이터 갯수로 줄 계산
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
     const visibleRows = React.useMemo(
         () =>
-            stableSort(rows, getComparator(order, orderBy)).slice(
+            stableSort(userList, getComparator(order, orderBy)).slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage,
             ),
-        [rows,order, orderBy, page, rowsPerPage],
+        [userList,order, orderBy, page, rowsPerPage],
     );
-
-
     return (
-        <div className={'my-act-wrapper'}>
-            <Box sx={{ width: '100%' }}>
+        <div>
+            <Box sx={{ width: '65%' , mx:'auto' , mt:10}}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length} title={"내가 쓴 댓글"} />
+                    <EnhancedTableToolbar numSelected={selected.length}  title={"회원 관리"}/>
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
@@ -145,27 +160,28 @@ const MyActivityComment = ({rows}) => {
                                 orderBy={orderBy}
                                 onSelectAllClick={handleSelectAllClick}
                                 onRequestSort={handleRequestSort}
-                                rowCount={rows.length}
+                                rowCount={userList.length}
                                 headCells={headCells}
                             />
                             <TableBody>
-                                {visibleRows.map((row, index) => {
-                                    const isItemSelected = isSelected(row.id);
+                                {userList.map((row, index) => {
+                                    const isItemSelected = isSelected(row.userId);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.id)}
+
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.id}
+                                            key={row.userId}
                                             selected={isItemSelected}
                                             sx={{ cursor: 'pointer' }}
                                         >
                                             <TableCell padding="checkbox">
                                                 <Checkbox
+                                                    onClick={(event) => handleClick(event, row.userId)}
                                                     color="primary"
                                                     checked={isItemSelected}
                                                     inputProps={{
@@ -174,10 +190,16 @@ const MyActivityComment = ({rows}) => {
                                                 />
                                             </TableCell>
 
-                                            <TableCell align="left" sx={{ width: '12%' }}>{row.id}</TableCell>
-                                            <TableCell align="left">{row.title}</TableCell>
-                                            <TableCell align="left">{row.context}</TableCell>
-                                            <TableCell align="left">{formatDate(row.replyDate,"day")}</TableCell>
+                                            <TableCell align="left">{row.userId}</TableCell>
+                                            <TableCell align="left">{row.userName}</TableCell>
+                                            <TableCell align="left">{formatDate(row.joinMembershipDate,'day')}</TableCell>
+                                            <TableCell align="left">{row.report}</TableCell>
+                                            <TableCell align="left">
+                                                {row.role}
+                                                <Button sx={{ backgroundColor:"rgba(216, 216, 216, 0.61)", color : "black", ml:1}}
+                                                        onClick={handleClickOpen}
+                                                >권한변경</Button>
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -195,7 +217,7 @@ const MyActivityComment = ({rows}) => {
                     </TableContainer>
                     <TablePagination
                         component="div"
-                        count={rows.length}
+                        count={userList.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -203,8 +225,36 @@ const MyActivityComment = ({rows}) => {
                     />
                 </Paper>
             </Box>
+            <React.Fragment>
+                <Dialog
+                    open={open}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleClose}
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle>{"권한을 변경하시겠습니까?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            <FormControl fullWidth>
+                                <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                                    권한
+                                </InputLabel>
+                                <NativeSelect defaultValue={2}>
+                                    <option value={1}>ADMIN</option>
+                                    <option value={2}>COMMON</option>
+                                </NativeSelect>
+                            </FormControl>
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Cancle</Button>
+                        <Button onClick={handleClose}>Ok</Button>
+                    </DialogActions>
+                </Dialog>
+            </React.Fragment>
         </div>
     );
-}
+};
 
-export default MyActivityComment;
+export default UserManagement;
