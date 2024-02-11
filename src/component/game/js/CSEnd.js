@@ -21,11 +21,11 @@ class endScene extends Phaser.Scene {
         home.setInteractive();
 
         close.on('pointerdown',(pointer)=>{
-            this.scene.remove();
+            this.scene.setVisible(false,'endScene');
         })
         home.on('pointerdown', (pointer)=>{
             this.scene.stop();
-            this.scene.remove('rankScene')
+            this.scene.setVisible(false,'rankScene')
             this.scene.start('startScene');
         })
     }
