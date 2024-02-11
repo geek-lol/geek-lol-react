@@ -18,7 +18,7 @@ const requestHeader = {
 };
 
 let rankList= [];
-let myRankRecord = {};
+let myRankRecord = null;
 const loads = () =>{
     console.log("fetch함니더")
     fetch(API_URL, {
@@ -29,7 +29,6 @@ const loads = () =>{
             console.log(json)
             rankList = json.gameRankList
             addRankKey();
-            myRank();
         })
 
 }
@@ -39,12 +38,9 @@ const addRankKey= () =>{
     console.log(rankList)
     const map = rankList.map((rank, index) => ({...rank, rank:index+1}));
     rankList = map;
-}
-const myRank = () =>{
-    const filter = rankList.filter(rank=> rank.userId === tokenUserId);
-    console.log('filter')
-    console.log(...filter)
-    myRankRecord = filter[0];
+    const filter = map.filter(rank=> rank.userId === tokenUserId);
+    if (filter.length > 0)
+        myRankRecord = filter[0];
 }
 
 export default class rankScene extends Phaser.Scene {
@@ -57,11 +53,17 @@ export default class rankScene extends Phaser.Scene {
     create () {
 
         this.time.delayedCall(1000,()=>{
+            const home = this.add.text(80,50,`홈으로`,{ font: '20px Arial', fill: '#ffffff' });
             this.add.text('80','100',`나의 랭킹:`,{ font: '20px Arial', fill: '#ffffff' });
-            this.add.text('210','100',`${myRankRecord.rank}`,{ font: '20px Arial', fill: '#ffffff' });
-            this.add.text('350','100',`${myRankRecord.userName}(${myRankRecord.userId}):`,{ font: '20px Arial', fill: '#ffffff' });
-            this.add.text('830','100',`${myRankRecord.score}`,{ font: '20px Arial', fill: '#ffffff' });
-            this.add.text('1100','100',`${formatDate(myRankRecord.recordDate)}`,{ font: '20px Arial', fill: '#ffffff' });
+            if(myRankRecord !== null){
+                this.add.text('210','100',`${myRankRecord.rank}`,{ font: '20px Arial', fill: '#ffffff' });
+                this.add.text('350','100',`${myRankRecord.userName}(${myRankRecord.userId}):`,{ font: '20px Arial', fill: '#ffffff' });
+                this.add.text('830','100',`${myRankRecord.score}`,{ font: '20px Arial', fill: '#ffffff' });
+                this.add.text('1100','100',`${formatDate(myRankRecord.recordDate)}`,{ font: '20px Arial', fill: '#ffffff' });
+            }else{
+                this.add.text('210','100',`게임 정보가 없습니다.`,{ font: '20px Arial', fill: '#ffffff' });
+            }
+
 
             this.add.text('200','200',`순위`,{ font: '20px Arial', fill: '#ffffff' });
             this.add.text('400','200',`닉네임(아이디)`,{ font: '20px Arial', fill: '#ffffff' });
@@ -73,8 +75,14 @@ export default class rankScene extends Phaser.Scene {
                 this.add.text('830',`${250 + (50 * index)}`,`${rankList.score}`,{ font: '20px Arial', fill: '#ffffff' });
                 this.add.text('1100',`${250+(50*index)}`,`${formatDate(rankList.recordDate)}`,{ font: '20px Arial', fill: '#ffffff' });
             })
-        })
 
+            home.setInteractive();
+            home.on('pointerdown', (pointer)=>{
+                this.scene.stop();
+                this.scene.start('startScene');
+            })
+
+        })
 
 
 

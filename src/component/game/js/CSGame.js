@@ -17,7 +17,7 @@ let redMinions = null;
 let blueMinions = null;
 
 let gametimer = null;
-let timeCount =  120000;
+let timeCount =  5000; //2분 120000
 //시간 format 함수
 function formatTime(seconds) { // 100000 = 100초 = 1분 40초
     const s = Math.floor(seconds / 1000); // 100초
@@ -381,8 +381,9 @@ class CsGame extends Phaser.Scene {
         }
 
         if (timeCount <=0){
-            gametimer.paused = true;
-            this.scene.stop();
+            gametimer.reset();
+            timeCount =  5000;
+            this.scene.stop('mainScene');
             this.scene.start('endScene', {score: playerScore});
         }
     }

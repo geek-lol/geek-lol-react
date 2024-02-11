@@ -33,7 +33,7 @@ const ResponseTime = () => {
     };
 
     const [rankList,setRankList] = useState([]);
-    const [myRank, setMyRank] = useState({});
+    const [myRank, setMyRank] = useState(null);
     const [myRankFlag, setRankFlag] = useState(false);
 
     const [isRendered, setIsRendered] = useState(false);
@@ -45,39 +45,27 @@ const ResponseTime = () => {
         })
 
         const data = await response.data.gameRankList;
-        setRankList(data);
-        console.log('data');
-        console.log(data);
+        const updateList = data.map((rank, index)=>({...rank,rank:index+1}));
+        const filter = updateList.filter(rank => rank.userId === tokenId);
+        if (filter.length > 0){
+            setMyRank(...filter);
+        }
+        setRankList(updateList);
+        console.log('updata');
+        console.log(updateList);
     }
 
     useEffect(() => {
-        const filter = rankList.filter(rank => rank.userId === tokenId);
-        console.log(filter);
-        setMyRank(...filter);
-    }, [rankList]);
-    useEffect(()=>{
-        const updateList = rankList.map((rank, index)=>({...rank,rank:index+1}));
-        setRankList(updateList)
-        console.log('updateList')
-        console.log(updateList)
-    },[myRankFlag])
+        console.log(myRank);
+    }, [myRank]);
 
     useEffect(() => {
-        const fetchs = async ()=> {
-            try {
-                await fetchData();
-                setRankFlag(!myRankFlag);
-            } catch (error) {
-                console.error("Error during fetchData:", error);
-                // 에러
-            }
-        };
-        fetchs();
+       fetchData();
         const timer = setTimeout(() => {
             setIsRendered(true);
         }, 1000); // 1초 후에 렌더링
 
-        return () => clearTimeout(timer); // 컴포넌트가 언마운트되면 타이머를 제거하여 메모리 누수 방지
+        return () => clearTimeout(timer); // 컴포넌트가 언마운트되면 타이머를 제거하여 메모리 누수
     }, []);
 
     // 게임 점수 DB저장 처리 fetch
@@ -92,7 +80,12 @@ const ResponseTime = () => {
         })
         const json = await res.json();
 
-        setRankList(json.gameRankList);
+        const updateList = json.gameRankList.map((rank, index)=>({...rank,rank:index+1}));
+        const filter = updateList.filter(rank => rank.userId === tokenId);
+        if (filter.length > 0){
+            setMyRank(...filter);
+        }
+        setRankList(updateList);
 
     }
     // 게임 처리 함수
@@ -142,7 +135,9 @@ const ResponseTime = () => {
                 if (records.length < 5){
                     startClick();
                 }else{
-                    addRank(Avg);
+                    if (token !== null){
+                        addRank(Avg);
+                    }
                     setRankFlag(!myRankFlag);
                     $screen.textContent = `당신의 평균속도 : ${Avg}`;
                     document.getElementById("testReset").classList.remove('non');
@@ -162,27 +157,28 @@ const ResponseTime = () => {
         document.getElementById("testReset").classList.add('non');
     }
 
-
-    if (!isRendered) {
-        return null; // 렌더링을 지연시키려면 초기에 null 또는 로딩 스피너 등을 반환
+    if(!isRendered){
+        return null;
     }
-
     return (
         <>
-        <div className="res-wrapper"> </div>
-        <div>
-            <h1 className="game-title"> 반응 속도 테스트 </h1>
-            <div id="gameCount" style={{color:"white",marginBottom:"20px"}}>진행도 : 0/5</div>
-            <div className="game-main">
-                <div id="screen" className="waiting" onClick={startClick}>클릭해서 시작하세요</div>
-                <div id="result"></div>
+            <div className="res-wrapper"> </div>
+            <div>
+                <h1 className="game-title"> 반응 속도 테스트 </h1>
+                <div id="gameCount" style={{color:"white",marginBottom:"20px"}}>진행도 : 0/5</div>
+                {token === null && <div id="gameCount" style={{color:"white",marginBottom:"20px"}}>로그인해야 랭킹에 저장됩니다.</div>}
+                <div className="game-main">
+                    <div id="screen" className="waiting" onClick={startClick}>클릭해서 시작하세요</div>
+                    <div id="result"></div>
+                </div>
+                <div id="testReset" className="btn-reset non" onClick={resetButtonClickHandler}>
+                    <Button variant="contained">테스트 다시하기</Button>
+                </div>
             </div>
-            <div id="testReset" className="btn-reset non" onClick={resetButtonClickHandler}>
-                <Button variant="contained">테스트 다시하기</Button>
-            </div>
-        </div>
-            <TableContainer sx={{width:'65%', mx:'auto', mt:30}} component={Paper}>
-                <div className="rank-title"> 내 점수 </div>
+
+            <TableContainer sx={{width:'65%', mx:'auto',mt:10,mb:30}} component={Paper}>
+                <div className="rank-title"> 순위표 </div>
+
                 <Table sx={{ minWidth: 650 }} aria-label="simple table" >
                     <TableHead>
                         <TableRow>
@@ -193,47 +189,31 @@ const ResponseTime = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {myRank !== {} &&  <TableRow>
-                            <TableCell align="center" component="th" scope="row">
-                                {myRank.rank}
-                            </TableCell>
-                            <TableCell align="left">{`${myRank.userName}(${myRank.userId})`}</TableCell>
-                            <TableCell align="left">{myRank.score}</TableCell>
-                            <TableCell align="left">{formatDate(myRank.recordDate,null)}</TableCell>
-                        </TableRow>}
+                        {myRank !==null && <TableRow sx={{border: '4px solid red'}}>
+                        <TableCell align="center" component="th" scope="row">
+                            {myRank.rank}
+                        </TableCell>
+                        <TableCell align="left">{`${myRank.userName}(${myRank.userId})`}</TableCell>
+                        <TableCell align="left">{myRank.score}</TableCell>
+                        <TableCell align="left">{formatDate(myRank.recordDate, null)}</TableCell>
+                    </TableRow>}
+                        {rankList.map((row) => (
+                            <TableRow
+                                key={row.gameId}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                                <TableCell align="center" component="th" scope="row">
+                                    {row.rank}
+                                </TableCell>
+                                <TableCell align="left">{`${row.userName}(${row.userId})`}</TableCell>
+                                <TableCell align="left">{row.score}</TableCell>
+                                <TableCell align="left">{formatDate(row.recordDate,null)}</TableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-
-        <TableContainer sx={{width:'65%', mx:'auto',mt:10,mb:30}} component={Paper}>
-            <div className="rank-title"> 순위표 </div>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table" >
-                <TableHead>
-                    <TableRow>
-                        <TableCell align="center">순위</TableCell>
-                        <TableCell align="left">닉네임(아이디)</TableCell>
-                        <TableCell align="left">반응 속도</TableCell>
-                        <TableCell align="left">날짜</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rankList.map((row) => (
-                        <TableRow
-                            key={row.gameId}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell align="center" component="th" scope="row">
-                                {row.rank}
-                            </TableCell>
-                            <TableCell align="left">{`${row.userName}(${row.userId})`}</TableCell>
-                            <TableCell align="left">{row.score}</TableCell>
-                            <TableCell align="left">{formatDate(row.recordDate,null)}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    </>
+        </>
     );
 };
 
