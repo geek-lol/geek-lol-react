@@ -18,6 +18,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import {FormControl, InputLabel, NativeSelect} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import Slide from "@mui/material/Slide";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -27,33 +29,23 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 //테이블 헤더
 const headCells = [
     {
-        id: 'bnos',
-        numeric: true,
-        disablePadding: false,
+        id: 'userIds',
         label: '계정명',
     },
     {
         id: 'titles',
-        numeric: false,
-        disablePadding: false,
         label: '닉네임',
     },
     {
         id: 'dates',
-        numeric: true,
-        disablePadding: false,
         label: '계정 생성일자',
     },
     {
-        id: 'views',
-        numeric: true,
-        disablePadding: false,
+        id: 'reports',
         label: '누적신고횟수',
     },
     {
-        id: 'recommends',
-        numeric: true,
-        disablePadding: false,
+        id: 'roles',
         label: '권한',
     },
 ];
@@ -68,10 +60,9 @@ const UserManagement = () => {
         role : "COMMON"
     }]);
 
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
+    const [page, setPage] = React.useState(1);
+    const [totalPage, setTotalPage] = React.useState(1);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -85,11 +76,6 @@ const UserManagement = () => {
         setOpen(false);
     };
 
-    const handleRequestSort = (event, property) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
 
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
@@ -119,30 +105,23 @@ const UserManagement = () => {
         }
         setSelected(newSelected);
     };
+    const prevPageHandler= ()=>{
+        if(page === 1)
+            return;
+        setPage(page-1)
+    }
+    const nextPageHandler= ()=>{
+        if(totalPage === page)
+            return;
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
+        setPage(page+1)
+    }
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
     // 테이블 데이터 갯수로 줄 계산
-    // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
-    const visibleRows = React.useMemo(
-        () =>
-            stableSort(userList, getComparator(order, orderBy)).slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
-            ),
-        [userList,order, orderBy, page, rowsPerPage],
-    );
+        page > 1 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
+
     return (
         <div>
             <Box sx={{ width: '65%' , mx:'auto' , mt:10}}>
@@ -156,10 +135,7 @@ const UserManagement = () => {
                         >
                             <EnhancedTableHead
                                 numSelected={selected.length}
-                                order={order}
-                                orderBy={orderBy}
                                 onSelectAllClick={handleSelectAllClick}
-                                onRequestSort={handleRequestSort}
                                 rowCount={userList.length}
                                 headCells={headCells}
                             />
@@ -212,17 +188,27 @@ const UserManagement = () => {
                                         <TableCell colSpan={6} />
                                     </TableRow>
                                 )}
+                                <TableRow
+                                    sx={{height:20}}
+                                >
+                                    <TableCell colSpan={4}></TableCell>
+                                    <TableCell align="right">
+                                        {`${page} - ${totalPage}`}
+                                    </TableCell>
+                                    <TableCell >
+
+                                        <KeyboardArrowLeftIcon color={page === 1 ? 'disabled' : 'default'}
+                                                               fontSize={"small"}
+                                                               onClick={prevPageHandler}
+                                        />
+                                        <KeyboardArrowRightIcon color={page === totalPage ? 'disabled' : 'default'} fontSize={"small"}
+                                                                onClick={nextPageHandler}
+                                        />
+                                    </TableCell>
+                                </TableRow>
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <TablePagination
-                        component="div"
-                        count={userList.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
                 </Paper>
             </Box>
             <React.Fragment>

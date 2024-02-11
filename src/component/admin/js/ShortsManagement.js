@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import {EnhancedTableHead, EnhancedTableToolbar, getComparator, stableSort} from "../../../utils/create-table-header";
@@ -20,6 +20,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Slide from "@mui/material/Slide";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import {SHORT_URL} from "../../../config/host-config";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -55,13 +56,14 @@ const headCells = [
 ];
 
 
-const BoardManagement = () => {
-    const [boardList,setBoardList] = useState([{
-        userId : "seonjin123@gami.com",
-        userName : "선딩",
-        joinMembershipDate : "2022-04-02 11:22:33",
-        report : 2,
-        role : "COMMON"
+const ShortsManagement = () => {
+    const [shortsList,setShortsList] = useState([{
+        shortsId : 1,
+        title : "시발아시발",
+        uploaderName : "에딩",
+        uploadDate : "2015-21-64",
+        viewCount : 4,
+        upCount : 1
     }]);
 
     const [selected, setSelected] = React.useState([]);
@@ -71,6 +73,16 @@ const BoardManagement = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const [open, setOpen] = React.useState(false);
+
+    const shortsListFetch = async () =>{
+        const res = await fetch(SHORT_URL)
+        const json = await res.json()
+        if (json === null)
+            return
+
+        setShortsList(json.shorts);
+    }
+
 //모달
     const handleClickOpen = () => {
         setOpen(true);
@@ -84,7 +96,7 @@ const BoardManagement = () => {
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = boardList.map((n) => n.userId);
+            const newSelected = shortsList.map((n) => n.shortsId);
             setSelected(newSelected);
             return;
         }
@@ -124,13 +136,16 @@ const BoardManagement = () => {
 
     // 테이블 데이터 갯수로 줄 계산
     const emptyRows =
-        page > 1 ? Math.max(0, (1 + page) * rowsPerPage - boardList.length) : 0;
+        page > 1 ? Math.max(0, (1 + page) * rowsPerPage - shortsList.length) : 0;
 
+    useEffect(()=>{
+        shortsListFetch()
+    },[])
     return (
         <div>
             <Box sx={{ width: '65%' , mx:'auto' , mt:10}}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length}  title={"자유게시판"}/>
+                    <EnhancedTableToolbar numSelected={selected.length}  title={"하이라이트"}/>
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
@@ -140,28 +155,27 @@ const BoardManagement = () => {
                             <EnhancedTableHead
                                 numSelected={selected.length}
                                 onSelectAllClick={handleSelectAllClick}
-                                rowCount={boardList.length}
+                                rowCount={shortsList.length}
                                 headCells={headCells}
                             />
                             <TableBody>
-                                {boardList.map((row, index) => {
-                                    const isItemSelected = isSelected(row.userId);
+                                {shortsList.map((row, index) => {
+                                    const isItemSelected = isSelected(row.shortsId);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.userId}
+                                            key={row.shortsId}
                                             selected={isItemSelected}
                                             sx={{ cursor: 'pointer' }}
                                         >
                                             <TableCell padding="checkbox">
                                                 <Checkbox
-                                                    onClick={(event) => handleClick(event, row.userId)}
+                                                    onClick={(event) => handleClick(event, row.shortsId)}
                                                     color="primary"
                                                     checked={isItemSelected}
                                                     inputProps={{
@@ -170,16 +184,12 @@ const BoardManagement = () => {
                                                 />
                                             </TableCell>
 
-                                            <TableCell align="left">{row.userId}</TableCell>
-                                            <TableCell align="left">{row.userName}</TableCell>
-                                            <TableCell align="left">{formatDate(row.joinMembershipDate,'day')}</TableCell>
-                                            <TableCell align="left">{row.report}</TableCell>
-                                            <TableCell align="left">
-                                                {row.role}
-                                                <Button sx={{ backgroundColor:"rgba(216, 216, 216, 0.61)", color : "black", ml:1}}
-                                                        onClick={handleClickOpen}
-                                                >권한변경</Button>
-                                            </TableCell>
+                                            <TableCell align="left">{row.shortsId}</TableCell>
+                                            <TableCell align="left">{row.title}</TableCell>
+                                            <TableCell align="left">{row.uploaderName}</TableCell>
+                                            <TableCell align="left">{formatDate(row.uploadDate,'day')}</TableCell>
+                                            <TableCell align="left">{row.viewCount}</TableCell>
+                                            <TableCell align="left">{row.upCount}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -195,7 +205,7 @@ const BoardManagement = () => {
                                 <TableRow
                                     sx={{height:20}}
                                 >
-                                    <TableCell colSpan={4}></TableCell>
+                                    <TableCell colSpan={5}></TableCell>
                                     <TableCell align="right">
                                         {`${page} - ${totalPage}`}
                                     </TableCell>
@@ -247,4 +257,4 @@ const BoardManagement = () => {
     );
 };
 
-export default BoardManagement;
+export default ShortsManagement;
