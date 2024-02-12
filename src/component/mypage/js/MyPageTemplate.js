@@ -76,13 +76,15 @@ const MyPageTemplate = () => {
             headers: { 'Authorization': `Bearer ${token}`},
         })
         const json = await res.json()
-        console.log('json.board')
-        console.log(json.board)
         if (json.board !== null){
             const updatedRows = json.board.map((row,index) => ({ ...row, id: index+1 }));
             setBoardRows(prevState => ({
                 ...prevState,
                 boardRow: updatedRows
+            }))
+            setMyActivity(prevState => ({
+                ...prevState,
+                boards: prevState.boards+updatedRows.length
             }))
         }
     }
@@ -100,6 +102,10 @@ const MyPageTemplate = () => {
                 ...prevState,
                 boardRow:updatedRows
             }));
+            setMyActivity(prevState => ({
+                ...prevState,
+                comments: prevState.comments+updatedRows.length
+            }))
         }
     }
 
@@ -116,6 +122,10 @@ const MyPageTemplate = () => {
                 ...prevState,
                 shortsRow: updatedRows
             }))
+            setMyActivity(prevState => ({
+                ...prevState,
+                boards: prevState.boards+updatedRows.length
+            }))
         }
     }
     //쇼츠 댓글 가져오기
@@ -131,6 +141,10 @@ const MyPageTemplate = () => {
                 ...prevState,
                 shortsRow:updatedRows
             }));
+            setMyActivity(prevState => ({
+                ...prevState,
+                comments: prevState.comments+updatedRows.length
+            }))
         }
     }
 // 내가 쓴 트롤 사형 지원 게시판 조회
@@ -147,6 +161,11 @@ const MyPageTemplate = () => {
                 ...prevState,
                 trollApplyRow: updatedRows
             }))
+            setMyActivity(prevState => ({
+                ...prevState,
+                boards: prevState.boards+updatedRows.length
+            }))
+
         }
     }
     //트롤 사형 지원쪽 댓글 가져오기
@@ -162,6 +181,10 @@ const MyPageTemplate = () => {
                 ...prevState,
                 trollApplyRow:updatedRows
             }));
+            setMyActivity(prevState => ({
+                ...prevState,
+                comments: prevState.comments+updatedRows.length
+            }))
         }
     }
 
@@ -180,6 +203,10 @@ const MyPageTemplate = () => {
                 ...prevState,
                 trollRow: updatedRows
             }))
+            setMyActivity(prevState => ({
+                ...prevState,
+                boards: prevState.boards+updatedRows.length
+            }))
         }
     }
     //트롤 사형 댓글 가져오기
@@ -195,6 +222,10 @@ const MyPageTemplate = () => {
                 ...prevState,
                 trollRow:updatedRows
             }));
+            setMyActivity(prevState => ({
+                ...prevState,
+                comments: prevState.comments+updatedRows.length
+            }))
         }
     }
 
@@ -214,7 +245,6 @@ const MyPageTemplate = () => {
     }
 
     useEffect(() => {
-
         userInfoFetch();
 
         boardFetch()
