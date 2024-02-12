@@ -59,7 +59,6 @@ const ShortsContent = ({id, item, upVote}) => {
         const [videoUrl, setVideoUrl] = useState(null);
         const fetchShortVideo = async () => {
 
-
             const url = `${API_BASE_URL}/load-video/${shortsId}`;
             const res = await fetch(url, {
                 method: "GET"
@@ -105,13 +104,13 @@ const ShortsContent = ({id, item, upVote}) => {
                     if (!res.ok) {
                         throw new Error(`HTTP error! Status: ${res.status}`);
                     }
-                    // console.log('upCount', item.upCount);
                     return res.json();
                 })
                 .then(json => {
                     // console.log('shorts', json.shorts);
 
                     setShortList(json.shorts);
+
 
                 })
                 .catch(error => {
@@ -339,11 +338,11 @@ const ShortsContent = ({id, item, upVote}) => {
 
         return (
             <>
-                {currentIndex < shortList.length && shortList.slice(currentIndex, currentIndex + 1).map((item, index) => (
+                {shortList.slice(currentIndex, currentIndex + 1).map((item, index) => (
                     <li key={index.shortsId} className={cn('content-container', {scrollDown_ani_view: viewScrollDownAni}, {scrollUp_ani_view: viewScrollUpAni})} ref={contentRef}>
                         <div className={cn('short-form', {animation_view: viewAni})} id={'root'}>
                             <div className={cn('content', {animation_content_view: viewComment})}>
-                                <video controls={true} muted={true} autoPlay={true}>
+                                <video controls={true} autoPlay={true}>
                                     <source src={videoUrl}/>
                                 </video>
                                 <div className={'overlap-front'}>

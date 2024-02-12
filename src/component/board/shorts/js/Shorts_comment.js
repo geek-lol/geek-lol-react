@@ -92,7 +92,7 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
             })
             .then(json => {
                 if (json && json.reply) {
-                    console.log(json.reply);
+                    // console.log(json.reply);
                     setShortReplyList(json.reply);
                 }
             })
