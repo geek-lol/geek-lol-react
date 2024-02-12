@@ -25,12 +25,12 @@ const MenuModal = ({menu, isLogin,modalTouchHandler}) => {
                 <div className="infoBox">
                     {isLogin ? <Profile/>
                         : <>
-                            <a className="sign_in_a">
+                            <Link className="sign_in_a" to="/template/login">
                                 <div className="sign_in_M">로그인</div>
-                            </a>
-                            <a className="sign_up_a">
+                            </Link>
+                            <Link className="sign_up_a" to="/template/signup">
                                 <div className="sign_up_M">회원가입</div>
-                            </a>
+                            </Link>
                         </>
                     }
                 </div>

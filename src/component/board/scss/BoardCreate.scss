@@ -61,6 +61,9 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      img{
+        //display: none;
+      }
 
       #board_detail_img {
         width: 180px;

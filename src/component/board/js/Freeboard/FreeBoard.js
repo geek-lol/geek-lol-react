@@ -7,14 +7,19 @@ import {Link} from "react-router-dom";
 import {BOARD_URL} from "../../../../config/host-config";
 import Board from "../Board";
 import BoardContent from "./BoardContent";
-import { Pagination } from '@mui/material';
+import {Pagination} from '@mui/material';
+
 const FreeBoard = () => {
     const [boardList, setBoardList] = useState([]);
     const API_BASE_URL = BOARD_URL
     const [hide, setHide] = useState(false);
+    const [toggle, setToggle] = useState(true);
     const [title, setTitle] = useState("제목");
-    const [totalPage,setTotalPage]=useState(1);
-    const [page,setPage]=useState(1);
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    const [inputContent, setInputContent] = useState("");
+    const [cleantitle, setCleantitle] = useState("title");
+    const [SortPage, setSortPage] = useState("0");
     const relativeButtonHandler = (e) => {
         setHide(!hide);
     }
@@ -26,7 +31,19 @@ const FreeBoard = () => {
         setTitle(e.target.value);
     }
     useEffect(() => {
-        fetch(`${API_BASE_URL}?page=${page}`, {
+        if (title === '제목') {
+            setCleantitle('title');
+
+        } else if (title === '내용') {
+            setCleantitle('content');
+        } else if (title === '작성자') {
+            setCleantitle('poster');
+
+        }
+    }, [title]);
+
+    useEffect(() => {
+        fetch(`${API_BASE_URL}?page=${page}&upCount=${SortPage}`, {
             method: 'GET',
             headers: {'content-type': 'application/json'},
         })
@@ -40,21 +57,56 @@ const FreeBoard = () => {
                 setBoardList(json.board);
                 setTotalPage(json.totalPages);
             });
-        }, [page]);
+    }, [page]);
 
 
     const pageHandler = (e) => {
         setPage(+e.target.innerText);
-        console.log(+e.target.innerText);
+    };
+    const search = async () => {
+        const res = await fetch(`${BOARD_URL}?${cleantitle}=${inputContent}&upCount=${SortPage}`, {
+            method: 'GET',
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json();
+                }
+            })
+            .then(json => {
+                if (!json) return;
+                setBoardList(json.board);
+                setTotalPage(json.totalPages);
+            });
+    }
+    useEffect(() => {
+        search();
+    }, [SortPage]);
+
+    const inputHandler = (e) => {
+        setInputContent(e.target.value);
+    };
+    const onSearchHandler = (e) => {
+        e.preventDefault();
+        search();
+    };
+    const toggleHandler1 = () => {
+        setToggle(true);
+        setSortPage("0");
+    };
+    const toggleHandler2 = () => {
+        setToggle(false);
+        setSortPage("1");
     };
     return (
-        <div id="board_wrap" onClick={offDiv} style={{marginTop:'97.99px'}}>
+        <div id="board_wrap" onClick={offDiv} style={{marginTop: '97.99px'}}>
             <section id="board_main">
                 <div className="board_list_box">
                     <div className="board_search_box">
                         <div className="toggleBtn">
-                            <button className="sorting-button toggle">최신글</button>
-                            <button className="sorting-button">인기글</button>
+                            <button className={cn("sorting-button", {toggle: toggle})} onClick={toggleHandler1}>최신글
+                            </button>
+                            <button className={cn("sorting-button", {toggle: !toggle})} onClick={toggleHandler2}>인기글
+                            </button>
                         </div>
                         <div className="searchT">
                             <div className="relative">
@@ -67,7 +119,7 @@ const FreeBoard = () => {
                                                 <button onClick={hiddenHandler} value="제목">제목</button>
                                             </li>
                                             <li>
-                                                <button onClick={hiddenHandler} value="제목 + 내용">제목 + 내용</button>
+                                                <button onClick={hiddenHandler} value="내용">내용</button>
                                             </li>
                                             <li>
                                                 <button onClick={hiddenHandler} value="작성자">작성자</button>
@@ -76,7 +128,7 @@ const FreeBoard = () => {
                                     </div>
                                 </button>
                             </div>
-                            <form>
+                            <form onChange={inputHandler} onSubmit={onSearchHandler}>
                                 <input placeholder="게시물 검색"/>
                                 <button><CiSearch className="SearchIcon" size={12 * 2}/></button>
                             </form>
@@ -92,9 +144,9 @@ const FreeBoard = () => {
                             <span className="s-title5 py-1">조회</span>
                             <span className="s-title6 py-1">추천</span>
                         </div>
-                        {boardList.map(con=>
+                        {boardList.map(con =>
                             <BoardContent
-                            item={con}
+                                item={con}
                             />
                         )}
                         <nav className="page-box">

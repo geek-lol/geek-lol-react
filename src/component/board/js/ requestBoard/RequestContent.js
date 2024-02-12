@@ -6,6 +6,7 @@ import {IoCalendarOutline, IoPerson} from "react-icons/io5";
 import {BiSolidLike} from "react-icons/bi";
 import {BsChatDots} from "react-icons/bs";
 import {FaEye} from "react-icons/fa";
+import {Link} from "react-router-dom";
 const RequestContent = () => {
     const playerRef = useRef(null);
 
@@ -32,7 +33,7 @@ const RequestContent = () => {
     };
     return (
         <>
-            <div className="Request-Content-Box">
+            <Link className="Request-Content-Box" to="/board/RequestDetail">
                 <div className="content-box">
                     <div
                         className="video-box"
@@ -59,7 +60,7 @@ const RequestContent = () => {
                     <div className="info"><BsChatDots /><span>5</span></div>
                     <div className="info"><FaEye /><span>15</span></div>
                 </div>
-            </div>
+            </Link>
         </>
     );
 };

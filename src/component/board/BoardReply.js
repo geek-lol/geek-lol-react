@@ -4,7 +4,7 @@ import {AiFillAlert} from "react-icons/ai";
 import {REPLY_URL} from "../../config/host-config";
 
 const BoardReply = ({item,getReplyCount}) => {
-    const {replyId, context, replyDate, writerId} = item;
+    const {replyId, context, replyDate, writerId,writerName} = item;
     //토큰
     const [token, setToken] = useState(getCurrentLoginUser().token);
 
@@ -115,7 +115,7 @@ const BoardReply = ({item,getReplyCount}) => {
             <div className="comment">
                 <div className="comment-top">
                     <div className="tqbox">
-                        <p>{writerId}</p><p>|</p>
+                        <p>{writerName}</p><p>|</p>
                         <p>{timeDifference}</p>
                     </div>
                     {username === writerId ?

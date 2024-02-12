@@ -137,7 +137,7 @@ const BoardCreate = () => {
                         } }
                         onFocus={ ( event, editor ) => {
                             console.log( 'Focus.', editor );
-                        } }
+                        }}
                     />
                 </div>
                 <div className={'img-box'} >

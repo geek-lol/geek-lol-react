@@ -1,6 +1,16 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../scss/ResponseTime.scss';
 import Button from '@mui/material/Button';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import {getCurrentLoginUser} from "../../../utils/login-util";
+import axios from "axios";
+import {formatDate} from "../../../utils/format-date";
 const ResponseTime = () => {
 
     let startTime; // 시작시간
@@ -10,6 +20,74 @@ const ResponseTime = () => {
     let records = [];
     let timeoutId; // setTimeout 함수를 담을 변수;
 
+    // 토큰 가져오기
+    const [token, setToken] = useState(getCurrentLoginUser().token);
+    const tokenId = getCurrentLoginUser().userId;
+    //요청 URL
+    const API_URL = "http://localhost:8686/game/res";
+
+    // 요청 헤더 객체
+    const requestHeader = {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+
+    const [rankList,setRankList] = useState([]);
+    const [myRank, setMyRank] = useState(null);
+    const [myRankFlag, setRankFlag] = useState(false);
+
+    const [isRendered, setIsRendered] = useState(false);
+
+    //랭킹 조회하기
+    async function fetchData(){
+        const response = await axios.get(API_URL, {
+            headers: {"content-type": "application/json"}
+        })
+
+        const data = await response.data.gameRankList;
+        const updateList = data.map((rank, index)=>({...rank,rank:index+1}));
+        const filter = updateList.filter(rank => rank.userId === tokenId);
+        if (filter.length > 0){
+            setMyRank(...filter);
+        }
+        setRankList(updateList);
+        console.log('updata');
+        console.log(updateList);
+    }
+
+    useEffect(() => {
+        console.log(myRank);
+    }, [myRank]);
+
+    useEffect(() => {
+       fetchData();
+        const timer = setTimeout(() => {
+            setIsRendered(true);
+        }, 1000); // 1초 후에 렌더링
+
+        return () => clearTimeout(timer); // 컴포넌트가 언마운트되면 타이머를 제거하여 메모리 누수
+    }, []);
+
+    // 게임 점수 DB저장 처리 fetch
+    const addRank = async (score)=>{
+        const payload = {
+            score : `${score}`
+        }
+        const res = await fetch(API_URL,{
+            method:"POST",
+            headers : requestHeader,
+            body : JSON.stringify(payload)
+        })
+        const json = await res.json();
+
+        const updateList = json.gameRankList.map((rank, index)=>({...rank,rank:index+1}));
+        const filter = updateList.filter(rank => rank.userId === tokenId);
+        if (filter.length > 0){
+            setMyRank(...filter);
+        }
+        setRankList(updateList);
+
+    }
     // 게임 처리 함수
     function startClick(){
         console.log('start 함수 시작')
@@ -57,6 +135,10 @@ const ResponseTime = () => {
                 if (records.length < 5){
                     startClick();
                 }else{
+                    if (token !== null){
+                        addRank(Avg);
+                    }
+                    setRankFlag(!myRankFlag);
                     $screen.textContent = `당신의 평균속도 : ${Avg}`;
                     document.getElementById("testReset").classList.remove('non');
                 }
@@ -72,39 +154,66 @@ const ResponseTime = () => {
         $screen.textContent = "클릭해서 시작하세요!";
         $result.innerHTML=``;
         document.getElementById('gameCount').textContent = `진행도 : 0/5`;
+        document.getElementById("testReset").classList.add('non');
     }
 
+    if(!isRendered){
+        return null;
+    }
     return (
-        <>  
+        <>
+            <div className="res-wrapper"> </div>
             <div>
                 <h1 className="game-title"> 반응 속도 테스트 </h1>
-                <div id="gameCount">진행도 : 0/5</div>
-                <div id="screen" className="waiting" onClick={startClick}>클릭해서 시작하세요</div>
+                <div id="gameCount" style={{color:"white",marginBottom:"20px"}}>진행도 : 0/5</div>
+                {token === null && <div id="gameCount" style={{color:"white",marginBottom:"20px"}}>로그인해야 랭킹에 저장됩니다.</div>}
+                <div className="game-main">
+                    <div id="screen" className="waiting" onClick={startClick}>클릭해서 시작하세요</div>
+                    <div id="result"></div>
+                </div>
                 <div id="testReset" className="btn-reset non" onClick={resetButtonClickHandler}>
                     <Button variant="contained">테스트 다시하기</Button>
                 </div>
-                <div id="result"></div>
             </div>
-            <table className="game-rank">
-                <thead className="game-rank-head">
-                    <tr className="game-rank-row">
-                        <td className="game-rank-item">순위</td>
-                        <td className="game-rank-item" >닉네임</td>
-                        <td className="game-rank-item">반응 속도</td>
-                        <td className="game-rank-item">날짜</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr className="game-rank-row">
-                        <td className="game-rank-item">1</td>
-                        <td className="game-rank-item">하이</td>
-                        <td className="game-rank-item">2</td>
-                        <td className="game-rank-item">2024-01-01 33:22:11</td>
-                    </tr>
-                </tbody>
-            </table>
+
+            <TableContainer sx={{width:'65%', mx:'auto',mt:10,mb:30}} component={Paper}>
+                <div className="rank-title"> 순위표 </div>
+
+                <Table sx={{ minWidth: 650 }} aria-label="simple table" >
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">순위</TableCell>
+                            <TableCell align="left">닉네임(아이디)</TableCell>
+                            <TableCell align="left">반응 속도</TableCell>
+                            <TableCell align="left">날짜</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {myRank !==null && <TableRow sx={{border: '4px solid red'}}>
+                        <TableCell align="center" component="th" scope="row">
+                            {myRank.rank}
+                        </TableCell>
+                        <TableCell align="left">{`${myRank.userName}(${myRank.userId})`}</TableCell>
+                        <TableCell align="left">{myRank.score}</TableCell>
+                        <TableCell align="left">{formatDate(myRank.recordDate, null)}</TableCell>
+                    </TableRow>}
+                        {rankList.map((row) => (
+                            <TableRow
+                                key={row.gameId}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                                <TableCell align="center" component="th" scope="row">
+                                    {row.rank}
+                                </TableCell>
+                                <TableCell align="left">{`${row.userName}(${row.userId})`}</TableCell>
+                                <TableCell align="left">{row.score}</TableCell>
+                                <TableCell align="left">{formatDate(row.recordDate,null)}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </>
-     
     );
 };
 
