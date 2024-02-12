@@ -92,7 +92,7 @@ const MyActivityBoard = ({rows}) => {
                             aria-labelledby="tableTitle"
                             size={'medium'}
                         >
-                            <MyShortsEnhancedTableHead
+                            <MyEnhancedTableHead
                                 headCells={headCells}
                             />
                             <TableBody>

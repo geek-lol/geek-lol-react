@@ -72,7 +72,10 @@ const MyActivityBoard = ({rows}) => {
 
         setPage(page+1)
     }
-
+    const handleTitleClick = (e) => {
+        const boardId = e.currentTarget.dataset.boardid
+        window.location.href = FORWARD_URL+boardId
+    }
     return (
         <div>
             <Box sx={{ width: '100%' }}>
@@ -90,19 +93,11 @@ const MyActivityBoard = ({rows}) => {
                             <TableBody>
                                 {rows.map((row, index) => {
                                     return (
-                                        <TableRow
-                                            hover
-                                        >
-                                            <TableCell padding="checkbox">
-                                                <a href={FORWARD_URL+row.bulletinId}>
-                                                    <Button
-                                                        sx={{ backgroundColor:"rgba(216, 216, 216, 0.61)", color : "black", ml:1}}
-                                                    >바로가기</Button>
-                                                </a>
-                                            </TableCell>
-
+                                        <TableRow hover>
                                             <TableCell align="left">{row.id}</TableCell>
-                                            <TableCell align="left">{row.title}</TableCell>
+                                            <TableCell data-boardId={row.bulletinId} onClick={handleTitleClick}
+                                                       style={{ cursor: 'pointer'}}
+                                            >{row.title}</TableCell>
                                             <TableCell align="left">{formatDate(row.rulingDate,'day')}</TableCell>
                                             <TableCell align="left">{row.viewCount}</TableCell>
                                         </TableRow>
@@ -114,13 +109,13 @@ const MyActivityBoard = ({rows}) => {
                                             height: (dense ? 33 : 53) * emptyRows,
                                         }}
                                     >
-                                        <TableCell colSpan={5} />
+                                        <TableCell colSpan={4} />
                                     </TableRow>
                                 )}
                                 <TableRow
                                     sx={{height:20}}
                                 >
-                                    <TableCell colSpan={3}></TableCell>
+                                    <TableCell colSpan={2}></TableCell>
                                     <TableCell align="right">
                                         {`${page} - ${totalPage}`}
                                     </TableCell>

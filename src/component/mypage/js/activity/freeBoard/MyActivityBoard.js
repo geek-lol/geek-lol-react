@@ -19,6 +19,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Button from "@mui/material/Button";
 import {BOARD_URL} from "../../../../../config/host-config";
+import {Link} from "react-router-dom";
 
 //테이블 헤더
 const headCells = [
@@ -78,6 +79,10 @@ const MyActivityBoard = ({rows}) => {
 
         setPage(page+1)
     }
+    const handleTitleClick = (e) => {
+        const boardId = e.currentTarget.dataset.boardid
+        window.location.href = FORWARD_URL+boardId
+    }
 
     return (
         <div>
@@ -94,21 +99,13 @@ const MyActivityBoard = ({rows}) => {
                                 headCells={headCells}
                             />
                             <TableBody>
-                                {rows.map((row, index) => {
+                                {rows.map((row) => {
                                     return (
-                                        <TableRow
-                                            hover
-                                        >
-                                            <TableCell padding="checkbox">
-                                                <a href={FORWARD_URL+row.bulletinId}>
-                                                    <Button
-                                                        sx={{ backgroundColor:"rgba(216, 216, 216, 0.61)", color : "black", ml:1}}
-                                                    >바로가기</Button>
-                                                </a>
-                                            </TableCell>
-
+                                        <TableRow hover>
                                             <TableCell align="left">{row.id}</TableCell>
-                                            <TableCell align="left">{row.title}</TableCell>
+                                            <TableCell data-boardId={row.bulletinId} onClick={handleTitleClick}
+                                                       style={{ cursor: 'pointer'}}
+                                            >{row.title}</TableCell>
                                             <TableCell align="left">{formatDate(row.localDateTime,'day')}</TableCell>
                                             <TableCell align="left">{row.viewCount}</TableCell>
                                             <TableCell align="left">{row.upCount}</TableCell>
@@ -121,13 +118,13 @@ const MyActivityBoard = ({rows}) => {
                                             height: (dense ? 33 : 53) * emptyRows,
                                         }}
                                     >
-                                        <TableCell colSpan={6} />
+                                        <TableCell colSpan={5} />
                                     </TableRow>
                                 )}
                                 <TableRow
                                     sx={{height:20}}
                                 >
-                                    <TableCell colSpan={4}></TableCell>
+                                    <TableCell colSpan={3}></TableCell>
                                     <TableCell align="right">
                                         {`${page} - ${totalPage}`}
                                     </TableCell>

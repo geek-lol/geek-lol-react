@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import MyActivityHeader from "./MyActivityHeader";
 import MyActivityBoardTemplate from "./freeBoard/MyActivityBoardTemplate";
 import MyActivityShortsTemplate from "./shorts/MyActivityShortsTemplate";
-import MyActivityTrollTemplate from "./troll/MyActivityTrollTemplate";
 import MyActivityTrollApplyTemplate from "./trollApply/MyActivityTrollApplyTemplate";
+import MyActivityTrollTemplate from "./troll/MyActivityTrollTemplate";
 const MyActivityMain = ({boardRows,replyRows,reportRows}) => {//서브 메뉴 클릭한 유형 저장, 기본 : 유저관리
     const [pageType, setPageType] = useState("1");
     const changePageType=(num)=>{

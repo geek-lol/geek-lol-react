@@ -74,7 +74,10 @@ const MyActivityComment = ({rows}) => {
 
         setPage(page+1)
     }
-
+    const handleTitleClick = (e) => {
+        const boardId = e.currentTarget.dataset.boardid
+        window.location.href = FORWARD_URL+boardId
+    }
 
     return (
         <div className={'my-act-wrapper'}>
@@ -94,16 +97,10 @@ const MyActivityComment = ({rows}) => {
                                 {rows.map((row, index) => {
                                     return (
                                         <TableRow hover>
-                                            <TableCell padding="checkbox">
-                                                <a href={FORWARD_URL+row.boardId}>
-                                                    <Button
-                                                        sx={{ backgroundColor:"rgba(216, 216, 216, 0.61)", color : "black", ml:1}}
-                                                    >바로가기</Button>
-                                                </a>
-                                            </TableCell>
-
                                             <TableCell align="left" sx={{ width: '12%' }}>{row.id}</TableCell>
-                                            <TableCell align="left">{row.title}</TableCell>
+                                            <TableCell data-boardId={row.boardId} onClick={handleTitleClick}
+                                                       style={{ cursor: 'pointer'}}
+                                            >{row.title}</TableCell>
                                             <TableCell align="left">{row.context}</TableCell>
                                             <TableCell align="left">{formatDate(row.replyDate,"day")}</TableCell>
                                         </TableRow>
@@ -115,13 +112,13 @@ const MyActivityComment = ({rows}) => {
                                             height: (dense ? 33 : 53) * emptyRows,
                                         }}
                                     >
-                                        <TableCell colSpan={4} />
+                                        <TableCell colSpan={3} />
                                     </TableRow>
                                 )}
                                 <TableRow
                                     sx={{height:20}}
                                 >
-                                    <TableCell colSpan={3}></TableCell>
+                                    <TableCell colSpan={2}></TableCell>
                                     <TableCell align="right">
                                         {`${page} - ${totalPage}`}
                                     </TableCell>
