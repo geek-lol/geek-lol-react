@@ -4,21 +4,21 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
+
 import TableRow from '@mui/material/TableRow';
+
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
+
 import '../../../scss/MyActivityMain.scss'
 import {formatDate} from "../../../../../utils/format-date";
 import {
     EnhancedTableHead,
-    EnhancedTableToolbar,
-    MyEnhancedTableHead,
-    MyEnhancedTableToolbar
+    EnhancedTableToolbar, MyEnhancedTableHead, MyEnhancedTableToolbar
 } from "../../../../../utils/create-table-header";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Button from "@mui/material/Button";
-import {BOARD_URL} from "../../../../../config/host-config";
 
 //테이블 헤더
 const headCells = [
@@ -30,37 +30,33 @@ const headCells = [
     },
     {
         id: 'titles',
-        numeric: false,
+        numeric: true,
         disablePadding: false,
-        label: '제목 ',
+        label: '글제목 ',
+    },
+    {
+        id: 'comments',
+        numeric: true,
+        disablePadding: false,
+        label: '댓글내용 ',
     },
     {
         id: 'dates',
         numeric: true,
         disablePadding: false,
         label: '날짜 ',
-    },
-    {
-        id: 'views',
-        numeric: true,
-        disablePadding: false,
-        label: '조회 ',
-    },
-    {
-        id: 'recommends',
-        numeric: true,
-        disablePadding: false,
-        label: '추천 ',
-    },
+    }
 ];
 
-const MyActivityBoard = ({rows}) => {
-    const BOARD_DETAIL_URL = "http://localhost:3000/board/detail/";
-    const [selected, setSelected] = React.useState([]);
+
+const MyActivityComment = ({rows}) => {
+    const FORWARD_URL = "http://localhost:3000/board/detail/";
+
     const [page, setPage] = React.useState(1);
     const [totalPage, setTotalPage] = React.useState(1);
     const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
 
     // 테이블 데이터 갯수로 줄 계산
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -79,11 +75,12 @@ const MyActivityBoard = ({rows}) => {
         setPage(page+1)
     }
 
+
     return (
-        <div>
+        <div className={'my-act-wrapper'}>
             <Box sx={{ width: '100%' }}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <MyEnhancedTableToolbar  title={"내가 쓴 글"} />
+                    <MyEnhancedTableToolbar title={"내가 쓴 댓글"} />
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
@@ -96,22 +93,19 @@ const MyActivityBoard = ({rows}) => {
                             <TableBody>
                                 {rows.map((row, index) => {
                                     return (
-                                        <TableRow
-                                            hover
-                                        >
+                                        <TableRow hover>
                                             <TableCell padding="checkbox">
-                                                <a href={BOARD_DETAIL_URL+row.bulletinId}>
+                                                <a href={FORWARD_URL+row.boardId}>
                                                     <Button
                                                         sx={{ backgroundColor:"rgba(216, 216, 216, 0.61)", color : "black", ml:1}}
                                                     >바로가기</Button>
                                                 </a>
                                             </TableCell>
 
-                                            <TableCell align="left">{row.id}</TableCell>
+                                            <TableCell align="left" sx={{ width: '12%' }}>{row.id}</TableCell>
                                             <TableCell align="left">{row.title}</TableCell>
-                                            <TableCell align="left">{formatDate(row.localDateTime,'day')}</TableCell>
-                                            <TableCell align="left">{row.viewCount}</TableCell>
-                                            <TableCell align="left">{row.upCount}</TableCell>
+                                            <TableCell align="left">{row.context}</TableCell>
+                                            <TableCell align="left">{formatDate(row.replyDate,"day")}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -121,13 +115,13 @@ const MyActivityBoard = ({rows}) => {
                                             height: (dense ? 33 : 53) * emptyRows,
                                         }}
                                     >
-                                        <TableCell colSpan={6} />
+                                        <TableCell colSpan={4} />
                                     </TableRow>
                                 )}
                                 <TableRow
                                     sx={{height:20}}
                                 >
-                                    <TableCell colSpan={4}></TableCell>
+                                    <TableCell colSpan={3}></TableCell>
                                     <TableCell align="right">
                                         {`${page} - ${totalPage}`}
                                     </TableCell>
@@ -145,11 +139,10 @@ const MyActivityBoard = ({rows}) => {
                             </TableBody>
                         </Table>
                     </TableContainer>
-
                 </Paper>
             </Box>
         </div>
     );
 }
 
-export default MyActivityBoard;
+export default MyActivityComment;

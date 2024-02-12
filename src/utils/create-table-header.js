@@ -167,3 +167,30 @@ export function MyEnhancedTableHead(props) {
 EnhancedTableHead.propTypes = {
     headCells : PropTypes.array.isRequired
 };
+
+//바로가기가 없는 헤더
+export function MyShortsEnhancedTableHead(props) {
+    const {  headCells } =
+        props;
+
+    return (
+        <TableHead>
+            <TableRow>
+                {/* 테이블 헤더 삽입 */}
+                {headCells.map((headCell) => (
+                    <TableCell
+                        key={headCell.id}
+                        align={'center'}
+                    >
+                        {headCell.label}
+                    </TableCell>
+                ))}
+            </TableRow>
+        </TableHead>
+    );
+}
+
+
+EnhancedTableHead.propTypes = {
+    headCells : PropTypes.array.isRequired
+};

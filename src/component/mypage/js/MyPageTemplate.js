@@ -5,7 +5,6 @@ import MyInformation from "./info/MyInformation";
 import MyActivityMain from "./activity/MyActivityMain";
 
 import {getCurrentLoginUser} from "../../../utils/login-util";
-import {BOARD_REPLY_URL, BOARD_URL} from "../../../config/host-config";
 
 const MyPageTemplate = () => {
     //mypage 렌더링 유형을 저장

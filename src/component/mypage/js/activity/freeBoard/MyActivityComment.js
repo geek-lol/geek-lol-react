@@ -50,9 +50,8 @@ const headCells = [
 
 
 const MyActivityComment = ({rows}) => {
-    const BOARD_DETAIL_URL = "http://localhost:3000/board/detail/";
+    const FORWARD_URL = "http://localhost:3000/board/detail/";
 
-    const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(1);
     const [totalPage, setTotalPage] = React.useState(1);
     const [dense, setDense] = React.useState(false);
@@ -96,7 +95,7 @@ const MyActivityComment = ({rows}) => {
                                     return (
                                         <TableRow hover>
                                             <TableCell padding="checkbox">
-                                                <a href={BOARD_DETAIL_URL+row.boardId}>
+                                                <a href={FORWARD_URL+row.boardId}>
                                                     <Button
                                                         sx={{ backgroundColor:"rgba(216, 216, 216, 0.61)", color : "black", ml:1}}
                                                     >바로가기</Button>
