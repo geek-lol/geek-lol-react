@@ -14,6 +14,7 @@ import "./component/LinkReset.scss"
 import MainScene from "./component/game/js/FcsGame";
 import InfoTemplate from "./component/summonerInfo/js/InfoTemplate";
 import MyPageTemplate from "./component/mypage/js/MyPageTemplate";
+import AdminPage from "./component/admin/js/AdminPage";
 
 function App() {
     const [showHeader, setShowHeader] = useState(true);
@@ -58,6 +59,7 @@ function App() {
                 <Route path="/mypage/*" element={<MyPageTemplate />} />
                 <Route path="/resgame" element={<ResponseTime /> }/>
                 <Route path="/csgame" element={<MainScene />}/>
+                <Route path="/admin" element={<AdminPage />} />
             </Routes>
         </>
     );

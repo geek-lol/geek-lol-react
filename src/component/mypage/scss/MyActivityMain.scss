@@ -6,4 +6,29 @@
     margin-top: 50px;
   }
 
+
+  //헤더 전체
+  .my-header-wrapper{
+    font-weight: 700;
+    cursor: default;
+    margin-bottom: 20px;
+    // "관리자 페이지"
+    .page-name{
+      font-size: 1.5rem;
+      margin-bottom: 60px;
+    }
+    .my-list{
+      display: flex;
+      .my-list-item{
+        margin-right: 20px;
+        color: #a7a7a7;
+      }
+      .select{
+        color: #00C2FF;
+      }
+    }
+
+  }
+
+
 }

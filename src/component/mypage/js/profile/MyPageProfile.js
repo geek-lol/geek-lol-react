@@ -53,7 +53,7 @@ const MyPageProfile = ({userInfo,myActivity}) => {
         formData.append('user',jsonBlob);
         formData.append('profileImage',file);
         const res = await fetch(API_URL+"/modify",{
-            method:"POST",
+            method:"PUT",
             headers: {"Authorization" : `Bearer ${token}`},
             body: formData
         })

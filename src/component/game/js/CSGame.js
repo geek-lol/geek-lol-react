@@ -17,7 +17,7 @@ let redMinions = null;
 let blueMinions = null;
 
 let gametimer = null;
-let timeCount =  180000;
+let timeCount =  120000; //2분 120000
 //시간 format 함수
 function formatTime(seconds) { // 100000 = 100초 = 1분 40초
     const s = Math.floor(seconds / 1000); // 100초
@@ -64,7 +64,7 @@ function createBlueMinion (physics,add,tweens,x,y){
     const blueMinion = physics.add.sprite(x, y, "blueMinion");
 
     const Attack = physics.add.sprite(0,0,"attackImg");
-    Attack.setScale(0.7);
+    Attack.setScale(0.05);
     Attack.visible = false;
 
     const blueHealthBars = [];
@@ -171,15 +171,17 @@ class CsGame extends Phaser.Scene {
         this.load.image("redMinion", "assets/Chaos_Minion_Melee_Render.png");
         this.load.image("blueMinion", "assets/blueMinion.png");
         this.load.image("player", "assets/temo.png");
-        this.load.image("background", "assets/lol_game_back.jpg");
+        this.load.image("background", "assets/lol-back.png");
         this.load.image("attackImg","assets/attack1.png");
+        this.load.image("clickEffect","assets/clickEffect.png")
+        this.load.image("playerEffect","assets/playerEffect.png")
     }
     create () {
         redMinions = this.physics.add.group();
         blueMinions = this.physics.add.group();
 
         const backImg = this.add.image(500,300,"background");
-        backImg.setScale(2);
+        backImg.setScale(0.5);
         center = this.add.rectangle(500,300,10);
         // 게임 화면의 가로, 세로 크기
         const gameWidth = 1000;
@@ -210,14 +212,24 @@ class CsGame extends Phaser.Scene {
         // //카메라가 player 따라다님
         this.cameras.main.startFollow(playerInstance);
         // 플레이어 공격
-        playerAttack =  this.add.circle(200,500, 10, 0xFF0000);
+        playerAttack =  this.add.image(200,500, "playerEffect");
+        playerAttack.setScale(0.1);
         playerAttack.visible = false;
 
-        timeText = this.add.text(200,180,`남은시간:03:00`,{ font: '16px Arial', fill: '#ffffff' });
+        //왼쪽 위 UI
+        timeText = this.add.text(200,180,`남은시간:00:00`,{ font: '16px Arial', fill: '#ffffff' });
         timeText.setScrollFactor(0);
 
         scoreText = this.add.text(200,200,`점수:${playerScore}`,{ font: '16px Arial', fill: '#ffffff' });
         scoreText.setScrollFactor(0);
+
+        const home = this.add.text(200,150,`홈으로`,{ font: '16px Arial', fill: '#ffffff' });
+        home.setScrollFactor(0);
+        home.setInteractive();
+        home.on('pointerdown', (pointer)=>{
+            this.scene.stop();
+            this.scene.start('startScene');
+        })
 
         //미니언이 공격할 대상 랜덤지정
         blueMinions.children.iterate(bm => {
@@ -233,8 +245,8 @@ class CsGame extends Phaser.Scene {
             const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
             // 마우스 클릭한 좌표를 얻습니다.
             if (pointer.leftButtonDown()) {
-                const circle = this.add.circle(worldPoint.x,worldPoint.y, 10, 0xFF0000); // 0xFF0000은 빨간색의 16진수 표현입니다.
-
+                const circle = this.add.image(worldPoint.x,worldPoint.y, "clickEffect"); // 0xFF0000은 빨간색의 16진수 표현입니다.
+                circle.setScale(0.1)
                 // Tween 애니메이션을 사용하여 1초 동안 투명하게 만듭니다.
                 this.tweens.add({
                     targets: circle,
@@ -381,8 +393,9 @@ class CsGame extends Phaser.Scene {
         }
 
         if (timeCount <=0){
-            gametimer.paused = true;
-            this.scene.stop();
+            gametimer.reset();
+            timeCount =  5000;
+            this.scene.stop('mainScene');
             this.scene.start('endScene', {score: playerScore});
         }
     }

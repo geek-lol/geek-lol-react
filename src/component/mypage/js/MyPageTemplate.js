@@ -3,6 +3,7 @@ import MypageSideMenu from "./MypageSideMenu";
 import MyPageProfile from "./profile/MyPageProfile";
 import MyInformation from "./info/MyInformation";
 import MyActivityMain from "./activity/MyActivityMain";
+
 import {getCurrentLoginUser} from "../../../utils/login-util";
 
 const MyPageTemplate = () => {
@@ -21,11 +22,21 @@ const MyPageTemplate = () => {
         userId: "",
         userName:""
     });
-    // 마이페이지 게시글 목록들
-    const [boardRows,setBoardRows] = useState([]);
+    // 페이지별 게시글 목록들
+    const [boardRows,setBoardRows] = useState({
+        boardRow:[],
+        shortsRow:[],
+        trollRow:[],
+        trollApplyRow:[],
+    });
     const [boardRowFlag,setBoardRowFlag] = useState(false);
-    // 마이페이지 댓글 목록들
-    const [replyRows,setReplyRows] = useState([]);
+    // 페이지별 댓글 목록들
+    const [replyRows,setReplyRows] = useState({
+        boardRow:[],
+        shortsRow:[],
+        trollRow:[],
+        trollApplyRow:[],
+    });
     const [replyRowFlag,setReplyRowFlag] = useState(false);
     // 마이페이지 신고 목록들
     const [reportRows,setReportRows] = useState([]);
@@ -62,31 +73,36 @@ const MyPageTemplate = () => {
     const boardFetch = async () =>{
         const res = await fetch(API_URL+"/board/bulletin/my",{
             method : "GET",
-            headers: {"Authorization" : `Bearer ${token}`},
+            headers: { 'Authorization': `Bearer ${token}`},
         })
         const json = await res.json()
-
-        if (json.board){
-            setBoardRows(prevState => [
+        console.log('json.board')
+        console.log(json.board)
+        if (json.board !== null){
+            const updatedRows = json.board.map((row,index) => ({ ...row, id: index+1 }));
+            setBoardRows(prevState => ({
                 ...prevState,
-                ...json.board
-            ]);
+                boardRow: updatedRows
+            }))
         }
     }
-
-    // 내가 쓴 트롤 사형 게시판 조회
-    const applyFetch = async () =>{
-        const res = await fetch(API_URL+"/troll/apply/my",{
+    // 자유게시판 댓글 조회
+    const boardReplyFetch = async () =>{
+        const res = await fetch(API_URL+"/board/bulletin/detail/reply/my",{
             method : "GET",
             headers: {"Authorization" : `Bearer ${token}`},
         })
         const json = await res.json()
-        if (json.boardApply !== null){
-            setBoardRows(prevState => [
-                ...prevState, ...json.boardApply
-            ]);
+
+        if (json.myReply !== null){
+            const updatedRows = json.myReply.map((row,index) => ({ ...row, id: index+1 }));
+            setReplyRows(prevState => ({
+                ...prevState,
+                boardRow:updatedRows
+            }));
         }
     }
+
     // 내가 쓴 쇼츠 게시판 조회
     const shortsFetch = async () =>{
         const res = await fetch(API_URL+"/api/shorts/my",{
@@ -95,35 +111,11 @@ const MyPageTemplate = () => {
         })
         const json = await res.json()
         if (json.myshorts !== null){
-            setBoardRows(prevState => [
-                ...prevState, ...json.myshorts
-            ]);
-        }
-    }
-    //트롤 사형 지원쪽 댓글 가져오기
-    const applyReplyFetch = async () =>{
-        const res = await fetch(API_URL+"/troll/apply/reply/my",{
-            method : "GET",
-            headers: {"Authorization" : `Bearer ${token}`},
-        })
-        const json = await res.json()
-        if (json.reply !== null){
-            setReplyRows(prevState => [
-                ...prevState, ...json.reply
-            ]);
-        }
-    }
-    //트롤 사형 댓글 가져오기
-    const rulingReplyFetch = async () =>{
-        const res = await fetch(API_URL+"/troll/ruling/reply/my",{
-            method : "GET",
-            headers: {"Authorization" : `Bearer ${token}`},
-        })
-        const json = await res.json()
-        if (json.reply !== null){
-            setReplyRows(prevState => [
-                ...prevState, ...json.reply
-            ]);
+            const updatedRows = json.myshorts.map((row,index) => ({ ...row, id: index+1 }));
+            setBoardRows(prevState => ({
+                ...prevState,
+                shortsRow: updatedRows
+            }))
         }
     }
     //쇼츠 댓글 가져오기
@@ -134,8 +126,75 @@ const MyPageTemplate = () => {
         })
         const json = await res.json()
         if (json.myreplys !== null){
-            setReplyRows(prevState => [
-                ...prevState,...json.myreplys]);
+            const updatedRows = json.myreplys.map((row,index) => ({ ...row, id: index+1 }));
+            setReplyRows(prevState => ({
+                ...prevState,
+                shortsRow:updatedRows
+            }));
+        }
+    }
+// 내가 쓴 트롤 사형 지원 게시판 조회
+    const applyFetch = async () =>{
+        const res = await fetch(API_URL+"/troll/apply/my",{
+            method : "GET",
+            headers: {"Authorization" : `Bearer ${token}`},
+        })
+        const json = await res.json()
+
+        if (json.boardApply !== null){
+            const updatedRows = json.boardApply.map((row,index) => ({ ...row, id: index+1 }));
+            setBoardRows(prevState => ({
+                ...prevState,
+                trollApplyRow: updatedRows
+            }))
+        }
+    }
+    //트롤 사형 지원쪽 댓글 가져오기
+    const applyReplyFetch = async () =>{
+        const res = await fetch(API_URL+"/troll/apply/reply/my",{
+            method : "GET",
+            headers: {"Authorization" : `Bearer ${token}`},
+        })
+        const json = await res.json()
+        if (json.reply !== null){
+            const updatedRows = json.reply.map((row,index) => ({ ...row, id: index+1 }));
+            setReplyRows(prevState => ({
+                ...prevState,
+                trollApplyRow:updatedRows
+            }));
+        }
+    }
+
+    //트롤 사형 게시글 가져오기
+    const rulingBoardFetch = async () =>{
+        const res = await fetch(API_URL+"/troll/ruling/board/my",{
+            method : "GET",
+            headers: {"Authorization" : `Bearer ${token}`},
+        })
+        const json = await res.json()
+        console.log(`트롤 json`)
+        console.log(json)
+        if (json.rulingList!== null){
+            const updatedRows = json.rulingList.map((row,index) => ({ ...row, id: index+1 }));
+            setBoardRows(prevState => ({
+                ...prevState,
+                trollRow: updatedRows
+            }))
+        }
+    }
+    //트롤 사형 댓글 가져오기
+    const rulingReplyFetch = async () =>{
+        const res = await fetch(API_URL+"/troll/ruling/reply/my",{
+            method : "GET",
+            headers: {"Authorization" : `Bearer ${token}`},
+        })
+        const json = await res.json()
+        if (json.reply !== null){
+            const updatedRows = json.reply.map((row,index) => ({ ...row, id: index+1 }));
+            setReplyRows(prevState => ({
+                ...prevState,
+                trollRow:updatedRows
+            }));
         }
     }
 
@@ -153,46 +212,20 @@ const MyPageTemplate = () => {
     const changeType = (type)=>{
         setPageType(type)
     }
-    useEffect(() => {
-        const updatedRows = boardRows.map((row,index) => ({ ...row, id: index }));
-        setBoardRows(updatedRows);
-
-        console.log(`updatedRows`);
-        console.log(updatedRows);
-
-       changeActivity('boards',updatedRows.length)
-    }, [boardRowFlag]);
 
     useEffect(() => {
-        const updatedRows = replyRows.map((row,index) => ({ ...row, id: index }));
-        setReplyRows(updatedRows);
 
-        changeActivity('comments',updatedRows.length)
-    }, [replyRowFlag]);
-
-    useEffect(() => {
-        console.log('myActivity')
-        console.log(myActivity)
-    }, [myActivity]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await applyFetch();
-                await shortsFetch();
-                setBoardRowFlag(!boardRowFlag);
-
-                await applyReplyFetch();
-                await shortsReplyFetch();
-                await rulingReplyFetch();
-                setReplyRowFlag(!replyRowFlag);
-            } catch (error) {
-                console.error("Error during fetchData:", error);
-                // 에러를 처리할 수 있음
-            }
-        };
         userInfoFetch();
-        fetchData(); // fetchData 함수 호출
+
+        boardFetch()
+        applyFetch();
+        shortsFetch();
+        rulingBoardFetch()
+
+        boardReplyFetch();
+        applyReplyFetch();
+        shortsReplyFetch();
+        rulingReplyFetch();
 
     }, []);
     return (
