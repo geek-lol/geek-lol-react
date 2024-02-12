@@ -4,6 +4,7 @@ import UserManagement from "./UserManagement";
 import BoardManagement from "./BoardManagement";
 import ShortsManagement from "./ShortsManagement";
 import TrollApplyManagement from "./TrollApplyManagement";
+import TrollManagement from "./TrollManagement";
 
 
 
@@ -19,8 +20,8 @@ const AdminPage = () => {
             {pageType === "1" && <UserManagement />}
             {pageType === "2" && <BoardManagement />}
             {pageType === "3" && <ShortsManagement />}
-            {/*{pageType === "4" && <TrollManagement />}*/}
-            {pageType === "5" && <TrollApplyManagement />}
+            {pageType === "4" && <TrollApplyManagement />}
+            {pageType === "5" && <TrollManagement />}
         </>
     );
 };

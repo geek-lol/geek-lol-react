@@ -24,8 +24,8 @@ const AdminHeader = ({pageType,changePageType}) => {
                 <li id="1" className={cn('admin-list-item',{select:types["1"]})} onClick={onClickHandler}>회원관리</li>
                 <li id="2" className={cn('admin-list-item',{select:types["2"]})} onClick={onClickHandler}>자유게시판</li>
                 <li id="3" className={cn('admin-list-item',{select:types["3"]})} onClick={onClickHandler}>하이라이트</li>
-                <li id="4" className={cn('admin-list-item',{select:types["4"]})} onClick={onClickHandler}>트롤재판소</li>
-                <li id="5" className={cn('admin-list-item',{select:types["5"]})} onClick={onClickHandler}>트롤재판 후보선정</li>
+                <li id="4" className={cn('admin-list-item',{select:types["4"]})} onClick={onClickHandler}>트롤재판소 지원글</li>
+                <li id="5" className={cn('admin-list-item',{select:types["5"]})} onClick={onClickHandler}>트롤재판소</li>
                 <li id="6" className={cn('admin-list-item',{select:types["6"]})} onClick={onClickHandler}>신고신청내역</li>
             </ul>
         </div>
