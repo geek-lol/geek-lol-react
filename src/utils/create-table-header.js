@@ -109,3 +109,61 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
     headCells : PropTypes.array.isRequired
 };
+
+
+//마이페이지용 툴바
+export function MyEnhancedTableToolbar(props) {
+    const { title } = props;
+
+    return (
+        <Toolbar
+            sx={{
+                pl: { sm: 2 },
+                pr: { xs: 1, sm: 1 },
+            }}
+        >
+            {/* 테이블 헤더 상태*/}
+            <Typography
+                sx={{ flex: '1 1 100%' }}
+                variant="h6"
+                id="tableTitle"
+                component="div"
+            >
+                {title}
+            </Typography>
+        </Toolbar>
+    );
+}
+
+MyEnhancedTableToolbar.propTypes = {
+    title : PropTypes.string.isRequired
+};
+
+export function MyEnhancedTableHead(props) {
+    const {  headCells } =
+        props;
+
+    return (
+        <TableHead>
+            <TableRow>
+                <TableCell sx={{width:'15%'}}>
+                    바로가기
+                </TableCell>
+                {/* 테이블 헤더 삽입 */}
+                {headCells.map((headCell) => (
+                    <TableCell
+                        key={headCell.id}
+                        align={'left'}
+                    >
+                        {headCell.label}
+                    </TableCell>
+                ))}
+            </TableRow>
+        </TableHead>
+    );
+}
+
+
+EnhancedTableHead.propTypes = {
+    headCells : PropTypes.array.isRequired
+};

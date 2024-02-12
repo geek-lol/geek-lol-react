@@ -7,11 +7,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
-import '../../scss/MyActivityMain.scss'
-import {formatDate} from "../../../../utils/format-date";
-import {EnhancedTableHead, EnhancedTableToolbar} from "../../../../utils/create-table-header";
+import '../../../scss/MyActivityMain.scss'
+import {formatDate} from "../../../../../utils/format-date";
+import {
+    EnhancedTableHead,
+    EnhancedTableToolbar,
+    MyEnhancedTableHead,
+    MyEnhancedTableToolbar
+} from "../../../../../utils/create-table-header";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import Button from "@mui/material/Button";
+import {BOARD_URL} from "../../../../../config/host-config";
 
 //테이블 헤더
 const headCells = [
@@ -48,43 +55,12 @@ const headCells = [
 ];
 
 const MyActivityBoard = ({rows}) => {
+    const BOARD_DETAIL_URL = "http://localhost:3000/board/detail/";
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(1);
     const [totalPage, setTotalPage] = React.useState(1);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-    // 체크박스 전체 클릭
-    const handleSelectAllClick = (event) => {
-        if (event.target.checked) {
-            const newSelected = rows.map((n) => n.id);
-            setSelected(newSelected);
-            return;
-        }
-        setSelected([]);
-    };
-
-    const handleClick = (event, id) => {
-        const selectedIndex = selected.indexOf(id);
-        let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, id);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-        setSelected(newSelected);
-    };
-
-    const isSelected = (id) => selected.indexOf(id) !== -1;
-
 
     // 테이블 데이터 갯수로 줄 계산
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -107,43 +83,28 @@ const MyActivityBoard = ({rows}) => {
         <div>
             <Box sx={{ width: '100%' }}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length} title={"내가 쓴 글"} />
+                    <MyEnhancedTableToolbar  title={"내가 쓴 글"} />
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
                             aria-labelledby="tableTitle"
                             size={'medium'}
                         >
-                            <EnhancedTableHead
-                                numSelected={selected.length}
-                                onSelectAllClick={handleSelectAllClick}
-                                rowCount={rows.length}
+                            <MyEnhancedTableHead
                                 headCells={headCells}
                             />
                             <TableBody>
                                 {rows.map((row, index) => {
-                                    const isItemSelected = isSelected(row.id);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
-
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.id)}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.id}
-                                            selected={isItemSelected}
-                                            sx={{ cursor: 'pointer' }}
                                         >
                                             <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    color="primary"
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby': labelId,
-                                                    }}
-                                                />
+                                                <a href={BOARD_DETAIL_URL+row.bulletinId}>
+                                                    <Button
+                                                        sx={{ backgroundColor:"rgba(216, 216, 216, 0.61)", color : "black", ml:1}}
+                                                    >바로가기</Button>
+                                                </a>
                                             </TableCell>
 
                                             <TableCell align="left">{row.id}</TableCell>
