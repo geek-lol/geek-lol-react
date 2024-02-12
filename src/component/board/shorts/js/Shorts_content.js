@@ -3,7 +3,7 @@ import '../scss/Shorts_content.scss'
 import {BsChatLeft, BsExclamationCircle, BsHeart, BsHeartFill} from "react-icons/bs";
 import cn from "classnames";
 import Shorts_comment from "./Shorts_comment";
-import {debounce} from "lodash";
+import {debounce, isEmpty} from "lodash";
 import {SHORT_URL, SHORT_VOTE_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import axios from "axios";
@@ -161,89 +161,134 @@ const ShortsContent = ({id, item, upVote}) => {
 
 
         // console.log(token);
-        const patchVoteVideo = async () => {
-
-            const res = await fetch(API_VOTE_URL, {
-                method: 'PATCH',
-                headers: requestHeader,
-                body: JSON.stringify(shortsId)
-            })
-            if (res.status === 200) {
-                // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
-                const json = await res.json().catch(() => ({}));
-                console.log('jsonup', json.up);
-                console.log('voteShort', voteShort);
-
-                setVoteCount(json.up);
-                setVoteVideoState(item.upCount);
-                console.log('upCount', voteVideoState);
-
-
-            } else {
-                console.error('Error:', res.status);
-            }
-
-        };
-
-        const isEmpty = (value) => {
-            return !Boolean(1);
-        };
-
-        const postVoteVideo = async () => {
-            // 만약 누른 shortsId와 비교한 shrotsId가 같다면 실행되게
-
-            // console.log('voteVideoState.isEmpty:', isEmpty(voteCount));
-
-
-            const res = await fetch(API_VOTE_URL, {
-                method: isEmpty(voteCount) ? 'POST' : "PATCH",
-                headers: requestHeader,
-                body: JSON.stringify(shortsId)
-            })
-            if (res.status === 200) {
-                // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
-                const json = await res.json().catch(() => ({}));
-                console.log('jsonup', json.up);
-                console.log('voteShort', voteShort);
-                setVoteCount(json.up);
-                setVoteVideoState(item.upCount);
-                console.log('upCount', voteVideoState);
-
-            } else {
-                console.error('Error:', res.status);
-            }
-
-        }
+        // const patchVoteVideo = async () => {
+        //
+        //     const res = await fetch(API_VOTE_URL, {
+        //         method: 'PATCH',
+        //         headers: requestHeader,
+        //         body: JSON.stringify(shortsId)
+        //     })
+        //     if (res.status === 200) {
+        //         // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
+        //         const json = await res.json().catch(() => ({}));
+        //         console.log('jsonup', json.up);
+        //         console.log('voteShort', voteShort);
+        //
+        //         setVoteCount(json.up);
+        //         setVoteVideoState(item.upCount);
+        //         console.log('upCount', voteVideoState);
+        //
+        //
+        //     } else {
+        //         console.error('Error:', res.status);
+        //     }
+        //
+        // };
+        //
+        //
+        // const postVoteVideo = async () => {
+        //     // 만약 누른 shortsId와 비교한 shrotsId가 같다면 실행되게
+        //
+        //     console.log('voteVideoState.isEmpty:', isEmpty(voteCount));
+        //
+        //     const res = await fetch(API_VOTE_URL, {
+        //         method: isEmpty(voteCount) ? 'POST' : "PATCH",
+        //         headers: requestHeader,
+        //         body: JSON.stringify(shortsId)
+        //     })
+        //     if (res.status === 200) {
+        //         // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
+        //         const json = await res.json().catch(() => ({}));
+        //         console.log('jsonup', json.up);
+        //         console.log('voteShort', voteShort);
+        //         setVoteCount(json.up);
+        //         setVoteVideoState(item.upCount);
+        //         console.log('upCount', voteVideoState);
+        //
+        //     } else {
+        //         console.error('Error:', res.status);
+        //     }
+        //
+        // }
 
 
         const voteShortVideo = (selectedShortsId) => {
-            setVoteShort(!voteShort);
-            const selectedItem = shortList.find(short => short.shortsId === selectedShortsId);
-            console.log('selectedItem upCount:', voteList.up);
-
+            // 로그인 여부 검사
             if (!token) {
-                alert("로그인 회원만 할수있음")
+                alert("로그인 회원만 할 수 있습니다.");
                 redirect('/template/login');
+                return;
             }
-            if (selectedItem) {
 
-                if (!voteShort) {
-                    patchVoteVideo();
+            // 투표 여부를 확인하는 함수
+            const isAlreadyVoted = async () => {
+                const res = await fetch(API_VOTE_URL, {
+                    method: 'GET',
+                    headers: requestHeader,
+                });
 
-                } else if (voteShort) {
-                    if (voteList.up === 1) {
-                        patchVoteVideo();
+                if (res.status === 200) {
+                    const json = await res.json();
+                    return json.up.some((item) => item.shortsId === selectedShortsId);
+                } else {
+                    console.error('Error:', res.status);
+                    const err = await res.text();
+                    alert(err);
+                    return false;
+                }
+            };
+
+            // 투표 여부에 따른 요청 분기
+            const vote = async () => {
+                const isVoted = await isAlreadyVoted();
+
+                if (!isVoted) {
+                    const res = await fetch(API_VOTE_URL, {
+                        method: 'PATCH',
+                        headers: requestHeader,
+                        body: JSON.stringify(shortsId)
+                    })
+                    if (res.status === 200) {
+                        // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
+                        const json = await res.json().catch(() => ({}));
+                        console.log('jsonup', json.up);
+                        console.log('voteShort', voteShort);
+
+                        setVoteCount(json.up);
+                        setVoteVideoState(item.upCount);
+                        console.log('upCount', voteVideoState);
+
+
                     } else {
-                        postVoteVideo(selectedShortsId);
+                        console.error('Error:', res.status);
                     }
-
+                    return;
                 }
 
-                // console.log('vc:', voteCount);
-                // console.log('vvs:', voteVideoState);
-            }
+                // 새로운 투표
+                const res = await fetch(API_VOTE_URL, {
+                    method: 'POST',
+                    headers: requestHeader,
+                    body: JSON.stringify(selectedShortsId),
+                });
+                if (res.status === 200) {
+                    // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
+                    const json = await res.json().catch(() => ({}));
+                    console.log('jsonup', json.up);
+                    console.log('voteShort', voteShort);
+                    setVoteCount(json.up);
+                    setVoteVideoState(item.upCount);
+                    console.log('upCount', voteVideoState);
 
-        }
+                } else {
+                    console.error('Error:', res.status);
+                }
+            };
+
+            // 투표 실행
+            vote();
+        };
+
 
 
 // 댓글 닫을때 애니메이션
