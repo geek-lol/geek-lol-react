@@ -9,6 +9,7 @@ import * as commentLists from "react-bootstrap/ElementChildren";
 import {BOARD_REPLY_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import Shorts_content from "./Shorts_content";
+import async from "async";
 
 const ShortsComment = ({item, chkViewComment, viewComment}) => {
 
@@ -44,6 +45,7 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
 
     const addReply = async () => {
 
+
         const res = await fetch(API_BASE_URL, {
             method: 'POST',
             headers: requestHeader,
@@ -53,21 +55,31 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
         if (res.status === 200) {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
-            setShortReplyList(json.reply);
+            setShortReplyList(json.reply, () => setReplyValue({ context: '' }));
+
+
+
         } else {
             console.error('Error:',  res.status);
         }
 
     }
 
+
+
+
+
+
     const submitHandler = e => {
         e.preventDefault(); {/* 보냈을때 페이지가 다시로딩되는걸 막음 */}
         addReply();
         // 폼이 제출되면 입력창 비우기
-        setShortReply('');
+
+        setReplyValue({ context: '' });
     }
 
     useEffect(() => {
+
         fetch(API_BASE_URL, {
             method: 'GET',
             headers: { 'content-type': 'application/json' }
@@ -80,6 +92,7 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
             })
             .then(json => {
                 if (json && json.reply) {
+                    // console.log(json.reply);
                     setShortReplyList(json.reply);
                 }
             })
@@ -116,7 +129,14 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
                     <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
                 </div>
                 <div className={'comment-input-box'}>
-                    <input type="text" placeholder={'댓글추가...'} name='context' value={shortReply} onChange={onChange}/>
+                    <input
+                        type="text"
+                        placeholder={'댓글추가...'}
+                        name="context"
+                        value={replyValue.context}
+                        onChange={onChange}
+                        maxLength="88"
+                    />
                     <BsSend className={'comment-send'} onClick={submitHandler}/>
                 </div>
             </div>
