@@ -5,6 +5,13 @@
     display: flex;
     justify-content: start;
     align-items: center;
+    .player{
+      background-color: black;
+      width: 300px;
+      height: 168px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
     .video-box{
       border-radius: 5px;
       width: 400px;

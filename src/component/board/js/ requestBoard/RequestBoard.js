@@ -5,7 +5,7 @@ import {CiSearch} from "react-icons/ci";
 import {Link} from "react-router-dom";
 import ProgressBar from "@ramonak/react-progress-bar";
 import ReactPlayer from "react-player";
-import {TROLL_APPLY_URL} from "../../../../config/host-config";
+import {TROLL_APPLY_URL, TROLL_RULING_VOTE_URL} from "../../../../config/host-config";
 import RequestContent from "./RequestContent";
 
 const RequestBoard = () => {
@@ -59,6 +59,9 @@ const RequestBoard = () => {
                 // setTotalPage(json.totalPages);
             });
     }, [toggle]);
+    const voteData=async ()=>{
+        // const response=await fetch(`${TROLL_RULING_VOTE_URL}/${}`)
+    }
     const toggleHandler1 = () => {
         setToggle(true);
         setType(null);

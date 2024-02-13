@@ -82,6 +82,7 @@
     }
 
     .videoPlayer {
+      //background-color: black;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -153,34 +154,31 @@
       }
     }
 
-    .comment {
-      width: 95%;
+    .comment{
+      width: 100%;
+      padding: 12px;
       border-radius: 16px;
+      border: solid lightgray 1px;
       display: flex;
       flex-direction: column;
       margin: 5px;
-
-      .comment-top {
+      .comment-top{
         display: flex;
         align-items: center;
         justify-content: space-between;
-
-        .tqbox {
+        .tqbox{
           display: flex;
         }
-
-        p {
+        p{
           padding: 5px;
           cursor: pointer;
         }
       }
-
-      .comment-content {
+      .comment-content{
         display: flex;
         justify-content: space-between;
         padding: 8px;
-
-        .ctt {
+        .ctt{
           padding: 16px;
         }
       }

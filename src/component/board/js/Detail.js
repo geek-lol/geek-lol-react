@@ -76,7 +76,6 @@ const Detail = () => {
             // 예외 처리 로직 추가
         }
     };
-
     // 댓글 리스트 가져오기
     useEffect(() => {
         Replyrendering();

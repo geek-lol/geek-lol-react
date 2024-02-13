@@ -85,15 +85,16 @@ const RequestContent = ({item}) => {
                         // onMouseLeave={() => playerRef.current.pause()}
 
                     >
+                        <div className="player">
                         <ReactPlayer
                             ref={playerRef}
                             url={video}
                             controls={false}
                             muted={true}
                             width='300px'
-                            height={'100%'}
+                            height={'170px'}
 
-                        />
+                        /></div>
                 </div>
 
                     <div className="title-box">
