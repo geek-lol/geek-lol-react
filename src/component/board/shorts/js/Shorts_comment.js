@@ -1,42 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import cn from "classnames";
-import {dividerClasses} from "@mui/material";
+import { BsCaretLeftFill, BsPlusLg, BsSend } from "react-icons/bs";
+import { BOARD_REPLY_URL } from "../../../../config/host-config";
+import { getCurrentLoginUser } from "../../../../utils/login-util";
 import Shorts_comment_list from "./Shorts_comment_list";
 import '../scss/Shorts_comment.scss'
-import {BsCaretLeftFill, BsPlusLg, BsSend} from "react-icons/bs";
-import data from "bootstrap/js/src/dom/data";
-import * as commentLists from "react-bootstrap/ElementChildren";
-import {BOARD_REPLY_URL} from "../../../../config/host-config";
-import {getCurrentLoginUser} from "../../../../utils/login-util";
-import Shorts_content from "./Shorts_content";
-import async from "async";
 
-const ShortsComment = ({item, chkViewComment, viewComment}) => {
-
-    const {shortsId, uploaderName,replyCount,viewCount, upCount, title, context, videoLink} = item;
-
-    const API_BASE_URL = BOARD_REPLY_URL + `/${shortsId}`;
-
-    // 토큰 가져오기
-    const [token, setToken] = useState(getCurrentLoginUser().token);
-
-    const requestHeader = {
-        'content-type': 'application/json',
-        'Authorization': 'Bearer ' + token
-    };
-
-    const [shortReply, setShortReply] = useState();
+const ShortsComment = ({ item, chkViewComment, viewComment }) => {
+    const { shortsId } = item;
+    const API_BASE_URL = BOARD_REPLY_URL;
+    const token = getCurrentLoginUser().token;
 
     const [shortReplyList, setShortReplyList] = useState([]);
-
-
-
-    const [replyValue, setReplyValue] = useState({
-        context:''
-    });
+    const [replyValue, setReplyValue] = useState({ context: '' });
 
     const onChange = (event) => {
-        const { value, name } = event.target; //event.target에서 name과 value만 가져오기
+        const { value, name } = event.target;
         setReplyValue({
             ...replyValue,
             [name]: value,
@@ -44,84 +23,73 @@ const ShortsComment = ({item, chkViewComment, viewComment}) => {
     };
 
     const addReply = async () => {
-
-
-        const res = await fetch(API_BASE_URL, {
-            method: 'POST',
-            headers: requestHeader,
-            body: JSON.stringify(replyValue)
-        })
-
-        if (res.status === 200) {
-            // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
-            const json = await res.json().catch(() => ({}));
-            setShortReplyList(json.reply, () => setReplyValue({ context: '' }));
-
-
-
-        } else {
-            console.error('Error:',  res.status);
+        try {
+            const res = await fetch(`${API_BASE_URL}/${shortsId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(replyValue)
+            });
+            if (!res.ok) {
+                throw new Error(`HTTP error! Status: ${res.status}`);
+            }
+            const json = await res.json();
+            setShortReplyList([...shortReplyList, json.reply]);
+            setReplyValue({ context: '' });
+        } catch (error) {
+            console.error('Error:', error);
         }
+    };
 
-    }
-
-
-
-
-
-
-    const submitHandler = e => {
-        e.preventDefault(); {/* 보냈을때 페이지가 다시로딩되는걸 막음 */}
+    const submitHandler = (e) => {
+        e.preventDefault();
         addReply();
-        // 폼이 제출되면 입력창 비우기
-
-        setReplyValue({ context: '' });
-    }
+    };
 
     useEffect(() => {
-
-        fetch(API_BASE_URL, {
-            method: 'GET',
-            headers: { 'content-type': 'application/json' }
-        })
-            .then(res => {
-                if (!res.ok) {
+        const fetchData = async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/${shortsId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (res.status === 200) {
+                    const json = await res.json();
+                    console.log(json.reply);
+                    setShortReplyList(json.reply);
+                } else if (!res.ok) {
                     throw new Error(`HTTP error! Status: ${res.status}`);
                 }
-                return res.json();
-            })
-            .then(json => {
-                if (json && json.reply) {
-                    // console.log(json.reply);
-                    setShortReplyList(json.reply);
-                }
-            })
-            .catch(error => {
+
+            } catch (error) {
                 console.error('Error fetching data:', error);
-            });
-
+            }
+        };
+        fetchData();
     }, []);
-
 
     return (
         <div className={'comment-container'}>
             <div className={'comment-top'}>
                 <div className={'comment-title-box'}>
                     <span className={'comment-title'}>댓글</span>
-                    <p className={'comment-count'}>{replyCount}</p>
+                    <p className={'comment-count'}>{shortReplyList.length}</p>
                 </div>
-                <BsPlusLg className={cn('comment-close-btn', {close_animation: viewComment})} onClick={chkViewComment}
-                    />
+                <BsPlusLg className={cn('comment-close-btn', { close_animation: viewComment })} onClick={chkViewComment} />
             </div>
             <div className={'comment-box'}>
                 <ul className={'comment-list'}>
                     {shortReplyList.map((reply) => (
                         <Shorts_comment_list
-                            key={reply.replyId}
+                            key={reply.shortsId}
                             shortReplyList={reply}
-                            item={item}/>
+                            item={item}
+                        />
                     ))}
-
                 </ul>
             </div>
             <div className={'comment-save'}>
