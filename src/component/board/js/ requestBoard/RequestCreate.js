@@ -29,12 +29,6 @@ const RequestCreate = () => {
     const [explanation, setExplanation] = useState();
 
 
-
-    const imgClickHandler = e => {
-        document.getElementById('board_detail_img').click();
-    };
-
-
     const [boardValue, setBoardValue] = useState({
         title: '',
         context:''
@@ -56,13 +50,9 @@ const RequestCreate = () => {
             [ JSON.stringify(boardValue) ],
             { type: 'application/json' }
         );
-
-
         const formData = new FormData();
         formData.append('board',jsonBlob);
         formData.append('boardFile', document.getElementById('board_detail_img').files[0]);
-
-
 
         const res = await fetch(TROLL_APPLY_URL, {
             method: 'POST',
@@ -76,22 +66,19 @@ const RequestCreate = () => {
             setBoardList(json.boardInfo);
             redirection('/board/main/Request')
         } else {
-            alert("입력값이 유효하지 않습니다.")
+            alert("입력값이 유효하지 않습니다.");
             console.error('Error:',  res.status);
         }
     }
 
     const uploadHandler = e => {
         e.preventDefault();
-
         // 업로드를 허용하기 전에 사용자가 로그인되어 있는지 확인
         if (!token) {
             // 로그인되어 있지 않으면 로그인 페이지로 리디렉션
             redirection('/template/login');
             return;
         }
-
-
         // 업로드 로직 진행
         fetchBoardUpload();
     }
@@ -145,11 +132,11 @@ const RequestCreate = () => {
                         }}
                     />
                 </div>
-                <div className={'img-box'} onClick={imgClickHandler}>
+                <div className={'img-box'} >
                     <input
                         id='board_detail_img'
                         type='file'
-                        accept='image/*'
+                        accept="video/*"
                     />
                 </div>
                 <div className={'btn-container'}>

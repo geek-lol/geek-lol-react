@@ -8,6 +8,7 @@ import {BsChatDots} from "react-icons/bs";
 import {FaEye} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import {calculateTimeDifference} from "../../../../utils/time-util";
+import {TROLL_APPLY_URL} from "../../../../config/host-config";
 const RequestContent = ({item}) => {
     const playerRef = useRef(null);
     const {applyId,applyLink,content,localDateTime,posterId,posterName,reportCount,title,upCount,viewCount}=item;
@@ -33,7 +34,7 @@ const RequestContent = ({item}) => {
         if (playerRef.current) {
             const internalPlayer = playerRef.current.getInternalPlayer();
             if (internalPlayer) {
-                playerRef.current.seekTo(0, 'seconds');
+
                 internalPlayer.play();
             }
         }
@@ -44,11 +45,34 @@ const RequestContent = ({item}) => {
         if (playerRef.current) {
             const internalPlayer = playerRef.current.getInternalPlayer();
             if (internalPlayer) {
+                playerRef.current.seekTo(0, 'seconds');
                 internalPlayer.pause();
-
             }
         }
     };
+    useEffect(() => {
+        getImg();
+    }, []);
+    const [video,setVideo]=useState(null);
+
+    const getImg = async () => {
+        try {
+            const response = await fetch(`${TROLL_APPLY_URL}/load-video?applyId=${applyId}`, {
+                method: 'GET'
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const arrayBuffer = await response.arrayBuffer();
+            const blob = new Blob([arrayBuffer]);
+            const videoUrl = URL.createObjectURL(blob);
+            setVideo(videoUrl);
+        } catch (error) {
+            console.error('Error fetching video:', error);
+        }
+    }
     return (
         <>
             <Link className="Request-Content-Box" to="/board/RequestDetail">
@@ -57,12 +81,18 @@ const RequestContent = ({item}) => {
                         className="video-box"
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
+                        // onMouseEnter={() => playerRef.current.play()}
+                        // onMouseLeave={() => playerRef.current.pause()}
+
                     >
                         <ReactPlayer
                             ref={playerRef}
-                            url={"/assets/videos/test2.mp4"}
+                            url={video}
+                            controls={false}
+                            muted={true}
                             width='300px'
                             height={'100%'}
+
                         />
                 </div>
 

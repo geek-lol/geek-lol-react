@@ -37,23 +37,6 @@ const ShortsContent = ({item}) => {
     const API_VOTE_URL = SHORT_VOTE_URL;
 
 
-    // useEffect(() => {
-    //     fetch(API_VOTE_URL, {
-    //         method: 'GET',
-    //         headers: { 'content-type': 'application/json' }
-    //     })
-    //         .then(res => {
-    //             if (res.status === 200){
-    //                 return res.json();
-    //             }
-    //         })
-    //         .then(json => {
-    //             if (!json) return;
-    //
-    //             // console.log(json);
-    //             setShortList(json.vote);
-    //         });
-    // }, [currentItemIndex]);
 
     const requestHeader = {
         'content-type': 'application/json',
