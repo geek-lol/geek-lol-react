@@ -36,7 +36,18 @@ const Main = () => {
           alert('소환사명을 입력해주세요.');
           return;
       }
-      setSplitValue([splitInput[0], splitInput[1] ? splitInput[1] : 'KR1']);
+
+      var regex = /^[가-힣]{2}$/;
+      var characters = splitInput[0].split('');
+
+      if(regex.test(splitInput[0])) {
+          var stringWithSpaces = characters.join(' ');
+
+          setSplitValue([stringWithSpaces, splitInput[1] ? splitInput[1] : 'KR1']);
+      } else {
+          setSplitValue([splitInput[0], splitInput[1] ? splitInput[1] : 'KR1']);
+      }
+
     };
 
 

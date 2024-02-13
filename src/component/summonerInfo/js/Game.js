@@ -6,20 +6,36 @@ import PlayerSearchInfo from "./PlayerSearchInfo";
 import RightChampionInfo from "./RightChampionInfo";
 import TeamInfoTable from "./TeamInfoTable";
 import useStateForViewLayer from "./UseStateForViewLayer";
+import {viewGameMode} from "../functions/gameModeFunc";
 
 const Game = ({gameData, searchValue, spellData, key, itemData, runeData}) => {
     const maxParticipantCount = 5; // Maximum participant count
 
-    const filteredParticipants = gameData.participants.filter(participant =>
-        participant.riotIdGameName.toLowerCase().replace(/ /g, "").includes(searchValue.toLowerCase().replace(/ /g, ""))
-    );
+    const filteredParticipants = gameData.participants.filter(participant => {
+        // Ensure participant.riotIdGameName and searchValue are not null or undefined
+        if (participant.riotIdGameName && searchValue) {
+            // Normalize both strings by removing spaces and converting to lowercase
+            const normalizedParticipantName = participant.riotIdGameName.toLowerCase().replace(/ /g, "");
+            const normalizedSearchValue = searchValue.toLowerCase().replace(/ /g, "");
+
+            // Check if normalizedParticipantName includes normalizedSearchValue
+            return normalizedParticipantName.includes(normalizedSearchValue);
+        } else {
+            // Handle null or undefined values by excluding them from filtering
+            return false;
+        }
+    });
+
     const teamOnePlayers = gameData.participants.filter(participant => participant.teamId === 100);
     const teamTwoPlayers = gameData.participants.filter(participant => participant.teamId === 200);
     const [gameTimestamp, setGameTimestamp] = useState(false);
     const getSubRuneData = (id) => {
         for (const category of runeData) {
             if (category.id === id) {
-                return category;
+                return {
+                    name: category.name,
+                    icon: category.icon
+                };
             }
         }
         return null;
@@ -68,20 +84,9 @@ const Game = ({gameData, searchValue, spellData, key, itemData, runeData}) => {
                             {
                                 <div className={"game-info-container"}>
                                     <span className={`game-type ${player.win ? 'win' : 'lose'}`}>
-                                        {(() => {
-                                            switch (gameData.info.queueId) {
-                                                case 420:
-                                                    return '솔로랭크';
-                                                case 440:
-                                                    return '자유랭크';
-                                                case 450:
-                                                    return '칼바람 나락';
-                                                case 490:
-                                                    return '일반게임';
-                                                default:
-                                                    return '몰라요';
-                                            }
-                                        })()}
+                                        {
+                                            viewGameMode(gameData.info.queueId)
+                                        }
                                     </span>
                                     <div className="game-time">
                                         <div className={`game-timestamp ${gameTimestamp ? 'show' : ''}`}>
@@ -141,6 +146,7 @@ const Game = ({gameData, searchValue, spellData, key, itemData, runeData}) => {
                         setViewMainRune={setViewTeamBlueMainRune}
                         viewSubRune={viewTeamBlueSubRune}
                         setViewSubRune={setViewTeamBlueSubRune}
+                        itemData={itemData}
                     />
                     <TeamInfoTable
                         teamPlayers={teamTwoPlayers}
@@ -157,6 +163,7 @@ const Game = ({gameData, searchValue, spellData, key, itemData, runeData}) => {
                         setViewMainRune={setViewTeamRedMainRune}
                         viewSubRune={viewTeamRedSubRune}
                         setViewSubRune={setViewTeamRedSubRune}
+                        itemData={itemData}
                     />
                 </div>
             </>

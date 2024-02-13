@@ -9,7 +9,7 @@ const ButtonGroup = ({buttonData, onButtonClick}) => {
             onButtonClick(buttonId.id);
         }
 
-        console.log(buttonId)
+        // console.log(buttonId)
     };
 
     const renderButtons = () => {

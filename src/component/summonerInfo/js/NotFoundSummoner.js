@@ -15,6 +15,7 @@ const NotFoundSummoner = ({searchValue, tag}) => {
                     </div>
                     <span className={"not-found-description"}>등록되지 않은 소환사명입니다.</span>
                     <span className="not-found-description">닉네임 혹은 태그를 확인해주세요.</span>
+                    <span className="not-found-description">일부 닉네임은 공백까지 포함해야합니다.</span>
 
                     <img src={process.env.PUBLIC_URL + "/logo.png"} alt="로고이미지"/>
                 </div>

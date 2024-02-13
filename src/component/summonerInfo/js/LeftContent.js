@@ -1,10 +1,35 @@
 import React from 'react';
 import "../scss/LeftContent.scss"
 
-const LeftContent = ({userInfo, infoLoading, tag}) => {
+const LeftContent = ({userInfo, tag}) => {
+
+    const RankImage = ({tier}) => {
+        if (tier == null) {
+            return <img src={process.env.PUBLIC_URL + '/tierimage/unranked.webp'} alt="profile icon"/>;
+        }
+
+        const tierLower = tier.toLowerCase();
+        return <img src={process.env.PUBLIC_URL + `/tierimage/${tierLower}.png`} alt="profile icon"/>;
+    }
+
+
     const leagueInfo = userInfo.leagueInfo;
     const flexRankIndex = leagueInfo.findIndex(item => item.queueType === 'RANKED_FLEX_SR');
     const soloRankIndex = leagueInfo.findIndex(item => item.queueType === 'RANKED_SOLO_5x5')
+
+    const tierClassNames = {
+        "IRON": "iron",
+        "BRONZE": "bronze",
+        "SILVER": "silver",
+        "GOLD": "gold",
+        "PLATINUM": "platinum",
+        "DIAMOND": "diamond",
+        "MASTER": "master",
+        "GRANDMASTER": "grandmaster",
+        "CHALLENGER": "challenger",
+    };
+
+    const className = (rank) => tierClassNames[leagueInfo[rank].tier] || "unranked";
     return (
         <div className={"left-content"}>          {/* flex-direction: column */}
             <div className={"summoner-profile"}>    {/* row  */}
@@ -23,12 +48,6 @@ const LeftContent = ({userInfo, infoLoading, tag}) => {
                                     {tag === "KR1" ? userInfo.userInfo.name : userInfo.userInfo.gameName}
                                     <p>#{tag}</p>
                                 </span>
-                        <div className="prev-ranking">
-                            <span className="prev-nickname">
-                                {/*prev. {userInfo.userInfo.name}*/}
-                            </span>
-                            <span className="ranking">랭킹 : 000,000위</span>
-                        </div>
                     </div>
                     <button className="reloadBtn" onClick={() => window.location.reload()}>
                         전적갱신
@@ -43,31 +62,11 @@ const LeftContent = ({userInfo, infoLoading, tag}) => {
                     <div className="solo-rank-content player-info-content-container">
                         {leagueInfo[soloRankIndex] ? (
                                 <>
-                                    {leagueInfo[soloRankIndex].tier === "IRON" ? (
-                                        <img src={process.env.PUBLIC_URL + '/tierimage/iron.png'} alt="profile icon"/>
-                                    ) : leagueInfo[soloRankIndex].tier === "BRONZE" ? (
-                                        <img src={process.env.PUBLIC_URL + '/tieriamge/bronze.png'} alt="profile icon"/>
-                                    ) : leagueInfo[soloRankIndex].tier === "SILVER" ? (
-                                        <img src={process.env.PUBLIC_URL + '/tierimage/silver.png'} alt="profile icon"/>
-                                    ) : leagueInfo[soloRankIndex].tier === "GOLD" ? (
-                                        <img src={process.env.PUBLIC_URL + '/tierimage/gold.png'} alt="profile icon"/>
-                                    ) : leagueInfo[soloRankIndex].tier === "PLATINUM" ? (
-                                        <img src={process.env.PUBLIC_URL + '/tieriamge/platinum.png'} alt="profile icon"/>
-                                    ) : leagueInfo[soloRankIndex].tier === "EMERALD" ? (
-                                        <img src={process.env.PUBLIC_URL + '/tierimage/emerald.png'} alt="profile icon"/>
-                                    ) : leagueInfo[soloRankIndex].tier === "DIAMOND" ? (
-                                        <img src={process.env.PUBLIC_URL + '/tierimage/diamond.png'} alt="profile icon"/>
-                                    ) : leagueInfo[soloRankIndex].tier === "MASTER" ? (
-                                        <img src={process.env.PUBLIC_URL + '/tierimage/master.png'} alt="profile icon"/>
-                                    ) : leagueInfo[soloRankIndex].tier === "GRANDMASTER" ? (
-                                        <img src={process.env.PUBLIC_URL + '/tieriamge/grandmaster.png'}
-                                             alt="profile icon"/>
-                                    ) : <img src={process.env.PUBLIC_URL + '/tierimage/challenger.png'}
-                                             alt="profile icon"/>}
+                                    <RankImage tier={leagueInfo[soloRankIndex].tier}/>
                                     <div className="tier-icon-info-point"> {/* row */}
                                         <div className={"tier-win-lose-description"}>
-                                <span
-                                    className="tier">{leagueInfo[soloRankIndex].tier} {leagueInfo[soloRankIndex].rank}</span>
+                                            <span
+                                                className={`tier ${className(soloRankIndex)}`}>{leagueInfo[soloRankIndex].tier} {leagueInfo[soloRankIndex].rank}</span>
                                             <span
                                                 className="description">{leagueInfo[soloRankIndex].wins}승 {leagueInfo[soloRankIndex].losses}패</span>
                                         </div>
@@ -81,7 +80,7 @@ const LeftContent = ({userInfo, infoLoading, tag}) => {
                                 </>
                             ) :
                             <>
-                                <img src={process.env.PUBLIC_URL + '/tierimage/unranked.png'} alt="profile icon"/>
+                                <RankImage/>
                                 <div className="tier-icon-info-point"> {/* row */}
                                     <div className={"tier-win-lose-description"}>
                                         <span className="tier" style={{color: "black"}}>UNRANKED</span>
@@ -100,31 +99,11 @@ const LeftContent = ({userInfo, infoLoading, tag}) => {
                     <div className="player-info-rank-content player-info-content-container">
                         {leagueInfo[flexRankIndex] ? (
                             <>
-                                {leagueInfo[flexRankIndex].tier === "IRON" ? (
-                                    <img src={process.env.PUBLIC_URL + '/tierimage/iron.png'} alt="profile icon"/>
-                                ) : leagueInfo[flexRankIndex].tier === "BRONZE" ? (
-                                    <img src={process.env.PUBLIC_URL + '/tieriamge/bronze.png'} alt="profile icon"/>
-                                ) : leagueInfo[flexRankIndex].tier === "SILVER" ? (
-                                    <img src={process.env.PUBLIC_URL + '/tierimage/silver.png'} alt="profile icon"/>
-                                ) : leagueInfo[flexRankIndex].tier === "GOLD" ? (
-                                    <img src={process.env.PUBLIC_URL + '/tierimage/gold.png'} alt="profile icon"/>
-                                ) : leagueInfo[flexRankIndex].tier === "PLATINUM" ? (
-                                    <img src={process.env.PUBLIC_URL + '/tierimage/platinum.png'} alt="profile icon"/>
-                                ) : leagueInfo[flexRankIndex].tier === "EMERALD" ? (
-                                    <img src={process.env.PUBLIC_URL + '/tierimage/emerald.png'} alt="profile icon"/>
-                                ) : leagueInfo[flexRankIndex].tier === "DIAMOND" ? (
-                                    <img src={process.env.PUBLIC_URL + '/tierimage/diamond.png'} alt="profile icon"/>
-                                ) : leagueInfo[flexRankIndex].tier === "MASTER" ? (
-                                    <img src={process.env.PUBLIC_URL + '/tierimage/master.png'} alt="profile icon"/>
-                                ) : leagueInfo[flexRankIndex].tier === "GRANDMASTER" ? (
-                                    <img src={process.env.PUBLIC_URL + '/tieriamge/grandmaster.png'}
-                                         alt="profile icon"/>
-                                ) : <img src={process.env.PUBLIC_URL + '/tierimage/challenger.png'}
-                                         alt="profile icon"/>}
+                                <RankImage tier={leagueInfo[flexRankIndex].tier}/>
                                 <div className="tier-icon-info-point"> {/* row */}
                                     <div className={"tier-win-lose-description"}>
                                         <span
-                                            className="tier">{leagueInfo[flexRankIndex].tier} {leagueInfo[flexRankIndex].rank}</span>
+                                            className={`tier ${className(flexRankIndex)}`}>{leagueInfo[flexRankIndex].tier} {leagueInfo[flexRankIndex].rank}</span>
                                         <span
                                             className="description">{leagueInfo[flexRankIndex].wins}승 {leagueInfo[flexRankIndex].losses}패</span>
                                     </div>
@@ -138,7 +117,7 @@ const LeftContent = ({userInfo, infoLoading, tag}) => {
                             </>
                         ) : (
                             <>
-                                <img src={process.env.PUBLIC_URL + '/tierimage/unranked.png'} alt="profile icon"/>
+                                <RankImage/>
                                 <div className="tier-icon-info-point"> {/* row */}
                                     <div className={"tier-win-lose-description"}>
                                         <span className="tier" style={{color: "black"}}>UNRANKED</span>

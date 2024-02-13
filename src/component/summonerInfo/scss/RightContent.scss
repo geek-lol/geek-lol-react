@@ -1,17 +1,221 @@
-@media screen and (max-width: 1100px)  {
+@media screen and (max-width: 1100px) {
   #nav-box {
     width: 1100px;
   }
 }
 
 .right-content {
-  width: 703px;
+  width: 706px;
   //width: 100%;
   //border: 1px grey solid;
   border-radius: 5px;
   //position: absolute;
   //top: 0;
   //right: 0;
+
+  .conditional-rendering {
+    //width: 706px;
+    &.current-game {
+      border : 1.5px #c3d1dc solid;
+      border-top: none;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+
+      min-height: 440px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    &.champion-mastery {
+      padding-bottom: 100px;
+    }
+
+
+    .current-game-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+
+      .current-game-info {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+      }
+
+      .current-game-description {
+
+
+
+
+        .current-game-banned-champions {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-around;
+
+          position: relative;
+
+          .current-game-team-two-banned-champions,
+          .current-game-team-one-banned-champions {
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+
+            img {
+              border-radius: 5px;
+            }
+
+            .current-game-banned-champion-name {
+              display: none;
+              position: absolute;
+              height: auto;
+              //top: 0;
+              //left: 50%;
+              transform: translate(-30%, -130%);
+              z-index: 1;
+              width:fit-content;
+              text-align: center;
+
+              background-color: #00207b;
+              color: #fff;
+              padding: 10px;
+              border-radius: 5px;
+
+              &.show {
+                display: block;
+              }
+            }
+          }
+
+
+
+        }
+      }
+
+      .current-game-all-summoner {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 30px;
+
+        .current-game-summoner-container {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          width: 300px;
+
+          &.cur-team1 {
+            align-items: flex-end;
+          }
+
+          &.cur-team2 {
+            align-items: flex-start;
+          }
+
+          .current-summoner {
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+
+            .current-game-champion-info {
+
+              img {
+                border-radius: 5px;
+              }
+              .current-game-champion-name {
+                display: none;
+                position: absolute;
+                height: auto;
+                //top: 0;
+                //left: 50%;
+                transform: translate(-20%, -100%);
+                z-index: 1;
+                width: fit-content;
+
+                background-color: #00207b;
+                color: #fff;
+                padding: 10px;
+                border-radius: 5px;
+
+                &.show {
+                  display: block;
+                }
+              }
+            }
+
+
+            .current-game-summoner-info {
+              width: 120px;
+            }
+
+            .current-game-spell-container {
+              display: flex;
+              flex-direction: column;
+
+              img {
+                border-radius: 5px;
+              }
+
+              .current-game-spell-description {
+                display: none;
+                position: absolute;
+                height: auto;
+                //top: 0;
+                //left: 50%;
+                transform: translate(-50%, -100%);
+                z-index: 1;
+                width: fit-content;
+
+                background-color: #00207b;
+                color: #fff;
+                padding: 10px;
+                border-radius: 5px;
+
+                &.show {
+                  display: block;
+                }
+              }
+            }
+
+            .current-game-rune-container {
+              display: flex;
+              flex-direction: column;
+
+              .current-game-rune-description {
+                display: none;
+                position: absolute;
+                height: auto;
+                //top: 0;
+                //left: 50%;
+                transform: translate(-30%, -100%);
+                z-index: 1;
+                width: fit-content;
+
+                background-color: #00207b;
+                color: #fff;
+                padding: 10px;
+                border-radius: 5px;
+
+                &.show {
+                  display: block;
+                }
+              }
+
+              img {
+                background: navy;
+                border-radius: 50%;
+              }
+            }
+          }
+
+        }
+      }
+
+
+    }
+  }
 
   .view-menu {
     width: 703px;
@@ -46,6 +250,29 @@
       justify-content: space-evenly;
       align-items: center;
       gap: 10px;
+
+      padding: 30px 0;
+      font-family: 'BM Dohyeon', sans-serif;
+
+      .mastery-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        .champion-mastery-image {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+
+          .mastery-champion-image {
+            border-radius: 50%;
+            border: 2px gold solid;
+          }
+        }
+      }
     }
 
 
@@ -63,10 +290,12 @@
 
 
     }
+
     .game-record-description {
       display: flex;
       flex-direction: column;
       gap: 50px;
+
       span {
         font-size: 18px;
       }
@@ -82,6 +311,7 @@
           font-size: 18px;
           font-weight: 700;
         }
+
         .count {
           font-size: 14px;
           color: #808080;
@@ -98,6 +328,7 @@
       span {
         font-size: 18px;
       }
+
       .champion-des {
         display: flex;
         justify-content: space-between;
@@ -109,6 +340,7 @@
         display: flex;
         flex-direction: row;
         gap: 5px;
+
         img {
           width: 70px;
           height: 70px;
@@ -130,6 +362,7 @@
             font-size: 18px;
 
           }
+
           .champion-win-late-des3 {
             font-size: 16px;
           }
@@ -137,6 +370,7 @@
       }
     }
   }
+
   .game-mode {
     border: 1.5px solid #c3d1dc;
     width: 703px;

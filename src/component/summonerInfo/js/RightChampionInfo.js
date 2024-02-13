@@ -1,14 +1,20 @@
 import {IoIosArrowDown} from "react-icons/io";
-
+function capitalizeFirstLetter(word) {
+    if (word === "FiddleSticks") {   // 기형적인 문자열이라 따로처리
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    } else {
+        return word;
+    }
+}
 const Player = ({ player, index, filteredParticipants, moveToClickUserInfo }) => (
     <div className={"champion-name-image"} key={index}>
         <img
-            src={`https://ddragon.leagueoflegends.com/cdn/14.2.1/img/champion/${player.championName}.png`}
+            src={`https://ddragon.leagueoflegends.com/cdn/14.2.1/img/champion/${capitalizeFirstLetter(player.championName)}.png`}
             alt={`${player.championName}`}
             style={{width: "20px"}}
             className={filteredParticipants.some(participant => participant.championName === player.championName) ? 'mine' : 'not-mine'}
         />
-        <span
+        <span className={"right-champion-summoner-name"}
             onClick={() => moveToClickUserInfo(player.riotIdGameName, player.riotIdTagline)}>
       {
           player.riotIdGameName.length > 6

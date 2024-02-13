@@ -15,7 +15,7 @@ const InfoTemplate = () => {
     const [userInfo, setUserInfo] = useState(undefined)
     const [infoLoading, setInfoloading] = useState(null);
     const [gamesLoading, setGamesLoading] = useState(false);
-    const [recentGames, setRecentGames] = useState(null);
+    const [recentGames, setRecentGames] = useState([]);
 
     const getUserInfo = async () => {
         setInfoloading(true);
@@ -24,6 +24,7 @@ const InfoTemplate = () => {
             setUserInfo(response.data.userInfo != null ? response.data : null);
             console.log(response.data);
             await getRecentGames();
+            await getChampionMastery();
         } catch (e) {
             console.error(e);
             setUserInfo(null);
@@ -32,19 +33,49 @@ const InfoTemplate = () => {
         setInfoloading(false);
     };
 
+    const [startIndex, setStartIndex] = useState(0);
+    const [moreGame, setMoreGame] = useState(false);
+    const increment = 10;
+
     const getRecentGames = async () => {
-        setGamesLoading(true);
+
+        if (startIndex > 0) {
+            setMoreGame(true)
+        } else {
+            setGamesLoading(true);
+        }
         try {
-            const response = await axios.get(`http://localhost:8686/recentGames/${0}/${1}`);
+            const response = await axios.get(`http://localhost:8686/recentGames/${startIndex}/${10}`);
             if (response.status === 200) {
-                setRecentGames(response.data);
+
+                setRecentGames(prevGames => [...prevGames, ...response.data]);
+
                 // recentGames 출력 로직
                 console.log(response.data);
+
+                setStartIndex(prevIndex => prevIndex + increment);
             }
         } catch (e) {
             console.error(e);
         }
-        setGamesLoading(false);
+        if (startIndex > 0) {
+            setMoreGame(false)
+        } else {
+            setGamesLoading(false);
+        }
+    };
+
+    const [championMastery, setChampionMastery] = useState(undefined);
+    const getChampionMastery = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8686/championMastery`);
+            if(response.status === 200) {
+                setChampionMastery(response.data);
+                console.log(response.data);
+            }
+        } catch (e) {
+            console.error(e)
+        }
     };
 
     const [spell, setSpell] = useState([]);
@@ -65,12 +96,20 @@ const InfoTemplate = () => {
         // console.log(response);
     }
 
+    const [champions, setChampions] = useState([]);
+    const getAllChampionData = async () => {
+      const response = await axios.get(`https://ddragon.leagueoflegends.com/cdn/14.2.1/data/ko_KR/champion.json`);
+      const data = await response.data;
+        console.log(data);
+      setChampions(data);
+    };
+
     const [runes, setRunes] = useState([]);
 
     const getRuneData = async () => {
         const response = await axios.get("https://ddragon.leagueoflegends.com/cdn/14.2.1/data/ko_KR/runesReforged.json");
         const data = await response.data;
-        // console.log(response.data);
+        console.log(response.data);
         setRunes(data);
     }
 
@@ -79,6 +118,7 @@ const InfoTemplate = () => {
         getAllSpellData();
         getAllItemData();
         getRuneData();
+        getAllChampionData();
     }, []);
 
 
@@ -86,8 +126,8 @@ const InfoTemplate = () => {
         <LeftContent userInfo={userInfo} infoLoading={infoLoading} tag={tag}/>
     );
     const loadEndRightContent = (
-        <RightContent recentGames={recentGames} searchValue={searchValue} spellData={spell}
-                      itemData={items} runeData={runes}/>
+        <RightContent recentGames={recentGames} searchValue={searchValue} tag={tag} spellData={spell}
+                      itemData={items} runeData={runes} championMastery={championMastery} championData={champions} getRecentGames={getRecentGames} moreGame={moreGame} />
     );
 
     const loadLeftContent = (

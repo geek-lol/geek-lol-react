@@ -8,12 +8,10 @@ const toggleDescription = (setFunc, index) => {
 
 const PlayerSearchInfo = ({
                               player,
-                              // getItemByKey,
                               getSpellByKey,
                               getMainRuneById,
                               getSubRuneData,
                               itemData,
-                              runeData,
                           }) => {
     const [showSpellDescription1, setShowSpellDescription1] = useState(false);
     const [showSpellDescription2, setShowSpellDescription2] = useState(false);
@@ -31,6 +29,15 @@ const PlayerSearchInfo = ({
             }
         }
         return null;
+    };
+
+    const calculateKDA = (kill, death, assist) => {
+        const kda = ((kill + assist) / death).toFixed(2);
+        if (death === 0) {
+            return <span className={`kda kda-perfect`}>Perfect</span>
+        } else {
+            return <span className={`kda ${kda < 1 ? 'kda-brown' : kda < 2 ? 'kda-green' : 'kda-blue'}`}>KDA {kda}</span>
+        }
     };
 
     return (
@@ -110,21 +117,31 @@ const PlayerSearchInfo = ({
                 </div>
                 <div className="kda-data-container">
                     <span className={"kda-number"}>{player.kills} / {player.deaths} / {player.assists}</span>
-                    <span className="kda">KDA {((player.kills + player.assists) / player.deaths).toFixed(1)}</span>
+                    {calculateKDA(player.kills, player.deaths, player.assists)}
                 </div>
             </div>
             <div className="item-slot">
                 {
                     [0, 1, 2, 3, 4, 5, 6].map((itemIndex) => (
-                        <ItemDisplay
-                            key={itemIndex}
-                            itemKey={player[`item${itemIndex}`]}
-                            itemIndex={itemIndex}
-                            toggleDescription={toggleDescription}
-                            getItemByKey={getItemByKey}
-                            showItemDescriptions={showItemDescriptions}
-                            toggleShownDescriptions={setShowItemDescriptions}
-                        />
+                        <React.Fragment key={itemIndex}>
+                            {player[`item${itemIndex}`] > 0 ? (
+                                <ItemDisplay
+                                    key={itemIndex}
+                                    itemKey={player[`item${itemIndex}`]}
+                                    itemIndex={itemIndex}
+                                    toggleDescription={toggleDescription}
+                                    getItemByKey={getItemByKey}
+                                    showItemDescriptions={showItemDescriptions}
+                                    toggleShownDescriptions={setShowItemDescriptions}
+                                />
+                            ) : (
+                                <img
+                                    src={process.env.PUBLIC_URL + "/assets/icon_non_item.svg"}
+                                    alt="non-item"
+                                    width={25}
+                                />
+                            )}
+                        </React.Fragment>
                     ))
                 }
             </div>
