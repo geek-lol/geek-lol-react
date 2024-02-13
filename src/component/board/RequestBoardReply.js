@@ -110,7 +110,7 @@ const RequestBoardReply = ({item,getReplyCount}) => {
     };
     return (
         <>
-            <div className="comment">
+            <div className="comment2">
                 <div className="comment-top">
                     <div className="tqbox">
                         <p>{writerName}</p><p>|</p>

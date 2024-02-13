@@ -8,6 +8,11 @@ import {REPLY_URL, TROLL_APPLY_REPLY_URL, TROLL_APPLY_URL} from "../../../../con
 import BoardReply from "../../BoardReply";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import RequestBoardReply from "../../RequestBoardReply";
+import {VscAccount} from "react-icons/vsc";
+import {BiSolidLike} from "react-icons/bi";
+import {IoCalendarOutline} from "react-icons/io5";
+import {BsChatDots} from "react-icons/bs";
+import {FaEye} from "react-icons/fa";
 
 const RequestDetail = () => {
     const {id} = useParams();
@@ -99,6 +104,7 @@ const RequestDetail = () => {
 
     useEffect(() => {
         getDetail();
+        console.log(item)
         getImg();
     }, [id]);
     useEffect(() => {
@@ -114,7 +120,6 @@ const RequestDetail = () => {
             return
         }
         fetchBoardUpload();
-        console.log(replyText);
         setReplyText("");
         setTotalReply(totalReply + 1);
         alert("댓글이 등록되었습니다.");
@@ -128,99 +133,83 @@ const RequestDetail = () => {
     };
 
     return (
-        <div>
-            <section className="detailSection">
-                <div className="DetailTop">
-                    <h1 className="RequestTitle">트롤재판소</h1>
-                    <h2 className="subTile">누가 트롤인지 여러분의 손으로 정해보세요!</h2>
-                    <div className="btnBox">
-                        <button className="Btn1">현재 진행중인 재판 ></button>
-                        <button className="Btn2">지난 재판 ></button>
-                    </div>
-                </div>
-                <div className="DetailMid">
-                    <h1>{item.title}</h1>
-                    <div className="detail-info-box">
-                        <div className="info-front">
-                            <p>작성일자 - {item.localDateTime}</p><p>|</p>
-                            <p>작성자 - {item.posterName}</p>
-                        </div>
-                        <div className="info-back">
-                            <p>조회수 - {item.viewCount - 1}</p><p>|</p>
-                            <p>댓글 - {item.replyCount}</p><p>|</p>
-                            <p>추천 - {item.upCount}</p>
-                        </div>
-                    </div>
+        <>
+            <section id="section">
+            <div className="box">
+                <div className="live-feed">
                     <div className="videoPlayer">
                         <ReactPlayer
                             light={false}
                             pip={true}
                             controls={true}
                             url={Video}
-                            width='700px'
-                            height={'400px'}
+                            width='800px'
+                            height={'600px'}
 
                         />
-                    </div>
-
-                    <span className="detailContent">{item.content}</span>
-                    <div className="votebox">
-                        <h2 className="voteTitle">실시간 여론</h2>
-                        <div className="vote">
-                            <button className="prosbtn">50%</button>
-                            <button className="consbtn">50%</button>
+                        <div className="info">
+                        <div className="info"><VscAccount size={15*2}/><span>{item.posterName}</span></div>
+                        <div className="info"><BiSolidLike size={15*2}/><span>{item.upCount}</span></div>
+                        {/*<div className="info"><IoCalendarOutline/><span>{item.timeDifference}</span></div>*/}
+                        <div className="info"><BsChatDots size={15*2}/><span>{item.reportCount}</span></div>
+                        <div className="info"><FaEye size={15*2}/><span>{item.viewCount}</span></div>
                         </div>
                     </div>
 
                 </div>
-                <div className="DetailBottom">
-                    <h1 className="replyTitle">댓글</h1>
-                    <form className="detail-comment-form" onChange={replyOnChangeHandler}>
-                        <TextField
-                            id="outlined-basic"
-                            label="댓글 쓰기"
-                            variant="outlined"
-                            fullWidth
-                            multiline
-                            rows={3}
-                            maxRows={3}
-                            sx={{
-                                fontSize: 36,
-                                width: '90%',
-                                borderRadius: '34px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                textAlign: 'center'
-                            }}
-                            value={replyText}
-                        />
-                        <Button
-                            id="bttt"
-                            variant="outlined"
-                            fullWidth
-                            sx={{width: '10%', marginLeft: 1}}
-                            onClick={inputTextHandler}
-                        >등록</Button>
-                    </form>
-                    <div className="comment-box">
-                        {
-                            replyList.map(con =>
-                                <RequestBoardReply item={con} getReplyCount={getReplyCount}/>
-                            )}
-                        <Pagination
-                            activePage={page}
-                            count={totalPage}
-                            variant="outlined"
-                            color="primary"
-                            shape="rounded"
-                            onChange={pageHandler}
-                        />
+                <div className="comment">
+                    <div className="messages" id="live-chat">
+                        <h1>Title : {item.title}</h1>
+                        <span>{item.content}</span>
                     </div>
                 </div>
-
+            </div>
+                <div className="detail-comment">
+                    <form className="detail-comment-form" onChange={replyOnChangeHandler}>
+                    <TextField
+                        id="outlined-basic"
+                        label="댓글 쓰기"
+                        variant="outlined"
+                        fullWidth
+                        multiline
+                        rows={3}
+                        maxRows={3}
+                        sx={{
+                            fontSize: 36,
+                            width: '90%',
+                            borderRadius: '34px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            textAlign: 'center'
+                        }}
+                        value={replyText}
+                    />
+                    <Button
+                        id="bttt"
+                        fullWidth
+                        sx={{width: '10%', marginLeft: 1}}
+                        onClick={inputTextHandler}
+                    >등록</Button>
+                </form>
+                <div className="comment-box">
+                    {
+                        replyList.map(con =>
+                            <RequestBoardReply item={con} getReplyCount={getReplyCount}/>
+                        )}
+                    <Pagination
+                        activePage={page}
+                        count={totalPage}
+                        variant="outlined"
+                        color="primary"
+                        shape="rounded"
+                        onChange={pageHandler}
+                    />
+                </div>
+            </div>
             </section>
+        </>
 
-        </div>
+
     );
 };
 
