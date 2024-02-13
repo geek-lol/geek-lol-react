@@ -75,7 +75,7 @@ const RequestContent = ({item}) => {
     }
     return (
         <>
-            <Link className="Request-Content-Box" to="/board/RequestDetail">
+            <Link className="Request-Content-Box" to={`/board/RequestDetail/${applyId}`}>
                 <div className="content-box">
                     <div
                         className="video-box"

@@ -25,7 +25,7 @@ const BoardTemplate = ({touch}) => {
                 <Route path={'/detail/:Id'} element={<Detail />}/>
                 <Route path={'/lckBoard'} element={<LCKBoard />}/>
                 <Route path={'/Request'} element={<RequestBoard/>}/>
-                <Route path={'/RequestDetail'} element={<RequestDetail/>}/>
+                <Route path={'/RequestDetail/:id'} element={<RequestDetail/>}/>
 
 
                 {/*<Route path={'/main'} />*/}

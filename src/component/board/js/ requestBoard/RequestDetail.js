@@ -1,10 +1,47 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import ReactPlayer from "react-player";
 import {Button, Pagination, TextField} from "@mui/material";
 import '../../scss/RequestDetail.scss';
 import {AiFillAlert} from "react-icons/ai";
+import {json, useParams} from "react-router-dom";
+import {REPLY_URL, TROLL_APPLY_REPLY_URL, TROLL_APPLY_URL} from "../../../../config/host-config";
+import BoardReply from "../../BoardReply";
 
 const RequestDetail = () => {
+    const {id} = useParams();
+    const [item,setItem]=useState([]);
+    const [replyList, setReplyList] = useState([]);
+
+    const Replyrendering = async () => {
+        await fetch(`${TROLL_APPLY_REPLY_URL}/${item.bulletinId}`, {
+            method: 'GET',
+            headers: {'content-type': 'application/json'},
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json();
+                }
+            })
+            .then(json => {
+                if (!json) return;
+                setReplyList(json.reply);
+                // setTotalReply(json.totalCount);
+                // setTotalPage(json.totalPages);
+            });
+    }
+    const getDetail=async ()=>{
+        await fetch(`${TROLL_APPLY_URL}/detail/${id}`,{
+            method:'GET'
+        }).then(res=>{
+            return res.json(); // JSON 형식으로 응답을 파싱
+        }).then(json=>{
+            setItem(json);
+        })
+    }
+    useEffect(() => {
+        getDetail();
+    }, [id]);
+
     return (
         <div>
             <section className="detailSection">
@@ -17,7 +54,18 @@ const RequestDetail = () => {
                     </div>
                 </div>
                 <div className="DetailMid">
-                    <h1 className="detailTitle">누가 잘못했나요 ㅠㅠ 판결좀 내주세요</h1>
+                    <h1>{item.title}</h1>
+                    <div className="detail-info-box">
+                        <div className="info-front">
+                            <p>작성일자 - {item.localDateTime}</p><p>|</p>
+                            <p>작성자 - {item.posterName}</p>
+                        </div>
+                        <div className="info-back">
+                            <p>조회수 - {item.viewCount - 1}</p><p>|</p>
+                            <p>댓글 - {item.replyCount}</p><p>|</p>
+                            <p>추천 - {item.upCount}</p>
+                        </div>
+                    </div>
                     <div className="videoPlayer">
                         <ReactPlayer
                             url={"/assets/videos/test2.mp4"}
@@ -26,7 +74,7 @@ const RequestDetail = () => {
                         />
                     </div>
 
-                    <span className="detailContent">아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글아주 긴글</span>
+                    <span className="detailContent">{item.content}</span>
                     <div className="votebox">
                         <h2 className="voteTitle">실시간 여론</h2>
                         <div className="vote">
@@ -65,26 +113,10 @@ const RequestDetail = () => {
                         >등록</Button>
                     </form>
                     <div className="comment-box">
-                        <div className="comment">
-                            <div className="comment-top">
-                                <div className="tqbox">
-                                    <p>레삐</p><p>|</p>
-                                    <p>몇시간전</p>
-                                </div>
-                                {/*{username === writerId ?*/}
-                                {/*    <p style={{paddingRight: '20px', color: 'red'}} onClick={deleteHandler}>삭제</p>*/}
-                                {/*    :*/}
-                                {/*    <p style={{paddingRight: '20px', color: 'black'}}><AiFillAlert/>신고하기</p>*/}
-                                {/*}*/}
-                                    <p style={{paddingRight: '20px', color: 'red'}} >삭제</p>
-
-                                    {/*<p style={{paddingRight: '20px', color: 'black'}}><AiFillAlert/>신고하기</p>*/}
-                            </div>
-                            <div className="comment-content">
-                                <span className="ctt">에베베베베베ㅔㅂ</span>
-                            </div>
-                        </div>
-                        {/*<BoardReply />*/}
+                        {/*{*/}
+                        {/*    replyList.map(con =>*/}
+                        {/*        <BoardReply item={con} getReplyCount={getReplyCount}/>*/}
+                        {/*    )}*/}
                         <Pagination
                             // activePage={page}
                             // count={totalPage}
