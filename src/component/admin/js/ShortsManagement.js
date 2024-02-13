@@ -21,6 +21,7 @@ import Slide from "@mui/material/Slide";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import {SHORT_URL} from "../../../config/host-config";
+import {getCurrentLoginUser} from "../../../utils/login-util";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -57,14 +58,7 @@ const headCells = [
 
 
 const ShortsManagement = () => {
-    const [shortsList,setShortsList] = useState([{
-        shortsId : 1,
-        title : "시발아시발",
-        uploaderName : "에딩",
-        uploadDate : "2015-21-64",
-        viewCount : 4,
-        upCount : 1
-    }]);
+    const [shortsList,setShortsList] = useState([]);
 
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(1);
@@ -73,16 +67,54 @@ const ShortsManagement = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const [open, setOpen] = React.useState(false);
-
-    const shortsListFetch = async () =>{
-        const res = await fetch(SHORT_URL)
+    //요청 URL
+    const API_URL = "http://localhost:8686";
+    //토큰
+    const token= getCurrentLoginUser().token;
+    // 요청 헤더 객체
+    const requestHeader = {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    };
+    // 패치
+    const getShortsFetch = async () =>{
+        const res = await fetch(API_URL+"/admin/shorts?page="+page,{
+            method : "POST",
+            headers: {"Authorization" : `Bearer ${token}`},
+        })
         const json = await res.json()
-        if (json === null)
-            return
-
-        setShortsList(json.shorts);
+        if (json.shorts !== null){
+            setShortsList(json.shorts)
+            setTotalPage(json.totalPages)
+        }
+        if (json.totalPages === 0) {
+            setTotalPage(1)
+        }
     }
-
+    const deleteBoardFetch = async () =>{
+        const payload = {
+            ids : selected
+        }
+        const res = await fetch(API_URL+"/admin/shorts?page="+page,{
+            method : "DELETE",
+            headers: requestHeader,
+            body: JSON.stringify(payload)
+        })
+        const json = await res.json()
+        if (res.status ===200) {
+            if (json.shorts !== null) {
+                setShortsList(json.shorts)
+                setTotalPage(json.totalPages)
+                setSelected([])
+            }
+            if (json.totalPages === 0) {
+                setTotalPage(1)
+            }
+        }
+    }
+    const handleDelete = () =>{
+        deleteBoardFetch()
+    }
 //모달
     const handleClickOpen = () => {
         setOpen(true);
@@ -133,19 +165,19 @@ const ShortsManagement = () => {
         setPage(page+1)
     }
     const isSelected = (id) => selected.indexOf(id) !== -1;
+    let emptyRows = 0;
 
-    // 테이블 데이터 갯수로 줄 계산
-    const emptyRows =
-        page > 1 ? Math.max(0, (1 + page) * rowsPerPage - shortsList.length) : 0;
+    useEffect(() => {
+        getShortsFetch();
 
-    useEffect(()=>{
-        shortsListFetch()
-    },[])
+        emptyRows = page > 1 ? Math.max(0, (1 + page) * rowsPerPage - shortsList.length) : 0;
+
+    }, [page]);
     return (
         <div>
             <Box sx={{ width: '65%' , mx:'auto' , mt:10}}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length}  title={"하이라이트"}/>
+                    <EnhancedTableToolbar numSelected={selected.length}  title={"하이라이트"} onClickHandler={handleDelete}/>
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}

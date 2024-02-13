@@ -76,33 +76,48 @@ const BoardManagement = () => {
     const API_URL = "http://localhost:8686";
     //토큰
     const token= getCurrentLoginUser().token;
+    // 요청 헤더 객체
+    const requestHeader = {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    };
 
     // 패치
-            const getBoardFetch = async () =>{
-                const res = await fetch(API_URL+"/admin/board?page="+page,{
-                    method : "POST",
-                    headers: {"Authorization" : `Bearer ${token}`},
-                })
-                const json = await res.json()
-
-                if (json.board !== null){
-                    setBoardList(json.board)
-                    setTotalPage(json.totalPages)
-                }
-            }
-            const deleteBoardFetch = async () =>{
-                const payload = {
-                    ids : selected
-                }
-                const res = await fetch(API_URL+"/admin/board?page="+page,{
-                    method : "Delete",
-                    headers: {"Authorization" : `Bearer ${token}`},
-                    body: JSON.stringify(payload)
+    const getBoardFetch = async () =>{
+        const res = await fetch(API_URL+"/admin/board?page="+page,{
+            method : "POST",
+            headers: {"Authorization" : `Bearer ${token}`},
         })
         const json = await res.json()
 
         if (json.board !== null){
             setBoardList(json.board)
+            setTotalPage(json.totalPages)
+        }
+        if (json.totalPages === 0) {
+            setTotalPage(1)
+        }
+    }
+    const deleteBoardFetch = async () =>{
+        const payload = {
+            ids : selected
+        }
+
+        const res = await fetch(API_URL+"/admin/board?page="+page,{
+            method : "Delete",
+            headers: requestHeader,
+            body: JSON.stringify(payload)
+        })
+        if (res.status ===200) {
+            const json = await res.json()
+            if (json.board !== null) {
+                setBoardList(json.board)
+                setTotalPage(json.totalPages)
+                setSelected([])
+            }
+            if(json.totalPages === 0){
+                setTotalPage(1)
+            }
         }
     }
 //모달
@@ -143,6 +158,10 @@ const BoardManagement = () => {
         }
         setSelected(newSelected);
     };
+    const onClickDeleteIcon = async () =>{
+
+        await deleteBoardFetch();
+    }
     const prevPageHandler= ()=>{
         if(page === 1)
             return;
@@ -168,7 +187,10 @@ const BoardManagement = () => {
         <div>
             <Box sx={{ width: '65%' , mx:'auto' , mt:10}}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length}  title={"자유게시판"}/>
+                    <EnhancedTableToolbar numSelected={selected.length}
+                                          title={"자유게시판"}
+                                          onClickHandler={onClickDeleteIcon}
+                    />
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}

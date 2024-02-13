@@ -21,6 +21,7 @@ import Slide from "@mui/material/Slide";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import {SHORT_URL} from "../../../config/host-config";
+import {getCurrentLoginUser} from "../../../utils/login-util";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -63,14 +64,55 @@ const TrollManagement = () => {
 
     const [open, setOpen] = React.useState(false);
 
-    const trollListFetch = async () =>{
-        const res = await fetch("http://localhost:8686/troll/ruling/board/all")
+    //요청 URL
+    const API_URL = "http://localhost:8686";
+    //토큰
+    const token= getCurrentLoginUser().token;
+    // 요청 헤더 객체
+    const requestHeader = {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    };
+    // 패치
+    const getMainFetch = async () =>{
+        const res = await fetch(API_URL+"/admin/ruling?page="+page,{
+            method : "POST",
+            headers: {"Authorization" : `Bearer ${token}`},
+        })
         const json = await res.json()
-        if (json.rulingList === null)
-            return
-        setApplyList(json.rulingList);
+        if (json.ruling !== null){
+            setApplyList(json.ruling)
+            setTotalPage(json.totalPages)
+        }
+        if (json.totalPages === 0) {
+            setTotalPage(1)
+        }
+    }
+    const deleteBoardFetch = async () =>{
+        const payload = {
+            ids : selected
+        }
+        const res = await fetch(API_URL+"/admin/ruling?page="+page,{
+            method : "DELETE",
+            headers: requestHeader,
+            body: JSON.stringify(payload)
+        })
+        const json = await res.json()
+        if (res.status ===200) {
+            if (json.ruling !== null) {
+                setApplyList(json.ruling)
+                setTotalPage(json.totalPages)
+                setSelected([])
+            }
+            if (json.totalPages === 0) {
+                setTotalPage(1)
+            }
+        }
     }
 
+    const onClickDelete = () =>{
+        deleteBoardFetch();
+    }
 //모달
     const handleClickOpen = () => {
         setOpen(true);
@@ -121,19 +163,17 @@ const TrollManagement = () => {
         setPage(page+1)
     }
     const isSelected = (id) => selected.indexOf(id) !== -1;
+    let emptyRows = 0;
+    useEffect(() => {
+        getMainFetch();
+        emptyRows = page > 1 ? Math.max(0, (1 + page) * rowsPerPage - applyList.length) : 0;
 
-    // 테이블 데이터 갯수로 줄 계산
-    const emptyRows =
-        page > 1 ? Math.max(0, (1 + page) * rowsPerPage - applyList.length) : 0;
-
-    useEffect(()=>{
-        trollListFetch();
-    },[])
+    }, [page]);
     return (
         <div>
             <Box sx={{ width: '65%' , mx:'auto' , mt:10}}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length}  title={"트롤재판소"}/>
+                    <EnhancedTableToolbar numSelected={selected.length}  title={"트롤재판소"} onClickHandler={onClickDelete}/>
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
