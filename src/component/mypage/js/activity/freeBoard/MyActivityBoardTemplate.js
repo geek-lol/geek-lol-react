@@ -2,11 +2,11 @@ import React from 'react';
 import MyActivityBoard from "./MyActivityBoard";
 import MyActivityComment from "./MyActivityComment";
 
-const MyActivityBoardTemplate = ({boardRows,replyRows}) => {
+const MyActivityBoardTemplate = () => {
     return (
         <div>
-            <MyActivityBoard rows={boardRows}/>
-            <MyActivityComment rows={replyRows}/>
+            <MyActivityBoard />
+            <MyActivityComment />
         </div>
     );
 };

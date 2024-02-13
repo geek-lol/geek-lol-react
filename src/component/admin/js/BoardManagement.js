@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import {EnhancedTableHead, EnhancedTableToolbar, getComparator, stableSort} from "../../../utils/create-table-header";
@@ -20,6 +20,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Slide from "@mui/material/Slide";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import {getCurrentLoginUser} from "../../../utils/login-util";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -57,7 +58,7 @@ const headCells = [
 
 const BoardManagement = () => {
     const [boardList,setBoardList] = useState([{
-        userId : "seonjin123@gami.com",
+        bulletinId : "seonjin123@gami.com",
         userName : "선딩",
         joinMembershipDate : "2022-04-02 11:22:33",
         report : 2,
@@ -71,6 +72,39 @@ const BoardManagement = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const [open, setOpen] = React.useState(false);
+    //요청 URL
+    const API_URL = "http://localhost:8686";
+    //토큰
+    const token= getCurrentLoginUser().token;
+
+    // 패치
+            const getBoardFetch = async () =>{
+                const res = await fetch(API_URL+"/admin/board?page="+page,{
+                    method : "POST",
+                    headers: {"Authorization" : `Bearer ${token}`},
+                })
+                const json = await res.json()
+
+                if (json.board !== null){
+                    setBoardList(json.board)
+                    setTotalPage(json.totalPages)
+                }
+            }
+            const deleteBoardFetch = async () =>{
+                const payload = {
+                    ids : selected
+                }
+                const res = await fetch(API_URL+"/admin/board?page="+page,{
+                    method : "Delete",
+                    headers: {"Authorization" : `Bearer ${token}`},
+                    body: JSON.stringify(payload)
+        })
+        const json = await res.json()
+
+        if (json.board !== null){
+            setBoardList(json.board)
+        }
+    }
 //모달
     const handleClickOpen = () => {
         setOpen(true);
@@ -84,7 +118,7 @@ const BoardManagement = () => {
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = boardList.map((n) => n.userId);
+            const newSelected = boardList.map((n) => n.bulletinId);
             setSelected(newSelected);
             return;
         }
@@ -122,10 +156,14 @@ const BoardManagement = () => {
     }
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
-    // 테이블 데이터 갯수로 줄 계산
-    const emptyRows =
-        page > 1 ? Math.max(0, (1 + page) * rowsPerPage - boardList.length) : 0;
+    let emptyRows = 0;
 
+    useEffect(() => {
+        getBoardFetch();
+        // 테이블 데이터 갯수로 줄 계산
+        emptyRows = page > 1 ? Math.max(0, (1 + page) * rowsPerPage - boardList.length) : 0;
+
+    }, [page]);
     return (
         <div>
             <Box sx={{ width: '65%' , mx:'auto' , mt:10}}>
@@ -145,7 +183,7 @@ const BoardManagement = () => {
                             />
                             <TableBody>
                                 {boardList.map((row, index) => {
-                                    const isItemSelected = isSelected(row.userId);
+                                    const isItemSelected = isSelected(row.bulletinId);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
@@ -155,13 +193,13 @@ const BoardManagement = () => {
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.userId}
+                                            key={row.bulletinId}
                                             selected={isItemSelected}
                                             sx={{ cursor: 'pointer' }}
                                         >
                                             <TableCell padding="checkbox">
                                                 <Checkbox
-                                                    onClick={(event) => handleClick(event, row.userId)}
+                                                    onClick={(event) => handleClick(event, row.bulletinId)}
                                                     color="primary"
                                                     checked={isItemSelected}
                                                     inputProps={{
@@ -170,26 +208,22 @@ const BoardManagement = () => {
                                                 />
                                             </TableCell>
 
-                                            <TableCell align="left">{row.userId}</TableCell>
-                                            <TableCell align="left">{row.userName}</TableCell>
-                                            <TableCell align="left">{formatDate(row.joinMembershipDate,'day')}</TableCell>
-                                            <TableCell align="left">{row.report}</TableCell>
-                                            <TableCell align="left">
-                                                {row.role}
-                                                <Button sx={{ backgroundColor:"rgba(216, 216, 216, 0.61)", color : "black", ml:1}}
-                                                        onClick={handleClickOpen}
-                                                >권한변경</Button>
-                                            </TableCell>
+                                            <TableCell align="left">{row.bulletinId}</TableCell>
+                                            <TableCell align="left">{row.title}</TableCell>
+                                            <TableCell align="left">{row.posterName}</TableCell>
+                                            <TableCell align="left">{formatDate(row.localDateTime,'day')}</TableCell>
+                                            <TableCell align="left">{row.viewCount}</TableCell>
+                                            <TableCell align="left">{row.upCount}</TableCell>
                                         </TableRow>
                                     );
                                 })}
                                 {emptyRows > 0 && (
                                     <TableRow
                                         style={{
-                                            height: (dense ? 33 : 53) * emptyRows,
+                                            height: 33 * emptyRows,
                                         }}
                                     >
-                                        <TableCell colSpan={6} />
+                                        <TableCell colSpan={5} />
                                     </TableRow>
                                 )}
                                 <TableRow

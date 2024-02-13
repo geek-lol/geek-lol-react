@@ -22,25 +22,7 @@ const MyPageTemplate = () => {
         userId: "",
         userName:""
     });
-    // 페이지별 게시글 목록들
-    const [boardRows,setBoardRows] = useState({
-        boardRow:[],
-        shortsRow:[],
-        trollRow:[],
-        trollApplyRow:[],
-    });
-    const [boardRowFlag,setBoardRowFlag] = useState(false);
-    // 페이지별 댓글 목록들
-    const [replyRows,setReplyRows] = useState({
-        boardRow:[],
-        shortsRow:[],
-        trollRow:[],
-        trollApplyRow:[],
-    });
-    const [replyRowFlag,setReplyRowFlag] = useState(false);
-    // 마이페이지 신고 목록들
-    const [reportRows,setReportRows] = useState([]);
-    const [reportRowFlag,setReportRowFlag] = useState(false);
+
     // 토큰 가져오기
     const token= getCurrentLoginUser().token;
     const userId = getCurrentLoginUser().token;
@@ -69,165 +51,6 @@ const MyPageTemplate = () => {
         }
     };
 
-    //내가 쓴 자게 조회
-    const boardFetch = async () =>{
-        const res = await fetch(API_URL+"/board/bulletin/my",{
-            method : "GET",
-            headers: { 'Authorization': `Bearer ${token}`},
-        })
-        const json = await res.json()
-        if (json.board !== null){
-            const updatedRows = json.board.map((row,index) => ({ ...row, id: index+1 }));
-            setBoardRows(prevState => ({
-                ...prevState,
-                boardRow: updatedRows
-            }))
-            setMyActivity(prevState => ({
-                ...prevState,
-                boards: prevState.boards+updatedRows.length
-            }))
-        }
-    }
-    // 자유게시판 댓글 조회
-    const boardReplyFetch = async () =>{
-        const res = await fetch(API_URL+"/board/bulletin/detail/reply/my",{
-            method : "GET",
-            headers: {"Authorization" : `Bearer ${token}`},
-        })
-        const json = await res.json()
-
-        if (json.myReply !== null){
-            const updatedRows = json.myReply.map((row,index) => ({ ...row, id: index+1 }));
-            setReplyRows(prevState => ({
-                ...prevState,
-                boardRow:updatedRows
-            }));
-            setMyActivity(prevState => ({
-                ...prevState,
-                comments: prevState.comments+updatedRows.length
-            }))
-        }
-    }
-
-    // 내가 쓴 쇼츠 게시판 조회
-    const shortsFetch = async () =>{
-        const res = await fetch(API_URL+"/api/shorts/my",{
-            method : "GET",
-            headers: {"Authorization" : `Bearer ${token}`},
-        })
-        const json = await res.json()
-        if (json.myshorts !== null){
-            const updatedRows = json.myshorts.map((row,index) => ({ ...row, id: index+1 }));
-            setBoardRows(prevState => ({
-                ...prevState,
-                shortsRow: updatedRows
-            }))
-            setMyActivity(prevState => ({
-                ...prevState,
-                boards: prevState.boards+updatedRows.length
-            }))
-        }
-    }
-    //쇼츠 댓글 가져오기
-    const shortsReplyFetch = async () =>{
-        const res = await fetch(API_URL+"/api/shorts/reply/my",{
-            method : "GET",
-            headers: {"Authorization" : `Bearer ${token}`},
-        })
-        const json = await res.json()
-        if (json.myreplys !== null){
-            const updatedRows = json.myreplys.map((row,index) => ({ ...row, id: index+1 }));
-            setReplyRows(prevState => ({
-                ...prevState,
-                shortsRow:updatedRows
-            }));
-            setMyActivity(prevState => ({
-                ...prevState,
-                comments: prevState.comments+updatedRows.length
-            }))
-        }
-    }
-// 내가 쓴 트롤 사형 지원 게시판 조회
-    const applyFetch = async () =>{
-        const res = await fetch(API_URL+"/troll/apply/my",{
-            method : "GET",
-            headers: {"Authorization" : `Bearer ${token}`},
-        })
-        const json = await res.json()
-
-        if (json.boardApply !== null){
-            const updatedRows = json.boardApply.map((row,index) => ({ ...row, id: index+1 }));
-            setBoardRows(prevState => ({
-                ...prevState,
-                trollApplyRow: updatedRows
-            }))
-            setMyActivity(prevState => ({
-                ...prevState,
-                boards: prevState.boards+updatedRows.length
-            }))
-
-        }
-    }
-    //트롤 사형 지원쪽 댓글 가져오기
-    const applyReplyFetch = async () =>{
-        const res = await fetch(API_URL+"/troll/apply/reply/my",{
-            method : "GET",
-            headers: {"Authorization" : `Bearer ${token}`},
-        })
-        const json = await res.json()
-        if (json.reply !== null){
-            const updatedRows = json.reply.map((row,index) => ({ ...row, id: index+1 }));
-            setReplyRows(prevState => ({
-                ...prevState,
-                trollApplyRow:updatedRows
-            }));
-            setMyActivity(prevState => ({
-                ...prevState,
-                comments: prevState.comments+updatedRows.length
-            }))
-        }
-    }
-
-    //트롤 사형 게시글 가져오기
-    const rulingBoardFetch = async () =>{
-        const res = await fetch(API_URL+"/troll/ruling/board/my",{
-            method : "GET",
-            headers: {"Authorization" : `Bearer ${token}`},
-        })
-        const json = await res.json()
-        console.log(`트롤 json`)
-        console.log(json)
-        if (json.rulingList!== null){
-            const updatedRows = json.rulingList.map((row,index) => ({ ...row, id: index+1 }));
-            setBoardRows(prevState => ({
-                ...prevState,
-                trollRow: updatedRows
-            }))
-            setMyActivity(prevState => ({
-                ...prevState,
-                boards: prevState.boards+updatedRows.length
-            }))
-        }
-    }
-    //트롤 사형 댓글 가져오기
-    const rulingReplyFetch = async () =>{
-        const res = await fetch(API_URL+"/troll/ruling/reply/my",{
-            method : "GET",
-            headers: {"Authorization" : `Bearer ${token}`},
-        })
-        const json = await res.json()
-        if (json.reply !== null){
-            const updatedRows = json.reply.map((row,index) => ({ ...row, id: index+1 }));
-            setReplyRows(prevState => ({
-                ...prevState,
-                trollRow:updatedRows
-            }));
-            setMyActivity(prevState => ({
-                ...prevState,
-                comments: prevState.comments+updatedRows.length
-            }))
-        }
-    }
 
     const changeActivity = (key,value) => {
         setMyActivity({
@@ -246,24 +69,13 @@ const MyPageTemplate = () => {
 
     useEffect(() => {
         userInfoFetch();
-
-        boardFetch()
-        applyFetch();
-        shortsFetch();
-        rulingBoardFetch()
-
-        boardReplyFetch();
-        applyReplyFetch();
-        shortsReplyFetch();
-        rulingReplyFetch();
-
     }, []);
     return (
         <div className="mypage">
             <MypageSideMenu changeType={changeType} />
             {pageType === 1 && <MyPageProfile userInfo={userInfo} myActivity={myActivity} />}
             {pageType === 2 && <MyInformation userInfo={userInfo} changeUser ={changeUser} />}
-            {pageType === 3 && <MyActivityMain boardRows={boardRows} replyRows={replyRows} reportRows={reportRows} />}
+            {pageType === 3 && <MyActivityMain />}
         </div>
     );
 };
