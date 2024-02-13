@@ -22,7 +22,6 @@ const ShortsContent = ({id, item, upVote}) => {
         const {shortsId, uploaderName, replyCount, viewCount, upCount, title, context} = item;
 
 
-
         const [viewComment, setViewComment] = useState(false);
         const [viewAni, setViewAni] = useState(false);
 
@@ -55,7 +54,6 @@ const ShortsContent = ({id, item, upVote}) => {
         const [totalCount, setTotalCount] = useState();
 
 
-
         // 이미지 URL을 저장할 상태변수
         const [videoUrl, setVideoUrl] = useState(null);
         const [videoLoaded, setVideoLoaded] = useState(false);
@@ -85,7 +83,6 @@ const ShortsContent = ({id, item, upVote}) => {
             }
 
         };
-
 
 
         // 쇼츠 리스트
@@ -131,7 +128,7 @@ const ShortsContent = ({id, item, upVote}) => {
                 })
                 .then(json => {
                     setVoteCount(json.up);
-                    console.log('voteCount',json.up);
+                    console.log('voteCount', json.up);
 
                 })
                 .catch(error => {
@@ -149,7 +146,7 @@ const ShortsContent = ({id, item, upVote}) => {
             getVoteList();
             setVoteLoaded(true);
 
-            console.log('shorts',shortsId);
+            console.log('shorts', shortsId);
 
         }, []);
 
@@ -157,7 +154,6 @@ const ShortsContent = ({id, item, upVote}) => {
         useEffect(() => {
             if (!videoLoaded) return;
         }, [videoLoaded]);
-
 
 
         useEffect(() => {
@@ -235,7 +231,6 @@ const ShortsContent = ({id, item, upVote}) => {
             // 투표 실행
             vote();
         };
-
 
 
         // 댓글 닫을때 애니메이션
@@ -328,23 +323,25 @@ const ShortsContent = ({id, item, upVote}) => {
 
 
 
-        return (
-            <>
 
-                    <li key={shortsId} className={cn('content-container', {scrollDown_ani_view: viewScrollDownAni}, {scrollUp_ani_view: viewScrollUpAni})} ref={contentRef}>
-                        {voteLoaded && (
+
+        return (
+            <div className={'container-html'}>
+                <li key={shortsId}
+                    className={cn('content-container', {scrollDown_ani_view: viewScrollDownAni}, {scrollUp_ani_view: viewScrollUpAni})}
+                    ref={contentRef}>
+                    {voteLoaded && (
                         <div className={cn('short-form', {animation_view: viewAni})} id={'root'}>
                             <div className={cn('content', {animation_content_view: viewComment})}>
                                 {videoLoaded && (
-                                <video
-                                    ref={playerRef}
-                                    autoPlay={true}
-                                    muted={isMuted}
-                                    controls={true}
-                                    loop={true}
-                                >
-                                    <source src={videoUrl}/>
-                                </video>
+                                    <video
+                                        autoPlay={true}
+                                        muted={true}
+                                        controls={true}
+                                        loop={true}
+                                    >
+                                        <source src={videoUrl}/>
+                                    </video>
                                 )}
                                 <div className={'overlap-front'}>
                                     <div className={'produce'}>
@@ -418,33 +415,33 @@ const ShortsContent = ({id, item, upVote}) => {
                                 </div>
                             </div>
                         </div>
-                        )}
-                        {
-                            viewReport &&
-                            <div className={'modal-container'} ref={modalBackground} onClick={e => {
-                                if (e.target === modalBackground.current) {
-                                    setViewReport(false);
-                                }
-                            }}>
-                                <div className={'modal-report'}>
-                                    <div className={'modal-report-text'}>
-                                        <p>정말 신고하시겠습니까?</p>
+                    )}
+                    {
+                        viewReport &&
+                        <div className={'modal-container'} ref={modalBackground} onClick={e => {
+                            if (e.target === modalBackground.current) {
+                                setViewReport(false);
+                            }
+                        }}>
+                            <div className={'modal-report'}>
+                                <div className={'modal-report-text'}>
+                                    <p>정말 신고하시겠습니까?</p>
+                                </div>
+                                <div className={'modal-btns'}>
+                                    <div className={'modal-cancel-btn'} onClick={() => setViewReport(false)}>
+                                        <p>취소</p>
                                     </div>
-                                    <div className={'modal-btns'}>
-                                        <div className={'modal-cancel-btn'} onClick={() => setViewReport(false)}>
-                                            <p>취소</p>
-                                        </div>
-                                        <div className={'modal-correct-btn'}>
-                                            <p>확인</p>
-                                        </div>
+                                    <div className={'modal-correct-btn'}>
+                                        <p>확인</p>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                        }
-                    </li>
+                    }
+                </li>
 
-            </>
+            </div>
         );
 
 
