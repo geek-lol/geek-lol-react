@@ -119,16 +119,16 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
 
 
     // useEffect(() => {
-    //     if (size < shortReplyCount) {
+    //     if (size > shortReplyCount) {
     //         setSize(shortReplyCount);
     //     } else {
     //
     //         // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
-    //         if (inView && !loading) {
+    //         if (inView) {
     //             setPage(shortReplyList => shortReplyList + 1)
     //         }
     //     }
-    // }, [inView, loading])
+    // }, [inView])
 
 
     return (

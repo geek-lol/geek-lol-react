@@ -33,7 +33,7 @@ const ShortsCommentList = ({key, item, shortReplyList, ref}) => {
 
     return (
         shortReplyList && (
-            <li key={key} ref={ref} className={'comment-item'} id={'commentNo'}>
+            <li key={key} className={'comment-item'} id={'commentNo'}>
                 <div className={'comment-user-profile'}>
                     <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
                 </div>
