@@ -2,8 +2,7 @@ import React, {useEffect, useState} from 'react';
 import ReactPlayer from "react-player";
 import {Button, Pagination, TextField} from "@mui/material";
 import '../../scss/RequestDetail.scss';
-import {AiFillAlert} from "react-icons/ai";
-import {json, useParams} from "react-router-dom";
+import { useParams} from "react-router-dom";
 import {
     TROLL_APPLY_REPLY_URL,
     TROLL_APPLY_URL, TROLL_APPLY_VOTE_URL,
@@ -11,8 +10,6 @@ import {
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import RequestBoardReply from "../../RequestBoardReply";
 import {VscAccount} from "react-icons/vsc";
-import {BiSolidLike} from "react-icons/bi";
-import {IoCalendarOutline} from "react-icons/io5";
 import {BsChatDots} from "react-icons/bs";
 import {FaEye} from "react-icons/fa";
 import {GoHeart, GoHeartFill} from "react-icons/go";
@@ -27,7 +24,7 @@ const RequestDetail = () => {
     const [totalReply, setTotalReply] = useState(0);
     const [totalPage, setTotalPage] = useState();
     const [page, setPage] = useState(1);
-    const [likeToggle, setLikeToggle] = useState(null);
+    const [likeToggle, setLikeToggle] = useState(0);
     const [totalLike, setTotalLike] = useState(null);
 
     const Replyrendering = async () => {
@@ -57,7 +54,6 @@ const RequestDetail = () => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
             const arrayBuffer = await response.arrayBuffer();
             const blob = new Blob([arrayBuffer]);
             const videoUrl = URL.createObjectURL(blob);
@@ -114,6 +110,7 @@ const RequestDetail = () => {
         getImg();
     }, [id]);
     useEffect(() => {
+        getDetail();
         Replyrendering();
     }, [id, inputText, page, totalReply]);
     const createLike = async () => {
@@ -127,6 +124,9 @@ const RequestDetail = () => {
         }).then(res => {
             if (res.status === 200) {
                 console.log("잘 만들어짐");
+                modifyLike();
+                findLike();
+
             }
             if (res.status === 400) {
                 console.log('이미 만들어짐');

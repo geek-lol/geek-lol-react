@@ -10,6 +10,7 @@ import RequestBoard from "./ requestBoard/RequestBoard";
 import Modify from "./Modify";
 import RequestDetail from "./ requestBoard/RequestDetail";
 import RequestCreate from "./ requestBoard/RequestCreate";
+import SelectDetail from "./ requestBoard/selectDetail";
 
 const BoardTemplate = ({touch}) => {
 
@@ -26,6 +27,7 @@ const BoardTemplate = ({touch}) => {
                 <Route path={'/lckBoard'} element={<LCKBoard />}/>
                 <Route path={'/Request'} element={<RequestBoard/>}/>
                 <Route path={'/RequestDetail/:id'} element={<RequestDetail/>}/>
+                <Route path={'/SelectDetail'} element={<SelectDetail/>}/>
 
 
                 {/*<Route path={'/main'} />*/}

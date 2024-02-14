@@ -4,9 +4,10 @@ import cn from "classnames";
 import {CiSearch} from "react-icons/ci";
 import {Link} from "react-router-dom";
 import ProgressBar from "@ramonak/react-progress-bar";
-import ReactPlayer from "react-player";
-import {TROLL_APPLY_URL, TROLL_RULING_BOARD_URL, TROLL_RULING_VOTE_URL} from "../../../../config/host-config";
+import {TROLL_APPLY_URL, TROLL_RULING_BOARD_URL} from "../../../../config/host-config";
 import RequestContent from "./RequestContent";
+import {Pagination} from "@mui/material";
+import HeaderCard from "./headerCard";
 
 const RequestBoard = () => {
     const [hide, setHide] = useState(false);
@@ -16,8 +17,10 @@ const RequestBoard = () => {
     const [toggle, setToggle] = useState(true);
     const [inputContent, setInputContent] = useState("");
     const [rbtitle, setRbTitle] = useState(null);
-
-
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    const [cardData1,setCardData1]=useState([]);
+    const [cardData2,setCardData2]=useState([]);
 
     const relativeButtonHandler = (e) => {
         setHide(!hide);
@@ -44,7 +47,7 @@ const RequestBoard = () => {
     }, [title]);
 
     useEffect(() => {
-        fetch(`${TROLL_APPLY_URL}?type=${type}`, {
+        fetch(`${TROLL_APPLY_URL}?type=${type}&page=${page}&size=${10}`, {
             method: 'GET',
             headers: {
                 'content-type': 'application/json',
@@ -59,12 +62,9 @@ const RequestBoard = () => {
                 if (!json) return;
                 SetRequestBoard(json.boardApply);
                 console.log(json.boardApply);
-                // setTotalPage(json.totalPages);
+                setTotalPage(json.totalPages);
             });
-    }, [toggle]);
-    const voteData=async ()=>{
-        // const response=await fetch(`${TROLL_RULING_VOTE_URL}/${}`)
-    }
+    }, [toggle,page]);
     const toggleHandler1 = () => {
         setToggle(true);
         setType(null);
@@ -94,6 +94,10 @@ const RequestBoard = () => {
                 SetRequestBoard(json.boardApply);
             });
     }
+    const pageHandler = (e) => {
+        console.log(+e.target.innerText)
+        setPage(e.target.innerText);
+    };
     const inputHandler = (e) => {
         setInputContent(e.target.value);
     };
@@ -108,18 +112,31 @@ const RequestBoard = () => {
                 'content-type': 'application/json',
             }
         }).then(res=>{
-            console.log(res.status);
+            if(res.status===200)
+                return res.json();
+        }).then( json => {
+            console.log(json);
+            setCardData1([json.currentBoard]);
+            setCardData2([json.previousBoard]);
         })
     }
+    const [prev,setPrev]=useState(true);
+    const [current,setCurrent]=useState(false);
     return (
         <div id="board_wrap" onClick={offDiv}>
             <section id="board_main">
                 <div className="card-box">
+                    {cardData1.map(item=>
+                        <HeaderCard item={item} isBool={prev}/>
+                    )}
+                    {cardData2.map(item=>
+                        <HeaderCard item={item} isBool={current}/>
+                    )}
 
 
                 </div>
                 <div>
-                    <ProgressBar
+                <ProgressBar
                         className="progressBar"
                         completed={60}
                         customLabel={"에베벱"}
@@ -168,6 +185,14 @@ const RequestBoard = () => {
                             <div className="write-btn">
                                 <Link to="/board/RequestCreate">글쓰기</Link>
                             </div>
+                            <Pagination
+                                activePage={page}
+                                count={totalPage}
+                                variant="outlined"
+                                color="primary"
+                                shape="rounded"
+                                onChange={pageHandler}
+                            />
                         </nav>
                     </div>
                 </div>

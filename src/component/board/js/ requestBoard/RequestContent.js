@@ -2,8 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import ReactPlayer from "react-player";
 import '../../scss/RequestContent.scss';
 import {VscAccount} from "react-icons/vsc";
-import {IoCalendarOutline, IoPerson} from "react-icons/io5";
-import {BiSolidLike} from "react-icons/bi";
+import {IoCalendarOutline} from "react-icons/io5";
 import {BsChatDots} from "react-icons/bs";
 import {FaEye} from "react-icons/fa";
 import {Link} from "react-router-dom";
@@ -82,7 +81,6 @@ const RequestContent = ({item}) => {
                         className="video-box"
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
-
                     >
                         <div className="player">
                         <ReactPlayer
