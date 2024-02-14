@@ -127,8 +127,8 @@ const ShortsContent = ({id, item, upVote}) => {
                     return res.json();
                 })
                 .then(json => {
-                    setVoteCount(json.up);
                     setTotalCount(json.total);
+                    setVoteCount(json.up);
                     console.log('total', json.total)
                     console.log('voteCount', json.up);
 
@@ -147,6 +147,7 @@ const ShortsContent = ({id, item, upVote}) => {
             getshortList();
             getVoteList();
             setVoteLoaded(true);
+            setTotalCount(upCount);
 
             console.log('shorts', shortsId);
 
@@ -177,7 +178,7 @@ const ShortsContent = ({id, item, upVote}) => {
 
                 if (voteCount === 1 || voteCount === 0) {
                     const res = await fetch(API_VOTE_URL, {
-                        method: 'PUT',
+                        method: 'PATCH',
                         headers: requestHeader,
                         body: JSON.stringify(shortsId)
                     })
@@ -209,6 +210,7 @@ const ShortsContent = ({id, item, upVote}) => {
                     console.log('jsonup', json.up);
                     setVoteCount(json.up);
                     setTotalCount(json.total);
+                    console.log('total', json.total);
 
 
 
