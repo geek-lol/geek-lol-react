@@ -47,11 +47,11 @@ const ShortsContent = ({id, item, upVote}) => {
 
 
         //전체 upCount
-        const [voteCount, setVoteCount] = useState(); // 각각의upCount
-        const [voteShort, setVoteShort] = useState(false);
+        const [voteCount, setVoteCount] = useState(null); // 각각의upCount
+        const [totalVote, setTotalVote] = useState();
         const [voteLoaded, setVoteLoaded] = useState(false);
 
-        const [totalCount, setTotalCount] = useState();
+        const [totalCount, setTotalCount] = useState(null);
 
 
         // 이미지 URL을 저장할 상태변수
@@ -103,7 +103,6 @@ const ShortsContent = ({id, item, upVote}) => {
                     setShortList(json.shorts);
                     setReplyLength(replyCount);
                     console.log(shortsId)
-                    setTotalCount(upVote);
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
@@ -129,6 +128,8 @@ const ShortsContent = ({id, item, upVote}) => {
                 })
                 .then(json => {
                     setVoteCount(json.up);
+                    setTotalCount(json.total);
+                    console.log('total', json.total)
                     console.log('voteCount', json.up);
 
                 })
@@ -161,7 +162,7 @@ const ShortsContent = ({id, item, upVote}) => {
             if (!voteLoaded) return;
         }, [voteLoaded]);
 
-        const voteShortVideo = (selectedShortsId) => {
+        const voteShortVideo = () => {
             setVoteLoaded(true);
             // 로그인 여부 검사
             if (!token) {
@@ -176,7 +177,7 @@ const ShortsContent = ({id, item, upVote}) => {
 
                 if (voteCount === 1 || voteCount === 0) {
                     const res = await fetch(API_VOTE_URL, {
-                        method: 'PATCH',
+                        method: 'PUT',
                         headers: requestHeader,
                         body: JSON.stringify(shortsId)
                     })
@@ -185,6 +186,9 @@ const ShortsContent = ({id, item, upVote}) => {
                         const json = await res.json().catch(() => ({}));
                         console.log('jsonup', json.up);
                         setVoteCount(json.up);
+                        setTotalCount(json.total);
+                        console.log('total', json.total);
+
 
 
                     } else {
@@ -204,6 +208,8 @@ const ShortsContent = ({id, item, upVote}) => {
                     const json = await res.json().catch(() => ({}));
                     console.log('jsonup', json.up);
                     setVoteCount(json.up);
+                    setTotalCount(json.total);
+
 
 
                 } else {
@@ -410,18 +416,13 @@ const ShortsContent = ({id, item, upVote}) => {
                                 setViewReport(false);
                             }
                         }}>
-                            <div className={'modal-report'}>
-                                <div className={'modal-report-text'}>
+                            <div className={'modal-inform'}>
+                                <div className={'modal-inform-text'}>
                                     <p>정말 신고하시겠습니까?</p>
+                                    <p></p>
+                                    <p></p>
                                 </div>
-                                <div className={'modal-btns'}>
-                                    <div className={'modal-cancel-btn'} onClick={() => setViewReport(false)}>
-                                        <p>취소</p>
-                                    </div>
-                                    <div className={'modal-correct-btn'}>
-                                        <p>확인</p>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
 
