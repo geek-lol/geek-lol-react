@@ -8,8 +8,6 @@ import {getCurrentLoginUser} from "../../../utils/login-util";
 import {BOARD_URL, DETAIL_URL, LOAD_PROFILE_URL, MODIFY_URL} from "../../../config/host-config";
 import { useLocation } from 'react-router-dom';
 import {value} from "lodash/seq";
-import async from "async";
-
 
 const Modify = () => {
     const location = useLocation();

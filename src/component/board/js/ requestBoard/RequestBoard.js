@@ -5,7 +5,7 @@ import {CiSearch} from "react-icons/ci";
 import {Link} from "react-router-dom";
 import ProgressBar from "@ramonak/react-progress-bar";
 import ReactPlayer from "react-player";
-import {TROLL_APPLY_URL, TROLL_RULING_VOTE_URL} from "../../../../config/host-config";
+import {TROLL_APPLY_URL, TROLL_RULING_BOARD_URL, TROLL_RULING_VOTE_URL} from "../../../../config/host-config";
 import RequestContent from "./RequestContent";
 
 const RequestBoard = () => {
@@ -29,6 +29,9 @@ const RequestBoard = () => {
     const hiddenHandler = (e) => {
         setTitle(e.target.value);
     }
+    useEffect(() => {
+        getCardData();
+    }, []);
     useEffect(() => {
         if (title === '제목') {
             setRbTitle('title');
@@ -55,7 +58,7 @@ const RequestBoard = () => {
             .then(json => {
                 if (!json) return;
                 SetRequestBoard(json.boardApply);
-                console.log(requestBoard);
+                console.log(json.boardApply);
                 // setTotalPage(json.totalPages);
             });
     }, [toggle]);
@@ -98,46 +101,20 @@ const RequestBoard = () => {
         e.preventDefault();
         search();
     };
+    const getCardData=async ()=>{
+        await fetch(TROLL_RULING_BOARD_URL, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+            }
+        }).then(res=>{
+            console.log(res.status);
+        })
+    }
     return (
         <div id="board_wrap" onClick={offDiv}>
             <section id="board_main">
                 <div className="card-box">
-                    <div className="prev hero">
-                        <div className='videoo'>
-                            <ReactPlayer
-                                url={"/assets/videos/lol.mp4"}
-                                width={'300px'}
-                                height={'100%'}/>
-                        </div>
-                        <div className="text"></div>
-                        <div className="logo">
-                            <img src={process.env.PUBLIC_URL + '/assets/lollogo.jpg'} alt=""/>
-                        </div>
-                        <div className="main-text">
-                            <p>누가누가 문제인가요?? ㅅㅂ?</p>
-                        </div>
-                        <div className="main-text2">
-                            <p>이전 투표 글</p>
-                        </div>
-                    </div>
-                    <div className="prev hero">
-                        <div className='videoo'>
-                            <ReactPlayer
-                                url={"/assets/videos/lol.mp4"}
-                                width={'300px'}
-                                height={'100%'}/>
-                        </div>
-                        <div className="text second"></div>
-                        <div className="logo">
-                            <img src={process.env.PUBLIC_URL + '/assets/lollogo.jpg'} alt=""/>
-                        </div>
-                        <div className="main-text">
-                            <p>누가누가 문제인가요?? ㅅㅂ?</p>
-                        </div>
-                        <div className="main-text2">
-                            <p>현재투표 글</p>
-                        </div>
-                    </div>
 
 
                 </div>

@@ -9,9 +9,10 @@ import {FaEye} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import {calculateTimeDifference} from "../../../../utils/time-util";
 import {TROLL_APPLY_URL} from "../../../../config/host-config";
+import {GoHeartFill} from "react-icons/go";
 const RequestContent = ({item}) => {
     const playerRef = useRef(null);
-    const {applyId,applyLink,content,localDateTime,posterId,posterName,reportCount,title,upCount,viewCount}=item;
+    const {applyId,applyLink,content,localDateTime,posterId,posterName,reportCount,title,upCount,viewCount,replyCount}=item;
     const [timeDifference, setTimeDifference] = useState('');
     const getCurrentTime = () => new Date();
     useEffect(() => {
@@ -81,8 +82,6 @@ const RequestContent = ({item}) => {
                         className="video-box"
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
-                        // onMouseEnter={() => playerRef.current.play()}
-                        // onMouseLeave={() => playerRef.current.pause()}
 
                     >
                         <div className="player">
@@ -104,9 +103,9 @@ const RequestContent = ({item}) => {
                 </div>
                 <div className="info-Box">
                     <div className="info"><VscAccount /><span>{posterName}</span></div>
-                    <div className="info"><BiSolidLike /><span>{upCount}</span></div>
+                    <div className="info"><GoHeartFill/><span>{upCount}</span></div>
                     <div className="info"><IoCalendarOutline /><span>{timeDifference}</span></div>
-                    <div className="info"><BsChatDots /><span>{reportCount}</span></div>
+                    <div className="info"><BsChatDots /><span>{replyCount}</span></div>
                     <div className="info"><FaEye /><span>{viewCount}</span></div>
                 </div>
             </Link>

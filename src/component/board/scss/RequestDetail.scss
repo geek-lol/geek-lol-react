@@ -23,13 +23,18 @@
     background-color: #000000;
     margin: 20px 0 0 20px;
     text-align: center;
-    .info {
+    .infobox {
       margin-top: 10px;
-      margin-left: 10px;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      gap: 15px;
+      justify-content: center;
+      gap: 35px;
+      .info{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+      }
     }
   }
 
