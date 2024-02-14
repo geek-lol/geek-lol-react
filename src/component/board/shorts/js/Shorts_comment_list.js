@@ -3,7 +3,7 @@ import '../scss/Shorts_comment_list.scss'
 import data from "bootstrap/js/src/dom/data";
 import {BOARD_REPLY_URL} from "../../../../config/host-config";
 
-const ShortsCommentList = ({key, item, shortReplyList}) => {
+const ShortsCommentList = ({key, item, shortReplyList, ref}) => {
 
 
     const [showMore, setShowMore] = useState(false);
@@ -33,7 +33,7 @@ const ShortsCommentList = ({key, item, shortReplyList}) => {
 
     return (
         shortReplyList && (
-            <li key={key} className={'comment-item'} id={'commentNo'}>
+            <li key={key} ref={ref} className={'comment-item'} id={'commentNo'}>
                 <div className={'comment-user-profile'}>
                     <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
                 </div>

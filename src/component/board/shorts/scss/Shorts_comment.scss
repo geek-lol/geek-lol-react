@@ -45,9 +45,23 @@
 
   .comment-box {
     height: 80%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      width: 10px;  /* 스크롤바의 너비 */
+    }
+
+    &::-webkit-scrollbar-thumb {
+      height: 30%; /* 스크롤바의 길이 */
+      background: #CCCCCC; /* 스크롤바의 색상 */
+
+      border-radius: 10px;
+    }
 
     .comment-list {
       height: 100%;
+
     }
   }
 
@@ -58,6 +72,7 @@
     justify-content: space-between;
     border-top: 1px solid #cccccc;
     padding-top: 2%;
+    background: #FFFFFF;
 
     .comment-save-profile {
       img {

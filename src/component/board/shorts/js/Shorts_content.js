@@ -101,6 +101,7 @@ const ShortsContent = ({id, item, upVote}) => {
                 .then(json => {
                     // console.log('shorts', json.shorts);
                     setShortList(json.shorts);
+                    setReplyLength(replyCount);
                     console.log(shortsId)
                     setTotalCount(upVote);
                 })
@@ -169,29 +170,11 @@ const ShortsContent = ({id, item, upVote}) => {
                 return;
             }
 
-            // 투표 여부를 확인하는 함수
-            const isAlreadyVoted = async () => {
-                const res = await fetch(`${API_VOTE_URL}?shortsId=${shortsId}`, {
-                    method: 'GET',
-                    headers: requestHeader
-                });
-
-                if (res.status === 200) {
-                    const json = await res.json();
-                    setVoteCount(json.up);
-                    return json.up
-                } else {
-                    console.error('Error:', res.status);
-                    const err = await res.text();
-                    alert(err);
-                }
-            };
 
             // 투표 여부에 따른 요청 분기
             const vote = async () => {
-                const votedCount = await isAlreadyVoted();
 
-                if (votedCount === 1 || votedCount === 0) {
+                if (voteCount === 1 || voteCount === 0) {
                     const res = await fetch(API_VOTE_URL, {
                         method: 'PATCH',
                         headers: requestHeader,
@@ -253,76 +236,80 @@ const ShortsContent = ({id, item, upVote}) => {
 
 
         // 휠을 내리거나 올렸을때 0.3s 기다리고 움직임
-        const handleWheel = (event) => {
-            const currentTime = new Date().getTime();
-            // 이전 이벤트 시간 - 지금 이벤트 시간
-            const deltaTime = currentTime - lastWheelTime.current;
-
-            // 만약 0.4s이상이면 실행되도록
-            if (deltaTime > 400) {
-                const deltaY = event.deltaY;
-
-                if (deltaY > 0 && currentIndex < shortList.length - 1) {
-                    setViewScrollDownAni(true);
-                    setTimeout(() => {
-                        setViewScrollDownAni(false);
-                        setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, shortList.length - 1)); // 범위 벗어나지 않도록
-                    }, 300);
-                } else if (deltaY < 0 && currentIndex > 0) {
-                    setViewScrollUpAni(true);
-                    setTimeout(() => {
-                        setViewScrollUpAni(false);
-                        setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0)); // 범위 벗어나지 않도록
-                    }, 300);
-                }
-
-                lastWheelTime.current = currentTime;
-            }
-        };
-
-
-        const handleKeyDown = (event) => {
-            const currentTime = new Date().getTime();
-            // 이전 이벤트 시간 - 지금 이벤트 시간
-            const deltaTime = currentTime - lastWheelTime.current;
-
-            // 만약 0.4s이상이면 실행되도록
-            if (deltaTime > 400) {
-                const deltaY = event.deltaY;
-
-                if (event.keyCode === 40 && currentIndex < shortList.length - 1) {
-                    setViewScrollDownAni(true);
-                    setTimeout(() => {
-                        setViewScrollDownAni(false);
-                        setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, shortList.length - 1)); // 범위 벗어나지 않도록
-                    }, 300);
-                } else if (event.keyCode === 38 && currentIndex > 0) {
-                    setViewScrollUpAni(true);
-                    setTimeout(() => {
-                        setViewScrollUpAni(false);
-                        setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0)); // 범위 벗어나지 않도록
-                    }, 300);
-                }
-                lastWheelTime.current = currentTime;
-            }
-        };
-
-        useEffect(() => {
-            // 전달받은 쇼츠의 인덱스로 초기화
-            setCurrentIndex(shortList.findIndex((item) => item.shortsId === id));
-            setCurrentIndex(Math.min(shortList.length - 1, 0));
-            window.addEventListener('wheel', handleWheel);
-            window.addEventListener('keydown', handleKeyDown);
-            return () => {
-                window.removeEventListener('wheel', handleWheel);
-                window.removeEventListener('keydown', handleKeyDown);
-            };
-        }, [shortList, id]);
+        // const handleWheel = (event) => {
+        //     const currentTime = new Date().getTime();
+        //     // 이전 이벤트 시간 - 지금 이벤트 시간
+        //     const deltaTime = currentTime - lastWheelTime.current;
+        //
+        //     // 만약 0.4s이상이면 실행되도록
+        //     if (deltaTime > 400) {
+        //         const deltaY = event.deltaY;
+        //
+        //         if (deltaY > 0 && currentIndex < shortList.length - 1) {
+        //             setViewScrollDownAni(true);
+        //             setTimeout(() => {
+        //                 setViewScrollDownAni(false);
+        //                 setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, shortList.length - 1)); // 범위 벗어나지 않도록
+        //             }, 300);
+        //         } else if (deltaY < 0 && currentIndex > 0) {
+        //             setViewScrollUpAni(true);
+        //             setTimeout(() => {
+        //                 setViewScrollUpAni(false);
+        //                 setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0)); // 범위 벗어나지 않도록
+        //             }, 300);
+        //         }
+        //
+        //         lastWheelTime.current = currentTime;
+        //     }
+        // };
+        //
+        //
+        // const handleKeyDown = (event) => {
+        //     const currentTime = new Date().getTime();
+        //     // 이전 이벤트 시간 - 지금 이벤트 시간
+        //     const deltaTime = currentTime - lastWheelTime.current;
+        //
+        //     // 만약 0.4s이상이면 실행되도록
+        //     if (deltaTime > 400) {
+        //         const deltaY = event.deltaY;
+        //
+        //         if (event.keyCode === 40 && currentIndex < shortList.length - 1) {
+        //             setViewScrollDownAni(true);
+        //             setTimeout(() => {
+        //                 setViewScrollDownAni(false);
+        //                 setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, shortList.length - 1)); // 범위 벗어나지 않도록
+        //             }, 300);
+        //         } else if (event.keyCode === 38 && currentIndex > 0) {
+        //             setViewScrollUpAni(true);
+        //             setTimeout(() => {
+        //                 setViewScrollUpAni(false);
+        //                 setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0)); // 범위 벗어나지 않도록
+        //             }, 300);
+        //         }
+        //         lastWheelTime.current = currentTime;
+        //     }
+        // };
+        //
+        // useEffect(() => {
+        //     // 전달받은 쇼츠의 인덱스로 초기화
+        //     setCurrentIndex(shortList.findIndex((item) => item.shortsId === id));
+        //     setCurrentIndex(Math.min(shortList.length - 1, 0));
+        //     window.addEventListener('wheel', handleWheel);
+        //     window.addEventListener('keydown', handleKeyDown);
+        //     return () => {
+        //         window.removeEventListener('wheel', handleWheel);
+        //         window.removeEventListener('keydown', handleKeyDown);
+        //     };
+        // }, [shortList, id]);
 
         // const currentListItem = ;
 
 
-
+        const [replyLength, setReplyLength] = useState(null);
+        const ReplyCount = (replylength) => {
+            console.log(replylength)
+            setReplyLength(replylength);
+        }
 
 
         return (
@@ -375,7 +362,7 @@ const ShortsContent = ({id, item, upVote}) => {
                                         </div>
                                         <div className={'short-btn comment-btn'}>
                                             <BsChatLeft className={'btn'} onClick={chkViewComment}/>
-                                            <p>{replyCount}</p>
+                                            <p>{replyLength}</p>
                                         </div>
                                         <div className={'short-btn report-btn'}>
                                             <BsExclamationCircle className={'btn'} onClick={() => setViewReport(true)}/>
@@ -400,7 +387,7 @@ const ShortsContent = ({id, item, upVote}) => {
                                 </div>
                                 <div className={'short-btn comment-btn'}>
                                     <BsChatLeft className={'btn'} onClick={chkViewComment}/>
-                                    <p>{replyCount}</p>
+                                    <p>{replyLength}</p>
                                 </div>
                                 <div className={'short-btn report-btn'}>
                                     <BsExclamationCircle className={'btn'} onClick={() => setViewReport(true)}/>
@@ -409,7 +396,7 @@ const ShortsContent = ({id, item, upVote}) => {
                             <div className={cn('comment-form', {comment_form_view: viewComment})}>
                                 <div className={cn("comment", {comment_view: viewComment})}>
                                     <div className={'comment-wrapper'}>
-                                        <Shorts_comment item={item} chkViewComment={chkViewComment}
+                                        <Shorts_comment ReplyCount={ReplyCount} item={item} chkViewComment={chkViewComment}
                                                         viewComment={viewComment}/>
                                     </div>
                                 </div>
