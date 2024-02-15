@@ -44,6 +44,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    .info{
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
 
     h1 {
       width: 100%;
@@ -52,7 +60,6 @@
       font-size: 30px;
       margin: 16px 0;
       text-align: center;
-
     }
 
     .detail-info-box {
@@ -89,11 +96,10 @@
       border: lightgray solid 2px;
       overflow: hidden;
       border-radius: 5px;
-
     }
 
     .detailContent {
-      margin-top: 5px;
+      padding: 15px 0;
       border-bottom: lightgray solid 2px;
       width: 100%;
       text-align: center;
@@ -133,7 +139,6 @@
     .replyTitle {
       font-size: 26px;
       font-weight: 900;
-      margin-top: 50px;
     }
 
     .detail-comment-form {
@@ -187,9 +192,9 @@
 
 }
 
-button {
-  background-color: transparent; /* 배경색 투명하게 */
-  border: none; /* 테두리 없애기 */
-  outline: none; /* 포커스시 테두리 없애기 */
-  cursor: pointer; /* 마우스를 올리면 커서 모양 변경 */
-}
+//button {
+//  background-color: transparent; /* 배경색 투명하게 */
+//  border: none; /* 테두리 없애기 */
+//  outline: none; /* 포커스시 테두리 없애기 */
+//  cursor: pointer; /* 마우스를 올리면 커서 모양 변경 */
+//}

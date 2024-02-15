@@ -3,23 +3,71 @@ import ReactPlayer from "react-player";
 import {Pagination, TextField} from "@mui/material";
 import {useLocation} from "react-router-dom";
 import "../../scss/SelectDetail.scss";
-import {VscAccount} from "react-icons/vsc";
-import {BsChatDots} from "react-icons/bs";
-import {FaEye} from "react-icons/fa";
-import {GoHeart} from "react-icons/go";
 import {Button, Modal} from 'react-bootstrap';
 import {GiLuciferCannon} from "react-icons/gi";
-import RequestBoardReply from "../../RequestBoardReply";
+import {TROLL_APPLY_REPLY_URL, TROLL_RULING_BOARD_URL, TROLL_RULING_REPLY_URL} from "../../../../config/host-config";
+import {getCurrentLoginUser} from "../../../../utils/login-util";
+import SelectBoardReply from "../../SelectBoardReply";
 const SelectDetail = () => {
     const [dataList, setDataList] = useState([]);
     const [page, setPage] = useState(1);
     const location = useLocation();
-    const {title, applyPosterId, applyPosterName, content, replyCount, rulingDate, viewCount} = location.state.data;
-    const {rulingId, isBool} = location.state;
+    const {title, applyPosterId, applyPosterName, content, replyCount, rulingDate, viewCount} = location.state.data||{};
+    const {rulingId}=location.state.rulingId||{};
     const [vs,setVs]=useState(0);
+    const [Video, setVideo] = useState();
+    const [token, setToken] = useState(getCurrentLoginUser().token);
+    const [replyText, setReplyText] = useState();
+    const [inputText, setInputText] = useState();
+    const [totalReply, setTotalReply] = useState(0);
+    const [totalPage, setTotalPage] = useState();
+    const [likeToggle, setLikeToggle] = useState(0);
+    const [replyList, setReplyList] = useState([]);
+    const [totalLike, setTotalLike] = useState(null);
+
     useEffect(() => {
-        console.log(title);
+        console.log(location.state.rulingId);
+        getImg();
     }, []);
+    useEffect(() => {
+        Replyrendering();
+    }, [title, inputText, page, totalReply]);
+    const Replyrendering = async () => {
+        await fetch(`${TROLL_RULING_REPLY_URL}/${location.state.rulingId}?page=${page}`, {
+            method: 'GET',
+            headers: {'content-type': 'application/json',},
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json();
+                }
+            })
+            .then(json => {
+                if (!json) return;
+                setReplyList(json.reply);
+                setTotalReply(json.totalCount);
+                setTotalPage(json.totalPages);
+            });
+    }
+
+    const getImg = async () => {
+        try {
+            const response = await fetch(`${TROLL_RULING_BOARD_URL}/load-video/${location.state.rulingId}`, {
+                method: 'POST'
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const arrayBuffer = await response.arrayBuffer();
+            const blob = new Blob([arrayBuffer]);
+            const videoUrl = URL.createObjectURL(blob);
+            setVideo(videoUrl);
+        } catch (error) {
+            console.error('Error fetching video:', error);
+        }
+    }
+
 
     const [show, setShow] = useState(false);
     const blueClickHandler = () => {
@@ -35,6 +83,57 @@ const SelectDetail = () => {
         setVs(2);
         $red_btn.style.width="400px";
         $blue_btn.style.width="150px";
+    };
+    const fetchBoardUpload = async () => {
+        try {
+            // 클라이언트에서 전송할 데이터
+            const requestData = {
+                context: replyText,  // 필요한 데이터에 맞게 수정
+                // 다른 필요한 데이터들을 추가할 수 있음
+            };
+
+            const res = await fetch(`${TROLL_RULING_REPLY_URL}/${location.state.rulingId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(requestData),
+            });
+
+            if (res.ok) {
+                // const json = await res.json();
+                // console.log(json);
+                // 성공적으로 처리된 경우에 수행할 작업 추가
+            } else {
+                console.error('Error:', res.status);
+                // 에러 처리 로직 추가
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            // 예외 처리 로직 추가
+        }
+    };
+    const replyOnChangeHandler = (e) => {
+        setReplyText(e.target.value);
+    };
+    const inputTextHandler = () => {
+        setInputText(replyText);
+        if (!token) {
+            alert("로그인이 필요한 서비스입니다.");
+            return
+        }
+        fetchBoardUpload();
+        setReplyText("");
+        setTotalReply(totalReply + 1);
+        alert("댓글이 등록되었습니다.");
+    };
+    const getReplyCount = () => {
+        if (totalReply <= 0) setTotalReply(0);
+        setTotalReply(totalReply - 1);
+    }
+    const pageHandler = (e) => {
+        setPage(+e.target.innerText);
     };
     return (
         <>
@@ -53,11 +152,8 @@ const SelectDetail = () => {
                 </Modal.Header>
                 <h2 className='modalTitle'>{title}</h2>
                 <Modal.Body>
-
-
                     <div className="modal-body">
                         <div className='blue-box'>
-
                             <img src={process.env.PUBLIC_URL + '/assets/bluepng-removebg.png'} alt=""/>
                             <hr className='hr'/>
                             <div id="three" className="button BIG-red-button blue-btn" onClick={blueClickHandler}>찬성
@@ -69,7 +165,6 @@ const SelectDetail = () => {
                                     <GiLuciferCannon size={22 * 2}/>
                                     :
                                     <GiLuciferCannon size={22 * 2} style={{transform: 'scaleX(-1)'}}/>
-
                             }
                         </div>
                         <div className='red-box'>
@@ -110,26 +205,21 @@ const SelectDetail = () => {
                                 light={false}
                                 pip={true}
                                 controls={true}
-                                // url={Video}
+                                url={Video}
                                 width='800px'
                                 height={'600px'}
                             />
-
-
                         </div>
-
                         <span className="detailContent">{content}</span>
                         <div className="vote-box">
 
                             <div id="three" className="button BIG-red-button!!!" onClick={() => setShow(true)}>투표하기
                             </div>
                         </div>
-
-
                     </div>
                     <div className="DetailBottom">
                         <h1 className="replyTitle">댓글</h1>
-                        <form className="detail-comment-form" >
+                        <form className="detail-comment-form" onChange={replyOnChangeHandler}>
                             <TextField
                                 id="outlined-basic"
                                 label="댓글 쓰기"
@@ -146,28 +236,28 @@ const SelectDetail = () => {
                                     alignItems: 'center',
                                     textAlign: 'center'
                                 }}
-                                // value={replyText}
+                                value={replyText}
                             />
                             <Button
                                 id="bttt"
                                 variant="outlined"
                                 fullWidth
-                                sx={{width: '10%', marginLeft: 1}}
-                                // onClick={inputTextHandler}
+                                sx={{width: '15%', marginLeft: 1}}
+                                onClick={inputTextHandler}
                             >등록</Button>
                         </form>
                         <div className="comment-box">
-                            {/*{*/}
-                            {/*    replyList.map(con =>*/}
-                            {/*        <RequestBoardReply item={con} getReplyCount={getReplyCount}/>*/}
-                            {/*    )}*/}
+                            {
+                                replyList.map(con =>
+                                    <SelectBoardReply item={con} getReplyCount={getReplyCount}/>
+                                )}
                             <Pagination
                                 activePage={page}
-                                // count={totalPage}
+                                count={totalPage}
                                 variant="outlined"
                                 color="primary"
                                 shape="rounded"
-                                // onChange={pageHandler}
+                                onChange={pageHandler}
                             />
                         </div>
                     </div>

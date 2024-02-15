@@ -9,9 +9,6 @@ import {
 } from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import RequestBoardReply from "../../RequestBoardReply";
-import {VscAccount} from "react-icons/vsc";
-import {BsChatDots} from "react-icons/bs";
-import {FaEye} from "react-icons/fa";
 import {GoHeart, GoHeartFill} from "react-icons/go";
 
 const RequestDetail = () => {
@@ -124,9 +121,7 @@ const RequestDetail = () => {
         }).then(res => {
             if (res.status === 200) {
                 console.log("잘 만들어짐");
-                modifyLike();
                 findLike();
-
             }
             if (res.status === 400) {
                 console.log('이미 만들어짐');
@@ -219,7 +214,7 @@ const RequestDetail = () => {
                             <div className="info-back">
                                 <p>조회수 - {item.viewCount - 1}</p><p>|</p>
                                 <p>댓글 - {item.replyCount}</p><p>|</p>
-                                <p>추천 - {item.upCount}</p>
+                                <p>추천 - {totalLike}</p>
                             </div>
                         </div>
                         <div className="videoPlayer">
@@ -235,6 +230,18 @@ const RequestDetail = () => {
                         </div>
 
                         <span className="detailContent">{item.content}</span>
+                        {
+                            likeToggle === 1 ?
+                                <div className="info" onClick={likeHanlder}><GoHeart className="p"
+                                                                                     size={25 * 2}/><span>{totalLike}</span><span>좋아요를 눌러서 투표에 선정되게 도와주세요!</span>
+                                </div>
+                                :
+                                <div className="info" onClick={likeHanlder}><GoHeartFill className="p"
+                                                                                         color="red"
+                                                                                         size={25 * 2}/><span>{totalLike}</span><span>좋아요를 눌러서 투표에 선정되게 도와주세요!</span>
+                                </div>
+
+                        }
 
                     </div>
                     <div className="DetailBottom">
