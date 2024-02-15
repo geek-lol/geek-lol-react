@@ -51,7 +51,7 @@ const SelectDetail = () => {
                         투표하기
                     </Modal.Title>
                 </Modal.Header>
-                <h2 className='modalTitle'>제목?제목?제목?제목?</h2>
+                <h2 className='modalTitle'>{title}</h2>
                 <Modal.Body>
 
 
@@ -93,16 +93,16 @@ const SelectDetail = () => {
                         </div>
                     </div>
                     <div className="DetailMid">
-                        {/*<h1>{item.title}</h1>*/}
+                        <h1>{title}</h1>
                         <div className="detail-info-box">
                             <div className="info-front">
-                                {/*<p>작성일자 - {item.localDateTime}</p><p>|</p>*/}
-                                {/*<p>작성자 - {item.posterName}</p>*/}
+                                <p>작성일자 - {rulingDate}</p><p>|</p>
+                                <p>작성자 - {applyPosterName}</p>
                             </div>
                             <div className="info-back">
-                                {/*<p>조회수 - {item.viewCount - 1}</p><p>|</p>*/}
-                                {/*<p>댓글 - {item.replyCount}</p><p>|</p>*/}
-                                {/*<p>추천 - {item.upCount}</p>*/}
+                                <p>조회수 - {viewCount - 1}</p><p>|</p>
+                                <p>댓글 - {replyCount}</p><p>|</p>
+                                {/*<p>추천 - {upCount}</p>*/}
                             </div>
                         </div>
                         <div className="videoPlayer">
@@ -113,13 +113,12 @@ const SelectDetail = () => {
                                 // url={Video}
                                 width='800px'
                                 height={'600px'}
-
                             />
 
 
                         </div>
 
-                        {/*<span className="detailContent">{item.content}</span>*/}
+                        <span className="detailContent">{content}</span>
                         <div className="vote-box">
 
                             <div id="three" className="button BIG-red-button!!!" onClick={() => setShow(true)}>투표하기

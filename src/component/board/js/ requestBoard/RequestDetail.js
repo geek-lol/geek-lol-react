@@ -235,13 +235,6 @@ const RequestDetail = () => {
                         </div>
 
                         <span className="detailContent">{item.content}</span>
-                        <div className="votebox">
-                            <h2 className="voteTitle">실시간 여론</h2>
-                            <div className="vote">
-                                <button className="prosbtn">50%</button>
-                                <button className="consbtn">50%</button>
-                            </div>
-                        </div>
 
                     </div>
                     <div className="DetailBottom">
@@ -269,7 +262,7 @@ const RequestDetail = () => {
                                 id="bttt"
                                 variant="outlined"
                                 fullWidth
-                                sx={{width: '10%', marginLeft: 1}}
+                                sx={{width: '15%', marginLeft: 1}}
                                 onClick={inputTextHandler}
                             >등록</Button>
                         </form>
