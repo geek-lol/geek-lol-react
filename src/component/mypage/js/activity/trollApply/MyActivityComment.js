@@ -21,6 +21,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Button from "@mui/material/Button";
 import {getCurrentLoginUser} from "../../../../../utils/login-util";
 import {useEffect, useState} from "react";
+import {TROLL_APPLY_URL} from "../../../../../config/host-config";
 
 //테이블 헤더
 const headCells = [
@@ -68,7 +69,7 @@ const MyActivityComment = () => {
 
     //트롤 사형 지원쪽 댓글 가져오기
     const applyReplyFetch = async () =>{
-        const res = await fetch(API_URL+"/troll/apply/reply/my",{
+        const res = await fetch(TROLL_APPLY_URL+"/my",{
             method : "GET",
             headers: {"Authorization" : `Bearer ${token}`},
         })
