@@ -5,12 +5,14 @@ import BoardManagement from "./BoardManagement";
 import ShortsManagement from "./ShortsManagement";
 import TrollApplyManagement from "./TrollApplyManagement";
 import TrollManagement from "./TrollManagement";
+import {getCurrentLoginUser} from "../../../utils/login-util";
 
 
 
 const AdminPage = () => {
     //서브 메뉴 클릭한 유형 저장, 기본 : 유저관리
     const [pageType, setPageType] = useState("1");
+    const role = getCurrentLoginUser().role;
     const changePageType=(num)=>{
         setPageType(num);
     }

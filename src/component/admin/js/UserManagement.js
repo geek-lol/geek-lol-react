@@ -61,6 +61,7 @@ const UserManagement = () => {
     const [selectedValue, setSelectedValue] = useState('');
 
     const [open, setOpen] = React.useState(false);
+    const [deleteOpen, setDeleteOpen] = React.useState(false);
     //요청 URL
     const API_URL = "http://localhost:8686";
     //토큰
@@ -120,7 +121,7 @@ const UserManagement = () => {
     }
 
     const onClickDelete = () =>{
-        deleteBoardFetch();
+        setDeleteOpen(true);
     }
 //모달
     const handleClickOpen = (id) => {
@@ -134,6 +135,13 @@ const UserManagement = () => {
     const handleOk = () => {
         modifyAuth(changeId,selectedValue)
         setOpen(false);
+    };
+    const deletehandleClose = () => {
+        setDeleteOpen(false);
+    };
+    const deletehandleOk = () => {
+        deleteBoardFetch();
+        setDeleteOpen(false);
     };
 
 
@@ -305,6 +313,28 @@ const UserManagement = () => {
                     <DialogActions>
                         <Button onClick={handleClose}>Cancle</Button>
                         <Button onClick={handleOk}>Ok</Button>
+                    </DialogActions>
+                </Dialog>
+            </React.Fragment>
+            <React.Fragment>
+                <Dialog
+                    open={deleteOpen}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={deletehandleClose}
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle>{"정말 삭제하시겠습니까?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            <FormControl fullWidth>
+                                삭제하면 되돌릴 수 없습니다.
+                            </FormControl>
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={deletehandleClose}>Cancle</Button>
+                        <Button onClick={deletehandleOk}>Ok</Button>
                     </DialogActions>
                 </Dialog>
             </React.Fragment>

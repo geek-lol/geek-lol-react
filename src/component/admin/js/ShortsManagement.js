@@ -67,6 +67,7 @@ const ShortsManagement = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const [open, setOpen] = React.useState(false);
+    const [deleteOpen, setDeleteOpen] = React.useState(false);
     //요청 URL
     const API_URL = "http://localhost:8686";
     //토큰
@@ -113,7 +114,7 @@ const ShortsManagement = () => {
         }
     }
     const handleDelete = () =>{
-        deleteBoardFetch()
+        setDeleteOpen(true)
     }
 //모달
     const handleClickOpen = () => {
@@ -123,7 +124,13 @@ const ShortsManagement = () => {
     const handleClose = () => {
         setOpen(false);
     };
-
+    const deletehandleClose = () => {
+        setDeleteOpen(false);
+    };
+    const deletehandleOk = () => {
+        deleteBoardFetch();
+        setDeleteOpen(false);
+    };
 
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
@@ -259,29 +266,23 @@ const ShortsManagement = () => {
             </Box>
             <React.Fragment>
                 <Dialog
-                    open={open}
+                    open={deleteOpen}
                     TransitionComponent={Transition}
                     keepMounted
-                    onClose={handleClose}
+                    onClose={deletehandleClose}
                     aria-describedby="alert-dialog-slide-description"
                 >
-                    <DialogTitle>{"권한을 변경하시겠습니까?"}</DialogTitle>
+                    <DialogTitle>{"정말 삭제하시겠습니까?"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-slide-description">
                             <FormControl fullWidth>
-                                <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                    권한
-                                </InputLabel>
-                                <NativeSelect defaultValue={2}>
-                                    <option value={1}>ADMIN</option>
-                                    <option value={2}>COMMON</option>
-                                </NativeSelect>
+                                삭제하면 되돌릴 수 없습니다.
                             </FormControl>
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancle</Button>
-                        <Button onClick={handleClose}>Ok</Button>
+                        <Button onClick={deletehandleClose}>Cancle</Button>
+                        <Button onClick={deletehandleOk}>Ok</Button>
                     </DialogActions>
                 </Dialog>
             </React.Fragment>
