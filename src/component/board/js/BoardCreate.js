@@ -30,11 +30,6 @@ const BoardCreate = () => {
 
 
 
-    const imgClickHandler = e => {
-        document.getElementById('board_detail_img').click();
-    };
-
-
     const [boardValue, setBoardValue] = useState({
         title: '',
         context:''
@@ -133,8 +128,8 @@ const BoardCreate = () => {
                         } }
                         onChange={ ( event, editor ) => {
                             const data = editor.getData();
-                            const cleanData = data.replace(/<p>/g, '').replace(/<\/p>/g, '');
-                            onChange({ target: { name: 'content', value: cleanData.trim()}});
+                            const cleanData = data.replace(/<p>/g, '').replace(/<\/p>/g, '').replace(/&nbsp;/g,' ');
+                            onChange({ target: { name: 'content', value: cleanData}});
                             console.log( { event, editor, cleanData } );
                         } }
                         onBlur={ ( event, editor ) => {
@@ -145,7 +140,7 @@ const BoardCreate = () => {
                         }}
                     />
                 </div>
-                <div className={'img-box'} onClick={imgClickHandler}>
+                <div className={'img-box'} >
                     <input
                         id='board_detail_img'
                         type='file'

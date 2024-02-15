@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "../scss/Login.scss";
 import {Link, Route, Routes, useNavigate} from "react-router-dom";
 import {USER_URL} from "../../../../config/host-config";
@@ -31,7 +31,7 @@ const Login = () => {
         }
 
         if (res.status === 200) {
-            const {token, userName, role, id} = await res.json();
+            const {token, userName, role, id, autoLogin} = await res.json();
             // const responseData = await res.json();
             // 클라이언트에서 로그인을 했다는 사실을 알게 해야함
             // 서버에서 받은 토큰을 브라우저에 저장할것.
@@ -39,6 +39,7 @@ const Login = () => {
             // 2. 세션 스토리지 - 데이터를 브라우저가 종료되는 순간 삭제함
             localStorage.setItem('ACCESS_TOKEN', token);
             localStorage.setItem('USER_NAME', userName);
+            localStorage.setItem('AUTO_LOGIN', autoLogin);
             localStorage.setItem('ROLE', role);
             localStorage.setItem('USER_ID', id);
 
@@ -54,8 +55,12 @@ const Login = () => {
 
     const autoLoginHandler = e => {
         setAutoLogin(!autoLogin);
-        console.log(autoLogin)
+
     }
+
+    useEffect(() => {
+        // console.log(autoLogin);
+    }, [autoLogin]);
 
     return (
         <div className={'loginform'}>

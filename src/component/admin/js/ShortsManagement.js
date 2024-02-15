@@ -20,6 +20,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Slide from "@mui/material/Slide";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import {SHORT_URL} from "../../../config/host-config";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 
 
@@ -56,14 +57,8 @@ const headCells = [
 ];
 
 
-const BoardManagement = () => {
-    const [boardList,setBoardList] = useState([{
-        bulletinId : "seonjin123@gami.com",
-        userName : "선딩",
-        joinMembershipDate : "2022-04-02 11:22:33",
-        report : 2,
-        role : "COMMON"
-    }]);
+const ShortsManagement = () => {
+    const [shortsList,setShortsList] = useState([]);
 
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(1);
@@ -81,17 +76,15 @@ const BoardManagement = () => {
         'content-type': 'application/json',
         'Authorization': 'Bearer ' + token
     };
-
     // 패치
-    const getBoardFetch = async () =>{
-        const res = await fetch(API_URL+"/admin/board?page="+page,{
+    const getShortsFetch = async () =>{
+        const res = await fetch(API_URL+"/admin/shorts?page="+page,{
             method : "POST",
             headers: {"Authorization" : `Bearer ${token}`},
         })
         const json = await res.json()
-
-        if (json.board !== null){
-            setBoardList(json.board)
+        if (json.shorts !== null){
+            setShortsList(json.shorts)
             setTotalPage(json.totalPages)
         }
         if (json.totalPages === 0) {
@@ -102,23 +95,25 @@ const BoardManagement = () => {
         const payload = {
             ids : selected
         }
-
-        const res = await fetch(API_URL+"/admin/board?page="+page,{
-            method : "Delete",
+        const res = await fetch(API_URL+"/admin/shorts?page="+page,{
+            method : "DELETE",
             headers: requestHeader,
             body: JSON.stringify(payload)
         })
+        const json = await res.json()
         if (res.status ===200) {
-            const json = await res.json()
-            if (json.board !== null) {
-                setBoardList(json.board)
+            if (json.shorts !== null) {
+                setShortsList(json.shorts)
                 setTotalPage(json.totalPages)
                 setSelected([])
             }
-            if(json.totalPages === 0){
+            if (json.totalPages === 0) {
                 setTotalPage(1)
             }
         }
+    }
+    const handleDelete = () =>{
+        deleteBoardFetch()
     }
 //모달
     const handleClickOpen = () => {
@@ -133,7 +128,7 @@ const BoardManagement = () => {
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = boardList.map((n) => n.bulletinId);
+            const newSelected = shortsList.map((n) => n.shortsId);
             setSelected(newSelected);
             return;
         }
@@ -158,10 +153,6 @@ const BoardManagement = () => {
         }
         setSelected(newSelected);
     };
-    const onClickDeleteIcon = async () =>{
-
-        await deleteBoardFetch();
-    }
     const prevPageHandler= ()=>{
         if(page === 1)
             return;
@@ -174,23 +165,19 @@ const BoardManagement = () => {
         setPage(page+1)
     }
     const isSelected = (id) => selected.indexOf(id) !== -1;
-
     let emptyRows = 0;
 
     useEffect(() => {
-        getBoardFetch();
-        // 테이블 데이터 갯수로 줄 계산
-        emptyRows = page > 1 ? Math.max(0, (1 + page) * rowsPerPage - boardList.length) : 0;
+        getShortsFetch();
+
+        emptyRows = page > 1 ? Math.max(0, (1 + page) * rowsPerPage - shortsList.length) : 0;
 
     }, [page]);
     return (
         <div>
             <Box sx={{ width: '65%' , mx:'auto' , mt:10}}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length}
-                                          title={"자유게시판"}
-                                          onClickHandler={onClickDeleteIcon}
-                    />
+                    <EnhancedTableToolbar numSelected={selected.length}  title={"하이라이트"} onClickHandler={handleDelete}/>
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
@@ -200,28 +187,27 @@ const BoardManagement = () => {
                             <EnhancedTableHead
                                 numSelected={selected.length}
                                 onSelectAllClick={handleSelectAllClick}
-                                rowCount={boardList.length}
+                                rowCount={shortsList.length}
                                 headCells={headCells}
                             />
                             <TableBody>
-                                {boardList.map((row, index) => {
-                                    const isItemSelected = isSelected(row.bulletinId);
+                                {shortsList.map((row, index) => {
+                                    const isItemSelected = isSelected(row.shortsId);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.bulletinId}
+                                            key={row.shortsId}
                                             selected={isItemSelected}
                                             sx={{ cursor: 'pointer' }}
                                         >
                                             <TableCell padding="checkbox">
                                                 <Checkbox
-                                                    onClick={(event) => handleClick(event, row.bulletinId)}
+                                                    onClick={(event) => handleClick(event, row.shortsId)}
                                                     color="primary"
                                                     checked={isItemSelected}
                                                     inputProps={{
@@ -230,10 +216,10 @@ const BoardManagement = () => {
                                                 />
                                             </TableCell>
 
-                                            <TableCell align="left">{row.bulletinId}</TableCell>
+                                            <TableCell align="left">{row.shortsId}</TableCell>
                                             <TableCell align="left">{row.title}</TableCell>
-                                            <TableCell align="left">{row.posterName}</TableCell>
-                                            <TableCell align="left">{formatDate(row.localDateTime,'day')}</TableCell>
+                                            <TableCell align="left">{row.uploaderName}</TableCell>
+                                            <TableCell align="left">{formatDate(row.uploadDate,'day')}</TableCell>
                                             <TableCell align="left">{row.viewCount}</TableCell>
                                             <TableCell align="left">{row.upCount}</TableCell>
                                         </TableRow>
@@ -242,16 +228,16 @@ const BoardManagement = () => {
                                 {emptyRows > 0 && (
                                     <TableRow
                                         style={{
-                                            height: 33 * emptyRows,
+                                            height: (dense ? 33 : 53) * emptyRows,
                                         }}
                                     >
-                                        <TableCell colSpan={5} />
+                                        <TableCell colSpan={6} />
                                     </TableRow>
                                 )}
                                 <TableRow
                                     sx={{height:20}}
                                 >
-                                    <TableCell colSpan={4}></TableCell>
+                                    <TableCell colSpan={5}></TableCell>
                                     <TableCell align="right">
                                         {`${page} - ${totalPage}`}
                                     </TableCell>
@@ -303,4 +289,4 @@ const BoardManagement = () => {
     );
 };
 
-export default BoardManagement;
+export default ShortsManagement;

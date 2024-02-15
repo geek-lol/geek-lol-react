@@ -27,6 +27,8 @@ const MyInformation = ({userInfo,changeUser}) => {
 
     //입력 닉네임 저장
     const [newName,setNewName] = useState(userInfo.userName);
+    const [newNameCheck,setNewNameCheck] = useState(false);
+    const [message,setMessage] = useState("");
 
     const [user,setUser] = useState(userInfo);
 
@@ -55,7 +57,7 @@ const MyInformation = ({userInfo,changeUser}) => {
         const formData = new FormData();
         formData.append('user',jsonBlob);
         const res = await fetch(API_URL+"/modify",{
-            method:"POST",
+            method:"PUT",
             headers: {"Authorization" : `Bearer ${token}`},
             body: formData
         })
@@ -80,20 +82,29 @@ const MyInformation = ({userInfo,changeUser}) => {
         setAlterPw(!alterPw);
     }
 
-    useEffect(() => {
-        setUser(prev=>(
-            {
-                ...prev,
-                userName: newName
-            }))
-    }, [newName]);
-
+    const changeAlterNameClikHandler = ()=>{
+        setNewName(user.userName);
+        setAlterName(false);
+    }
     const alterNameClikHandler = ()=>{
-        alterName && alterNameFetch();
-        setAlterName(!alterName);
+        if (!newNameCheck){
+            setAlterName(true);
+        }else{
+            alterNameFetch();
+            setNewNameCheck(false);
+            setAlterName(false);
+        }
     }
     const inputNameHandler = (e) =>{
-        setNewName(e.target.value);
+        const inputs = e.target.value
+        if (inputs.length < 2 || inputs.length>6){
+            setNewNameCheck(false);
+            setMessage("닉네임은 2~6글자 사이여야 합니다.")
+        } else{
+            setNewNameCheck(true);
+            setMessage("닉네임 사용가능 합니다!")
+        }
+        setNewName(inputs);
     }
 
     const deleteFetch = async () =>{
@@ -101,7 +112,7 @@ const MyInformation = ({userInfo,changeUser}) => {
             id : userId
         }
         const res = await fetch(API_URL+"/delete",{
-            method: "POST",
+            method: "PUT",
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify(payload)
         })
@@ -126,18 +137,17 @@ const MyInformation = ({userInfo,changeUser}) => {
         setOpen(false);
         deleteFetch();
     };
+
     return (
         <div className="my-info-wrapper">
             <div className="info-title">기본정보</div>
             <div className="my-info-container">
                 <TextField
-                    id="outlined-read-only-input"
+                    disabled
+                    id="outlined-disabled"
                     label="아이디"
                     defaultValue={userInfo.userId}
-                    className="my-id-textField"
-                    InputProps={{
-                        readOnly: true,
-                    }}
+                    sx={{mt:2}}
                 />
             </div>
             <div className="my-info-container">
@@ -167,6 +177,11 @@ const MyInformation = ({userInfo,changeUser}) => {
                                 value={newName}
                                 variant="standard"
                                 onChange={inputNameHandler}/>
+                            <span className={'message'} style={
+                                newNameCheck
+                                    ? {color: '#61DBF0'}
+                                    : {color: '#F15F5F'}}>{message}</span>
+                                <div className="alter-text" onClick={changeAlterNameClikHandler}>취소</div>
                                 <div className="alter-text" onClick={alterNameClikHandler}>완료</div>
                         </>
                 }
