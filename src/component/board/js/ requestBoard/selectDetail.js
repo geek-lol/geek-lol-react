@@ -1,49 +1,89 @@
 import React, {useEffect, useState} from 'react';
 import ReactPlayer from "react-player";
-import {Button, Pagination, TextField} from "@mui/material";
+import {Pagination, TextField} from "@mui/material";
 import {useLocation} from "react-router-dom";
 import "../../scss/SelectDetail.scss";
 import {VscAccount} from "react-icons/vsc";
 import {BsChatDots} from "react-icons/bs";
 import {FaEye} from "react-icons/fa";
 import {GoHeart} from "react-icons/go";
-import Buttons from "../Buttons";
-
+import {Button, Modal} from 'react-bootstrap';
+import {GiLuciferCannon} from "react-icons/gi";
 const SelectDetail = () => {
     const [dataList, setDataList] = useState([]);
     const [page, setPage] = useState(1);
     const location = useLocation();
     const {title, applyPosterId, applyPosterName, content, replyCount, rulingDate, viewCount} = location.state.data;
     const {rulingId, isBool} = location.state;
+    const [vs,setVs]=useState(0);
     useEffect(() => {
         console.log(title);
     }, []);
 
-
-    const handleButtonClick = (e) => {
-        const buttonId = e.target.id;
-        document.getElementById('modal-container').className = buttonId;
-        document.getElementById("section").classList.add('modal-active');
+    const [show, setShow] = useState(false);
+    const blueClickHandler = () => {
+        const $blue_btn =document.querySelector('.blue-btn');
+        const $red_btn =document.querySelector('.red-btn');
+        setVs(1);
+        $blue_btn.style.width="400px";
+        $red_btn.style.width="150px";
     };
-
-    const handleModalContainerClick = () => {
-        document.getElementById('modal-container').classList.add('out');
-        document.getElementById("section").classList.remove('modal-active');
+    const redClickHandler = () => {
+        const $blue_btn =document.querySelector('.blue-btn');
+        const $red_btn =document.querySelector('.red-btn');
+        setVs(2);
+        $red_btn.style.width="400px";
+        $blue_btn.style.width="150px";
     };
     return (
         <>
-            <div id="modal-container" >
-                <div className="modal-background" onClick={handleButtonClick}>
-                    <div className="modal">
-                        <h2>I'm a Modal</h2>
-                        <p>Hear me roar.</p>
+            <Modal
+                size='lg'
+                className="modal"
+                show={show}
+                onHide={() => setShow(false)}
+                dialogClassName="modal-90w"
+                aria-labelledby="example-custom-modal-styling-title"
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="example-custom-modal-styling-title">
+                        투표하기
+                    </Modal.Title>
+                </Modal.Header>
+                <h2 className='modalTitle'>제목?제목?제목?제목?</h2>
+                <Modal.Body>
 
+
+                    <div className="modal-body">
+                        <div className='blue-box'>
+
+                            <img src={process.env.PUBLIC_URL + '/assets/bluepng-removebg.png'} alt=""/>
+                            <hr className='hr'/>
+                            <div id="three" className="button BIG-red-button blue-btn" onClick={blueClickHandler}>찬성
+                            </div>
+                        </div>
+                        <div className="empty-box">
+                            {vs === 0 ?
+                                <h2 className="vs">VS</h2> : vs === 1 ?
+                                    <GiLuciferCannon size={22 * 2}/>
+                                    :
+                                    <GiLuciferCannon size={22 * 2} style={{transform: 'scaleX(-1)'}}/>
+
+                            }
+                        </div>
+                        <div className='red-box'>
+                            <img src={process.env.PUBLIC_URL + '/assets/red-removebg.png'} alt=""/>
+                            <hr className='hr'/>
+
+                            <div id="three" className="button BIG-red-button red-btn" onClick={redClickHandler}>반대
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </Modal.Body>
+            </Modal>
             <section id="section">
-                <div id="box">
-                    <div className="infobox">
+            <div id="box">
+                <div className="infobox">
                         <div className="info"><GoHeart className="p"
                                                        size={15 * 2}/><span>{5}</span>
                         </div>
@@ -65,7 +105,9 @@ const SelectDetail = () => {
 
                             />
                             <div className="vote-box">
-                                <div id="three" className="button BIG-red-button!!!" onClick={handleButtonClick}>투표하기</div>
+
+                                <div id="three" className="button BIG-red-button!!!" onClick={() => setShow(true)}>투표하기
+                                </div>
                             </div>
 
 

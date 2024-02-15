@@ -1,3 +1,4 @@
+@import '~bootstrap/scss/bootstrap';
 #section {
   display: flex;
   flex-direction: column;
@@ -102,9 +103,6 @@
     border: 1px solid #ddd;
   }
 
-  .comment {
-    position: relative;
-  }
 
   .comment .coming-soon {
     text-align: center;
