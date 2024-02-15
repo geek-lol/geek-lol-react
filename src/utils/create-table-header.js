@@ -14,8 +14,9 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Box from "@mui/material/Box";
 import {visuallyHidden} from "@mui/utils";
 
+
 export function EnhancedTableToolbar(props) {
-    const { numSelected,title } = props;
+    const { numSelected,title, onClickHandler } = props;
 
     return (
         <Toolbar
@@ -56,7 +57,7 @@ export function EnhancedTableToolbar(props) {
             {/*헤더 맨 오른쪽 아이콘 */}
             {/*체크박스에 1개 이상체크 됐을때*/}
             {numSelected > 0 && (
-                <Tooltip title="Delete">
+                <Tooltip title="Delete" onClick={onClickHandler}>
                     <IconButton>
                         <DeleteIcon />
                     </IconButton>
@@ -68,14 +69,12 @@ export function EnhancedTableToolbar(props) {
 
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
-    title : PropTypes.string.isRequired
+    title : PropTypes.string.isRequired,
+    onClickHandler : PropTypes.func.isRequired
 };
 export function EnhancedTableHead(props) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort,headCells } =
+    const { onSelectAllClick, numSelected, rowCount, headCells } =
         props;
-    const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
-    };
 
     return (
         <TableHead>
@@ -96,21 +95,8 @@ export function EnhancedTableHead(props) {
                     <TableCell
                         key={headCell.id}
                         align={'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
+                        {headCell.label}
                     </TableCell>
                 ))}
             </TableRow>
@@ -121,40 +107,61 @@ export function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
     numSelected: PropTypes.number.isRequired,
-    onRequestSort: PropTypes.func.isRequired,
     onSelectAllClick: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-    orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
     headCells : PropTypes.array.isRequired
 };
 
-//정렬 계산식
-export function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-// 정렬 오름차 내림차 선택
-export function getComparator(order, orderBy) {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
+
+//마이페이지용 툴바
+export function MyEnhancedTableToolbar(props) {
+    const { title } = props;
+
+    return (
+        <Toolbar
+            sx={{
+                pl: { sm: 2 },
+                pr: { xs: 1, sm: 1 },
+            }}
+        >
+            {/* 테이블 헤더 상태*/}
+            <Typography
+                sx={{ flex: '1 1 100%' }}
+                variant="h6"
+                id="tableTitle"
+                component="div"
+            >
+                {title}
+            </Typography>
+        </Toolbar>
+    );
 }
 
-export // 테이블 정렬하기
-function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
+MyEnhancedTableToolbar.propTypes = {
+    title : PropTypes.string.isRequired
+};
+
+export function MyEnhancedTableHead(props) {
+    const {  headCells } =
+        props;
+
+    return (
+        <TableHead>
+            <TableRow>
+                {/* 테이블 헤더 삽입 */}
+                {headCells.map((headCell) => (
+                    <TableCell
+                        key={headCell.id}
+                        align={'left'}
+                    >
+                        {headCell.label}
+                    </TableCell>
+                ))}
+            </TableRow>
+        </TableHead>
+    );
 }
+
+EnhancedTableHead.propTypes = {
+    headCells : PropTypes.array.isRequired
+};

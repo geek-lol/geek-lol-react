@@ -163,7 +163,7 @@ const MyInfoAlterPw = ({changePwStatus,changeUser}) => {
         const formData = new FormData();
         formData.append('user',jsonBlob);
         const res = await fetch(API_URL,{
-            method:"POST",
+            method:"PUT",
             headers: {"Authorization" : `Bearer ${token}`},
             body: formData
         })
