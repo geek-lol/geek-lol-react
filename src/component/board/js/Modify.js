@@ -8,8 +8,6 @@ import {getCurrentLoginUser} from "../../../utils/login-util";
 import {BOARD_URL, DETAIL_URL, LOAD_PROFILE_URL, MODIFY_URL} from "../../../config/host-config";
 import { useLocation } from 'react-router-dom';
 import {value} from "lodash/seq";
-import async from "async";
-
 
 const Modify = () => {
     const location = useLocation();
@@ -21,7 +19,6 @@ const Modify = () => {
         const formData = new FormData();
         formData.append('boardInfo', new Blob([JSON.stringify({ bulletinId: data.bulletinId, title: Title, content: modifyContent,posterId:data.posterId })], { type: 'application/json' }));
         formData.append('fileUrl', document.getElementById('board_detail_img').files[0]);
-
         try {
             const res = await fetch(MODIFY_URL, {
                 method: 'POST',

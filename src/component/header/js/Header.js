@@ -5,7 +5,7 @@ import LoginBtn from "./LoginBtn";
 import SearchBox from "./SearchBox";
 import Profile from "./Profile";
 import MenuModal from "./MenuModal";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import cn from "classnames";
 import {getCurrentLoginUser, isLogin} from "../../../utils/login-util";
 
@@ -62,11 +62,17 @@ const Header = ({sendTouch}) => {
     //nav 끝
     const [menu, setMenu] = useState(false);
     const [isInput, setIsInput] = useState(true);
-    const [isLoggedIn,setIsLogin]=useState(false)
+    const [isLoggedIn, setIsLogin] = useState(false);
+    const location = useLocation();
+
+    useEffect(() => {
+        const path = location.pathname;
+        const isMainInPath = path.length > 1 && path !== "/";
+        setIsInput(isMainInPath);
+    }, [location.pathname]);
     useEffect(() => {
         setIsLogin(isLogin());
-        const a=getCurrentLoginUser();
-        // console.log(a.role);
+        const a = getCurrentLoginUser();
     }, [isLogin()]);
     const findPage = () => {
         if (window.location.href.includes("main")) {
@@ -80,6 +86,26 @@ const Header = ({sendTouch}) => {
         });
 
     }, []);
+    const useWindowSizeBelow1400 = () => {
+        const [isBelow1400, setIsBelow1400] = useState(window.innerWidth <= 1400);
+
+        useEffect(() => {
+            const handleResize = () => {
+                setIsBelow1400(window.innerWidth <= 1400);
+            };
+
+            window.addEventListener("resize", handleResize);
+
+            // 컴포넌트가 언마운트 될 때 이벤트 리스너를 제거합니다.
+            return () => {
+                window.removeEventListener("resize", handleResize);
+            };
+        }, []);
+
+        return isBelow1400;
+    };
+    const isBelow1400 = useWindowSizeBelow1400();
+
 
     function menuHandler() {
         setMenu(!menu);
@@ -93,7 +119,7 @@ const Header = ({sendTouch}) => {
     const redirect = useNavigate();
 
     const moveToHome = (e) => {
-      redirect("/")
+        redirect("/")
     };
 
     return (
@@ -107,14 +133,14 @@ const Header = ({sendTouch}) => {
                     </div>
                     <div className="content__box">
                         <p className="nav-item is-active" active-color="orange"
-                              onClick={(e) => handleIndicator(e.target)}>홈</p>
+                           onClick={(e) => {handleIndicator(e.target);moveToHome()}}>홈</p>
                         <Link to="/rank" className="nav-item" active-color="green"
                               onClick={(e) => handleIndicator(e.target)}>랭킹</Link>
                         <div className="nav-item board-btn b1" active-color="blue"
-                              onClick={(e) => {
-                                  handleIndicator(e.target);
-                                  boardClickHandler1(e);
-                              }}>게시판
+                             onClick={(e) => {
+                                 handleIndicator(e.target);
+                                 boardClickHandler1(e);
+                             }}>게시판
                             <ul className={cn("hide-btn btn1", {hovers1: hovers1})}>
                                 <li>
                                     <Link to="/board/main/FreeBoard" className="c1"
@@ -131,10 +157,10 @@ const Header = ({sendTouch}) => {
                             </ul>
                         </div>
                         <div className="nav-item board-btn b2" active-color="red"
-                              onClick={(e) => {
-                                  handleIndicator(e.target);
-                                  boardClickHandler2(e);
-                              }}>
+                             onClick={(e) => {
+                                 handleIndicator(e.target);
+                                 boardClickHandler2(e);
+                             }}>
                             <ul className={cn("hide-btn btn2", {hovers2: hovers2})}>
                                 <li>
                                     <Link to="/csgame">민희언 주기깅</Link>
@@ -143,15 +169,17 @@ const Header = ({sendTouch}) => {
                                     <Link to="/resgame">반응속도테스트</Link>
                                 </li>
                             </ul>
-                            미니게임</div>
+                            미니게임
+                        </div>
                         <p className="nav-item" active-color="yellowgreen"
-                              onClick={(e) => handleIndicator(e.target)}>트롤사형투표</p>
+                           onClick={(e) => handleIndicator(e.target)}>트롤사형투표</p>
                         <span className="nav-indicator" style={{
                             width: indicatorStyle.width,
                             left: indicatorStyle.left,
                             backgroundColor: indicatorStyle.backgroundColor
                         }}></span>
-                        {isInput === true && <SearchBox/>}
+                        {!isBelow1400?
+                            isInput === true && <SearchBox/>:null}
                     </div>
                     <ul className="certification__box">
                         {isLoggedIn ? <Profile/> : <LoginBtn/>}
@@ -162,7 +190,7 @@ const Header = ({sendTouch}) => {
             <div className="nav_toggle_Btn" onClick={menuHandler} modalTouchHandler={modalTouchHandler}>
                 <TiThMenu/>
             </div>
-            <MenuModal menu={menu} isLogin={isLoggedIn}/>
+            {isBelow1400?<MenuModal menu={menu} isLogin={isLoggedIn}/>:null}
         </div>
     );
 }

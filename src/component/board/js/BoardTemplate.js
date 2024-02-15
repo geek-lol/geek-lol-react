@@ -9,6 +9,8 @@ import ShortCreateMain from "../shorts/shortCreate/js/ShortCreateMain";
 import RequestBoard from "./ requestBoard/RequestBoard";
 import Modify from "./Modify";
 import RequestDetail from "./ requestBoard/RequestDetail";
+import RequestCreate from "./ requestBoard/RequestCreate";
+import SelectDetail from "./ requestBoard/selectDetail";
 
 const BoardTemplate = ({touch}) => {
 
@@ -17,13 +19,15 @@ const BoardTemplate = ({touch}) => {
             <Routes>
                 <Route path={'/main/*'} element={<Board touch={touch} />}/>
                 <Route path={'/create'} element={<BoardCreate />} />
+                <Route path={'/RequestCreate'} element={<RequestCreate />} />
                 <Route path={'/modify'} element={<Modify />} />
                 <Route path={'/shorts'} element={<BoardShorts />} />
                 <Route path={'/sc'} element={<ShortCreateMain />}/>
                 <Route path={'/detail/:Id'} element={<Detail />}/>
                 <Route path={'/lckBoard'} element={<LCKBoard />}/>
                 <Route path={'/Request'} element={<RequestBoard/>}/>
-                <Route path={'/RequestDetail'} element={<RequestDetail/>}/>
+                <Route path={'/RequestDetail/:id'} element={<RequestDetail/>}/>
+                <Route path={'/SelectDetail'} element={<SelectDetail/>}/>
 
 
                 {/*<Route path={'/main'} />*/}

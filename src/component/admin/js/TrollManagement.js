@@ -49,16 +49,12 @@ const headCells = [
     {
         id: 'views',
         label: '조회수',
-    },
-    {
-        id: 'like',
-        label: '좋아요',
-    },
+    }
 ];
 
 
-const ShortsManagement = () => {
-    const [shortsList,setShortsList] = useState([]);
+const TrollManagement = () => {
+    const [applyList,setApplyList] = useState([]);
 
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(1);
@@ -67,6 +63,7 @@ const ShortsManagement = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const [open, setOpen] = React.useState(false);
+
     //요청 URL
     const API_URL = "http://localhost:8686";
     //토큰
@@ -77,14 +74,14 @@ const ShortsManagement = () => {
         'Authorization': 'Bearer ' + token
     };
     // 패치
-    const getShortsFetch = async () =>{
-        const res = await fetch(API_URL+"/admin/shorts?page="+page,{
+    const getMainFetch = async () =>{
+        const res = await fetch(API_URL+"/admin/ruling?page="+page,{
             method : "POST",
             headers: {"Authorization" : `Bearer ${token}`},
         })
         const json = await res.json()
-        if (json.shorts !== null){
-            setShortsList(json.shorts)
+        if (json.ruling !== null){
+            setApplyList(json.ruling)
             setTotalPage(json.totalPages)
         }
         if (json.totalPages === 0) {
@@ -95,15 +92,15 @@ const ShortsManagement = () => {
         const payload = {
             ids : selected
         }
-        const res = await fetch(API_URL+"/admin/shorts?page="+page,{
+        const res = await fetch(API_URL+"/admin/ruling?page="+page,{
             method : "DELETE",
             headers: requestHeader,
             body: JSON.stringify(payload)
         })
         const json = await res.json()
         if (res.status ===200) {
-            if (json.shorts !== null) {
-                setShortsList(json.shorts)
+            if (json.ruling !== null) {
+                setApplyList(json.ruling)
                 setTotalPage(json.totalPages)
                 setSelected([])
             }
@@ -112,8 +109,9 @@ const ShortsManagement = () => {
             }
         }
     }
-    const handleDelete = () =>{
-        deleteBoardFetch()
+
+    const onClickDelete = () =>{
+        deleteBoardFetch();
     }
 //모달
     const handleClickOpen = () => {
@@ -128,7 +126,7 @@ const ShortsManagement = () => {
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = shortsList.map((n) => n.shortsId);
+            const newSelected = applyList.map((n) => n.rulingId);
             setSelected(newSelected);
             return;
         }
@@ -166,18 +164,16 @@ const ShortsManagement = () => {
     }
     const isSelected = (id) => selected.indexOf(id) !== -1;
     let emptyRows = 0;
-
     useEffect(() => {
-        getShortsFetch();
-
-        emptyRows = page > 1 ? Math.max(0, (1 + page) * rowsPerPage - shortsList.length) : 0;
+        getMainFetch();
+        emptyRows = page > 1 ? Math.max(0, (1 + page) * rowsPerPage - applyList.length) : 0;
 
     }, [page]);
     return (
         <div>
             <Box sx={{ width: '65%' , mx:'auto' , mt:10}}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length}  title={"하이라이트"} onClickHandler={handleDelete}/>
+                    <EnhancedTableToolbar numSelected={selected.length}  title={"트롤재판소"} onClickHandler={onClickDelete}/>
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
@@ -187,12 +183,12 @@ const ShortsManagement = () => {
                             <EnhancedTableHead
                                 numSelected={selected.length}
                                 onSelectAllClick={handleSelectAllClick}
-                                rowCount={shortsList.length}
+                                rowCount={applyList.length}
                                 headCells={headCells}
                             />
                             <TableBody>
-                                {shortsList.map((row, index) => {
-                                    const isItemSelected = isSelected(row.shortsId);
+                                {applyList.map((row, index) => {
+                                    const isItemSelected = isSelected(row.rulingId);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
@@ -201,13 +197,13 @@ const ShortsManagement = () => {
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.shortsId}
+                                            key={row.rulingId}
                                             selected={isItemSelected}
                                             sx={{ cursor: 'pointer' }}
                                         >
                                             <TableCell padding="checkbox">
                                                 <Checkbox
-                                                    onClick={(event) => handleClick(event, row.shortsId)}
+                                                    onClick={(event) => handleClick(event, row.rulingId)}
                                                     color="primary"
                                                     checked={isItemSelected}
                                                     inputProps={{
@@ -216,12 +212,11 @@ const ShortsManagement = () => {
                                                 />
                                             </TableCell>
 
-                                            <TableCell align="left">{row.shortsId}</TableCell>
+                                            <TableCell align="left">{row.rulingId}</TableCell>
                                             <TableCell align="left">{row.title}</TableCell>
-                                            <TableCell align="left">{row.uploaderName}</TableCell>
-                                            <TableCell align="left">{formatDate(row.uploadDate,'day')}</TableCell>
+                                            <TableCell align="left">{row.applyPosterName}</TableCell>
+                                            <TableCell align="left">{formatDate(row.rulingDate,'day')}</TableCell>
                                             <TableCell align="left">{row.viewCount}</TableCell>
-                                            <TableCell align="left">{row.upCount}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -231,13 +226,13 @@ const ShortsManagement = () => {
                                             height: (dense ? 33 : 53) * emptyRows,
                                         }}
                                     >
-                                        <TableCell colSpan={6} />
+                                        <TableCell colSpan={5} />
                                     </TableRow>
                                 )}
                                 <TableRow
                                     sx={{height:20}}
                                 >
-                                    <TableCell colSpan={5}></TableCell>
+                                    <TableCell colSpan={4}></TableCell>
                                     <TableCell align="right">
                                         {`${page} - ${totalPage}`}
                                     </TableCell>
@@ -289,4 +284,4 @@ const ShortsManagement = () => {
     );
 };
 
-export default ShortsManagement;
+export default TrollManagement;

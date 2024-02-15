@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import {EnhancedTableHead, EnhancedTableToolbar, getComparator, stableSort} from "../../../utils/create-table-header";
@@ -20,6 +20,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Slide from "@mui/material/Slide";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import {getCurrentLoginUser} from "../../../utils/login-util";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -41,10 +42,6 @@ const headCells = [
         label: '계정 생성일자',
     },
     {
-        id: 'reports',
-        label: '누적신고횟수',
-    },
-    {
         id: 'roles',
         label: '권한',
     },
@@ -52,27 +49,89 @@ const headCells = [
 
 
 const UserManagement = () => {
-    const [userList,setUserList] = useState([{
-        userId : "seonjin123@gami.com",
-        userName : "선딩",
-        joinMembershipDate : "2022-04-02 11:22:33",
-        report : 2,
-        role : "COMMON"
-    }]);
+    const [userList,setUserList] = useState([]);
 
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(1);
     const [totalPage, setTotalPage] = React.useState(1);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [changeId, setChangeId] = useState('');
+    const [selectedValue, setSelectedValue] = useState('');
 
     const [open, setOpen] = React.useState(false);
+    //요청 URL
+    const API_URL = "http://localhost:8686";
+    //토큰
+    const token= getCurrentLoginUser().token;
+    // 요청 헤더 객체
+    const requestHeader = {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    };
+    // 패치
+    const getUserFetch = async () =>{
+        const res = await fetch(API_URL+"/admin/user?page="+page,{
+            method : "POST",
+            headers: {"Authorization" : `Bearer ${token}`},
+        })
+        const json = await res.json()
+        if (json.user !== null){
+            setUserList(json.user)
+            setTotalPage(json.totalPages)
+        }
+        if (json.totalPages === 0) {
+            setTotalPage(1)
+        }
+    }
+    const deleteBoardFetch = async () =>{
+        const payload = {
+            ids : selected
+        }
+        const res = await fetch(API_URL+"/admin/user?page="+page,{
+            method : "DELETE",
+            headers: requestHeader,
+            body: JSON.stringify(payload)
+        })
+        const json = await res.json()
+        if (res.status ===200) {
+            if (json.user !== null) {
+                setUserList(json.user)
+                setTotalPage(json.totalPages)
+                setSelected([])
+            }
+            if (json.totalPages === 0) {
+                setTotalPage(1)
+            }
+        }
+    }
+    const modifyAuth=async (id,newAuth)=>{
+        const res = await fetch(API_URL+`/admin/change?id=${id}&newAuth=${newAuth}&page=${page}`,{
+            method : "POST",
+            headers: requestHeader
+        })
+        const json = await res.json()
+        if (res.status ===200) {
+            if (json.user !== null) {
+                setUserList(json.user)
+            }
+        }
+    }
+
+    const onClickDelete = () =>{
+        deleteBoardFetch();
+    }
 //모달
-    const handleClickOpen = () => {
+    const handleClickOpen = (id) => {
+        setChangeId(id);
         setOpen(true);
     };
 
     const handleClose = () => {
+        setOpen(false);
+    };
+    const handleOk = () => {
+        modifyAuth(changeId,selectedValue)
         setOpen(false);
     };
 
@@ -80,7 +139,7 @@ const UserManagement = () => {
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = userList.map((n) => n.userId);
+            const newSelected = userList.map((n) => n.id);
             setSelected(newSelected);
             return;
         }
@@ -116,17 +175,24 @@ const UserManagement = () => {
 
         setPage(page+1)
     }
+    const handleChange = (event) => {
+        setSelectedValue(event.target.value);
+    };
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
-    // 테이블 데이터 갯수로 줄 계산
-    const emptyRows =
-        page > 1 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
+    let emptyRows = 0;
 
+    useEffect(() => {
+        getUserFetch();
+        // 테이블 데이터 갯수로 줄 계산
+        emptyRows = page > 1 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
+
+    }, [page]);
     return (
         <div>
             <Box sx={{ width: '65%' , mx:'auto' , mt:10}}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
-                    <EnhancedTableToolbar numSelected={selected.length}  title={"회원 관리"}/>
+                    <EnhancedTableToolbar numSelected={selected.length}  title={"회원 관리"} onClickHandler={onClickDelete}/>
                     <TableContainer>
                         <Table
                             sx={{ minWidth: 750 }}
@@ -141,7 +207,7 @@ const UserManagement = () => {
                             />
                             <TableBody>
                                 {userList.map((row, index) => {
-                                    const isItemSelected = isSelected(row.userId);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
@@ -151,13 +217,13 @@ const UserManagement = () => {
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.userId}
+                                            key={row.id}
                                             selected={isItemSelected}
                                             sx={{ cursor: 'pointer' }}
                                         >
                                             <TableCell padding="checkbox">
                                                 <Checkbox
-                                                    onClick={(event) => handleClick(event, row.userId)}
+                                                    onClick={(event) => handleClick(event, row.id)}
                                                     color="primary"
                                                     checked={isItemSelected}
                                                     inputProps={{
@@ -166,14 +232,13 @@ const UserManagement = () => {
                                                 />
                                             </TableCell>
 
-                                            <TableCell align="left">{row.userId}</TableCell>
+                                            <TableCell align="left">{row.id}</TableCell>
                                             <TableCell align="left">{row.userName}</TableCell>
-                                            <TableCell align="left">{formatDate(row.joinMembershipDate,'day')}</TableCell>
-                                            <TableCell align="left">{row.report}</TableCell>
+                                            <TableCell align="left">{row.joinDate}</TableCell>
                                             <TableCell align="left">
                                                 {row.role}
                                                 <Button sx={{ backgroundColor:"rgba(216, 216, 216, 0.61)", color : "black", ml:1}}
-                                                        onClick={handleClickOpen}
+                                                        onClick={() => handleClickOpen(row.id)}
                                                 >권한변경</Button>
                                             </TableCell>
                                         </TableRow>
@@ -185,13 +250,13 @@ const UserManagement = () => {
                                             height: (dense ? 33 : 53) * emptyRows,
                                         }}
                                     >
-                                        <TableCell colSpan={6} />
+                                        <TableCell colSpan={4} />
                                     </TableRow>
                                 )}
                                 <TableRow
                                     sx={{height:20}}
                                 >
-                                    <TableCell colSpan={4}></TableCell>
+                                    <TableCell colSpan={3}></TableCell>
                                     <TableCell align="right">
                                         {`${page} - ${totalPage}`}
                                     </TableCell>
@@ -226,16 +291,19 @@ const UserManagement = () => {
                                 <InputLabel variant="standard" htmlFor="uncontrolled-native">
                                     권한
                                 </InputLabel>
-                                <NativeSelect defaultValue={2}>
-                                    <option value={1}>ADMIN</option>
-                                    <option value={2}>COMMON</option>
+                                <NativeSelect
+                                    onChange={handleChange}
+                                    defaultValue={selectedValue}
+                                >
+                                    <option value={`ADMIN`}>ADMIN</option>
+                                    <option value={`COMMON`}>COMMON</option>
                                 </NativeSelect>
                             </FormControl>
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose}>Cancle</Button>
-                        <Button onClick={handleClose}>Ok</Button>
+                        <Button onClick={handleOk}>Ok</Button>
                     </DialogActions>
                 </Dialog>
             </React.Fragment>

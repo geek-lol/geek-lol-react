@@ -14,8 +14,9 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Box from "@mui/material/Box";
 import {visuallyHidden} from "@mui/utils";
 
+
 export function EnhancedTableToolbar(props) {
-    const { numSelected,title } = props;
+    const { numSelected,title, onClickHandler } = props;
 
     return (
         <Toolbar
@@ -56,7 +57,7 @@ export function EnhancedTableToolbar(props) {
             {/*헤더 맨 오른쪽 아이콘 */}
             {/*체크박스에 1개 이상체크 됐을때*/}
             {numSelected > 0 && (
-                <Tooltip title="Delete">
+                <Tooltip title="Delete" onClick={onClickHandler}>
                     <IconButton>
                         <DeleteIcon />
                     </IconButton>
@@ -68,7 +69,8 @@ export function EnhancedTableToolbar(props) {
 
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
-    title : PropTypes.string.isRequired
+    title : PropTypes.string.isRequired,
+    onClickHandler : PropTypes.func.isRequired
 };
 export function EnhancedTableHead(props) {
     const { onSelectAllClick, numSelected, rowCount, headCells } =
@@ -146,9 +148,6 @@ export function MyEnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell sx={{width:'15%'}}>
-                    바로가기
-                </TableCell>
                 {/* 테이블 헤더 삽입 */}
                 {headCells.map((headCell) => (
                     <TableCell
@@ -162,34 +161,6 @@ export function MyEnhancedTableHead(props) {
         </TableHead>
     );
 }
-
-
-EnhancedTableHead.propTypes = {
-    headCells : PropTypes.array.isRequired
-};
-
-//바로가기가 없는 헤더
-export function MyShortsEnhancedTableHead(props) {
-    const {  headCells } =
-        props;
-
-    return (
-        <TableHead>
-            <TableRow>
-                {/* 테이블 헤더 삽입 */}
-                {headCells.map((headCell) => (
-                    <TableCell
-                        key={headCell.id}
-                        align={'center'}
-                    >
-                        {headCell.label}
-                    </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
-    );
-}
-
 
 EnhancedTableHead.propTypes = {
     headCells : PropTypes.array.isRequired

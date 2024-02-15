@@ -19,6 +19,8 @@ import {
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Button from "@mui/material/Button";
+import {useEffect, useState} from "react";
+import {getCurrentLoginUser} from "../../../../../utils/login-util";
 
 //테이블 헤더
 const headCells = [
@@ -49,20 +51,52 @@ const headCells = [
 ];
 
 
-const MyActivityComment = ({rows}) => {
+const MyActivityComment = () => {
     const FORWARD_URL = "http://localhost:3000/board/detail/";
 
+    // 토큰 가져오기
+    const token= getCurrentLoginUser().token;
+    const userId = getCurrentLoginUser().token;
+
+    //요청 URL
+    const API_URL = "http://localhost:8686";
+
     const [page, setPage] = React.useState(1);
-    const [totalPage, setTotalPage] = React.useState(1);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [emptyRows, setEmptyRows] = useState(0);
+    const [rows,setRows] = useState([]);
+    const [totalPage,setTotalPage] = useState(1);
 
 
-    // 테이블 데이터 갯수로 줄 계산
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows =
-        page > 1 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    //트롤 사형 댓글 가져오기
+    const rulingReplyFetch = async () =>{
+        const res = await fetch(API_URL+"/troll/ruling/reply/my",{
+            method : "GET",
+            headers: {"Authorization" : `Bearer ${token}`},
+        })
+        const json = await res.json()
+        if (json.reply !== null){
+            const updatedRows = json.reply.map((row,index) =>  ({
+                ...row,
+                id: index+1
+            }));
+            setRows(updatedRows)
+            setTotalPage(json.totalPages)
 
+        }
+    }
+
+    useEffect(()=>{
+       rulingReplyFetch();
+    },[page])
+
+
+    useEffect(() => {
+        // 테이블 데이터 갯수로 줄 계산
+        setEmptyRows(page > 1 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0);
+
+    }, [totalPage]);
     const prevPageHandler= ()=>{
         if(page === 1)
             return;
@@ -74,7 +108,10 @@ const MyActivityComment = ({rows}) => {
 
         setPage(page+1)
     }
-
+    const handleTitleClick = (e) => {
+        const boardId = e.currentTarget.dataset.boardid
+        window.location.href = FORWARD_URL+boardId
+    }
 
     return (
         <div className={'my-act-wrapper'}>
@@ -94,16 +131,10 @@ const MyActivityComment = ({rows}) => {
                                 {rows.map((row, index) => {
                                     return (
                                         <TableRow hover>
-                                            <TableCell padding="checkbox">
-                                                <a href={FORWARD_URL+row.boardId}>
-                                                    <Button
-                                                        sx={{ backgroundColor:"rgba(216, 216, 216, 0.61)", color : "black", ml:1}}
-                                                    >바로가기</Button>
-                                                </a>
-                                            </TableCell>
-
                                             <TableCell align="left" sx={{ width: '12%' }}>{row.id}</TableCell>
-                                            <TableCell align="left">{row.title}</TableCell>
+                                            <TableCell data-boardId={row.boardId} onClick={handleTitleClick}
+                                                       style={{ cursor: 'pointer'}}
+                                            >{row.title}</TableCell>
                                             <TableCell align="left">{row.context}</TableCell>
                                             <TableCell align="left">{formatDate(row.replyDate,"day")}</TableCell>
                                         </TableRow>
@@ -115,13 +146,13 @@ const MyActivityComment = ({rows}) => {
                                             height: (dense ? 33 : 53) * emptyRows,
                                         }}
                                     >
-                                        <TableCell colSpan={4} />
+                                        <TableCell colSpan={3} />
                                     </TableRow>
                                 )}
                                 <TableRow
                                     sx={{height:20}}
                                 >
-                                    <TableCell colSpan={3}></TableCell>
+                                    <TableCell colSpan={2}></TableCell>
                                     <TableCell align="right">
                                         {`${page} - ${totalPage}`}
                                     </TableCell>
