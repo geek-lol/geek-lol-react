@@ -21,6 +21,8 @@ const RequestBoard = () => {
     const [page, setPage] = useState(1);
     const [cardData1,setCardData1]=useState([]);
     const [cardData2,setCardData2]=useState([]);
+    const[isCard,setIsCard]=useState(true);
+    const[isBoard,setIsBoard]=useState(true);
 
     const relativeButtonHandler = (e) => {
         setHide(!hide);
@@ -59,7 +61,8 @@ const RequestBoard = () => {
                 }
             })
             .then(json => {
-                if (!json) return;
+                console.log(json);
+                if (!json) { return}
                 SetRequestBoard(json.boardApply);
                 console.log(json.boardApply);
                 setTotalPage(json.totalPages);
@@ -90,7 +93,7 @@ const RequestBoard = () => {
                 }
             })
             .then(json => {
-                if (!json) return;
+                if (!json) {setIsBoard(false); return}
                 SetRequestBoard(json.boardApply);
             });
     }
@@ -115,7 +118,7 @@ const RequestBoard = () => {
             if(res.status===200)
                 return res.json();
         }).then( json => {
-            console.log(json);
+            if(json.currentBoard===null){setIsCard(false)}
             setCardData1([json.currentBoard]);
             setCardData2([json.previousBoard]);
         })
@@ -126,12 +129,17 @@ const RequestBoard = () => {
         <div id="board_wrap" onClick={offDiv}>
             <section id="board_main">
                 <div className="card-box">
-                    {cardData1.map(item=>
-                        <HeaderCard item={item} isBool={prev}/>
-                    )}
-                    {cardData2.map(item=>
-                        <HeaderCard item={item} isBool={current}/>
-                    )}
+                    {isCard===false?null:cardData1.length > 0 &&
+                        cardData1.map(item =>
+                            <HeaderCard item={item} isBool={prev} />
+                        )
+                    }
+                    {isCard===false?null:cardData2.length > 0 &&
+                        cardData2.map(item =>
+                            <HeaderCard item={item} isBool={current} />
+                        )
+                    }
+                    {isCard===false?<p>아직 선정된 투표게시물이 없습니다.</p>:<p>tq</p> }
 
 
                 </div>
