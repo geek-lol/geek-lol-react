@@ -6,6 +6,7 @@ import {json, Link, useNavigate, useParams} from "react-router-dom";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import BoardReply from "../BoardReply";
 import {GoHeart, GoHeartFill} from "react-icons/go";
+import {formatDate} from "../../../utils/format-date";
 
 const Detail = () => {
     const GetData = (Id) => {
@@ -281,7 +282,7 @@ const Detail = () => {
                         <h1>{data.title}</h1>
                         <div className="detail-info-box">
                             <div className="info-front">
-                                <p>{data.localDateTime}</p><p>|</p>
+                                <p>{formatDate(data.localDateTime,"day")}</p><p>|</p>
                                 <p>{data.posterName}</p>
                             </div>
                             <div className="info-back">

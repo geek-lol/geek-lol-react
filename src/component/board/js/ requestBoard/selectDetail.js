@@ -1,20 +1,34 @@
 import React, {useEffect, useState} from 'react';
 import ReactPlayer from "react-player";
 import {Pagination, TextField} from "@mui/material";
-import {useLocation} from "react-router-dom";
+import {json, useLocation} from "react-router-dom";
 import "../../scss/SelectDetail.scss";
 import {Button, Modal} from 'react-bootstrap';
 import {GiLuciferCannon} from "react-icons/gi";
-import {TROLL_APPLY_REPLY_URL, TROLL_RULING_BOARD_URL, TROLL_RULING_REPLY_URL} from "../../../../config/host-config";
+import {
+    TROLL_RULING_BOARD_URL,
+    TROLL_RULING_REPLY_URL,
+    TROLL_RULING_VOTE_URL
+} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import SelectBoardReply from "../../SelectBoardReply";
+import {formatDate} from "../../../../utils/format-date";
+
 const SelectDetail = () => {
     const [dataList, setDataList] = useState([]);
     const [page, setPage] = useState(1);
     const location = useLocation();
-    const {title, applyPosterId, applyPosterName, content, replyCount, rulingDate, viewCount} = location.state.data||{};
-    const {rulingId}=location.state.rulingId||{};
-    const [vs,setVs]=useState(0);
+    const {
+        title,
+        applyPosterId,
+        applyPosterName,
+        content,
+        replyCount,
+        rulingDate,
+        viewCount
+    } = location.state.data || {};
+    const {rulingId} = location.state.rulingId || {};
+    const [vs, setVs] = useState(0);
     const [Video, setVideo] = useState();
     const [token, setToken] = useState(getCurrentLoginUser().token);
     const [replyText, setReplyText] = useState();
@@ -24,9 +38,9 @@ const SelectDetail = () => {
     const [likeToggle, setLikeToggle] = useState(0);
     const [replyList, setReplyList] = useState([]);
     const [totalLike, setTotalLike] = useState(null);
+    const [vote, setVote] = useState(null);
 
     useEffect(() => {
-        console.log(location.state.rulingId);
         getImg();
     }, []);
     useEffect(() => {
@@ -44,10 +58,44 @@ const SelectDetail = () => {
             })
             .then(json => {
                 if (!json) return;
+                console.log(json.reply);
                 setReplyList(json.reply);
                 setTotalReply(json.totalCount);
                 setTotalPage(json.totalPages);
             });
+    }
+    const [cons, setCons] = useState(null);
+    const [pros, setPros] = useState(null);
+    const [c, setC] = useState(null);
+    const [p, setP] = useState(null);
+
+    const getVoteData = async () => {
+        await fetch(`${TROLL_RULING_VOTE_URL}/${location.state.rulingId}`, {
+            method: 'GET',
+            headers: {'content-type': 'application/json',},
+        }).then(res => {
+            if (res.status === 200) {
+                return res.json();
+            }
+        }).then(json => {
+            setCons(json.consPercent);
+            setPros(json.prosPercent);
+            setC(json.cons);
+            setP(json.pros);
+
+        })
+    }
+    const setVoteData = async () => {
+        await fetch(`${TROLL_RULING_VOTE_URL}`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({vote: vote, rulingId: location.state.rulingId})
+        }).then(res => {
+            console.log(res.status);
+        })
     }
 
     const getImg = async () => {
@@ -68,21 +116,33 @@ const SelectDetail = () => {
         }
     }
 
-
+    const $blue_btn = document.querySelector('.blue-btn');
+    const $red_btn = document.querySelector('.red-btn');
     const [show, setShow] = useState(false);
     const blueClickHandler = () => {
-        const $blue_btn =document.querySelector('.blue-btn');
-        const $red_btn =document.querySelector('.red-btn');
+        setVote("pros");
+
         setVs(1);
-        $blue_btn.style.width="400px";
-        $red_btn.style.width="150px";
+        $blue_btn.style.width = "400px";
+        $red_btn.style.width = "150px";
+        $blue_btn.textContent = Math.round(pros) + "%";
+        $red_btn.textContent = Math.round(cons) + "%";
+
     };
+    useEffect(() => {
+
+        setVoteData();
+        getVoteData();
+
+    }, [vote]);
     const redClickHandler = () => {
-        const $blue_btn =document.querySelector('.blue-btn');
-        const $red_btn =document.querySelector('.red-btn');
+        setVote("cons");
         setVs(2);
-        $red_btn.style.width="400px";
-        $blue_btn.style.width="150px";
+        $red_btn.style.width = "400px";
+        $blue_btn.style.width = "150px";
+        $blue_btn.textContent = Math.round(pros) + "%";
+        $red_btn.textContent = Math.round(cons) + "%";
+
     };
     const fetchBoardUpload = async () => {
         try {
@@ -100,7 +160,6 @@ const SelectDetail = () => {
                 },
                 body: JSON.stringify(requestData),
             });
-
             if (res.ok) {
                 // const json = await res.json();
                 // console.log(json);
@@ -153,27 +212,7 @@ const SelectDetail = () => {
                 <h2 className='modalTitle'>{title}</h2>
                 <Modal.Body>
                     <div className="modal-body">
-                        <div className='blue-box'>
-                            <img src={process.env.PUBLIC_URL + '/assets/bluepng-removebg.png'} alt=""/>
-                            <hr className='hr'/>
-                            <div id="three" className="button BIG-red-button blue-btn" onClick={blueClickHandler}>찬성
-                            </div>
-                        </div>
-                        <div className="empty-box">
-                            {vs === 0 ?
-                                <h2 className="vs">VS</h2> : vs === 1 ?
-                                    <GiLuciferCannon size={22 * 2}/>
-                                    :
-                                    <GiLuciferCannon size={22 * 2} style={{transform: 'scaleX(-1)'}}/>
-                            }
-                        </div>
-                        <div className='red-box'>
-                            <img src={process.env.PUBLIC_URL + '/assets/red-removebg.png'} alt=""/>
-                            <hr className='hr'/>
 
-                            <div id="three" className="button BIG-red-button red-btn" onClick={redClickHandler}>반대
-                            </div>
-                        </div>
                     </div>
                 </Modal.Body>
             </Modal>
@@ -191,13 +230,12 @@ const SelectDetail = () => {
                         <h1>{title}</h1>
                         <div className="detail-info-box">
                             <div className="info-front">
-                                <p>작성일자 - {rulingDate}</p><p>|</p>
+                                <p>작성일자 - {formatDate(rulingDate,"day")}</p><p>|</p>
                                 <p>작성자 - {applyPosterName}</p>
                             </div>
                             <div className="info-back">
                                 <p>조회수 - {viewCount - 1}</p><p>|</p>
-                                <p>댓글 - {replyCount}</p><p>|</p>
-                                {/*<p>추천 - {upCount}</p>*/}
+                                <p>댓글 - {replyCount}</p>
                             </div>
                         </div>
                         <div className="videoPlayer">
@@ -212,8 +250,29 @@ const SelectDetail = () => {
                         </div>
                         <span className="detailContent">{content}</span>
                         <div className="vote-box">
+                            <div className='blue-box'>
+                                <img src={process.env.PUBLIC_URL + '/assets/bluepng-removebg.png'} alt=""/>
+                                <hr className='hr'/>
+                                <div id="three" className="button BIG-red-button blue-btn" onClick={blueClickHandler}>찬성
+                                </div>
+                            </div>
+                            <div className="empty-box">
+                                {vs === 0 ?
+                                    <h2 className="vs">VS<br/><p>총 투표수<br/>{c + p}</p></h2> : vs === 1 ?
+                                        <div><GiLuciferCannon size={22 * 2}></GiLuciferCannon><br/><p>총 투표수<br/>{c + p}
+                                        </p></div>
+                                        :
+                                        <div><GiLuciferCannon size={22 * 2} style={{transform: 'scaleX(-1)'}}/><br/><p>총
+                                            투표수<br/>{c + p}
+                                        </p></div>
+                                }
+                            </div>
+                            <div className='red-box'>
+                                <img src={process.env.PUBLIC_URL + '/assets/red-removebg.png'} alt=""/>
+                                <hr className='hr'/>
 
-                            <div id="three" className="button BIG-red-button!!!" onClick={() => setShow(true)}>투표하기
+                                <div id="three" className="button BIG-red-button red-btn" onClick={redClickHandler}>반대
+                                </div>
                             </div>
                         </div>
                     </div>

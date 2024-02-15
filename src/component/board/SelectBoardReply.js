@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {getCurrentLoginUser} from "../../utils/login-util";
 import {AiFillAlert} from "react-icons/ai";
-import {REPLY_URL, TROLL_APPLY_REPLY_URL} from "../../config/host-config";
+import {REPLY_URL, TROLL_APPLY_REPLY_URL, TROLL_RULING_REPLY_URL} from "../../config/host-config";
 
 const SelectBoardReply = ({item,getReplyCount}) => {
-    const {replyId, context, replyDate, writerId,writerName} = item;
+    const {replyId, context, replyDate, rulingId,userId} = item;
     //토큰
     const [token, setToken] = useState(getCurrentLoginUser().token);
 
@@ -51,15 +51,15 @@ const SelectBoardReply = ({item,getReplyCount}) => {
     }, [replyDate]);  // localDateTime이 변경될 때마다 useEffect 실행
     const deleteReply = async () => {
         try {
-            const response = await fetch(`${TROLL_APPLY_REPLY_URL}`, {
+            const response = await fetch(`${TROLL_RULING_REPLY_URL}/${replyId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body:JSON.stringify({id:replyId})
             });
             if (response.ok) {
+                alert("삭제되었습니다.");
                 console.log('댓글이 성공적으로 삭제되었습니다.');
             } else {
                 // 서버 응답이 JSON 형식이 아닌 경우에 대한 처리
@@ -113,10 +113,10 @@ const SelectBoardReply = ({item,getReplyCount}) => {
             <div className="comment2">
                 <div className="comment-top">
                     <div className="tqbox">
-                        <p>{writerName}</p><p>|</p>
+                        <p>{userId}</p><p>|</p>
                         <p>{timeDifference}</p>
                     </div>
-                    {username === writerId ?
+                    {username === userId ?
                         <p style={{paddingRight: '20px', color: 'red'}} onClick={deleteHandler}>삭제</p>
                         :
                         <p style={{paddingRight: '20px', color: 'black'}}><AiFillAlert/>신고하기</p>

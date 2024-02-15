@@ -10,6 +10,7 @@ import {
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import RequestBoardReply from "../../RequestBoardReply";
 import {GoHeart, GoHeartFill} from "react-icons/go";
+import {formatDate} from "../../../../utils/format-date";
 
 const RequestDetail = () => {
     const {id} = useParams();
@@ -208,7 +209,7 @@ const RequestDetail = () => {
                         <h1>{item.title}</h1>
                         <div className="detail-info-box">
                             <div className="info-front">
-                                <p>작성일자 - {item.localDateTime}</p><p>|</p>
+                                <p>작성일자 - {formatDate(item.localDateTime,"day")}</p><p>|</p>
                                 <p>작성자 - {item.posterName}</p>
                             </div>
                             <div className="info-back">
