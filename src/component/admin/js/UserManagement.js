@@ -21,6 +21,7 @@ import Slide from "@mui/material/Slide";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import {getCurrentLoginUser} from "../../../utils/login-util";
+import {ADMIN_URL} from "../../../config/host-config";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -71,7 +72,7 @@ const UserManagement = () => {
     };
     // 패치
     const getUserFetch = async () =>{
-        const res = await fetch(API_URL+"/admin/user?page="+page,{
+        const res = await fetch(ADMIN_URL+"/user?page="+page,{
             method : "POST",
             headers: {"Authorization" : `Bearer ${token}`},
         })
@@ -88,7 +89,7 @@ const UserManagement = () => {
         const payload = {
             ids : selected
         }
-        const res = await fetch(API_URL+"/admin/user?page="+page,{
+        const res = await fetch(ADMIN_URL+"/user?page="+page,{
             method : "DELETE",
             headers: requestHeader,
             body: JSON.stringify(payload)
@@ -106,7 +107,7 @@ const UserManagement = () => {
         }
     }
     const modifyAuth=async (id,newAuth)=>{
-        const res = await fetch(API_URL+`/admin/change?id=${id}&newAuth=${newAuth}&page=${page}`,{
+        const res = await fetch(ADMIN_URL+`/change?id=${id}&newAuth=${newAuth}&page=${page}`,{
             method : "POST",
             headers: requestHeader
         })

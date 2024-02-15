@@ -5,15 +5,15 @@ import MyInformation from "./info/MyInformation";
 import MyActivityMain from "./activity/MyActivityMain";
 
 import {getCurrentLoginUser} from "../../../utils/login-util";
+import async from "async";
 
 const MyPageTemplate = () => {
     //mypage 렌더링 유형을 저장
     const [pageType, setPageType] = useState(1);
 
     const [myActivity, setMyActivity] = useState({
-        boards : 0,
-        comments : 0,
-        reports : 0
+        boardCount : 0,
+        replyCount : 0
     })
 
     // 유저 정보를 저장할
@@ -51,12 +51,16 @@ const MyPageTemplate = () => {
         }
     };
 
-
-    const changeActivity = (key,value) => {
-        setMyActivity({
-            ... myActivity,
-            [key] : value
+    //내 활동내역 카운트 가져오기 fetch
+    const myActivityCount = async ()=>{
+        const res = await fetch(API_URL+"/api/count",{
+            method:"GET",
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         })
+        const json = await res.json();
+        setMyActivity(json);
     }
     //하위 컴포넌트에서 userInfo변경
     const changeUser = (user) =>{
@@ -69,6 +73,7 @@ const MyPageTemplate = () => {
 
     useEffect(() => {
         userInfoFetch();
+        myActivityCount();
     }, []);
     return (
         <div className="mypage">

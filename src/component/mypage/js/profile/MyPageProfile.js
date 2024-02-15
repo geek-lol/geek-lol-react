@@ -111,15 +111,11 @@ const MyPageProfile = ({userInfo,myActivity}) => {
                 <div className="my-profile-active">
                     <div className="active-item">
                         <div className="active-type">내 글</div>
-                        <div className="active-count">{myActivity.boards}</div>
+                        <div className="active-count">{myActivity.boardCount}</div>
                     </div>
                     <div className="active-item">
                         <div className="active-type">내 댓글</div>
-                        <div className="active-count">{myActivity.comments}</div>
-                    </div>
-                    <div className="active-item">
-                        <div className="active-type">제재내역</div>
-                        <div className="active-count">{myActivity.reports}</div>
+                        <div className="active-count">{myActivity.replyCount}</div>
                     </div>
                 </div>
             </div>

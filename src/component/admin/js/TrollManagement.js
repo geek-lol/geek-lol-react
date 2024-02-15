@@ -20,7 +20,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Slide from "@mui/material/Slide";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import {SHORT_URL} from "../../../config/host-config";
+import {ADMIN_URL, SHORT_URL} from "../../../config/host-config";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 
 
@@ -75,7 +75,7 @@ const TrollManagement = () => {
     };
     // 패치
     const getMainFetch = async () =>{
-        const res = await fetch(API_URL+"/admin/ruling?page="+page,{
+        const res = await fetch(ADMIN_URL+"/ruling?page="+page,{
             method : "POST",
             headers: {"Authorization" : `Bearer ${token}`},
         })
@@ -92,7 +92,7 @@ const TrollManagement = () => {
         const payload = {
             ids : selected
         }
-        const res = await fetch(API_URL+"/admin/ruling?page="+page,{
+        const res = await fetch(ADMIN_URL+"/ruling?page="+page,{
             method : "DELETE",
             headers: requestHeader,
             body: JSON.stringify(payload)

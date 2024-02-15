@@ -21,6 +21,7 @@ import Slide from "@mui/material/Slide";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import {getCurrentLoginUser} from "../../../utils/login-util";
+import {ADMIN_URL} from "../../../config/host-config";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -84,7 +85,7 @@ const BoardManagement = () => {
 
     // 패치
     const getBoardFetch = async () =>{
-        const res = await fetch(API_URL+"/admin/board?page="+page,{
+        const res = await fetch(ADMIN_URL+"/board?page="+page,{
             method : "POST",
             headers: {"Authorization" : `Bearer ${token}`},
         })
@@ -103,7 +104,7 @@ const BoardManagement = () => {
             ids : selected
         }
 
-        const res = await fetch(API_URL+"/admin/board?page="+page,{
+        const res = await fetch(ADMIN_URL+"/board?page="+page,{
             method : "Delete",
             headers: requestHeader,
             body: JSON.stringify(payload)

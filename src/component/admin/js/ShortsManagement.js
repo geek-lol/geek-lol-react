@@ -20,7 +20,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Slide from "@mui/material/Slide";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import {SHORT_URL} from "../../../config/host-config";
+import {ADMIN_URL, SHORT_URL} from "../../../config/host-config";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 
 
@@ -78,7 +78,7 @@ const ShortsManagement = () => {
     };
     // 패치
     const getShortsFetch = async () =>{
-        const res = await fetch(API_URL+"/admin/shorts?page="+page,{
+        const res = await fetch(ADMIN_URL+"/shorts?page="+page,{
             method : "POST",
             headers: {"Authorization" : `Bearer ${token}`},
         })
@@ -95,7 +95,7 @@ const ShortsManagement = () => {
         const payload = {
             ids : selected
         }
-        const res = await fetch(API_URL+"/admin/shorts?page="+page,{
+        const res = await fetch(ADMIN_URL+"/shorts?page="+page,{
             method : "DELETE",
             headers: requestHeader,
             body: JSON.stringify(payload)
