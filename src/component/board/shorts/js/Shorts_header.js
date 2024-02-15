@@ -4,6 +4,7 @@ import '../scss/Shorts_header.scss'
 import cn from "classnames";
 import {BsAward, BsBinoculars, BsClipboard2, BsFillHouseFill, BsHouse, BsNintendoSwitch} from "react-icons/bs";
 import {ImUpload} from "react-icons/im";
+import {MdHowToVote} from "react-icons/md";
 
 const Shorts_header = ({onAdd}) => {
 
@@ -23,11 +24,7 @@ const Shorts_header = ({onAdd}) => {
                 <div className={'header-navbar'}>
                     <div className={'menubar'}>
                         <Link to='/' className={'btn-b'}><BsHouse className={'btn1'}/><p className={'btn2'}>홈</p></Link>
-                        <Link to='/rank' className={'btn-b'}><BsAward className={'btn1'}/><p className={'btn2'}>랭킹</p>
-                        </Link>
-                        <Link to='/spector' className={'btn-b'}><BsBinoculars className={'btn1'}/>
-                            <p className={'btn2'}>관전</p>
-                        </Link>
+                        <Link to='/rank' className={'btn-b'}><BsAward className={'btn1'}/><p className={'btn2'}>랭킹</p></Link>
                         <div className={'board-menu-container'}>
                             <div className={'dropdown-board btn-b'}>
                                 <Link to='/board/main' className={'btn-b'}> <BsNintendoSwitch
@@ -53,6 +50,7 @@ const Shorts_header = ({onAdd}) => {
                                 </div>
                             </div>
                         </div>
+                        <Link to='/rank' className={'btn-b'}><MdHowToVote className={'btn1'}/><p className={'btn2'}>트롤재판소</p></Link>
                     </div>
                 </div>
             </div>
