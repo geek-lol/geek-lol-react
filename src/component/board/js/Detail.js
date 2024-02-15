@@ -6,6 +6,7 @@ import {json, Link, useNavigate, useParams} from "react-router-dom";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import BoardReply from "../BoardReply";
 import {GoHeart, GoHeartFill} from "react-icons/go";
+
 const Detail = () => {
     const GetData = (Id) => {
         const API_BASE_URL = DETAIL_URL;
@@ -39,12 +40,12 @@ const Detail = () => {
     const [replyList, setReplyList] = useState([]);
     const [totalReply, setTotalReply] = useState(0);
     const [totalPage, setTotalPage] = useState();
-    const [likeToggle,setLikeToggle]=useState();
+    const [likeToggle, setLikeToggle] = useState();
     const redirection = useNavigate();
 
     useEffect(() => {
         setData({...item});
-        }, [item]);
+    }, [item]);
     //댓글 입력
     const fetchBoardUpload = async () => {
         try {
@@ -76,7 +77,6 @@ const Detail = () => {
             // 예외 처리 로직 추가
         }
     };
-
     // 댓글 리스트 가져오기
     useEffect(() => {
         Replyrendering();
@@ -177,40 +177,40 @@ const Detail = () => {
     );
 
     const detailDeleteHandler = () => {
-        if(data.posterId===getCurrentLoginUser().userId){
+        if (data.posterId === getCurrentLoginUser().userId) {
             confirmDelete();
-        }else{
+        } else {
             alert("권한이 없습니다.");
         }
     };
-    const createLike=async ()=>{
-        const res= await fetch(`${BOARD_VOTE_URL}`,{
-            method:'POST',
-            headers:{
+    const createLike = async () => {
+        const res = await fetch(`${BOARD_VOTE_URL}`, {
+            method: 'POST',
+            headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
-            body:JSON.stringify({boardId:data.bulletinId})
-        }).then(res=>{
-            if(res.status===200){
+            body: JSON.stringify({boardId: data.bulletinId})
+        }).then(res => {
+            if (res.status === 200) {
                 console.log("잘 만들어짐");
                 findLike();
             }
-            if(res.status===400){
+            if (res.status === 400) {
                 console.log('이미 만들어짐');
             }
         })
     }
-    const modifyLike=async ()=>{
-        const res= await fetch(`${BOARD_VOTE_URL}`,{
-            method:'PUT',
-            headers:{
+    const modifyLike = async () => {
+        const res = await fetch(`${BOARD_VOTE_URL}`, {
+            method: 'PUT',
+            headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
-            body:JSON.stringify({boardId:data.bulletinId})
-        }).then(res=>{
-            if(res.status===200){
+            body: JSON.stringify({boardId: data.bulletinId})
+        }).then(res => {
+            if (res.status === 200) {
                 console.log("좋아요 수정 됨");
                 findLike();
             }
@@ -241,7 +241,7 @@ const Detail = () => {
         modifyLike();
         console.log("클릭됨");
     };
-    const getImg=async ()=>{
+    const getImg = async () => {
         await fetch(`${LOAD_PROFILE_URL}?bulletinId=${Id}`)
             .then(response => {
                 if (!response.ok) {
@@ -258,7 +258,7 @@ const Detail = () => {
 
                 // 이미지를 표시할 DOM 요소에 설정
                 const imageElement = document.createElement('img');
-                imageElement.className='imgTag';
+                imageElement.className = 'imgTag';
                 imageElement.src = imageUrl;
                 // 이미지를 표시할 DOM 요소에 추가
                 const contentCenter = document.querySelector('.content-center');
@@ -291,18 +291,18 @@ const Detail = () => {
                     </div>
                     <div className="content-bottom">
                         {
-                            likeToggle===0 ?
-                            <GoHeart className="p" size={12 * 2} onClick={likeHanlder} />
+                            likeToggle === 0 ?
+                                <GoHeart className="p" size={12 * 2} onClick={likeHanlder}/>
+                                :
+                                <GoHeartFill className="p" color="red" size={12 * 2} onClick={likeHanlder}/>
+                        }
+                        {data.posterId === getCurrentLoginUser().userId
+                            ? <Link className="correction p" to="/board/modify"
+                                    state={{
+                                        data: data
+                                    }}>수정</Link>
                             :
-                            <GoHeartFill className="p" color="red" size={12 * 2} onClick={likeHanlder}/>
-                    }
-                        {data.posterId===getCurrentLoginUser().userId
-                            ?                        <Link className="correction p" to="/board/modify"
-                                                           state={{
-                                                               data:data
-                                                           }}>수정</Link>
-                            :
-                            <span className="p" onClick={()=>{
+                            <span className="p" onClick={() => {
                                 alert('권한이 없습니다.')
                             }}>수정</span>
                         }
@@ -341,8 +341,8 @@ const Detail = () => {
                     <div className="comment-box">
                         {
                             replyList.map(con =>
-                            <BoardReply item={con} getReplyCount={getReplyCount}/>
-                        )}
+                                <BoardReply item={con} getReplyCount={getReplyCount}/>
+                            )}
                         <Pagination
                             activePage={page}
                             count={totalPage}

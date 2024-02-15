@@ -1,86 +1,155 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {GoChevronDown} from "react-icons/go";
 import cn from "classnames";
 import {CiSearch} from "react-icons/ci";
 import {Link} from "react-router-dom";
-import {
-    MdKeyboardArrowLeft,
-    MdKeyboardDoubleArrowLeft,
-    MdKeyboardDoubleArrowRight,
-    MdOutlineKeyboardArrowRight
-} from "react-icons/md";
-import RequestGather from "./RequestGather";
-import ReactPlayer from "react-player";
-import {ProgressBar} from "react-bootstrap";
+import ProgressBar from "@ramonak/react-progress-bar";
+import {TROLL_APPLY_URL, TROLL_RULING_BOARD_URL} from "../../../../config/host-config";
+import RequestContent from "./RequestContent";
+import {Pagination} from "@mui/material";
+import HeaderCard from "./headerCard";
 
 const RequestBoard = () => {
-    const [hide,setHide]=useState(false);
-    const [title,setTitle]=useState("제목");
-    const relativeButtonHandler=(e)=>{
+    const [hide, setHide] = useState(false);
+    const [title, setTitle] = useState("제목");
+    const [requestBoard, SetRequestBoard] = useState([]);
+    const [type,setType]=useState(null);
+    const [toggle, setToggle] = useState(true);
+    const [inputContent, setInputContent] = useState("");
+    const [rbtitle, setRbTitle] = useState(null);
+    const [totalPage, setTotalPage] = useState(1);
+    const [page, setPage] = useState(1);
+    const [cardData1,setCardData1]=useState([]);
+    const [cardData2,setCardData2]=useState([]);
+
+    const relativeButtonHandler = (e) => {
         setHide(!hide);
     };
-    const offDiv=()=>{
-        if(hide===true)
+    const offDiv = () => {
+        if (hide === true)
             setHide(false);
     };
-    const hiddenHandler=(e)=>{
+    const hiddenHandler = (e) => {
         setTitle(e.target.value);
-    };
-    function BasicExample() {
-        return <ProgressBar now={60} />;
     }
+    useEffect(() => {
+        getCardData();
+    }, []);
+    useEffect(() => {
+        if (title === '제목') {
+            setRbTitle('title');
+        } else if (title === '제목 + 내용') {
+            setRbTitle('mix');
+        } else if (title === '작성자') {
+            setRbTitle('writer');
+        }
+        console.log(rbtitle);
+    }, [title]);
+
+    useEffect(() => {
+        fetch(`${TROLL_APPLY_URL}?type=${type}&page=${page}&size=${10}`, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+            },
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json();
+                }
+            })
+            .then(json => {
+                if (!json) return;
+                SetRequestBoard(json.boardApply);
+                console.log(json.boardApply);
+                setTotalPage(json.totalPages);
+            });
+    }, [toggle,page]);
+    const toggleHandler1 = () => {
+        setToggle(true);
+        setType(null);
+    };
+    const toggleHandler2 = () => {
+        setToggle(false);
+        setType("like");
+    };
+    const search=()=>{
+        console.log(rbtitle,inputContent);
+        fetch(`${TROLL_APPLY_URL}/search`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body:JSON.stringify({type:rbtitle,keyword:inputContent})
+        })
+            .then(res => {
+                console.log(res.status);
+                if (res.status === 200) {
+                    return res.json();
+
+                }
+            })
+            .then(json => {
+                if (!json) return;
+                SetRequestBoard(json.boardApply);
+            });
+    }
+    const pageHandler = (e) => {
+        console.log(+e.target.innerText)
+        setPage(e.target.innerText);
+    };
+    const inputHandler = (e) => {
+        setInputContent(e.target.value);
+    };
+    const submitHandler = (e) => {
+        e.preventDefault();
+        search();
+    };
+    const getCardData=async ()=>{
+        await fetch(TROLL_RULING_BOARD_URL, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+            }
+        }).then(res=>{
+            if(res.status===200)
+                return res.json();
+        }).then( json => {
+            console.log(json);
+            setCardData1([json.currentBoard]);
+            setCardData2([json.previousBoard]);
+        })
+    }
+    const [prev,setPrev]=useState(true);
+    const [current,setCurrent]=useState(false);
     return (
         <div id="board_wrap" onClick={offDiv}>
             <section id="board_main">
                 <div className="card-box">
-                    <div className="prev hero">
-                        <div className='videoo'>
-                            <ReactPlayer
-                                url={"/assets/videos/lol.mp4"}
-                                width={'300px'}
-                                height={'100%'}/>
-                        </div>
-                        <div className="text"></div>
-                        <div className="logo">
-                            <img src={process.env.PUBLIC_URL + '/assets/lollogo.jpg'} alt=""/>
-                        </div>
-                        <div className="main-text">
-                            <p>누가누가 문제인가요?? ㅅㅂ?</p>
-                        </div>
-                        <div className="main-text2">
-                            <p>이전 투표 글</p>
-                        </div>
-                    </div>
-                    <div className="prev hero">
-                        <div className='videoo'>
-                            <ReactPlayer
-                                url={"/assets/videos/lol.mp4"}
-                                width={'300px'}
-                                height={'100%'}/>
-                        </div>
-                        <div className="text second"></div>
-                        <div className="logo">
-                            <img src={process.env.PUBLIC_URL + '/assets/lollogo.jpg'} alt=""/>
-                        </div>
-                        <div className="main-text">
-                            <p>누가누가 문제인가요?? ㅅㅂ?</p>
-                        </div>
-                        <div className="main-text2">
-                            <p>현재투표 글</p>
-                        </div>
-                    </div>
+                    {cardData1.map(item=>
+                        <HeaderCard item={item} isBool={prev}/>
+                    )}
+                    {cardData2.map(item=>
+                        <HeaderCard item={item} isBool={current}/>
+                    )}
 
 
                 </div>
                 <div>
-                    {BasicExample()}
+                <ProgressBar
+                        className="progressBar"
+                        completed={60}
+                        customLabel={"에베벱"}
+                    />
                 </div>
 
                 <div className="board_list_box">
                     <div className="board_search_box">
                         <div className="toggleBtn">
-                            <button className="sorting-button toggle">최신글</button>
-                            <button className="sorting-button">인기글</button>
+                            <button className={cn("sorting-button", {toggle: toggle})} onClick={toggleHandler1}>최신글
+                            </button>
+                            <button className={cn("sorting-button", {toggle: !toggle})} onClick={toggleHandler2}>인기글
+                            </button>
                         </div>
                         <div className="searchT">
                             <div className="relative">
@@ -102,26 +171,28 @@ const RequestBoard = () => {
                                     </div>
                                 </button>
                             </div>
-                            <form>
-                                <input placeholder="게시물 검색"/>
+                            <form onChange={inputHandler} onSubmit={submitHandler}>
+                                <input placeholder="게시물 검색" />
                                 <button><CiSearch className="SearchIcon" size={12 * 2}/></button>
                             </form>
                         </div>
                     </div>
                     <div className="board_table_box">
-                        <RequestGather/>
+                        {requestBoard.map(con =>
+                            <RequestContent item={con}/>
+                        )}
                         <nav className="page-box">
                             <div className="write-btn">
-                                <Link to="/board/create">글쓰기</Link>
+                                <Link to="/board/RequestCreate">글쓰기</Link>
                             </div>
-                            <ul className="arrowBox">
-                                <li className="arrow"><MdKeyboardDoubleArrowLeft size={12 * 2}/></li>
-                                <li className="arrow"><MdKeyboardArrowLeft size={12 * 2}/></li>
-                                <li className="arrow">1</li>
-                                <li className="arrow">2</li>
-                                <li className="arrow"><MdOutlineKeyboardArrowRight size={12 * 2}/></li>
-                                <li className="arrow"><MdKeyboardDoubleArrowRight size={12 * 2}/></li>
-                            </ul>
+                            <Pagination
+                                activePage={page}
+                                count={totalPage}
+                                variant="outlined"
+                                color="primary"
+                                shape="rounded"
+                                onChange={pageHandler}
+                            />
                         </nav>
                     </div>
                 </div>
