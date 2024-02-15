@@ -3,7 +3,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
+  &.modal-active {
+    overflow: hidden;
+  }
   h1 {
     text-align: center;
     font-size: 24px;
@@ -12,7 +14,7 @@
 
   .box {
     height: 705px;
-    width: 1300px;
+    width: 1250px;
     margin: 0 auto;
     background-color: #eaeaea;
   }
@@ -92,18 +94,6 @@
     border: 3px solid #0074d9;
   }
 
-  button {
-    height: 45px;
-    width: 45px;
-    float: left;
-    margin-top: 20px;
-    margin-left: 20px;
-    background-color: #0074d9;
-    border: none;
-    font-size: 20px;
-    color: #FFFFFF;
-  }
-
   .box, .live-feed, .comment, button {
     border-radius: 3px;
   }
@@ -135,20 +125,23 @@
       width: 40%;
       margin: 25px auto;
       display: flex;
-      align-items: flex-start;
+      justify-content: center;
+      align-items: center;
       border-bottom: lightgray solid 1px;
 
       #outlined-basic {
         border-radius: 16px;
       }
 
-      button {
+      #bttt {
+        width: 15%;
         font-weight: 700;
         color: black;
         border: lightgray solid 1px;
         font-size: 18px;
-        width: 100px;
-        height: 50px;
+        height: 100px;
+        float: left;
+        background-color: #0074d9;
       }
     }
 

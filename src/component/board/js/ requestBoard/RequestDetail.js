@@ -261,8 +261,6 @@ const RequestDetail = () => {
                         />
                         <Button
                             id="bttt"
-                            fullWidth
-                            sx={{width: '10%', marginLeft: 1}}
                             onClick={inputTextHandler}
                         >등록</Button>
                     </form>

@@ -1,39 +1,52 @@
 import React, {useEffect, useState} from 'react';
 import ReactPlayer from "react-player";
 import {Button, Pagination, TextField} from "@mui/material";
-import { useLocation} from "react-router-dom";
-import {
-
-    TROLL_RULING_BOARD_URL
-} from "../../../../config/host-config";
+import {useLocation} from "react-router-dom";
+import "../../scss/SelectDetail.scss";
 import {VscAccount} from "react-icons/vsc";
 import {BsChatDots} from "react-icons/bs";
 import {FaEye} from "react-icons/fa";
 import {GoHeart} from "react-icons/go";
+import Buttons from "../Buttons";
 
 const SelectDetail = () => {
     const [dataList, setDataList] = useState([]);
     const [page, setPage] = useState(1);
     const location = useLocation();
-    const{title,applyPosterId,applyPosterName,content,replyCount,rulingDate,viewCount}=location.state.data;
+    const {title, applyPosterId, applyPosterName, content, replyCount, rulingDate, viewCount} = location.state.data;
     const {rulingId, isBool} = location.state;
     useEffect(() => {
         console.log(title);
     }, []);
 
 
+    const handleButtonClick = (e) => {
+        const buttonId = e.target.id;
+        document.getElementById('modal-container').className = buttonId;
+        document.getElementById("section").classList.add('modal-active');
+    };
 
+    const handleModalContainerClick = () => {
+        document.getElementById('modal-container').classList.add('out');
+        document.getElementById("section").classList.remove('modal-active');
+    };
     return (
         <>
+            <div id="modal-container" >
+                <div className="modal-background" onClick={handleButtonClick}>
+                    <div className="modal">
+                        <h2>I'm a Modal</h2>
+                        <p>Hear me roar.</p>
+
+                    </div>
+                </div>
+            </div>
             <section id="section">
-
-                <div className="box">
+                <div id="box">
                     <div className="infobox">
-                        {/*<div className="info"><GoHeart className="p"*/}
-                        {/*                               size={15 * 2}/><span>{dataList[0].upCount}</span>*/}
-                        {/*</div>*/}
-
-
+                        <div className="info"><GoHeart className="p"
+                                                       size={15 * 2}/><span>{5}</span>
+                        </div>
                         <div className="info"><VscAccount size={15 * 2}/><span>{applyPosterName}</span>
                         </div>
                         <div className="info"><BsChatDots size={15 * 2}/><span>{replyCount}</span>
@@ -51,6 +64,10 @@ const SelectDetail = () => {
                                 height={'600px'}
 
                             />
+                            <div className="vote-box">
+                                <div id="three" className="button BIG-red-button!!!" onClick={handleButtonClick}>투표하기</div>
+                            </div>
+
 
                         </div>
 
