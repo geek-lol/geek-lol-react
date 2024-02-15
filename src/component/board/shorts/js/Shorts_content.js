@@ -7,7 +7,6 @@ import {SHORT_URL, SHORT_VOTE_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import {json, useNavigate} from "react-router-dom";
 
-
 const ShortsContent = ({id, item, upVote}) => {
     const API_BASE_URL = SHORT_URL;
     const API_VOTE_URL = SHORT_VOTE_URL;
@@ -18,48 +17,7 @@ const ShortsContent = ({id, item, upVote}) => {
     };
     const redirect = useNavigate();
     const {shortsId, uploaderName, replyCount, viewCount, upCount, title, context} = item;
-    const [token, setToken] = useState(getCurrentLoginUser().token);
-    const [viewComment, setViewComment] = useState(false);
-    const [voteShort, setVoteShort] = useState(false);
-    const [voteCount,setVoteCount] = useState(item.upCount);
-    const [viewAni, setViewAni] = useState(false);
-    
-    // 휠 애니메이션
-    const [viewScrollDownAni, setViewScrollDownAni] = useState(false);
-    const [viewScrollUpAni, setViewScrollUpAni] = useState(false);
-    // 리스트 인덱스
-    const [currentItemIndex, setCurrentItemIndex] = useState(0);
-    // 휠 이벤트 시간
-    const lastWheelTime = useRef(0);
 
-    const {shortsId, uploaderName,replyCount,viewCount, upCount, title, context, videoLink} = item;
-
-    // 신고 모달 띄우기
-    const [viewReport, setViewReport] = useState(false);
-    const modalBackground = useRef();
-    const contentRef = useRef(null);
-    const isMounted = useRef(false);
-
-    const [shortList, setShortList] = useState([]);
-    const [shortVote, setShortVote] = useState([]);
-    const API_BASE_URL = SHORT_URL;
-    const API_VOTE_URL = SHORT_VOTE_URL;
-
-
-
-    const requestHeader = {
-        'content-type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    };
-
-    const [voteVideoState, setVoteVideoState] = useState(null);
-    const getVoteVideo = async () => {
-        const response = await axios.get(API_VOTE_URL, {
-            headers: requestHeader,
-            params: {
-                shortsId,
-            }
-        });
 
     const [viewComment, setViewComment] = useState(false);
     const [viewAni, setViewAni] = useState(false);
@@ -465,7 +423,6 @@ const ShortsContent = ({id, item, upVote}) => {
 
                         </div>
                     </div>
-
                 }
             </li>
 
