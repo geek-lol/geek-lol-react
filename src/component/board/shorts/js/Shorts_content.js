@@ -341,16 +341,10 @@ const ShortsContent = ({id, item, upVote}) => {
                     <div className={cn('short-form', {animation_view: viewAni})} id={'root'}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
                             {videoLoaded && (
-                                <video
+                                <iframe
                                     src={videoUrl}
-                                    autoPlay
-                                    muted={true}
-                                    // playsInline
-                                    loop
-                                    // controlsList="nodownload"
-                                    // muted
-                                    // allow="autoplay=true; control=false; loop=true;"
-                                ></video>
+                                    allow="autoplay=true; control=false; loop=true;"
+                                ></iframe>
                             )}
                             <div className={'overlap-front'}>
                                 <div className={'produce'}>
