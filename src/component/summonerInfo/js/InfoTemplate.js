@@ -9,6 +9,7 @@ import NotFoundSummoner from "./NotFoundSummoner";
 import SkeletonLeftContent from "../skeleton/js/SkeletonLeftContent";
 import SkeletonRightContent from "../skeleton/js/SkeletonRightContent";
 import SkeletonContent from "../skeleton/js/SkeletonContent";
+import {CHAMPION_MASTERY_URL, FIND_USER_URL, RECENT_GAMES_URL} from "../../../config/host-config";
 
 const InfoTemplate = () => {
     const {searchValue, tag} = useParams();
@@ -20,7 +21,7 @@ const InfoTemplate = () => {
     const getUserInfo = async () => {
         setInfoloading(true);
         try {
-            const response = await axios.get(`http://localhost:8686/find/${searchValue}/${tag ? tag : 'KR1'}`);
+            const response = await axios.get(FIND_USER_URL +`/${searchValue}/${tag ? tag : 'KR1'}`);
             setUserInfo(response.data.userInfo != null ? response.data : null);
             console.log(response.data);
             await getRecentGames();
@@ -45,7 +46,7 @@ const InfoTemplate = () => {
             setGamesLoading(true);
         }
         try {
-            const response = await axios.get(`http://localhost:8686/recentGames/${startIndex}/${10}`);
+            const response = await axios.get(RECENT_GAMES_URL + `/${startIndex}/${10}`);
             if (response.status === 200) {
 
                 setRecentGames(prevGames => [...prevGames, ...response.data]);
@@ -68,7 +69,7 @@ const InfoTemplate = () => {
     const [championMastery, setChampionMastery] = useState(undefined);
     const getChampionMastery = async () => {
         try {
-            const response = await axios.get(`http://localhost:8686/championMastery`);
+            const response = await axios.get(CHAMPION_MASTERY_URL);
             if(response.status === 200) {
                 setChampionMastery(response.data);
                 console.log(response.data);

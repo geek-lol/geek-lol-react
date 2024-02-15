@@ -1,11 +1,26 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import RankSelect from "./RankSelect";
 import RankBoard from "./RankBoard";
 import "../scss/Rank.scss"
 import {BsChevronDoubleLeft, BsChevronDoubleRight, BsChevronLeft, BsChevronRight} from "react-icons/bs";
-import {Reset} from "styled-reset";
+import axios from "axios";
+import {RANKING_URL} from "../../../config/host-config";
 
 const Rank = () => {
+
+    const [ranking, setRanking] = useState(null);
+    const getRankingData = async () => {
+        const response = await axios.get(RANKING_URL + `/CHALLENGER`);
+
+        if (response.status === 200 && response.data !== null) {
+            setRanking(response.data);
+            console.log(response.data);
+        }
+    };
+
+    useEffect(() => {
+        getRankingData();
+    }, []);
     return (
         <div className={'rank'}>
             <div className={'rank-container'}>
@@ -13,23 +28,19 @@ const Rank = () => {
                     <p>랭킹</p>
                 </div>
                 <div className={'rank-select'}>
-                    <RankSelect />
+                    <RankSelect/>
                 </div>
                 <div className={'rank-board'}>
-                    <RankBoard />
+                    <RankBoard/>
                 </div>
                 <div className={'rank-bottom'}>
                     <nav className={'navigation'}>
                         <ul className={'paging'}>
                             <li className={'page-item'}>
-                                <a href="#">
-                                    <BsChevronDoubleLeft />
-                                </a>
+                                <BsChevronDoubleLeft/>
                             </li>
                             <li className={'page-item'}>
-                                <a href="#">
-                                    <BsChevronLeft />
-                                </a>
+                                <BsChevronLeft/>
                             </li>
                             <li className={'page-item'}>
                                 <a href="#">
@@ -37,14 +48,10 @@ const Rank = () => {
                                 </a>
                             </li>
                             <li className={'page-item'}>
-                                <a href="#">
-                                    <BsChevronRight />
-                                </a>
+                                <BsChevronRight/>
                             </li>
                             <li className={'page-item'}>
-                                <a href="#">
-                                    <BsChevronDoubleRight />
-                                </a>
+                                <BsChevronDoubleRight/>
                             </li>
                         </ul>
                     </nav>

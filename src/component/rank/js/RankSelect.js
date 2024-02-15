@@ -2,6 +2,11 @@ import React from 'react';
 import "../scss/RankSelect.scss"
 import {BsChevronDown} from "react-icons/bs";
 const RankSelect = () => {
+
+    const changeTierHandler = e => {
+        console.log(e.target.value);
+    };
+
     return (
         <>
             <div className={'rank-selectbox'}>
@@ -11,7 +16,7 @@ const RankSelect = () => {
                 </select>
             </div>
             <div className={'tier-selectbox'}>
-                <select name="" id="" className={'tier-select'}>
+                <select className={'tier-select'} onChange={changeTierHandler}>
                     <option value="Challenger">Challenger</option>
                     <option value="GrandMaster">GrandMaster</option>
                     <option value="Master">Master</option>

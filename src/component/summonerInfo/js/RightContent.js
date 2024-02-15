@@ -11,6 +11,7 @@ import {getMainRuneById, getSubRuneData} from "../functions/getRuneFunc";
 import "../scss/MasteryTable.scss";
 import {RxCross2} from "react-icons/rx";
 import {CiCircleCheck, CiCircleRemove} from "react-icons/ci";
+import {ALL_CHAMPION_MASTERY_URL, REALTIME_GAME_URL} from "../../../config/host-config";
 
 const RightContent = ({
                           recentGames,
@@ -88,7 +89,7 @@ const RightContent = ({
     const [currentGame, setCurrentGame] = useState(null);
 
     const getRealtimeGame = async () => {
-        const response = await axios.get("http://localhost:8686/realtimeGame");
+        const response = await axios.get(REALTIME_GAME_URL);
 
         if (response.status === 200 && response.data !== "" && response.data.gameId !== currentGame) { // Only update if there's a change
             setCurrentGame(response.data);
@@ -101,7 +102,7 @@ const RightContent = ({
     const [allChampionMastery, setAllChampionMastery] = useState(null)
     const getAllChampionMastery = async () => {
 
-        const response = await axios.get("http://localhost:8686/all-champion-mastery");
+        const response = await axios.get(ALL_CHAMPION_MASTERY_URL);
 
         if (response.status === 200 && response.data !== "") {
             setAllChampionMastery(response.data);
