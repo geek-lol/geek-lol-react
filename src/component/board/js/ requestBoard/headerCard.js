@@ -4,7 +4,7 @@ import {TROLL_RULING_BOARD_URL} from "../../../../config/host-config";
 import {Link} from "react-router-dom";
 
 const HeaderCard = ({item,isBool}) => {
-    const {posterId,rulingId,title}=item;
+    const {posterId,rulingId,title}=item||{};
     const [Video, setVideo] = useState();
     const playerRef = useRef(null);
     const [data,setData]=useState(null);

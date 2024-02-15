@@ -9,6 +9,7 @@ import {FaEye} from "react-icons/fa";
 import {GoHeart} from "react-icons/go";
 import {Button, Modal} from 'react-bootstrap';
 import {GiLuciferCannon} from "react-icons/gi";
+import RequestBoardReply from "../../RequestBoardReply";
 const SelectDetail = () => {
     const [dataList, setDataList] = useState([]);
     const [page, setPage] = useState(1);
@@ -81,19 +82,29 @@ const SelectDetail = () => {
                     </div>
                 </Modal.Body>
             </Modal>
-            <section id="section">
-            <div id="box">
-                <div className="infobox">
-                        <div className="info"><GoHeart className="p"
-                                                       size={15 * 2}/><span>{5}</span>
+            <div>
+                <section className="detailSection">
+                    <div className="DetailTop">
+                        <h1 className="RequestTitle">트롤재판소</h1>
+                        <h2 className="subTile">누가 트롤인지 여러분의 손으로 정해보세요!</h2>
+                        <div className="btnBox">
+                            <button className="Btn1">현재 진행중인 재판 ></button>
+                            <button className="Btn2">지난 재판 ></button>
                         </div>
-                        <div className="info"><VscAccount size={15 * 2}/><span>{applyPosterName}</span>
-                        </div>
-                        <div className="info"><BsChatDots size={15 * 2}/><span>{replyCount}</span>
-                        </div>
-                        <div className="info"><FaEye size={15 * 2}/><span>{viewCount}</span></div>
                     </div>
-                    <div className="live-feed">
+                    <div className="DetailMid">
+                        {/*<h1>{item.title}</h1>*/}
+                        <div className="detail-info-box">
+                            <div className="info-front">
+                                {/*<p>작성일자 - {item.localDateTime}</p><p>|</p>*/}
+                                {/*<p>작성자 - {item.posterName}</p>*/}
+                            </div>
+                            <div className="info-back">
+                                {/*<p>조회수 - {item.viewCount - 1}</p><p>|</p>*/}
+                                {/*<p>댓글 - {item.replyCount}</p><p>|</p>*/}
+                                {/*<p>추천 - {item.upCount}</p>*/}
+                            </div>
+                        </div>
                         <div className="videoPlayer">
                             <ReactPlayer
                                 light={false}
@@ -104,66 +115,66 @@ const SelectDetail = () => {
                                 height={'600px'}
 
                             />
-                            <div className="vote-box">
 
-                                <div id="three" className="button BIG-red-button!!!" onClick={() => setShow(true)}>투표하기
-                                </div>
+
+                        </div>
+
+                        {/*<span className="detailContent">{item.content}</span>*/}
+                        <div className="vote-box">
+
+                            <div id="three" className="button BIG-red-button!!!" onClick={() => setShow(true)}>투표하기
                             </div>
-
-
                         </div>
 
+
                     </div>
-                    <div className="comment">
-                        <div className="messages" id="live-chat">
-                            <h1>Title : {title}</h1>
-                            <span>{content}</span>
+                    <div className="DetailBottom">
+                        <h1 className="replyTitle">댓글</h1>
+                        <form className="detail-comment-form" >
+                            <TextField
+                                id="outlined-basic"
+                                label="댓글 쓰기"
+                                variant="outlined"
+                                fullWidth
+                                multiline
+                                rows={3}
+                                maxRows={3}
+                                sx={{
+                                    fontSize: 36,
+                                    width: '90%',
+                                    borderRadius: '34px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    textAlign: 'center'
+                                }}
+                                // value={replyText}
+                            />
+                            <Button
+                                id="bttt"
+                                variant="outlined"
+                                fullWidth
+                                sx={{width: '10%', marginLeft: 1}}
+                                // onClick={inputTextHandler}
+                            >등록</Button>
+                        </form>
+                        <div className="comment-box">
+                            {/*{*/}
+                            {/*    replyList.map(con =>*/}
+                            {/*        <RequestBoardReply item={con} getReplyCount={getReplyCount}/>*/}
+                            {/*    )}*/}
+                            <Pagination
+                                activePage={page}
+                                // count={totalPage}
+                                variant="outlined"
+                                color="primary"
+                                shape="rounded"
+                                // onChange={pageHandler}
+                            />
                         </div>
                     </div>
-                </div>
-                <div className="detail-comment">
-                    <form className="detail-comment-form">
-                        <TextField
-                            id="outlined-basic"
-                            label="댓글 쓰기"
-                            variant="outlined"
-                            fullWidth
-                            multiline
-                            rows={3}
-                            maxRows={3}
-                            sx={{
-                                fontSize: 36,
-                                width: '90%',
-                                borderRadius: '34px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                textAlign: 'center'
-                            }}
-                            // value={replyText}
-                        />
-                        <Button
-                            id="bttt"
-                            fullWidth
-                            sx={{width: '10%', marginLeft: 1}}
-                            // onClick={inputTextHandler}
-                        >등록</Button>
-                    </form>
-                    <div className="comment-box">
-                        {/*{*/}
-                        {/*    replyList.map(con =>*/}
-                        {/*        <RequestBoardReply item={con} getReplyCount={getReplyCount}/>*/}
-                        {/*    )}*/}
-                        <Pagination
-                            // activePage={page}
-                            // count={totalPage}
-                            variant="outlined"
-                            color="primary"
-                            shape="rounded"
-                            // onChange={pageHandler}
-                        />
-                    </div>
-                </div>
-            </section>
+
+                </section>
+            </div>
         </>
     );
 };
