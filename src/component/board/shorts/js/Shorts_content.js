@@ -175,13 +175,12 @@ const ShortsContent = ({id, item, upVote}) => {
         setVoteLoaded(true);
         setTotalCount(upCount);
 
-        // console.log('shorts', shortsId);
-
     }, []);
 
 
     useEffect(() => {
         if (!videoLoaded) return;
+
     }, [videoLoaded]);
 
 
@@ -275,6 +274,12 @@ const ShortsContent = ({id, item, upVote}) => {
     }
 
 
+    var player = videojs("player");
+
+    player.ready(function() {
+        player.play();
+    });
+
 
     return (
         <>
@@ -286,10 +291,7 @@ const ShortsContent = ({id, item, upVote}) => {
                         <div className={cn('content', {animation_content_view: viewComment})}>
                             {videoLoaded && (
                                 <video
-                                    autoPlay={true}
-                                    muted={true}
-                                    controls={true}
-                                    loop={true}
+                                    muted id="player"
                                 >
                                     <source src={videoUrl}/>
                                 </video>

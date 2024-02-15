@@ -5,16 +5,15 @@ import {BOARD_REPLY_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import Shorts_comment_list from "./Shorts_comment_list";
 import '../scss/Shorts_comment.scss'
-import axios from "axios";
-import {brown} from "@mui/material/colors";
 
 const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
-    const {shortsId,replyCount} = item;
+    const {shortsId, replyCount} = item;
     const API_BASE_URL = BOARD_REPLY_URL;
     const token = getCurrentLoginUser().token;
+    const containerRef = useRef(null);
 
     const [page, setPage] = useState(1);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [shortReplyList, setShortReplyList] = useState([]); //replyList
     const [shortReplyCount, setShortReplyCount] = useState([]);
     const [replyValue, setReplyValue] = useState({context: ''});
@@ -64,7 +63,6 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
 
 
     const fetchData = async () => {
-        setIsLoading(true);
         if (replyCount !== 0) {
             try {
                 const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=15`, {
@@ -76,9 +74,8 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                 }
 
                 const json = await res.json();
-                setShortReplyList(json.reply); // 가져온 댓글로 항목을 업데이트합니다.
-                console.log(json.reply);
-                // setShortReplyCount(json.totalCount);
+                setShortReplyList(prevList => [...prevList, ...json.reply]);
+                setPage(prevPage => prevPage + 1);
 
             } catch (error) {
                 console.log('데이터 없음');
@@ -91,7 +88,30 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     useEffect(() => {
         fetchData();
     }, [])
+    useEffect(() => {
+        const handleScroll = () => {
+            if (
+                containerRef.current &&
+                containerRef.current.scrollTop + containerRef.current.clientHeight >=
+                containerRef.current.scrollHeight
+            ) {
+                fetchData();
+            }
+        };
 
+        containerRef.current.addEventListener('scroll', handleScroll);
+        return () => {
+            containerRef.current.removeEventListener('scroll', handleScroll);
+        };
+    }, [fetchData]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <div className={'comment-container'}>
@@ -102,18 +122,20 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                 </div>
                 <BsPlusLg className={cn('comment-close-btn', {close_animation: viewComment})} onClick={chkViewComment}/>
             </div>
-            <div className={'comment-box'}>
-                <ul className={'comment-list scrollBar'}>
-                    {shortReplyList && shortReplyList.map((reply) => (
-                        <Shorts_comment_list
-                            shortReplyList={reply}
-                            item={item}
-                        />
-                    ))}
-                    {isLoading && <p>Loading...</p>}
-                    <div id="observer" style={{height: "10px"}}></div>
-
-                </ul>
+            <div ref={containerRef} className={'comment-box'}>
+                {isLoading ? (
+                    <p>Loading...</p>
+                ) : (
+                    <ul className={'comment-list scrollBar'}>
+                        {shortReplyList && shortReplyList.map((reply) => (
+                            <Shorts_comment_list
+                                key={reply.id}
+                                shortReplyList={reply}
+                                item={item}
+                            />
+                        ))}
+                    </ul>
+                )}
             </div>
             <div className={'comment-save'}>
                 <div className={'comment-save-profile'}>
