@@ -21,6 +21,10 @@
   justify-content: center;
   align-items: center;
 
+  .shortsId {
+    display: none;
+  }
+
 
   .short-form {
     //padding: 10% 0;
@@ -51,6 +55,7 @@
         object-fit: cover;
 
       }
+
 
 
       .overlap-front {

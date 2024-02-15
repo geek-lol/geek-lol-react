@@ -1,14 +1,17 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import '../scss/Shorts_comment_list.scss'
 import data from "bootstrap/js/src/dom/data";
-import {BOARD_REPLY_URL} from "../../../../config/host-config";
+import {BOARD_REPLY_URL, USER_URL} from "../../../../config/host-config";
+import {getCurrentLoginUser} from "../../../../utils/login-util";
 
 const ShortsCommentList = ({item, shortReplyList, ref}) => {
 
 
     const [showMore, setShowMore] = useState(false);
-    const {replyId, writerName, context, replyDate, shortsId} = shortReplyList;
-    const [contextList, setContextList] = useState([]);
+    const {replyId, writerId, writerName, context, replyDate, shortsId} = shortReplyList;
+
+    const API_IMG_URL = USER_URL;
+    const [writerImgUrl, setWriterImgUrl] = useState();
 
 
 
@@ -28,6 +31,35 @@ const ShortsCommentList = ({item, shortReplyList, ref}) => {
     // }, [showMore]);
 
 
+    useEffect(() => {
+        fetchWriterImg();
+    },[])
+
+    // 댓글쓴 사람의 이미지 URL
+    const fetchWriterImg = async () => {
+
+        const url = `${API_IMG_URL}/profile?userId=${writerId}`;
+        const res = await fetch(url, {
+            method: "GET"
+        });
+
+        if (res.status === 200) {
+            const imgData = await res.blob();
+
+            // blob이미지를 url로 변환
+            const profileUrl = window.URL.createObjectURL(imgData);
+
+            setWriterImgUrl(profileUrl);
+            // console.log(profileUrl);
+
+        } else {
+            const errMsg = await res.text();
+            alert(errMsg);
+            setWriterImgUrl(null);
+        }
+
+    };
+
 
 
 
@@ -35,7 +67,7 @@ const ShortsCommentList = ({item, shortReplyList, ref}) => {
         shortReplyList && (
             <li key={shortReplyList.replyId} className={'comment-item'} id={'commentNo'}>
                 <div className={'comment-user-profile'}>
-                    <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
+                    <img src={writerImgUrl} alt="프로필이미지"/>
                 </div>
                 <div className={'comment-user-data'}>
                     <div className={'user-data'}>

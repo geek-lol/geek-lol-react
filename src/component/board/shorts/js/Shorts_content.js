@@ -17,7 +17,7 @@ const ShortsContent = ({id, item, upVote}) => {
         'Authorization': `Bearer ${token}`
     };
     const redirect = useNavigate();
-    const {shortsId, uploaderName, replyCount, viewCount, upCount, title, context,uploaderId} = item;
+    const {shortsId, uploaderName, replyCount, viewCount, upCount, title, context, uploaderId} = item;
 
 
     const [viewComment, setViewComment] = useState(false);
@@ -152,8 +152,8 @@ const ShortsContent = ({id, item, upVote}) => {
                 return res.json();
             })
             .then(json => {
-                setTotalCount(json.total);
                 setVoteCount(json.up);
+                setTotalCount(json.total);
                 // console.log('total', json.total)
                 // console.log('voteCount', json.up);
 
@@ -174,7 +174,6 @@ const ShortsContent = ({id, item, upVote}) => {
         getVoteList();
         setVoteLoaded(true);
         setTotalCount(upCount);
-
     }, []);
 
 
@@ -201,7 +200,7 @@ const ShortsContent = ({id, item, upVote}) => {
         // 투표 여부에 따른 요청 분기
         const vote = async () => {
 
-            if (voteCount === 1 || voteCount === 0) {
+            if (voteCount === 0 || voteCount === 1) {
                 const res = await fetch(API_VOTE_URL, {
                     method: 'PATCH',
                     headers: requestHeader,
@@ -231,8 +230,8 @@ const ShortsContent = ({id, item, upVote}) => {
             if (res.status === 200) {
                 // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
                 const json = await res.json().catch(() => ({}));
-                console.log('jsonup', json.up);
                 setVoteCount(json.up);
+                console.log('jsonup', json.up);
                 setTotalCount(json.total);
                 console.log('total', json.total);
 
@@ -266,19 +265,70 @@ const ShortsContent = ({id, item, upVote}) => {
     }
 
 
-
     const [replyLength, setReplyLength] = useState(null);
     const ReplyCount = (replylength) => {
-        // console.log(replylength)
-        setReplyLength(replylength);
-    }
+            // console.log(replylength)
+            setReplyLength(replylength);
+        }
 
 
-    var player = videojs("player");
+        // const fetchData = async () => {
+        //     if (replyCount !== 0) {
+        //         try {
+        //             const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=15`, {
+        //                 method: 'GET'
+        //             });
+        //
+        //             if (!res.ok) {
+        //                 throw new Error(`HTTP 오류! 상태: ${res.status}`);
+        //             }
+        //
+        //             const json = await res.json();
+        //             setShortReplyList(prevList => [...prevList, ...json.reply]);
+        //             setPage(prevPage => prevPage + 1);
+        //
+        //         } catch (error) {
+        //             console.log('데이터 없음');
+        //         }
+        //         setIsLoading(false);
+        //     }
+        // };
 
-    player.ready(function() {
-        player.play();
-    });
+        // useEffect(() => {
+        //     fetchData();
+        // }, [])
+        // useEffect(() => {
+        //     const container = containerRef.current;
+        //     if (!container) return;
+        //     const handleScroll = () => {
+        //         if (
+        //             containerRef.current &&
+        //             containerRef.current.scrollTop + containerRef.current.clientHeight >=
+        //             containerRef.current.scrollHeight
+        //         ) {
+        //             fetchData();
+        //         }
+        //     };
+        //
+        //     container.addEventListener('scroll', handleScroll);
+        //     return () => {
+        //         container.removeEventListener('scroll', handleScroll);
+        //     };
+        // }, [fetchData]);
+        //
+        // useEffect(() => {
+        //     const timer = setTimeout(() => {
+        //         setIsLoading(false);
+        //     }, 300);
+        //
+        //     return () => clearTimeout(timer);
+        // }, []);
+        //
+        //
+        //
+
+    // video element 참조
+
 
 
     return (
@@ -286,15 +336,21 @@ const ShortsContent = ({id, item, upVote}) => {
             <li key={shortsId}
                 className={cn('content-container', {scrollDown_ani_view: viewScrollDownAni}, {scrollUp_ani_view: viewScrollUpAni})}
                 ref={contentRef}>
+                <div className={'shortsId'}>{shortsId}</div>
                 {voteLoaded && (
                     <div className={cn('short-form', {animation_view: viewAni})} id={'root'}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
                             {videoLoaded && (
                                 <video
-                                    muted id="player"
-                                >
-                                    <source src={videoUrl}/>
-                                </video>
+                                    src={videoUrl}
+                                    autoPlay
+                                    muted={true}
+                                    // playsInline
+                                    loop
+                                    // controlsList="nodownload"
+                                    // muted
+                                    // allow="autoplay=true; control=false; loop=true;"
+                                ></video>
                             )}
                             <div className={'overlap-front'}>
                                 <div className={'produce'}>
@@ -313,7 +369,7 @@ const ShortsContent = ({id, item, upVote}) => {
                                 </div>
                                 <div className={cn('front-sidebar', {front_sidebar_view: viewComment})}>
                                     <div className={'short-btn like-btn'}>
-                                        {voteCount === 1 ? (
+                                        {voteCount === 0 ? (
                                             <>
                                                 <BsHeartFill className={'btn'}
                                                              onClick={() => voteShortVideo(item.shortsId)}/>
@@ -338,7 +394,7 @@ const ShortsContent = ({id, item, upVote}) => {
                         </div>
                         <div className={cn('sidebar', {sidebar_view: viewComment})}>
                             <div className={'short-btn like-btn'}>
-                                {voteCount === 1 ? (
+                                {voteCount === 0 ? (
                                     <>
                                         <BsHeartFill className={'btn'}
                                                      onClick={() => voteShortVideo(item.shortsId)}/>

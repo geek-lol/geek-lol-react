@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import cn from "classnames";
 import {BsCaretLeftFill, BsPlusLg, BsSend} from "react-icons/bs";
-import {BOARD_REPLY_URL} from "../../../../config/host-config";
+import {BOARD_REPLY_URL, USER_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import Shorts_comment_list from "./Shorts_comment_list";
 import '../scss/Shorts_comment.scss'
@@ -9,7 +9,16 @@ import '../scss/Shorts_comment.scss'
 const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     const {shortsId, replyCount} = item;
     const API_BASE_URL = BOARD_REPLY_URL;
+    const API_IMG_URL = USER_URL;
+
+    const [imgUrl, setImgUrl] = useState();
     const token = getCurrentLoginUser().token;
+
+    const requestHeader = {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+
     const containerRef = useRef(null);
 
     const [page, setPage] = useState(1);
@@ -25,6 +34,30 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             ...replyValue,
             [name]: value,
         });
+    };
+    const fetchUserImg = async () => {
+
+        const url = `${API_IMG_URL}/load-profile`;
+        const res = await fetch(url, {
+            method: "GET",
+            headers: requestHeader
+        });
+
+        if (res.status === 200) {
+            const imgData = await res.blob();
+
+            // blob이미지를 url로 변환
+            const profileUrl = window.URL.createObjectURL(imgData);
+
+            setImgUrl(profileUrl);
+            // console.log(profileUrl);
+
+        } else {
+            const errMsg = await res.text();
+            alert(errMsg);
+            setImgUrl(null);
+        }
+
     };
 
     const addReply = async () => {
@@ -62,6 +95,7 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     // const [items, setItems] = useState([])
 
 
+
     const fetchData = async () => {
         if (replyCount !== 0) {
             try {
@@ -85,10 +119,18 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     };
 
 
+
+
+
     useEffect(() => {
+        fetchUserImg();
         fetchData();
-    }, [])
+    }, []);
+
+
     useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
         const handleScroll = () => {
             if (
                 containerRef.current &&
@@ -99,9 +141,9 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             }
         };
 
-        containerRef.current.addEventListener('scroll', handleScroll);
+        container.addEventListener('scroll', handleScroll);
         return () => {
-            containerRef.current.removeEventListener('scroll', handleScroll);
+            container.removeEventListener('scroll', handleScroll);
         };
     }, [fetchData]);
 
@@ -139,7 +181,7 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             </div>
             <div className={'comment-save'}>
                 <div className={'comment-save-profile'}>
-                    <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
+                    <img src={imgUrl} alt="프로필이미지"/>
                 </div>
                 <div className={'comment-input-box'}>
                     <input
