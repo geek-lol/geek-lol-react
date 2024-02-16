@@ -6,6 +6,7 @@ import Shorts_comment from "./Shorts_comment";
 import {SHORT_URL, SHORT_VOTE_URL, USER_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import {json, useNavigate} from "react-router-dom";
+import ReactPlayer from "react-player";
 
 const ShortsContent = ({id, item, upVote}) => {
     const API_BASE_URL = SHORT_URL;
@@ -328,7 +329,12 @@ const ShortsContent = ({id, item, upVote}) => {
         //
 
     // video element 참조
+    const videoRef = useRef(null);
+    const [playing, setPlaying] = useState(true);
 
+    const onPlay = () => {
+        setPlaying(!playing);
+    }
 
 
     return (
@@ -341,10 +347,17 @@ const ShortsContent = ({id, item, upVote}) => {
                     <div className={cn('short-form', {animation_view: viewAni})} id={'root'}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
                             {videoLoaded && (
-                                <iframe
-                                    src={videoUrl}
-                                    allow="autoplay=true; control=false; loop=true;"
-                                ></iframe>
+                                <div className={'video-box'} onClick={onPlay}>
+                                <ReactPlayer
+                                    url={videoUrl}
+                                    playing={playing}
+                                    muted={true}
+                                    loop={true}
+                                    controls={false}
+                                    width='100%'
+                                    height='100%'
+                                ></ReactPlayer>
+                                </div>
                             )}
                             <div className={'overlap-front'}>
                                 <div className={'produce'}>
