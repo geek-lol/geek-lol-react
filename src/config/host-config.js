@@ -3,6 +3,7 @@ const LOCAL_PORT = '8686'
 const API_BASE_URL = 'http://localhost:' + LOCAL_PORT;
 
 const USER = '/user';
+const GOOGLE = '/auth/google';
 const BOARD = '/board/bulletin'
 const DETAIL='/detail'
 const REPLY='/reply'
@@ -21,6 +22,7 @@ const TROLL_RULING_REPLY='/troll/ruling/reply'
 
 
 export const USER_URL = API_BASE_URL + USER;
+export const GOOGLE_URL = API_BASE_URL + GOOGLE;
 export const SHORT_URL = API_BASE_URL + SHORT;
 export const SHORT_VOTE_URL = API_BASE_URL + SHORT_VOTE;
 export const BOARD_URL = API_BASE_URL + BOARD;

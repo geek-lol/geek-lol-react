@@ -53,7 +53,7 @@ const MypageSideMenu = ({changeType}) => {
 
     const logOutHandler = () => {
         localStorage.clear()
-        redirection('/login');
+        redirection('/template/login');
     };
     return (
         <div className="my-sidemenu-wrapper">

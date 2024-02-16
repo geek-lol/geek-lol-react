@@ -1,29 +1,39 @@
 import React, {useEffect, useRef, useState} from 'react';
 import '../scss/Shorts_content.scss'
-import {BsChatLeft, BsExclamationCircle, BsHeart} from "react-icons/bs";
+import {BsChatLeft, BsExclamationCircle, BsHeart, BsHeartFill} from "react-icons/bs";
 import cn from "classnames";
 import Shorts_comment from "./Shorts_comment";
-import {debounce} from "lodash";
-import {SHORT_URL, SHORT_VOTE_URL} from "../../../../config/host-config";
+import {SHORT_URL, SHORT_VOTE_URL, USER_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
-import axios from "axios";
+import {json, useNavigate} from "react-router-dom";
+import ReactPlayer from "react-player";
 
-const ShortsContent = ({item}) => {
+const ShortsContent = ({id, item, upVote}) => {
+    const API_BASE_URL = SHORT_URL;
+    const API_VOTE_URL = SHORT_VOTE_URL;
+    const API_IMG_URL = USER_URL;
     const [token, setToken] = useState(getCurrentLoginUser().token);
+    const requestHeader = {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+    const redirect = useNavigate();
+    const {shortsId, uploaderName, replyCount, viewCount, upCount, title, context, uploaderId} = item;
+
+
     const [viewComment, setViewComment] = useState(false);
-    const [voteShort, setVoteShort] = useState(false);
-    const [voteCount,setVoteCount] = useState(item.upCount);
     const [viewAni, setViewAni] = useState(false);
-    
+
     // 휠 애니메이션
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [displayCount, setDisplayCount] = useState(1);
+
+
     const [viewScrollDownAni, setViewScrollDownAni] = useState(false);
     const [viewScrollUpAni, setViewScrollUpAni] = useState(false);
-    // 리스트 인덱스
-    const [currentItemIndex, setCurrentItemIndex] = useState(0);
     // 휠 이벤트 시간
     const lastWheelTime = useRef(0);
 
-    const {shortsId, uploaderName,replyCount,viewCount, upCount, title, context, videoLink} = item;
 
     // 신고 모달 띄우기
     const [viewReport, setViewReport] = useState(false);
@@ -32,94 +42,209 @@ const ShortsContent = ({item}) => {
     const isMounted = useRef(false);
 
     const [shortList, setShortList] = useState([]);
-    const [shortVote, setShortVote] = useState([]);
-    const API_BASE_URL = SHORT_URL;
-    const API_VOTE_URL = SHORT_VOTE_URL;
+    // const [shortVote, setShortVote] = useState([]);
 
 
+    //전체 upCount
+    const [voteCount, setVoteCount] = useState(null); // 각각의upCount
+    const [totalVote, setTotalVote] = useState();
+    const [voteLoaded, setVoteLoaded] = useState(false);
 
-    const requestHeader = {
-        'content-type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    };
+    const [totalCount, setTotalCount] = useState(null);
 
-    const [voteVideoState, setVoteVideoState] = useState(null);
-    const getVoteVideo = async () => {
-        const response = await axios.get(API_VOTE_URL, {
-            headers: requestHeader,
-            params: {
-                shortsId,
-            }
+
+    // 비디오 URL을 저장할 상태변수
+    const [videoUrl, setVideoUrl] = useState(null);
+    const [videoLoaded, setVideoLoaded] = useState(false);
+
+    // 이미지 URL을 저장할 상태변수
+    const [imgUrl, setImgUrl] = useState(null);
+
+    // 비디오 URL
+    const fetchShortVideo = async () => {
+
+        const url = `${API_BASE_URL}/load-video/${shortsId}`;
+        const res = await fetch(url, {
+            method: "GET"
         });
 
-        const data = await response.data;
+        if (res.status === 200) {
+            const videoData = await res.blob();
 
-        if(response.status === 200) {
-            setVoteVideoState(data);
+            // blob이미지를 url로 변환
+            const shortUrl = window.URL.createObjectURL(videoData);
+
+            setVideoUrl(shortUrl);
+            // console.log(shortUrl);
+
+            setVideoLoaded(true);
+        } else {
+            const errMsg = await res.text();
+            alert(errMsg);
+            setVideoUrl(null);
         }
 
-        console.log(data);
     };
 
+    // 이미지 URL
+    const fetchUserImg = async () => {
+
+        const url = `${API_IMG_URL}/profile?userId=${uploaderId}`;
+        const res = await fetch(url, {
+            method: "GET"
+        });
+
+        if (res.status === 200) {
+            const imgData = await res.blob();
+
+            // blob이미지를 url로 변환
+            const profileUrl = window.URL.createObjectURL(imgData);
+
+            setImgUrl(profileUrl);
+            // console.log(profileUrl);
+
+        } else {
+            const errMsg = await res.text();
+            alert(errMsg);
+            setVideoUrl(null);
+        }
+
+    };
+
+    // 쇼츠 리스트
+    const getshortList = async () => {
+        fetch(API_BASE_URL, {
+            method: 'GET',
+            headers: requestHeader
+        })
+            .then(res => {
+                // console.log(res.status);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! Status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(json => {
+                // console.log('shorts', json.shorts);
+                setShortList(json.shorts);
+                setReplyLength(replyCount);
+                // console.log(shortsId)
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+
+
+    };
+
+    // 투표 리스트
+    const getVoteList = async () => {
+
+        fetch(`${API_VOTE_URL}?shortsId=${shortsId}`, {
+            method: 'GET',
+            headers: requestHeader
+        })
+            .then(res => {
+                // console.log(res.status);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! Status: ${res.status}`);
+                }
+                // console.log('upCount', item.upCount);
+                return res.json();
+            })
+            .then(json => {
+                setVoteCount(json.up);
+                setTotalCount(json.total);
+                // console.log('total', json.total)
+                // console.log('voteCount', json.up);
+
+            })
+            .catch(error => {
+                console.log('아직투표없음');
+            });
+
+
+    };
+
+
+    // GET
     useEffect(() => {
-        getVoteVideo();
+        fetchShortVideo();
+        fetchUserImg();
+        getshortList();
+        getVoteList();
+        setVoteLoaded(true);
+        setTotalCount(upCount);
     }, []);
 
-    // console.log(token);
-    const patchVoteVideo = async () => {
 
-        const res = await fetch(API_VOTE_URL, {
-            method: 'PATCH',
-            headers: requestHeader,
-            body: JSON.stringify(shortsId)
-        })
-        if (res.status === 200) {
-            // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
-            const json = await res.json().catch(() => ({}));
-            setShortVote(json.vote);
-        } else {
-            console.error('Error:',  res.status);
-        }
+    useEffect(() => {
+        if (!videoLoaded) return;
 
-    };
-
-    const postVoteVideo = async () => {
-
-        const res = await fetch(API_VOTE_URL, {
-            method: voteVideoState.isEmpty ? 'POST' : "PATCH",
-            headers: requestHeader,
-            body: JSON.stringify(shortsId)
-        })
-        if (res.status === 200) {
-            // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
-            const json = await res.json().catch(() => ({}));
-            setShortVote(json.vote);
-            console.log(json.vote);
-        } else {
-            console.error('Error:',  res.status);
-        }
-    }
+    }, [videoLoaded]);
 
 
+    useEffect(() => {
+        if (!voteLoaded) return;
+    }, [voteLoaded]);
 
-    const voteShortVideo = e => {
-        setVoteShort(!voteShort);
-        console.log(voteShort)
-
+    const voteShortVideo = () => {
+        setVoteLoaded(true);
+        // 로그인 여부 검사
         if (!token) {
-            alert("로그인 회원만 할수있음")
+            alert("로그인 회원만 할 수 있습니다.");
+            redirect('/template/login');
             return;
         }
 
-        if (voteShort) {
-            patchVoteVideo();
 
-        }else {
-            postVoteVideo();
-        }
-    }
+        // 투표 여부에 따른 요청 분기
+        const vote = async () => {
+
+            if (voteCount === 0 || voteCount === 1) {
+                const res = await fetch(API_VOTE_URL, {
+                    method: 'PATCH',
+                    headers: requestHeader,
+                    body: JSON.stringify(shortsId)
+                })
+                if (res.status === 200) {
+                    // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
+                    const json = await res.json().catch(() => ({}));
+                    console.log('jsonup', json.up);
+                    setVoteCount(json.up);
+                    setTotalCount(json.total);
+                    console.log('total', json.total);
 
 
+                } else {
+                    console.error('Error:', res.status);
+                }
+                return;
+            }
+
+            // 새로운 투표
+            const res = await fetch(API_VOTE_URL, {
+                method: 'POST',
+                headers: requestHeader,
+                body: JSON.stringify(shortsId)
+            });
+            if (res.status === 200) {
+                // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
+                const json = await res.json().catch(() => ({}));
+                setVoteCount(json.up);
+                console.log('jsonup', json.up);
+                setTotalCount(json.total);
+                console.log('total', json.total);
+
+
+            } else {
+                console.error('Error:', res.status);
+            }
+        };
+
+        // 투표 실행
+        vote();
+    };
 
 
     // 댓글 닫을때 애니메이션
@@ -141,114 +266,132 @@ const ShortsContent = ({item}) => {
     }
 
 
-
-
-    // 휠을 내리거나 올렸을때 0.3s 기다리고 움직임
-    const handleWheel = (event) => {
-        const currentTime = new Date().getTime();
-        // 이전 이벤트 시간 - 지금 이벤트 시간
-        const deltaTime = currentTime - lastWheelTime.current;
-
-        // 만약 0.4s이상이면 실행되도록
-        if (deltaTime > 400) {
-            const deltaY = event.deltaY;
-
-            if (deltaY > 0 && currentItemIndex < shortList.length - 1) {
-                setViewScrollDownAni(true);
-                setTimeout(() => {
-                    setViewScrollDownAni(false);
-                    setCurrentItemIndex((prevIndex) => prevIndex + 1);
-                }, 300);
-            } else if (deltaY < 0 && currentItemIndex > 0) {
-                setViewScrollUpAni(true);
-                setTimeout(() => {
-                    setViewScrollUpAni(false);
-                    setCurrentItemIndex((prevIndex) => prevIndex - 1);
-                }, 300);
-            }
-
-            lastWheelTime.current = currentTime;
+    const [replyLength, setReplyLength] = useState(null);
+    const ReplyCount = (replylength) => {
+            // console.log(replylength)
+            setReplyLength(replylength);
         }
-    };
-
-    const handleKeyDown = (event) => {
-        const currentTime = new Date().getTime();
-        // 이전 이벤트 시간 - 지금 이벤트 시간
-        const deltaTime = currentTime - lastWheelTime.current;
-
-        // 만약 0.4s이상이면 실행되도록
-        if (deltaTime > 400) {
-            const deltaY = event.deltaY;
-
-            if (event.keyCode === 40 && currentItemIndex < shortList.length - 1) {
-                setViewScrollDownAni(true);
-                setTimeout(() => {
-                    setViewScrollDownAni(false);
-                    setCurrentItemIndex((prevIndex) => prevIndex + 1);
-                }, 300);
-            } else if (event.keyCode === 38 && currentItemIndex > 0) {
-                setViewScrollUpAni(true);
-                setTimeout(() => {
-                    setViewScrollUpAni(false);
-                    setCurrentItemIndex((prevIndex) => prevIndex - 1);
-                }, 300);
-            }
-            lastWheelTime.current = currentTime;
-        }
-    };
-
-    useEffect(() => {
-        window.addEventListener('wheel', handleWheel);
-        window.addEventListener('keydown', handleKeyDown); // 키다운 이벤트 추가
-        return () => {
-            window.removeEventListener('wheel', handleWheel);
-            window.removeEventListener('keydown', handleKeyDown); // 이벤트 제거
-        };
-    }, [currentItemIndex]);
 
 
+        // const fetchData = async () => {
+        //     if (replyCount !== 0) {
+        //         try {
+        //             const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=15`, {
+        //                 method: 'GET'
+        //             });
+        //
+        //             if (!res.ok) {
+        //                 throw new Error(`HTTP 오류! 상태: ${res.status}`);
+        //             }
+        //
+        //             const json = await res.json();
+        //             setShortReplyList(prevList => [...prevList, ...json.reply]);
+        //             setPage(prevPage => prevPage + 1);
+        //
+        //         } catch (error) {
+        //             console.log('데이터 없음');
+        //         }
+        //         setIsLoading(false);
+        //     }
+        // };
 
-        const videoRef= useRef();
-        const setPlayBackRate = () => {
-            videoRef.current.playbackRate = 0.5;
-        };
+        // useEffect(() => {
+        //     fetchData();
+        // }, [])
+        // useEffect(() => {
+        //     const container = containerRef.current;
+        //     if (!container) return;
+        //     const handleScroll = () => {
+        //         if (
+        //             containerRef.current &&
+        //             containerRef.current.scrollTop + containerRef.current.clientHeight >=
+        //             containerRef.current.scrollHeight
+        //         ) {
+        //             fetchData();
+        //         }
+        //     };
+        //
+        //     container.addEventListener('scroll', handleScroll);
+        //     return () => {
+        //         container.removeEventListener('scroll', handleScroll);
+        //     };
+        // }, [fetchData]);
+        //
+        // useEffect(() => {
+        //     const timer = setTimeout(() => {
+        //         setIsLoading(false);
+        //     }, 300);
+        //
+        //     return () => clearTimeout(timer);
+        // }, []);
+        //
+        //
+        //
+
+    // video element 참조
+    const videoRef = useRef(null);
+    const [playing, setPlaying] = useState(true);
+
+    const onPlay = () => {
+        setPlaying(!playing);
+    }
+
 
     return (
         <>
-            {[item].slice(currentItemIndex, currentItemIndex + 1).map((item, shortsId) => (
-                <li key={shortsId}
-                    className={cn('content-container', {scrollDown_ani_view: viewScrollDownAni}, {scrollUp_ani_view: viewScrollUpAni})}
-                    ref={contentRef}>
-                    <div className={cn('short-form', {animation_view: viewAni})}>
+            <li key={shortsId}
+                className={cn('content-container', {scrollDown_ani_view: viewScrollDownAni}, {scrollUp_ani_view: viewScrollUpAni})}
+                ref={contentRef}>
+                <div className={'shortsId'}>{shortsId}</div>
+                {voteLoaded && (
+                    <div className={cn('short-form', {animation_view: viewAni})} id={'root'}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
-                            <video className={'short-video'} ref={videoRef} autoPlay
-                                   loop onCanPlay={() => setPlayBackRate()}>
-                                <source src={item.videoLink} type="video/mp4" />
-                            </video>
+                            {videoLoaded && (
+                                <div className={'video-box'} onClick={onPlay}>
+                                <ReactPlayer
+                                    url={videoUrl}
+                                    playing={playing}
+                                    muted={true}
+                                    loop={true}
+                                    controls={false}
+                                    width='100%'
+                                    height='100%'
+                                ></ReactPlayer>
+                                </div>
+                            )}
                             <div className={'overlap-front'}>
                                 <div className={'produce'}>
                                     <div className={'profile_box'}>
                                         <div className={'profile-img'}>
-                                            <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'}
+                                            <img src={imgUrl}
                                                  alt="프로필이미지"/>
                                         </div>
                                         <div className={'profile-name'}>
-                                            <p>{item.uploaderName}</p>
+                                            <p>{uploaderName}</p>
                                         </div>
                                     </div>
                                     <div className={'shortlist-title'}>
-                                        <p className={'short-title'}>{item.title}</p>
+                                        <p className={'short-title'}>{title}</p>
                                     </div>
                                 </div>
                                 <div className={cn('front-sidebar', {front_sidebar_view: viewComment})}>
                                     <div className={'short-btn like-btn'}>
-                                        <BsHeart className={'btn'} onClick={voteShortVideo}/>
-                                        {/* <BsHeartFill /> */}
-                                        <p>{item.upCount}</p>
+                                        {voteCount === 0 ? (
+                                            <>
+                                                <BsHeartFill className={'btn'}
+                                                             onClick={() => voteShortVideo(item.shortsId)}/>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <BsHeart className={'btn'}
+                                                         onClick={() => voteShortVideo(item.shortsId)}/>
+                                            </>
+                                        )}
+                                        <p>{totalCount}</p>
                                     </div>
                                     <div className={'short-btn comment-btn'}>
                                         <BsChatLeft className={'btn'} onClick={chkViewComment}/>
-                                        <p>{item.replyCount}</p>
+                                        <p>{replyLength}</p>
                                     </div>
                                     <div className={'short-btn report-btn'}>
                                         <BsExclamationCircle className={'btn'} onClick={() => setViewReport(true)}/>
@@ -258,13 +401,22 @@ const ShortsContent = ({item}) => {
                         </div>
                         <div className={cn('sidebar', {sidebar_view: viewComment})}>
                             <div className={'short-btn like-btn'}>
-                                <BsHeart className={'btn'} onClick={voteShortVideo}/>
-                                {/* <BsHeartFill /> */}
-                                <p>{item.upCount}</p>
+                                {voteCount === 0 ? (
+                                    <>
+                                        <BsHeartFill className={'btn'}
+                                                     onClick={() => voteShortVideo(item.shortsId)}/>
+                                    </>
+                                ) : (
+                                    <>
+                                        <BsHeart className={'btn'}
+                                                 onClick={() => voteShortVideo(item.shortsId)}/>
+                                    </>
+                                )}
+                                <p>{totalCount}</p>
                             </div>
                             <div className={'short-btn comment-btn'}>
                                 <BsChatLeft className={'btn'} onClick={chkViewComment}/>
-                                <p>{item.replyCount}</p>
+                                <p>{replyLength}</p>
                             </div>
                             <div className={'short-btn report-btn'}>
                                 <BsExclamationCircle className={'btn'} onClick={() => setViewReport(true)}/>
@@ -273,37 +425,32 @@ const ShortsContent = ({item}) => {
                         <div className={cn('comment-form', {comment_form_view: viewComment})}>
                             <div className={cn("comment", {comment_view: viewComment})}>
                                 <div className={'comment-wrapper'}>
-                                    <Shorts_comment item ={item} chkViewComment={chkViewComment} viewComment={viewComment}/>
+                                    <Shorts_comment ReplyCount={ReplyCount} item={item} chkViewComment={chkViewComment}
+                                                    viewComment={viewComment}/>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    {
-                        viewReport &&
-                        <div className={'modal-container'} ref={modalBackground} onClick={e => {
-                            if (e.target === modalBackground.current) {
-                                setViewReport(false);
-                            }
-                        }}>
-                            <div className={'modal-report'}>
-                                <div className={'modal-report-text'}>
-                                    <p>정말 신고하시겠습니까?</p>
-                                </div>
-                                <div className={'modal-btns'}>
-                                    <div className={'modal-cancel-btn'} onClick={() => setViewReport(false)}>
-                                        <p>취소</p>
-                                    </div>
-                                    <div className={'modal-correct-btn'}>
-                                        <p>확인</p>
-                                    </div>
-                                </div>
+                )}
+                {
+                    viewReport &&
+                    <div className={'modal-container'} ref={modalBackground} onClick={e => {
+                        if (e.target === modalBackground.current) {
+                            setViewReport(false);
+                        }
+                    }}>
+                        <div className={'modal-inform'}>
+                            <div className={'modal-inform-text'}>
+                                <p>정말 신고하시겠습니까?</p>
+                                <p></p>
+                                <p></p>
                             </div>
-                        </div>
 
-                    }
-                </li>
-            ))}
+                        </div>
+                    </div>
+                }
+            </li>
+
         </>
     );
 
