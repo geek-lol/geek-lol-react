@@ -2,7 +2,7 @@ import React from 'react';
 import RankBoardData from "./RankBoardData";
 import "../scss/RankBoard.scss"
 
-const RankBoard = () => {
+const RankBoard = ({ranking, currentPage, itemsPerPage, selectedValue, tier}) => {
     return (
         <table className={'rank-table'}>
             <thead>
@@ -11,11 +11,13 @@ const RankBoard = () => {
                     <th>소환사</th>
                     <th>티어</th>
                     <th>LP</th>
+                    <th>승</th>
+                    <th>패</th>
                     <th>승률</th>
                 </tr>
             </thead>
 
-            <RankBoardData />
+            <RankBoardData ranking={ranking} currentPage={currentPage} itemsPerPage={itemsPerPage} selectedValue={selectedValue} tier={tier} />
         </table>
 
     );

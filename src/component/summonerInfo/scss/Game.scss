@@ -173,7 +173,7 @@
             height: auto;
             top: 0;
             left: 50%;
-            transform: translate(-50%, -40%);
+            transform: translate(-50%, -60%);
             z-index: 1;
             width: 400px;
 
@@ -243,6 +243,19 @@
           font-weight: 700;
           font-size: 13px;
         }
+
+        .kda-blue {
+          color: blue;
+        }
+        .kda-brown {
+          color: brown;
+        }
+        .kda-green {
+          color: green;
+        }
+        .kda-perfect {
+          color: purple;
+        }
       }
 
       .item-slot {
@@ -311,6 +324,11 @@
         font-size: 14px;
       }
 
+      span:hover {
+        color: blue;
+        text-decoration-line: underline;
+      }
+
       img {
       }
 
@@ -323,94 +341,3 @@
 
 }
 
-.detail-game-info {
-  display: none;
-
-  .detail-game-info-champion {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  &.show {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-.detail-rune-container {
-  .detail-rune-info {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    position: relative;
-
-    .detail-rune-description  {
-      display: none;
-
-      position: absolute;
-      height: auto;
-
-      top: 0;
-      left: 50%;
-      transform: translate(-50%, -100%);
-      z-index: 1;
-      width: 400px;
-
-      background-color: #00207b;
-      color: #fff;
-      padding: 10px;
-      border-radius: 5px;
-      font-family: 'Nanum Gothic', sans-serif;
-      font-weight: 500;
-
-      &.show {
-        display: block;
-      }
-    }
-  }
-}
-
-.detail-spell-container {
-  position: relative;
-  height: 40px;
-
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-
-  .detail-spell-description {
-    display: none;
-    position: absolute;
-    height: auto;
-
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, -100%);
-    z-index: 1;
-    width: 400px;
-
-    background-color: #00207b;
-    color: #fff;
-    padding: 10px;
-    border-radius: 5px;
-    font-family: 'Nanum Gothic', sans-serif;
-    font-weight: 500;
-
-    &.show {
-      display: block;
-    }
-  }
-}
-
-
-tbody tr {
-
-}
-
-.detail-kda-td {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-}
