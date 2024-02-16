@@ -21,6 +21,7 @@ const Profile = props => {
 
             // blob이미지를 url로 변환
             const imgUrl = window.URL.createObjectURL(profileData);
+            console.log(imgUrl);
             setImgUrl(imgUrl);
         }
     }

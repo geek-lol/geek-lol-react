@@ -2,6 +2,9 @@ import React from 'react';
 import Phaser from "phaser";
 import CsGame from "./CSGame";
 
+const createRank =() =>{
+
+}
 
 class endScene extends Phaser.Scene {
     constructor() {

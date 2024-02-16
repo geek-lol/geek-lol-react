@@ -106,10 +106,6 @@ const MyActivityBoard = () => {
 
         setPage(page+1)
     }
-    const handleTitleClick = (e) => {
-        const boardId = e.currentTarget.dataset.boardid
-        window.location.href = FORWARD_URL+"/"+boardId
-    }
     return (
         <div>
             <Box sx={{ width: '100%' }}>
@@ -129,9 +125,7 @@ const MyActivityBoard = () => {
                                     return (
                                         <TableRow hover>
                                             <TableCell align="left">{row.id}</TableCell>
-                                            <TableCell data-boardId={row.rulingId} onClick={handleTitleClick}
-                                                       style={{ cursor: 'pointer'}}
-                                            >{row.title}</TableCell>
+                                            <TableCell data-boardId={row.rulingId}>{row.title}</TableCell>
                                             <TableCell align="left">{formatDate(row.rulingDate,'day')}</TableCell>
                                             <TableCell align="left">{row.viewCount}</TableCell>
                                         </TableRow>
