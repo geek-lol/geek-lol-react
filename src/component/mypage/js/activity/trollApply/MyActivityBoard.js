@@ -18,7 +18,12 @@ import {
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Button from "@mui/material/Button";
-import {BOARD_URL, TROLL_APPLY_DETAIL_URL, TROLL_RULING_DETAIL_URL} from "../../../../../config/host-config";
+import {
+    BOARD_URL,
+    LOCATION_URL,
+    TROLL_APPLY_DETAIL_URL,
+    TROLL_RULING_DETAIL_URL
+} from "../../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../../utils/login-util";
 import {useEffect, useState} from "react";
 

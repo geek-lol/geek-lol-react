@@ -21,7 +21,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Button from "@mui/material/Button";
 import {getCurrentLoginUser} from "../../../../../utils/login-util";
 import {useEffect, useState} from "react";
-import {TROLL_APPLY_URL} from "../../../../../config/host-config";
+import {TROLL_APPLY_URL, TROLL_RULING_REPLY_URL} from "../../../../../config/host-config";
 
 //테이블 헤더
 const headCells = [
@@ -53,7 +53,7 @@ const headCells = [
 
 
 const MyActivityComment = () => {
-    const FORWARD_URL = "http://localhost:3000/board/detail/";
+    const FORWARD_URL = TROLL_APPLY_URL;
     const token= getCurrentLoginUser().token;
     const userId = getCurrentLoginUser().token;
 
@@ -66,19 +66,24 @@ const MyActivityComment = () => {
 
     //트롤 사형 지원쪽 댓글 가져오기
     const applyReplyFetch = async () =>{
-        const res = await fetch(TROLL_APPLY_URL+"/my",{
+        const res = await fetch(TROLL_RULING_REPLY_URL+"/my",{
             method : "GET",
             headers: {"Authorization" : `Bearer ${token}`},
         })
         const json = await res.json()
-        if (json.reply !== null){
-            const updatedRows = json.reply.map((row,index) =>  ({
-                ...row,
-                id: index+1
-            }));
-            setRows(updatedRows)
-            setTotalPage(json.totalPages)
+        if(res.status == 200){
+            if (json.reply !== null){
+                const updatedRows = json.reply.map((row,index) =>  ({
+                    ...row,
+                    id: index+1
+                }));
+                setRows(updatedRows)
+                setTotalPage(json.totalPages)
+            }
+        }else{
+            alert(json.error);
         }
+
     }
     useEffect(()=>{
         applyReplyFetch()
@@ -125,9 +130,7 @@ const MyActivityComment = () => {
                                     return (
                                         <TableRow hover>
                                             <TableCell align="left" sx={{ width: '12%' }}>{row.id}</TableCell>
-                                            <TableCell data-boardId={row.boardId} onClick={handleTitleClick}
-                                                       style={{ cursor: 'pointer'}}
-                                            >{row.title}</TableCell>
+                                            <TableCell data-boardId={row.boardId}>{row.title}</TableCell>
                                             <TableCell align="left">{row.context}</TableCell>
                                             <TableCell align="left">{formatDate(row.replyDate,"day")}</TableCell>
                                         </TableRow>
