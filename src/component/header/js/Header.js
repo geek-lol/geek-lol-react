@@ -5,8 +5,9 @@ import LoginBtn from "./LoginBtn";
 import SearchBox from "./SearchBox";
 import Profile from "./Profile";
 import MenuModal from "./MenuModal";
-import {Link} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import cn from "classnames";
+import {getCurrentLoginUser, isLogin} from "../../../utils/login-util";
 
 const Header = ({sendTouch}) => {
     //boardHeader 상태변수
@@ -17,7 +18,7 @@ const Header = ({sendTouch}) => {
         sethover1(!hovers1);
     }
     const boardClickHandler2 = (e) => {
-        console.log(e.target);
+        // console.log(e.target);
         sethover2(!hovers2);
     }
     const boardOtherClickHandler = (e) => {
@@ -54,7 +55,6 @@ const Header = ({sendTouch}) => {
             left: `${el.offsetLeft}px`,
             backgroundColor: el.getAttribute('active-color'),
         };
-
         setIndicatorStyle(newStyle);
 
         // is-active 클래스와 color 속성을 설정하는 부분은 CSS에서 처리하도록 합니다.
@@ -62,8 +62,19 @@ const Header = ({sendTouch}) => {
     //nav 끝
     const [menu, setMenu] = useState(false);
     const [isInput, setIsInput] = useState(true);
-    const [isProfile, setProfile] = useState(false);
-    const [isLogin, setLogin] = useState(true);
+    const [isLoggedIn, setIsLogin] = useState(false);
+    const location = useLocation();
+    const[role,setRole]=useState(getCurrentLoginUser().role);
+
+    useEffect(() => {
+        const path = location.pathname;
+        const isMainInPath = path.length > 1 && path !== "/";
+        setIsInput(isMainInPath);
+    }, [location.pathname]);
+    useEffect(() => {
+        setIsLogin(isLogin());
+        const a = getCurrentLoginUser();
+    }, [isLogin()]);
     const findPage = () => {
         if (window.location.href.includes("main")) {
             setIsInput(false);
@@ -76,6 +87,26 @@ const Header = ({sendTouch}) => {
         });
 
     }, []);
+    const useWindowSizeBelow1400 = () => {
+        const [isBelow1400, setIsBelow1400] = useState(window.innerWidth <= 1400);
+
+        useEffect(() => {
+            const handleResize = () => {
+                setIsBelow1400(window.innerWidth <= 1400);
+            };
+
+            window.addEventListener("resize", handleResize);
+
+            // 컴포넌트가 언마운트 될 때 이벤트 리스너를 제거합니다.
+            return () => {
+                window.removeEventListener("resize", handleResize);
+            };
+        }, []);
+
+        return isBelow1400;
+    };
+    const isBelow1400 = useWindowSizeBelow1400();
+
 
     function menuHandler() {
         setMenu(!menu);
@@ -86,78 +117,81 @@ const Header = ({sendTouch}) => {
         sendTouch(e);
     }
 
+    const redirect = useNavigate();
+
+    const moveToHome = (e) => {
+        redirect("/")
+    };
+
     return (
         <div>
             <header id="header">
                 <nav id="nav-box">
                     <div className="logo__box">
-                        <Link className="logo" to="/">
+                        <p className="logo" onClick={moveToHome}>
                             <img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지"/>
-                        </Link>
+                        </p>
                     </div>
                     <div className="content__box">
-                        <Link to="/" className="nav-item is-active" active-color="orange"
-                              onClick={(e) => handleIndicator(e.target)}>홈</Link>
+                        <p className="nav-item is-active" active-color="orange"
+                           onClick={(e) => {handleIndicator(e.target);moveToHome()}}>홈</p>
                         <Link to="/rank" className="nav-item" active-color="green"
                               onClick={(e) => handleIndicator(e.target)}>랭킹</Link>
-                        <Link to="#" className="nav-item board-btn b1" active-color="blue"
-                              onClick={(e) => {
-                                  handleIndicator(e.target);
-                                  boardClickHandler1(e);
-                              }}>게시판
+                        <div className="nav-item board-btn b1" active-color="blue"
+                             onClick={(e) => {
+                                 handleIndicator(e.target);
+                                 boardClickHandler1(e);
+                             }}>게시판
                             <ul className={cn("hide-btn btn1", {hovers1: hovers1})}>
                                 <li>
                                     <Link to="/board/main/FreeBoard" className="c1"
                                           onClick={modalTouchHandler}>자유게시판</Link>
                                 </li>
                                 <li>
-                                    <Link to="/board/main/LCK" className="c2"
-                                          onClick={modalTouchHandler}>LCK</Link>
+                                    <Link to="/board/main/Request" className="c2"
+                                          onClick={modalTouchHandler}>트롤재판소</Link>
                                 </li>
                                 <li>
-                                    <Link to="/board/main/Solution" className="c3"
-                                          onClick={modalTouchHandler}>공략게시판</Link>
-                                </li>
-                                <li>
-                                    <Link to="/" className="c4"
+                                    <Link to="/board/shorts" className="c3"
                                           onClick={modalTouchHandler}>하이라이트</Link>
                                 </li>
                             </ul>
-                        </Link>
-                        <Link to="#" className="nav-item board-btn b2" active-color="red"
-                              onClick={(e) => {
-                                  handleIndicator(e.target);
-                                  boardClickHandler2(e);
-                              }}>
+                        </div>
+                        <div className="nav-item board-btn b2" active-color="red"
+                             onClick={(e) => {
+                                 handleIndicator(e.target);
+                                 boardClickHandler2(e);
+                             }}>
                             <ul className={cn("hide-btn btn2", {hovers2: hovers2})}>
                                 <li>
-                                    <Link to="/">민희언 주기깅</Link>
+                                    <Link to="/csgame">민희언 주기깅</Link>
                                 </li>
                                 <li>
-                                    <Link to="/">킹컴타자연습</Link>
+                                    <Link to="/resgame">반응속도테스트</Link>
                                 </li>
                             </ul>
-                            미니게임</Link>
-                        <Link to="/" className="nav-item" active-color="yellowgreen"
-                              onClick={(e) => handleIndicator(e.target)}>트롤사형투표</Link>
+                            미니게임
+                        </div>
+                        {role==="ADMIN"?<Link className="nav-item" active-color="yellowgreen"
+                           onClick={(e) => handleIndicator(e.target)} to="/admin">어드민</Link>:null}
                         <span className="nav-indicator" style={{
                             width: indicatorStyle.width,
                             left: indicatorStyle.left,
                             backgroundColor: indicatorStyle.backgroundColor
                         }}></span>
-                        {isInput === true && <SearchBox/>}
+                        {!isBelow1400?
+                            isInput === true && <SearchBox/>:null}
                     </div>
                     <ul className="certification__box">
-                        {isLogin === true && <LoginBtn/>}
-                        {isProfile === true && <Profile/>}
-
+                        {isLoggedIn ? <Profile/> : <LoginBtn/>}
                     </ul>
-                    <div className="nav_toggle_Btn" onClick={menuHandler}>
-                        <TiThMenu/>
-                    </div>
+
                 </nav>
             </header>
-            <MenuModal menu={menu} isProfile={isProfile} isLogin={isLogin}/>
+            <div className="nav_toggle_Btn" onClick={menuHandler} modalTouchHandler={modalTouchHandler}>
+                <TiThMenu/>
+            </div>
+            {isBelow1400?<MenuModal menu={menu} isLogin={isLoggedIn}/>:null}
         </div>
     );
 }

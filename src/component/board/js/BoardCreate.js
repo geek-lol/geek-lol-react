@@ -5,7 +5,8 @@ import {Link, useNavigate} from "react-router-dom";
 import "../scss/BoardCreate.scss"
 import BoardHeader from "./BoardHeader";
 import {getCurrentLoginUser} from "../../../utils/login-util";
-import {SHORT_URL} from "../../../config/host-config";
+import {BOARD_URL} from "../../../config/host-config";
+
 
 const BoardCreate = () => {
     const redirection = useNavigate();
@@ -13,12 +14,66 @@ const BoardCreate = () => {
     // 토큰 가져오기
     const [token, setToken] = useState(getCurrentLoginUser().token);
 
+    // 요청 헤더 객체
+    const requestHeader = {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    };
+
     // 서버에서 할 일 목록 (JSON)을 요청해서 받아와야 함
-    // const API_BASE_URL = SHORT_URL;
+    const API_BASE_URL = BOARD_URL;
+
+    const [boardList,setBoardList] = useState([]);
+
+    const [boardTitle, setBoardTitle] = useState();
+    const [explanation, setExplanation] = useState();
+
+
+
+    const [boardValue, setBoardValue] = useState({
+        title: '',
+        context:''
+    });
+
+    const onChange = (event) => {
+        const { value, name } = event.target; //event.target에서 name과 value만 가져오기
+        setBoardValue({
+            ...boardValue,
+            [name]: value,
+        });
+    };
+
 
     // 보드 업로드
-    const fetchBoardUpload = e => {
+    const fetchBoardUpload = async () => {
+        // JSON데이터를 formData에 넣기 위한 작업
+        const jsonBlob = new Blob(
+            [ JSON.stringify(boardValue) ],
+            { type: 'application/json' }
+        );
 
+
+        const formData = new FormData();
+        formData.append('boardInfo',jsonBlob);
+        formData.append('fileUrl', document.getElementById('board_detail_img').files[0]);
+
+
+
+        const res = await fetch(API_BASE_URL, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData
+        });
+        if (res.status === 200) {
+            const json = await res.json();
+            setBoardList(json.boardInfo);
+            redirection('/board/main/FreeBoard')
+        } else {
+            alert("입력값이 유효하지 않습니다.")
+            console.error('Error:',  res.status);
+        }
     }
 
     const uploadHandler = e => {
@@ -30,6 +85,7 @@ const BoardCreate = () => {
             redirection('/template/login');
             return;
         }
+
 
         // 업로드 로직 진행
         fetchBoardUpload();
@@ -56,9 +112,13 @@ const BoardCreate = () => {
                     <p>자유게시판</p>
                 </div>
                 <div className={'bc-create-title'}>
-                    <input className={'bc-ct-input'} type="text" placeholder={'제목'}/>
+                    <input className={'bc-ct-input'} type="text" placeholder={'제목'}
+                           name='title'
+                           value={boardTitle}
+                           onChange={onChange}
+                    />
                 </div>
-                <div className={'bc-create-content'}>
+                <div className={'bc-create-content'} >
                     <CKEditor
                         editor={ ClassicEditor }
                         data=""
@@ -68,14 +128,23 @@ const BoardCreate = () => {
                         } }
                         onChange={ ( event, editor ) => {
                             const data = editor.getData();
-                            console.log( { event, editor, data } );
+                            const cleanData = data.replace(/<p>/g, '').replace(/<\/p>/g, '').replace(/&nbsp;/g,' ');
+                            onChange({ target: { name: 'content', value: cleanData}});
+                            console.log( { event, editor, cleanData } );
                         } }
                         onBlur={ ( event, editor ) => {
                             console.log( 'Blur.', editor );
                         } }
                         onFocus={ ( event, editor ) => {
                             console.log( 'Focus.', editor );
-                        } }
+                        }}
+                    />
+                </div>
+                <div className={'img-box'} >
+                    <input
+                        id='board_detail_img'
+                        type='file'
+                        accept='image/*'
                     />
                 </div>
                 <div className={'btn-container'}>
@@ -83,8 +152,8 @@ const BoardCreate = () => {
                         <div className={'cancel-btn'}>
                             <Link to="/board/main" className={'btn-b'}>취소</Link>
                         </div>
-                        <div className={'save-btn'}>
-                            <p className={'btn'} onClick={uploadHandler}>등록</p>
+                        <div className={'save-btn'} onClick={uploadHandler}>
+                            <p className={'btn'}>등록</p>
                         </div>
                     </div>
                 </div>

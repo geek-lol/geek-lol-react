@@ -1,116 +1,188 @@
-import React, { Component } from 'react';
-import Phaser from 'phaser';
-import '../scss/CSGame.scss';
+import React from 'react';
+import Phaser from "phaser";
+import endScene from "./CSRank";
 
+const greens = Phaser.Display.Color.GetColor(0, 255, 0);
+const reds = Phaser.Display.Color.GetColor(255, 0, 0);
 
-const greens = Phaser.Display.Color.GetColor(0,255,0);
-const reds = Phaser.Display.Color.GetColor(255,0,0);
+let player = null
+let playerAttack = null;
+let playerAttackTween = null;
 
-class MainScene extends Component{
-    constructor(pros) {
-        super(pros);
-        this.player = null; // 플레이어를 클래스의 인스턴스 변수로 선언
-        this.redMini = null;
-        this.blueMini = null;
+let playerScore = 0;
+let scoreText = null;
+let timeText = null;
+let center = null;
+let redMinions = null;
+let blueMinions = null;
+
+let gametimer = null;
+let timeCount =  120000; //2분 120000
+//시간 format 함수
+function formatTime(seconds) { // 100000 = 100초 = 1분 40초
+    const s = Math.floor(seconds / 1000); // 100초
+    const minutes = Math.floor(s/60); // 1
+    const remainingSeconds = s % 60; // 40
+    const formattedTime = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    return formattedTime;
+};
+//미니언 이동 애니메이션
+function MinionTween(twee, target, x,y ){
+    const moveT = twee.add({
+        targets: target,
+        x: x,
+        y: y,
+        duration: 3000, // 이동에 걸리는 시간 (밀리초)
+        ease: 'Linear', // 이동에 사용할 easing 함수
+    });
+    return moveT
+}
+//미니언 체력바 애니메이션
+const HealthBarsTween =(tweens, target,x,y) => {
+    const healthT = tweens.add({
+        targets: target,
+        x: x,
+        y: y,
+        duration: 3000, // 이동에 걸리는 시간 (밀리초)
+        ease: 'Linear', // 이동에 사용할 easing 함수
+    });
+    return healthT
+}
+//랜덤 선택
+function getRandomElement(group) {
+    // Group 내의 자식 객체들을 배열로 변환
+    const childrenArray = group.getChildren();
+
+    // 배열에서 랜덤하게 하나의 객체 선택
+    const randomIndex = Phaser.Math.RND.between(0, childrenArray.length - 1);
+
+    // 선택된 객체 반환
+    return childrenArray[randomIndex];
+}
+
+function createBlueMinion (physics,add,tweens,x,y){
+    const blueMinion = physics.add.sprite(x, y, "blueMinion");
+
+    const Attack = physics.add.sprite(0,0,"attackImg");
+    Attack.setScale(0.05);
+    Attack.visible = false;
+
+    const blueHealthBars = [];
+    for (let i = 0; i < 5; i++) {
+        blueHealthBars[i] = add.rectangle((x-20)+(15*i), y-50, 15, 10);
+        blueHealthBars[i].setFillStyle(greens);
+    }
+    const minionTween = MinionTween(tweens,blueMinion,1000,0);
+    const healthBarsTween = HealthBarsTween(tweens,blueHealthBars,1000,-50);
+
+    //롤 블루미니언
+
+    blueMinion.setScale(-0.1, 0.1);
+    blueMinion.setData('repeatCount', 0);
+    blueMinion.setData('health', 100);
+    blueMinion.setData('healthBar', blueHealthBars);
+    blueMinion.setData('damage', 20);
+    blueMinion.setData('moveTween',minionTween)
+    blueMinion.setData('healthBarTween',healthBarsTween)
+    blueMinion.setData('attack',Attack)
+    blueMinion.setInteractive(); //마우스 이벤트에 응답 가능하게
+
+    return blueMinion
+}
+
+function createRedMinion (physics,add,tweens,x,y){
+    //롤 레드미니언
+    const redMinion = physics.add.sprite(x, y, "redMinion");
+
+    const redHealthBars = [];
+    for (let i = 0; i < 5; i++) {
+        redHealthBars[i] = add.rectangle(780+(15*i),y-10, 15, 10);
+        redHealthBars[i].setFillStyle(greens);
     }
 
-    // 게임 Config 함수
-    componentDidMount() {
-        // Phaser 초기화 및 게임 설정
-        const config = {
-            type: Phaser.AUTO,
-            parent: 'phaser-container',
-            width: 1000,
-            height: 600,
-            physics: {
-                default: 'arcade', // 또는 다른 물리 엔진을 사용하는지 확인
-                arcade: {
-                    gravity: { y:300 },
-                    debug: true
-                }
-            },
-            scene: {
-                preload: this.preload,
-                create: this.create,
-                update: this.update
-            },
-            input: {
-                // 마우스 오른쪽 버튼 캡처 설정
-                rightButtonCapture: true
-            },
-            scale: {
-                mode: Phaser.Scale.RESIZE,
-                autoCenter: Phaser.Scale.CENTER_BOTH
+    const redMinionTween = MinionTween(tweens,redMinion,0,600);
+    const redHealthBarsTween = HealthBarsTween(tweens,redHealthBars,0,550);
+
+    redMinion.setScale(0.1);
+    redMinion.setData('repeatCount', 0);
+    redMinion.setData('health', 100);
+    redMinion.setData('healthBar', redHealthBars);
+    redMinion.setData('damage', 20);
+    redMinion.setData('moveTween',redMinionTween)
+    redMinion.setData('healthBarTween',redHealthBarsTween)
+    redMinion.setInteractive(); //마우스 이벤트에 응답 가능하게
+
+    return redMinion
+}
+//미니언 공격
+function attackTween(tweens, attack, target, attacker,delay){
+    const attacks = tweens.add({
+        targets: attack,
+        x:0,
+        y:0,
+        duration: 1800,
+        ease: 'Linear',
+        paused: true, // 처음에는 일시 정지된 상태로 시작
+        delay: delay,
+        loop:5,
+        onLoop:()=>{
+            attacker.getData('attack').visible = false;
+
+            if (target.getData('health')<=0){
+                attacks.stop();
+            }else {
+                attacker.getData('attack').visible = true;
+                //미니언 체력수치 깎기
+                target.setData('health', target.getData('health') -target.getData('damage'));
+
+                //미니언 체력바 깍기
+                const index = 4 - target.getData('repeatCount');
+                target.getData('healthBar')[index].setFillStyle(reds);
+                target.setData('repeatCount',target.getData('repeatCount')+1);
             }
-        };
-
-        this.game = new Phaser.Game(config);
-    }
-
-    //공격함수
-    AttackMinion(){
-        this.redAttack = this.add.circle(0,0, 10, 0xFF0000);
-        this.redAttack.visible = false;
-
-
-        this.onRepeatCallbackAttack = ()=> {
-            //미니언 health-damage 처리
-            this.blueMini.setData('health', this.blueMini.getData('health') - this.blueMini.getData('damage'));
-
-            //미니언 체력바 깍기
-            const index = 4-this.repeatCount
-            this.blueHealthBars[index].setFillStyle(reds);
-            this.repeatCount ++;
+        },
+        onStart: () => {
+            // Tween이 시작되기 전에 호출되는 콜백
+            attacker.getData('attack').x = attacker.x;
+            attacker.getData('attack').y = attacker.y;
+            attacker.getData('attack').visible = true;
+        },
+        onUpdate: () => {
+            // Tween이 업데이트될 때마다 호출되는 콜백
+            // 현재 this.blueMini의 위치로 업데이트
+            attacks.updateTo('x', target.x);
+            attacks.updateTo('y', target.y);
+        },
+        onComplete: ()=>{
+            attacker.getData('attack').visible = false;
         }
+    });
 
-        //미니언 공격
-        this.redAttackTween = this.tweens.add({
-            targets: this.redAttack,
-            x: this.blueMini.x,
-            y: this.blueMini.y,
-            duration: 1800,
-            // delay:1000,
-            ease: 'Linear',
-            paused: true, // 처음에는 일시 정지된 상태로 시작
-            loop:5,
-            onLoop: this.onRepeatCallbackAttack,
+    return attacks
+}
 
-            onStart: () => {
-                // Tween이 시작되기 전에 호출되는 콜백
-                this.redAttack.x = this.redMini.x;
-                this.redAttack.y = this.redMini.y;
-                this.redAttack.visible = true;
-                this.repeatCount = 0;
-            },
-            onUpdate: () => {
-                // Tween이 업데이트될 때마다 호출되는 콜백
-                // 현재 this.blueMini의 위치로 업데이트
-                this.redAttackTween.updateTo('x', this.blueMini.x);
-                this.redAttackTween.updateTo('y', this.blueMini.y);
-                // if (this.redAttack.x === this.redMini.x){
-                //     this.redAttack.visible = false;
-                // }
-            },
-            onComplete: () => {
-                // 애니메이션이 완료되면 실행되는 콜백
-                this.redAttack.visible = false; // 애니메이션이 완료되면 숨김
-            }
-        });
+class CsGame extends Phaser.Scene {
+
+    constructor() {
+        super('mainScene');
     }
 
-    //파일 불러오기
-    preload() {
+    preload () {
         this.load.image("redMinion", "assets/Chaos_Minion_Melee_Render.png");
         this.load.image("blueMinion", "assets/blueMinion.png");
         this.load.image("player", "assets/temo.png");
-        this.load.image("background", "assets/lol_game_back.jpg");
+        this.load.image("background", "assets/lol-back.png");
+        this.load.image("attackImg","assets/attack1.png");
+        this.load.image("clickEffect","assets/clickEffect.png")
+        this.load.image("playerEffect","assets/playerEffect.png")
     }
+    create () {
+        redMinions = this.physics.add.group();
+        blueMinions = this.physics.add.group();
 
-    create() {
-        //배경화면
         const backImg = this.add.image(500,300,"background");
-        backImg.setScale(2);
-
+        backImg.setScale(0.5);
+        center = this.add.rectangle(500,300,10);
         // 게임 화면의 가로, 세로 크기
         const gameWidth = 1000;
         const gameHeight = 600;
@@ -120,84 +192,61 @@ class MainScene extends Component{
         this.cameras.main.setZoom(1.3);
         this.cameras.main.centerOn(0, 0);
 
-
-
-        //롤 블루미니언
-        this.blueMini = this.physics.add.sprite(20, 500, "blueMinion");
-        this.blueMini.disableBody(true, false);
-        this.blueMini.setScale(-0.1, 0.1);
-        this.blueMini.setData('health', 100);
-        this.blueMini.setData('damage', 20);
-        this.blueHealthBars = [];
-        for (let i = 0; i < 5; i++) {
-             this.blueHealthBars[i] = this.add.rectangle(15*i, 450, 15, 10);
-            this.blueHealthBars[i].setFillStyle(greens);
+        // 블루 미니언
+        for (let i = 0; i < 4; i++) {
+            blueMinions.add(createBlueMinion(this.physics,this.add,this.tweens,0,400+(120*i)),true);
+        }
+        for (let i = 0; i < 4; i++) {
+            redMinions.add(createRedMinion(this.physics,this.add,this.tweens,800,(100 * i)),true);
         }
 
-
-        this.blueMiniTween = this.tweens.add({
-            targets: this.blueMini,
-            x: 1000,
-            y: 0,
-            duration: 3000, // 이동에 걸리는 시간 (밀리초)
-            ease: 'Linear', // 이동에 사용할 easing 함수
-        });
-        this.blueHealthBarsTween = this.tweens.add({
-                targets: this.blueHealthBars,
-                x: 1000,
-                y: -50,
-                duration: 3000, // 이동에 걸리는 시간 (밀리초)
-                ease: 'Linear', // 이동에 사용할 easing 함수
-            });
-
-        //롤 레드미니언
-        this.redMini = this.add.sprite(900, 100, "redMinion");
-        this.redMini.setScale(0.1);
-        this.redMini.setData('health', 100);
-        this.redMini.setData('damage', 20);
-        const redHealthBars = this.add.rectangle(920, 50, 60, 10,0x00FF00);
-        redHealthBars.setFillStyle(greens)
-
-        this.redMiniTween = this.tweens.add({
-            targets: this.redMini,
-            x: 0,
-            y: 600,
-            duration: 3000, // 이동에 걸리는 시간 (밀리초)
-            ease: 'Linear', // 이동에 사용할 easing 함수
-        });
-        this.redHealthBarsTween = this.tweens.add({
-            targets: redHealthBars,
-            x: 0,
-            y: 550,
-            duration: 3000, // 이동에 걸리는 시간 (밀리초)
-            ease: 'Linear', // 이동에 사용할 easing 함수
-        });
-
-
         // player를 클래스의 인스턴스 변수로 선언
-        this.player = this.physics.add.sprite(200, 500, "player");
-        this.player.setScale(0.1);
-        this.player.setData('damage',25);
-        this.player.disableBody(true, false);
-        this.player.setBodySize(100,100);
-        //카메라가 player 따라다님
-        this.cameras.main.startFollow(this.player);
+        const playerInstance = this.physics.add.sprite(500, 500, "player");
+        playerInstance.setScale(0.1);
+        playerInstance.setData('damage',25);
+        playerInstance.disableBody(true, false);
+        playerInstance.setBodySize(100,100);
 
+        player = playerInstance;
+        //
+        // //카메라가 player 따라다님
+        this.cameras.main.startFollow(playerInstance);
+        // 플레이어 공격
+        playerAttack =  this.add.image(200,500, "playerEffect");
+        playerAttack.setScale(0.1);
+        playerAttack.visible = false;
 
-        //미니언의 공격 함수
-        this.AttackMinion();
+        //왼쪽 위 UI
+        timeText = this.add.text(200,180,`남은시간:00:00`,{ font: '16px Arial', fill: '#ffffff' });
+        timeText.setScrollFactor(0);
 
+        scoreText = this.add.text(200,200,`점수:${playerScore}`,{ font: '16px Arial', fill: '#ffffff' });
+        scoreText.setScrollFactor(0);
+
+        const home = this.add.text(200,150,`홈으로`,{ font: '16px Arial', fill: '#ffffff' });
+        home.setScrollFactor(0);
+        home.setInteractive();
+        home.on('pointerdown', (pointer)=>{
+            this.scene.stop();
+            this.scene.start('startScene');
+        })
+
+        //미니언이 공격할 대상 랜덤지정
+        blueMinions.children.iterate(bm => {
+            const targetRed = getRandomElement(redMinions);
+            bm.setData('target', targetRed);
+            bm.setData('AttackTween' ,attackTween(this.tweens,bm.getData('attack'),targetRed,bm,1000+bm.y));
+        })
 
 
         // 게임 루프에서 실행되는 업데이트 로직
         this.input.on('pointerdown', (pointer) => {
             // console.log(`마우스 클릭 : ${pointer.leftButtonDown()}`)
+            const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
             // 마우스 클릭한 좌표를 얻습니다.
-            if (pointer.leftButtonDown()){
-                const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
-
-                const circle = this.add.circle(worldPoint.x,worldPoint.y, 10, 0xFF0000); // 0xFF0000은 빨간색의 16진수 표현입니다.
-
+            if (pointer.leftButtonDown()) {
+                const circle = this.add.image(worldPoint.x,worldPoint.y, "clickEffect"); // 0xFF0000은 빨간색의 16진수 표현입니다.
+                circle.setScale(0.1)
                 // Tween 애니메이션을 사용하여 1초 동안 투명하게 만듭니다.
                 this.tweens.add({
                     targets: circle,
@@ -205,59 +254,151 @@ class MainScene extends Component{
                     duration: 1000,
                     ease: 'Linear'
                 });
-
-                const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, worldPoint.x, worldPoint.y);
+                // console.log(player);
+                const distance = Phaser.Math.Distance.Between(playerInstance.x, playerInstance.y, worldPoint.x, worldPoint.y);
                 const speed = 100;
+
                 // 플레이어를 클릭한 좌표로 이동시킵니다.
                 // 플레이어를 Tween 애니메이션을 사용하여 이동시킵니다.
                 this.tweens.add({
-                    targets: this.player,
+                    targets: playerInstance,
                     x: worldPoint.x,
                     y: worldPoint.y,
                     duration: distance / speed * 1000, // 이동에 걸리는 시간 (밀리초)
                     ease: 'Linear', // 이동에 사용할 easing 함수
                 });
-            } else{
+            }
+        });
+
+        function timerCallback() {
+            timeText.setText(`남은시간:${formatTime(timeCount)}`);
+            timeCount = (timeCount-1000);
+        }
+
+        gametimer= this.time.addEvent({
+            delay: 1000,      // 밀리초 단위의 지연 시간
+            callback: timerCallback,
+            callbackScope: this,
+            loop: true
+        })
+
+    }
+
+    update(){
+        redMinions.children.iterate(redMinion => {
+            redMinion.on('pointerdown',(pointer)=>{
+                const minionPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+                const distance = Phaser.Math.Distance.Between(player.x, player.y, minionPoint.x, minionPoint.y);
+                // 일정한 속도로 이동하도록 duration 계산
+                const speed = 200; // 이동 속도 (픽셀/초)
+                if(pointer.rightButtonDown()){
+                    if (!playerAttackTween||!playerAttackTween.isPlaying()){
+                        playerAttackTween = this.tweens.add({
+                            targets: playerAttack,
+                            x: redMinion.x,
+                            y: redMinion.y,
+                            duration: distance / speed * 1000,
+                            ease: 'Linear',
+                            paused: true, // 처음에는 일시 정지된 상태로 시작
+                            onStart: () => {
+                                // Tween이 시작되기 전에 호출되는 콜백
+                                playerAttack.x = player.x;
+                                playerAttack.y = player.y;
+                                playerAttack.visible = true;
+
+                            },
+                            onComplete: ()=>{
+
+                                //미니언 체력바 깍기
+                                if (redMinion.getData('repeatCount') <= 4){
+                                    //미니언 체력수치 깎기
+                                    redMinion.setData('health', redMinion.getData('health') - redMinion.getData('damage'));
+
+                                    const index = 4 - redMinion.getData('repeatCount')
+                                    redMinion.getData('healthBar')[index].setFillStyle(reds)
+                                    redMinion.setData('repeatCount',redMinion.getData('repeatCount') + 1);
+                                    if ( redMinion.getData('health') <= 0){
+                                        playerScore += 10;
+                                        scoreText.setText(`점수: ${playerScore}`);
+                                    }
+                                }
+
+                                playerAttack.visible = false;
+                            }
+                        });
+                    }
+
+                    if (redMinion.getData('health') > 0){
+                        playerAttackTween.play();
+                    }
+                }
+
+            })
+        })
+        redMinions.children.iterate((rm)=>{
+            if (rm !=null){
+                if (rm.getData('moveTween').isPlaying()){
+                    const distance = Phaser.Math.Distance.Between(rm.x, rm.y, center.x,  center.y);
+                    if (distance <= 200) {
+                        rm.getData('moveTween').stop();
+                        rm.getData('healthBarTween').stop();
+                    }
+                } else{
+                    if (rm.getData('health') <= 0){
+
+                        rm.getData('healthBar').forEach(h=> {
+                            if(h != null) h.destroy();
+                        })
+                        rm.destroy();
+                        redMinions.remove(rm)
+
+                    }
+                }
             }
 
         });
+        blueMinions.children.iterate((bm) => {
+            if (bm.getData('moveTween').isPlaying()){
+                const distance = Phaser.Math.Distance.Between(bm.x, bm.y, center.x, center.y);
+                const bluedistance = Phaser.Math.Distance.Between(bm.getData('target').x, bm.getData('target').y, center.x, center.y);
 
-    }
-
-    update() {
-        const distanceToMini = Phaser.Math.Distance.Between(this.blueMini.x, this.blueMini.y,this.redMini.x, this.redMini.y);
-
-        // 거리가 200 이하이면 해당 Tween 애니메이션을 멈춥니다.
-        if (distanceToMini <= 200) {
-            this.blueMiniTween.stop();
-            this.redMiniTween.stop();
-            this.blueHealthBarsTween.stop();
-            this.redHealthBarsTween.stop();
-            // Tween이 실행 중이지 않으면 시작
-                if(this.blueMini.getData('health') > 0){
-                    if (!this.redAttackTween.isPlaying()){
-                        this.redAttackTween.play();
+                if (distance <= 200) {
+                    if (bluedistance <= 200){
+                        bm.getData('moveTween').stop();
+                        bm.getData('healthBarTween').stop();
+                    }
+                }
+            }else{
+                if (bm.getData('target') != null){
+                    if(bm.getData('target').getData('health') > 0){
+                        if(!bm.getData('AttackTween').isPlaying()){
+                            bm.getData('AttackTween').play();
+                        }
+                    } else{
+                        bm.getData('AttackTween').stop();
+                        bm.getData('attack').visible = false;
+                        bm.setData('target',null);
                     }
                 }else{
-                    this.redAttackTween.destroy();
-                    this.redAttack.visible = false;
+                    const targetRed = getRandomElement(redMinions);
+                    bm.setData('target', targetRed);
+                    bm.setData('AttackTween' ,attackTween(this.tweens,bm.getData('attack'),targetRed,bm,1000+bm.y));
                 }
+            }
+        });
+        if (redMinions.children.entries.length === 0){
+            for (let i = 0; i < 4; i++) {
+                redMinions.add(createRedMinion(this.physics,this.add,this.tweens,800,(100 * i)),true);
+            }
         }
-    }
 
-    // 우클릭 삭제 ㅂㅂ
-    handleContextMenu = (e) => {
-        e.preventDefault();
-    };
-    render() {
-        console.log("게임실행함니다")
-        return (
-            <div id={'csgames'} onContextMenu={this.handleContextMenu}>
-                {/* Phaser 게임이 렌더링될 영역 */}
-                <div id="phaser-container" />
-            </div>
-        );
+        if (timeCount <=0){
+            gametimer.reset();
+            timeCount =  5000;
+            this.scene.stop('mainScene');
+            this.scene.start('endScene', {score: playerScore});
+        }
     }
 }
 
-export default MainScene;
+export default CsGame;

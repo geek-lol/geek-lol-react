@@ -19,7 +19,7 @@
       margin-bottom: 32px;
       border-bottom: 1px solid black;
       h1{
-        justify-content: start;
+        justify-content: flex-start;
         font-weight: 700;
         font-size: 30px;
         margin: 16px 0;
@@ -43,21 +43,26 @@
       padding: 100px;
       border-bottom: 1px solid black;
       margin-bottom: 32px;
+      .imgTag{
+        width: 50%;
+        height: 300px;
+      }
     }
     .content-bottom{
       margin:  25px 50px;
       display: flex;
-      justify-content: end;
-      p{
+      justify-content: flex-end;
+      .p{
         margin: 16px;
         font-size: 16px;
         cursor: pointer;
       }
-      p:hover{
+      .p:hover{
         //border: 1px solid lightgray;
       }
 
       .correction{
+        color: black;
       }
       .delete{
         color: red;

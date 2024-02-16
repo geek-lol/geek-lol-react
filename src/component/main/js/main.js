@@ -13,7 +13,6 @@ const Input = ({onSubmit, ...rest})=> {
     )
 }
 const Main = () => {
-
     const [inputValue, setInputValue] = useState('');
     const [splitValue, setSplitValue] = useState(['', 'KR1']);
     const navigate = useNavigate();
@@ -28,7 +27,6 @@ const Main = () => {
     const handleChange = e => {
         setInputValue(e.target.value);
     };
-
     const handleSubmit = e => {
       e.preventDefault();
       const splitInput = inputValue.split('#');
@@ -49,8 +47,6 @@ const Main = () => {
       }
 
     };
-
-
     return (
         <>
 

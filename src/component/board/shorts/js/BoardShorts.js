@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import '../scss/BoardShorts.scss'
-import Shorts_header from "./Shorts_header";
 import Shorts_content from "./Shorts_content";
-import {Route, Routes} from "react-router-dom";
-import ShortCreateMain from "../shortCreate/js/ShortCreateMain";
 import {SHORT_URL} from "../../../../config/host-config";
+import Shorts_header from "./Shorts_header";
 
 const BoardShorts = () => {
     const [shortList, setShortList] = useState([]);
@@ -27,7 +25,6 @@ const BoardShorts = () => {
 
                 // console.log(json);
                 setShortList(json.shorts);
-
             });
 
     }, []);
@@ -41,8 +38,10 @@ const BoardShorts = () => {
             <ul className={'shorts-content-wrapper'}>
                 {shortList.map((shorts) => (
                     <Shorts_content
-                        key={shorts.shortsId}
-                        item={shorts} />
+                        id={shorts.shortsId}
+                        item={shorts}
+                        upVote={shorts.upCount}
+                    />
                 ))}
             </ul>
         </div>
