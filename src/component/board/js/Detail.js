@@ -357,11 +357,6 @@ const Detail = () => {
                             shape="rounded"
                             onChange={pageHandler}
                         />
-                        <div className="moveBox">
-                            <button className="move-button clicked">이전글</button>
-                            <button className="move-button">게시판으로</button>
-                            <button className="move-button">다음 글</button>
-                        </div>
                     </div>
                 </div>
             </section>

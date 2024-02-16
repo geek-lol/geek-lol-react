@@ -186,10 +186,10 @@ const RequestBoard = () => {
             <section id="board_main">
                 <h2 className="main-vote-title">투표 게시판</h2>
                 <div className="card-box">
-                    {cardData2.map(item =>
+                    {cardData1.map(item =>
                         <HeaderCard item={item} isBool={prev}/>
                     )}
-                    {cardData1.map(item =>
+                    {cardData2.map(item =>
                         <HeaderCard item={item} isBool={current}/>
                     )}
 
@@ -197,6 +197,7 @@ const RequestBoard = () => {
                 </div>
                 <div className="progress-bar">
                     <ProgressBar
+                        width="800px"
                         bgColor="#72D4FE"
                         height="30px"
                         className="progressBar"

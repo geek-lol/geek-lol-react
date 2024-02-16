@@ -64,8 +64,8 @@ const SelectDetail = () => {
                 setTotalPage(json.totalPages);
             });
     }
-    const [cons, setCons] = useState(null);
-    const [pros, setPros] = useState(null);
+    const [pros, setPros] = useState("찬성");
+    const [cons, setCons] = useState("반대");
     const [c, setC] = useState(null);
     const [p, setP] = useState(null);
 
@@ -78,23 +78,31 @@ const SelectDetail = () => {
                 return res.json();
             }
         }).then(json => {
-            setCons(json.consPercent);
-            setPros(json.prosPercent);
+            console.log(json);
+
             setC(json.cons);
             setP(json.pros);
 
         })
     }
-    const setVoteData = async () => {
+    const setVoteData = async (text) => {
         await fetch(`${TROLL_RULING_VOTE_URL}`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify({vote: vote, rulingId: location.state.rulingId})
+            body: JSON.stringify({vote: text, rulingId: location.state.rulingId})
         }).then(res => {
+            if(res.status===200){return res.json();}
             console.log(res.status);
+        }).then(json=>{
+            if(json===undefined){
+                console.log("Asdf");return}
+            setCons(Math.round(json.consPercent)+"%");
+            setPros(Math.round(json.prosPercent)+"%");
+            setC(json.cons);
+            setP(json.pros);
         })
     }
 
@@ -120,30 +128,23 @@ const SelectDetail = () => {
     const $red_btn = document.querySelector('.red-btn');
     const [show, setShow] = useState(false);
     const blueClickHandler = () => {
-        setVote("pros");
-
+        // setVote();
         setVs(1);
-        $blue_btn.style.width = "400px";
+        setVoteData("pros");
+        $blue_btn.style.width = "350px";
         $red_btn.style.width = "150px";
-        $blue_btn.textContent = Math.round(pros) + "%";
-        $red_btn.textContent = Math.round(cons) + "%";
-
     };
     useEffect(() => {
-
-        setVoteData();
         getVoteData();
-
     }, [vote]);
     const redClickHandler = () => {
-        setVote("cons");
+        // setVote();
         setVs(2);
-        $red_btn.style.width = "400px";
+        setVoteData("cons");
+        $red_btn.style.width = "350px";
         $blue_btn.style.width = "150px";
-        $blue_btn.textContent = Math.round(pros) + "%";
-        $red_btn.textContent = Math.round(cons) + "%";
-
     };
+
     const fetchBoardUpload = async () => {
         try {
             // 클라이언트에서 전송할 데이터
@@ -196,35 +197,11 @@ const SelectDetail = () => {
     };
     return (
         <>
-            <Modal
-                size='lg'
-                className="modal"
-                show={show}
-                onHide={() => setShow(false)}
-                dialogClassName="modal-90w"
-                aria-labelledby="example-custom-modal-styling-title"
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title id="example-custom-modal-styling-title">
-                        투표하기
-                    </Modal.Title>
-                </Modal.Header>
-                <h2 className='modalTitle'>{title}</h2>
-                <Modal.Body>
-                    <div className="modal-body">
-
-                    </div>
-                </Modal.Body>
-            </Modal>
-            <div>
+            <div className="bg">
                 <section className="detailSection">
                     <div className="DetailTop">
                         <h1 className="RequestTitle">트롤재판소</h1>
                         <h2 className="subTile">누가 트롤인지 여러분의 손으로 정해보세요!</h2>
-                        <div className="btnBox">
-                            <button className="Btn1">현재 진행중인 재판 ></button>
-                            <button className="Btn2">지난 재판 ></button>
-                        </div>
                     </div>
                     <div className="DetailMid">
                         <h1>{title}</h1>
@@ -244,8 +221,8 @@ const SelectDetail = () => {
                                 pip={true}
                                 controls={true}
                                 url={Video}
-                                width='800px'
-                                height={'600px'}
+                                width='700px'
+                                height={'400px'}
                             />
                         </div>
                         <span className="detailContent">{content}</span>
@@ -253,16 +230,16 @@ const SelectDetail = () => {
                             <div className='blue-box'>
                                 <img src={process.env.PUBLIC_URL + '/assets/bluepng-removebg.png'} alt=""/>
                                 <hr className='hr'/>
-                                <div id="three" className="button BIG-red-button blue-btn" onClick={blueClickHandler}>찬성
+                                <div id="three" className="button BIG-red-button blue-btn" onClick={blueClickHandler}>{pros}
                                 </div>
                             </div>
                             <div className="empty-box">
                                 {vs === 0 ?
-                                    <h2 className="vs">VS<br/><p>총 투표수<br/>{c + p}</p></h2> : vs === 1 ?
-                                        <div><GiLuciferCannon size={22 * 2}></GiLuciferCannon><br/><p>총 투표수<br/>{c + p}
+                                    <h2 className="vs">VS<br/><p>투표수<br/>{c + p}</p></h2> : vs === 1 ?
+                                        <div><GiLuciferCannon size={22 * 2}></GiLuciferCannon><br/><p>투표수<br/>{c + p}
                                         </p></div>
                                         :
-                                        <div><GiLuciferCannon size={22 * 2} style={{transform: 'scaleX(-1)'}}/><br/><p>총
+                                        <div><GiLuciferCannon size={22 * 2} style={{transform: 'scaleX(-1)'}}/><br/><p>
                                             투표수<br/>{c + p}
                                         </p></div>
                                 }
@@ -271,7 +248,7 @@ const SelectDetail = () => {
                                 <img src={process.env.PUBLIC_URL + '/assets/red-removebg.png'} alt=""/>
                                 <hr className='hr'/>
 
-                                <div id="three" className="button BIG-red-button red-btn" onClick={redClickHandler}>반대
+                                <div id="three" className="button BIG-red-button red-btn" onClick={redClickHandler}>{cons}
                                 </div>
                             </div>
                         </div>
@@ -311,6 +288,7 @@ const SelectDetail = () => {
                                     <SelectBoardReply item={con} getReplyCount={getReplyCount}/>
                                 )}
                             <Pagination
+                                className="tq"
                                 activePage={page}
                                 count={totalPage}
                                 variant="outlined"

@@ -200,16 +200,12 @@ const RequestDetail = () => {
                     <div className="DetailTop">
                         <h1 className="RequestTitle">트롤재판소</h1>
                         <h2 className="subTile">누가 트롤인지 여러분의 손으로 정해보세요!</h2>
-                        <div className="btnBox">
-                            <button className="Btn1">현재 진행중인 재판 ></button>
-                            <button className="Btn2">지난 재판 ></button>
-                        </div>
                     </div>
                     <div className="DetailMid">
                         <h1>{item.title}</h1>
                         <div className="detail-info-box">
                             <div className="info-front">
-                                <p>작성일자 - {formatDate(item.localDateTime,"day")}</p><p>|</p>
+                                <p>작성일자 - {formatDate(item.localDateTime, "day")}</p><p>|</p>
                                 <p>작성자 - {item.posterName}</p>
                             </div>
                             <div className="info-back">
@@ -234,15 +230,16 @@ const RequestDetail = () => {
                         {
                             likeToggle === 1 ?
                                 <div className="info" onClick={likeHanlder}><GoHeart className="p"
-                                                                                     size={25 * 2}/><span>{totalLike}</span><span>좋아요를 눌러서 투표에 선정되게 도와주세요!</span>
+                                                                                     size={25 * 2}/><span>{totalLike}</span>
                                 </div>
                                 :
                                 <div className="info" onClick={likeHanlder}><GoHeartFill className="p"
                                                                                          color="red"
-                                                                                         size={25 * 2}/><span>{totalLike}</span><span>좋아요를 눌러서 투표에 선정되게 도와주세요!</span>
+                                                                                         size={25 * 2}/><span>{totalLike}</span>
                                 </div>
 
                         }
+                        <span className="pp">좋아요를 눌러서 투표에 선정되게 도와주세요!</span>
 
                     </div>
                     <div className="DetailBottom">

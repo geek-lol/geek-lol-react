@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 
 function BoardContent({item}) {
-    const {bulletinId,posterId,title,viewCount,localDateTime,upCount}=item;
+    const {bulletinId,posterId,title,viewCount,localDateTime,upCount,totlaReply}=item;
     const [timeDifference, setTimeDifference] = useState('');
 
     // 현재 시간을 가져오는 함수
@@ -49,7 +49,7 @@ function BoardContent({item}) {
                 <div className="empty"></div>
                 <div className="contents">
                     <span>{title}</span>
-                    <i>[0]</i>
+                    <i>[{totlaReply}]</i>
                 </div>
                 <div className="board_nickname">{posterId}</div>
                 <div className="num">{timeDifference}</div>

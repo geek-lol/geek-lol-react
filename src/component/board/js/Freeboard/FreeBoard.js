@@ -54,6 +54,7 @@ const FreeBoard = () => {
             })
             .then(json => {
                 if (!json) return;
+                console.log(json.board);
                 setBoardList(json.board);
                 setTotalPage(json.totalPages);
             });

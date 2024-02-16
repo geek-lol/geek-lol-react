@@ -172,8 +172,8 @@ const Header = ({sendTouch}) => {
                             </ul>
                             미니게임
                         </div>
-                        {role==="ADMIN"?<p className="nav-item" active-color="yellowgreen"
-                           onClick={(e) => handleIndicator(e.target)}>어드민</p>:null}
+                        {role==="ADMIN"?<Link className="nav-item" active-color="yellowgreen"
+                           onClick={(e) => handleIndicator(e.target)} to="/admin">어드민</Link>:null}
                         <span className="nav-indicator" style={{
                             width: indicatorStyle.width,
                             left: indicatorStyle.left,
