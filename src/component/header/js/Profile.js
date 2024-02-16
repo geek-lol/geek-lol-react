@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import '../scss/Profile.scss';
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import {Link} from "react-router-dom";
+import {USER_URL} from "../../../config/host-config";
 const Profile = props => {
     const [token, setToken] = useState(getCurrentLoginUser().token);
     const [imgUrl, setImgUrl] = useState(null);
     const API_URL = "http://localhost:8686/user";
 
     const userProfileFetch = async () =>{
-        const url = API_URL + "/load-profile";
+        const url = USER_URL + "/load-profile";
         const res = await fetch(url, {
             method: 'GET',
             headers: {
