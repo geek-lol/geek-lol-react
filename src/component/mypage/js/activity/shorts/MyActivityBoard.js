@@ -18,7 +18,7 @@ import {
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Button from "@mui/material/Button";
-import {BOARD_URL} from "../../../../../config/host-config";
+import {BOARD_URL, SHORT_URL} from "../../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../../utils/login-util";
 import {useEffect, useState} from "react";
 
@@ -74,7 +74,7 @@ const MyActivityBoard = () => {
 
     //내가 쓴 쇼츠 조회
     const shortsFetch = async () =>{
-        const res = await fetch(API_URL+"/api/shorts/my",{
+        const res = await fetch(SHORT_URL+"/my",{
             method : "GET",
             headers: {"Authorization" : `Bearer ${token}`},
         })

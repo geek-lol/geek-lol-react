@@ -11,6 +11,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Slide from "@mui/material/Slide";
 import {useNavigate} from "react-router-dom";
+import {USER_URL} from "../../../../config/host-config";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -56,7 +57,7 @@ const MyInformation = ({userInfo,changeUser}) => {
 
         const formData = new FormData();
         formData.append('user',jsonBlob);
-        const res = await fetch(API_URL+"/modify",{
+        const res = await fetch(USER_URL+"/modify",{
             method:"PUT",
             headers: {"Authorization" : `Bearer ${token}`},
             body: formData
@@ -111,7 +112,7 @@ const MyInformation = ({userInfo,changeUser}) => {
         const payload = {
             id : userId
         }
-        const res = await fetch(API_URL+"/delete",{
+        const res = await fetch(USER_URL+"/delete",{
             method: "PUT",
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify(payload)

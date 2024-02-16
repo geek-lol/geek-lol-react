@@ -57,9 +57,6 @@ const MyActivityComment = () => {
     const token= getCurrentLoginUser().token;
     const userId = getCurrentLoginUser().token;
 
-    //요청 URL
-    const API_URL = "http://localhost:8686";
-
     const [page, setPage] = React.useState(1);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);

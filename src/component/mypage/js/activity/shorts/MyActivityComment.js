@@ -21,6 +21,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
 import {getCurrentLoginUser} from "../../../../../utils/login-util";
+import {BOARD_REPLY_URL} from "../../../../../config/host-config";
 
 //테이블 헤더
 const headCells = [
@@ -69,7 +70,7 @@ const MyActivityComment = () => {
 
     //쇼츠 댓글 가져오기
     const shortsReplyFetch = async () =>{
-        const res = await fetch(API_URL+"/api/shorts/reply/my",{
+        const res = await fetch(BOARD_REPLY_URL+"/my",{
             method : "GET",
             headers: {"Authorization" : `Bearer ${token}`},
         })

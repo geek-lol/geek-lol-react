@@ -3,6 +3,7 @@ import MyProfile from '../../scss/MyPageProfile.scss';
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import defaultImg from "../../../../image/profile.jpg";
 import {formatDate} from "../../../../utils/format-date";
+import {USER_URL} from "../../../../config/host-config";
 
 const MyPageProfile = ({userInfo,myActivity}) => {
 
@@ -22,7 +23,7 @@ const MyPageProfile = ({userInfo,myActivity}) => {
 
     //회원 이미지 가져오기 fetch
     const userProfileFetch = async () =>{
-        const url = API_URL + "/load-profile";
+        const url = USER_URL + "/load-profile";
         console.log(`url:${url}`);
         const res = await fetch(url, {
             method: 'GET',
@@ -52,7 +53,7 @@ const MyPageProfile = ({userInfo,myActivity}) => {
         const formData = new FormData();
         formData.append('user',jsonBlob);
         formData.append('profileImage',file);
-        const res = await fetch(API_URL+"/modify",{
+        const res = await fetch(USER_URL+"/modify",{
             method:"PUT",
             headers: {"Authorization" : `Bearer ${token}`},
             body: formData

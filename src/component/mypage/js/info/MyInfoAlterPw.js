@@ -2,10 +2,11 @@ import React, {useState} from 'react';
 import {TextField} from "@mui/material";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import "../../scss/MyInformation.scss";
+import {USER_URL} from "../../../../config/host-config";
 
 const MyInfoAlterPw = ({changePwStatus,changeUser}) => {
     //요청 URL
-    const API_URL = "http://localhost:8686/user/modify";
+    const API_URL = USER_URL+"/modify";
     // 토큰 가져오기
     const token= getCurrentLoginUser().token;
     const userId = getCurrentLoginUser().userId;
