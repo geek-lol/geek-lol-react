@@ -68,8 +68,9 @@
             border: 1px solid #9fe8ff;
             margin: 3px;
 
-            a {
-              color: #1F1F1F;
+            &.current-page {
+              background: black;
+              color: white;
             }
           }
         }

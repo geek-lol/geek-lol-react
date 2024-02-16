@@ -56,9 +56,9 @@ const Main = () => {
 
             <div className='mainBox'>
                 <div className='main__Title'>
-                    <a href='#' className='title__logo'>
-                        <img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지" />
-                    </a>
+                    <div className='title__logo'>
+                        <img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지" className={"logo-image"} />
+                    </div>
                 </div>
                 <div className='input__Title'>
                     <Input value={inputValue} onChange={handleChange} onSubmit={handleSubmit}/>

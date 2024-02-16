@@ -1,3 +1,7 @@
+@keyframes bg {
+  100%{filter: hue-rotate(360deg);}
+}
+
 .mainBox{
   display: flex;
   justify-content: center;
@@ -15,6 +19,7 @@
       height: 220px;
       //background: url('/public/assets/logo.png') no-repeat;
       background-size: contain;
+      animation: bg 3s infinite;
     }
   }
   .input__Title{

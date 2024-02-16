@@ -18,6 +18,7 @@ import MyActivityTemplate from "./component/mypage/js/activity/MyActivityTemplat
 import CSGame from "./component/game/js/CSGame";
 import MainScene from "./component/game/js/FcsGame";
 import InfoTemplate from "./component/summonerInfo/js/InfoTemplate";
+import RiotText from "./component/RiotText";
 
 function App() {
     const [showHeader, setShowHeader] = useState(true);
@@ -65,6 +66,7 @@ function App() {
                 <Route path="/mypage/active" element={<MyActivityTemplate />}/>
                 <Route path="/resgame" element={<ResponseTime /> }/>
                 <Route path="/csgame" element={<MainScene />}/>
+                <Route path="/riot" element={<RiotText />} /> {/* Add this route for RiotText */}
             </Routes>
         </>
     );
