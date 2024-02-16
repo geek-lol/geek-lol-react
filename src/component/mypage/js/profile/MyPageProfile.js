@@ -3,6 +3,7 @@ import MyProfile from '../../scss/MyPageProfile.scss';
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import defaultImg from "../../../../image/profile.jpg";
 import {formatDate} from "../../../../utils/format-date";
+import {USER_URL} from "../../../../config/host-config";
 
 const MyPageProfile = ({userInfo,myActivity}) => {
 
@@ -22,7 +23,7 @@ const MyPageProfile = ({userInfo,myActivity}) => {
 
     //회원 이미지 가져오기 fetch
     const userProfileFetch = async () =>{
-        const url = API_URL + "/load-profile";
+        const url = USER_URL + "/load-profile";
         console.log(`url:${url}`);
         const res = await fetch(url, {
             method: 'GET',
@@ -52,7 +53,7 @@ const MyPageProfile = ({userInfo,myActivity}) => {
         const formData = new FormData();
         formData.append('user',jsonBlob);
         formData.append('profileImage',file);
-        const res = await fetch(API_URL+"/modify",{
+        const res = await fetch(USER_URL+"/modify",{
             method:"PUT",
             headers: {"Authorization" : `Bearer ${token}`},
             body: formData
@@ -111,15 +112,11 @@ const MyPageProfile = ({userInfo,myActivity}) => {
                 <div className="my-profile-active">
                     <div className="active-item">
                         <div className="active-type">내 글</div>
-                        <div className="active-count">{myActivity.boards}</div>
+                        <div className="active-count">{myActivity.boardCount}</div>
                     </div>
                     <div className="active-item">
                         <div className="active-type">내 댓글</div>
-                        <div className="active-count">{myActivity.comments}</div>
-                    </div>
-                    <div className="active-item">
-                        <div className="active-type">제재내역</div>
-                        <div className="active-count">{myActivity.reports}</div>
+                        <div className="active-count">{myActivity.replyCount}</div>
                     </div>
                 </div>
             </div>

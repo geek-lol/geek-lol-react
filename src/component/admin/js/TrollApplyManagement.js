@@ -20,7 +20,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Slide from "@mui/material/Slide";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import {SHORT_URL} from "../../../config/host-config";
+import {ADMIN_URL, SHORT_URL} from "../../../config/host-config";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 
 
@@ -67,6 +67,7 @@ const TrollApplyManagement = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const [open, setOpen] = React.useState(false);
+    const [deleteOpen, setDeleteOpen] = React.useState(false);
     //요청 URL
     const API_URL = "http://localhost:8686";
     //토큰
@@ -78,7 +79,7 @@ const TrollApplyManagement = () => {
     };
     // 패치
     const getMainFetch = async () =>{
-        const res = await fetch(API_URL+"/admin/applys?page="+page,{
+        const res = await fetch(ADMIN_URL+"/applys?page="+page,{
             method : "POST",
             headers: {"Authorization" : `Bearer ${token}`},
         })
@@ -95,7 +96,7 @@ const TrollApplyManagement = () => {
         const payload = {
             ids : selected
         }
-        const res = await fetch(API_URL+"/admin/applys?page="+page,{
+        const res = await fetch(ADMIN_URL+"/applys?page="+page,{
             method : "DELETE",
             headers: requestHeader,
             body: JSON.stringify(payload)
@@ -114,7 +115,7 @@ const TrollApplyManagement = () => {
     }
 
     const onClickDelete = () =>{
-        deleteBoardFetch();
+        setDeleteOpen(true)
     }
 //모달
     const handleClickOpen = () => {
@@ -125,7 +126,13 @@ const TrollApplyManagement = () => {
         setOpen(false);
     };
 
-
+    const deletehandleClose = () => {
+        setDeleteOpen(false);
+    };
+    const deletehandleOk = () => {
+        deleteBoardFetch();
+        setDeleteOpen(false);
+    };
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
@@ -260,29 +267,23 @@ const TrollApplyManagement = () => {
             </Box>
             <React.Fragment>
                 <Dialog
-                    open={open}
+                    open={deleteOpen}
                     TransitionComponent={Transition}
                     keepMounted
-                    onClose={handleClose}
+                    onClose={deletehandleClose}
                     aria-describedby="alert-dialog-slide-description"
                 >
-                    <DialogTitle>{"권한을 변경하시겠습니까?"}</DialogTitle>
+                    <DialogTitle>{"정말 삭제하시겠습니까?"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-slide-description">
                             <FormControl fullWidth>
-                                <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                    권한
-                                </InputLabel>
-                                <NativeSelect defaultValue={2}>
-                                    <option value={1}>ADMIN</option>
-                                    <option value={2}>COMMON</option>
-                                </NativeSelect>
+                                삭제하면 되돌릴 수 없습니다.
                             </FormControl>
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancle</Button>
-                        <Button onClick={handleClose}>Ok</Button>
+                        <Button onClick={deletehandleClose}>Cancle</Button>
+                        <Button onClick={deletehandleOk}>Ok</Button>
                     </DialogActions>
                 </Dialog>
             </React.Fragment>

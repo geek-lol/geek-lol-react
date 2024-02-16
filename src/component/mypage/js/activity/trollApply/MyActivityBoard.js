@@ -18,7 +18,7 @@ import {
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Button from "@mui/material/Button";
-import {BOARD_URL} from "../../../../../config/host-config";
+import {BOARD_URL, TROLL_APPLY_DETAIL_URL, TROLL_RULING_DETAIL_URL} from "../../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../../utils/login-util";
 import {useEffect, useState} from "react";
 
@@ -51,7 +51,7 @@ const headCells = [
 ];
 
 const MyActivityBoard = () => {
-    const FORWARD_URL = "http://localhost:3000/";
+    const FORWARD_URL = TROLL_APPLY_DETAIL_URL;
 
     // 토큰 가져오기
     const token= getCurrentLoginUser().token;
@@ -107,7 +107,7 @@ const MyActivityBoard = () => {
     }
     const handleTitleClick = (e) => {
         const boardId = e.currentTarget.dataset.boardid
-        window.location.href = FORWARD_URL+boardId
+        window.location.href = FORWARD_URL+"/"+boardId;
     }
 
     return (
@@ -129,7 +129,7 @@ const MyActivityBoard = () => {
                                     return (
                                         <TableRow hover>
                                             <TableCell align="left">{row.id}</TableCell>
-                                            <TableCell data-boardId={row.bulletinId} onClick={handleTitleClick}
+                                            <TableCell data-boardId={row.applyId} onClick={handleTitleClick}
                                                        style={{ cursor: 'pointer'}}
                                             >{row.title}</TableCell>
                                             <TableCell align="left">{formatDate(row.localDateTime,'day')}</TableCell>

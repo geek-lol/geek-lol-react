@@ -4,6 +4,8 @@ console.log('client : ', clientHostName);
 const LOCAL_PORT = '8686'
 const API_BASE_URL = 'http://localhost:' + LOCAL_PORT;
 
+const LOCATION_URL = 'http://localhost:3000'
+
 const S3URL = 'geeklol.site';
 const DEPLOY_BACKEND = "http://13.209.200.203";
 
@@ -50,6 +52,9 @@ const TROLL_APPLY_REPLY='/troll/apply/reply'
 const TROLL_RULING_VOTE='/troll/ruling/vote';
 const TROLL_APPLY_VOTE='/troll/apply/vote'
 const TROLL_RULING_BOARD='/troll/ruling/board'
+const TROLL_APPLY_DETAIL='/board/RequestDetail'
+const TROLL_RULING_DETAIL='/board/SelectDetail'
+const ADMIN = '/admin'
 const TROLL_RULING_REPLY='/troll/ruling/reply'
 
 
@@ -69,6 +74,9 @@ export const TROLL_APPLY_REPLY_URL = API_BASE_URL +TROLL_APPLY_REPLY;
 export const TROLL_RULING_VOTE_URL = API_BASE_URL +TROLL_RULING_VOTE;
 export const TROLL_APPLY_VOTE_URL = API_BASE_URL +TROLL_APPLY_VOTE;
 export const TROLL_RULING_BOARD_URL=API_BASE_URL+TROLL_RULING_BOARD
+export const TROLL_RULING_DETAIL_URL=LOCATION_URL+TROLL_RULING_DETAIL
+export const TROLL_APPLY_DETAIL_URL=LOCATION_URL+TROLL_APPLY_DETAIL
+export const ADMIN_URL = API_BASE_URL+ADMIN
 export const TROLL_RULING_REPLY_URL=API_BASE_URL+TROLL_RULING_REPLY
 
 

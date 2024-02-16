@@ -21,6 +21,7 @@ import Slide from "@mui/material/Slide";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import {getCurrentLoginUser} from "../../../utils/login-util";
+import {ADMIN_URL} from "../../../config/host-config";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -72,6 +73,7 @@ const BoardManagement = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const [open, setOpen] = React.useState(false);
+    const [deleteOpen, setDeleteOpen] = React.useState(false);
     //요청 URL
     const API_URL = "http://localhost:8686";
     //토큰
@@ -84,7 +86,7 @@ const BoardManagement = () => {
 
     // 패치
     const getBoardFetch = async () =>{
-        const res = await fetch(API_URL+"/admin/board?page="+page,{
+        const res = await fetch(ADMIN_URL+"/board?page="+page,{
             method : "POST",
             headers: {"Authorization" : `Bearer ${token}`},
         })
@@ -103,7 +105,7 @@ const BoardManagement = () => {
             ids : selected
         }
 
-        const res = await fetch(API_URL+"/admin/board?page="+page,{
+        const res = await fetch(ADMIN_URL+"/board?page="+page,{
             method : "Delete",
             headers: requestHeader,
             body: JSON.stringify(payload)
@@ -129,6 +131,13 @@ const BoardManagement = () => {
         setOpen(false);
     };
 
+    const deletehandleClose = () => {
+        setDeleteOpen(false);
+    };
+    const deletehandleOk = () => {
+        deleteBoardFetch();
+        setDeleteOpen(false);
+    };
 
     // 체크박스 전체 클릭
     const handleSelectAllClick = (event) => {
@@ -158,9 +167,8 @@ const BoardManagement = () => {
         }
         setSelected(newSelected);
     };
-    const onClickDeleteIcon = async () =>{
-
-        await deleteBoardFetch();
+    const onClickDeleteIcon = () =>{
+        setDeleteOpen(true)
     }
     const prevPageHandler= ()=>{
         if(page === 1)
@@ -273,29 +281,23 @@ const BoardManagement = () => {
             </Box>
             <React.Fragment>
                 <Dialog
-                    open={open}
+                    open={deleteOpen}
                     TransitionComponent={Transition}
                     keepMounted
-                    onClose={handleClose}
+                    onClose={deletehandleClose}
                     aria-describedby="alert-dialog-slide-description"
                 >
-                    <DialogTitle>{"권한을 변경하시겠습니까?"}</DialogTitle>
+                    <DialogTitle>{"정말 삭제하시겠습니까?"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-slide-description">
                             <FormControl fullWidth>
-                                <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                    권한
-                                </InputLabel>
-                                <NativeSelect defaultValue={2}>
-                                    <option value={1}>ADMIN</option>
-                                    <option value={2}>COMMON</option>
-                                </NativeSelect>
+                                삭제하면 되돌릴 수 없습니다.
                             </FormControl>
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancle</Button>
-                        <Button onClick={handleClose}>Ok</Button>
+                        <Button onClick={deletehandleClose}>Cancle</Button>
+                        <Button onClick={deletehandleOk}>Ok</Button>
                     </DialogActions>
                 </Dialog>
             </React.Fragment>
