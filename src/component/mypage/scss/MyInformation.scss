@@ -1,0 +1,72 @@
+
+//전체를 감싸는 div
+.my-info-wrapper {
+  width: 844px;
+  height: 771px;
+  position: relative;
+  padding-top: 150px;
+
+  // 기본정보
+  .info-title {
+    color: #000000;
+    text-align: left;
+    font-family: "NanumGothic-Regular", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .my-info-container{
+    padding: 10px;
+    margin-bottom: 20px;
+
+    .pw-alter-text{
+      display: flex;
+      .pw-text{
+        padding: 10px;
+      }
+    }
+  }
+  //아이디 적힌 창
+  .my-id-textField {
+    margin-top: 30px;
+  }
+  //비밀번호 메인
+  .my-alter-main{
+    display: flex;
+    justify-content: space-between;
+    color: #2F66D2;
+    margin-right: 20%;
+    .my-info-item {
+      color: #000000;
+      text-align: left;
+      font-family: "NanumGothic-Regular", sans-serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+
+      margin-top: 10px;
+      padding-left: 10px;
+    }
+
+  }
+  .user-delete{
+    margin-top: 50px;
+    margin-right: 20%;
+    display: flex;
+    justify-content:flex-end;
+  }
+
+  .my-alter-pw{
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    .standard-password-input{
+      max-width: 400px;
+      margin: 10px 0 5px;
+    }
+    .message {
+       font-size: 13px;
+     }
+  }
+}

@@ -1,0 +1,12 @@
+
+.rank-tbody {
+
+  .rank-tr td {
+    padding: 15px 0;
+  }
+
+  .rank-tr:nth-child(odd) {
+    background: #eaeaed;
+    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.25);
+  }
+}

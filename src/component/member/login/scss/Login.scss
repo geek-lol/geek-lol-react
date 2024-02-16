@@ -1,6 +1,7 @@
 .loginform {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   width: 100%;
   height: 75%;
 
@@ -8,7 +9,6 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-
     .login-box {
       display: flex;
       justify-content: center;
@@ -17,9 +17,6 @@
       gap: 20px;
       width: 100%;
       height: 100%;
-
-
-
       .login-input-container {
         display: flex;
         justify-content: center;
@@ -50,11 +47,19 @@
           width: 100%;
           border: 1px solid #ccc;
         }
+
+      }
+      .auto-login-check {
+        width: 80%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
       }
 
       .signin-box {
         width: 80%;
         height: 60px;
+        border: none;
         border-radius: 5px;
         display: flex;
         justify-content: space-around;
@@ -68,7 +73,7 @@
     //  easy-login
       .easy-login-text {
         color: #fff;
-        font-family: 'NanumGothic';
+        font-family: 'NanumGothic', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 18px;
@@ -82,14 +87,14 @@
         .easy-login-google {
           width: 50px;
           height: 50px;
-          background: url("../../../../image/web_neutral_sq_na@4x.png");
+          background: url("../../../../../public/assets/web_neutral_sq_na@4x.png");
           background-size: cover;
           background-repeat: no-repeat;
         }
         .easy-login-kakao {
           width: 50px;
           height: 50px;
-          background: url("../../../../image/kakaotalk_sharing_btn_medium.png");
+          background: url("../../../../../public/assets/kakaotalk_sharing_btn_medium.png");
           background-size: cover;
           background-repeat: no-repeat;
         }

@@ -1,0 +1,180 @@
+@media screen and (max-width: 1100px)  {
+  #nav-box {
+    width: 1100px;
+  }
+}
+
+.right-content {
+  width: 703px;
+  //width: 100%;
+  //border: 1px grey solid;
+  border-radius: 5px;
+  //position: absolute;
+  //top: 0;
+  //right: 0;
+
+  .view-menu {
+    width: 703px;
+    //width: 703px;
+    height: 61px;
+    border: 1.5px #c3d1dc solid;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .sub-content {
+    width: 703px;
+    min-height: 150px;
+    border: 1.5px solid #c3d1dc;
+    border-top: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    .sub-content-inner {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      align-items: center;
+      gap: 10px;
+    }
+
+
+    .win-late-chart {
+      width: fit-content;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .win-late-description {
+        position: absolute;
+        font-weight: 700;
+        font-size: 1.2em;
+      }
+
+
+    }
+    .game-record-description {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      span {
+        font-size: 18px;
+      }
+
+      .bottom-des {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        //gap: 5px;
+
+        .total-count {
+          font-size: 18px;
+          font-weight: 700;
+        }
+        .count {
+          font-size: 14px;
+          color: #808080;
+        }
+      }
+    }
+
+    .champion-win-late {
+      width: 60%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      span {
+        font-size: 18px;
+      }
+      .champion-des {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        width: 100%;
+      }
+
+      .sub-champion {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        img {
+          width: 70px;
+          height: 70px;
+          border-radius: 10px;
+        }
+
+        .champion-win-late-info-des {
+          display: flex;
+          flex-direction: column;
+          gap: 7px;
+
+          .champion-win-late-des1 {
+            font-size: 18px;
+            color: #00d1ff;
+            font-weight: 600;
+          }
+
+          .champion-win-late-des2 {
+            font-size: 18px;
+
+          }
+          .champion-win-late-des3 {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+  .game-mode {
+    border: 1.5px solid #c3d1dc;
+    width: 703px;
+    min-height: 61px;
+    border-radius: 5px;
+    margin-top: 10px;
+
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.btn-box {
+  width: 95%;
+  display: flex;
+  gap: 20px;
+
+  .select-btn {
+    width: 100px;
+    height: 40px;
+    cursor: pointer;
+    background-color: #fff;
+    border: none;
+
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    box-shadow: 0 4px 6px -3px grey;
+
+  }
+
+  .clicked {
+    background-color: #13D8F6;
+    color: #fff;
+    //box-shadow: inset 2px 2px 4px 3px #7E7E7E;
+    box-shadow: inset 2px 2px 4px 3px #0d9cb2;
+  }
+}
