@@ -68,7 +68,6 @@ const Detail = () => {
 
             if (res.ok) {
                 const json = await res.json();
-                // console.log(json);
                 // 성공적으로 처리된 경우에 수행할 작업 추가
             } else {
                 console.error('Error:', res.status);
@@ -117,7 +116,6 @@ const Detail = () => {
             return
         }
         fetchBoardUpload();
-        console.log(replyText);
         setReplyText("");
         setTotalReply(totalReply + 1);
         alert("댓글이 등록되었습니다.");
@@ -144,7 +142,6 @@ const Detail = () => {
             })
 
         }).then(res => {
-            console.log(res.status)
         });
     };
     const useConfirm = (message = null, onConfirm, onCancel) => {
@@ -168,7 +165,6 @@ const Detail = () => {
     const deleteConfirm = () => {
         detailDelete();
         getReplyCount();
-        console.log("삭제했습니다.");
         redirection('/board/main/FreeBoard');
     };
     const cancelConfirm = () => console.log("취소했습니다.");
@@ -195,11 +191,9 @@ const Detail = () => {
             body: JSON.stringify({boardId: data.bulletinId})
         }).then(res => {
             if (res.status === 200) {
-                console.log("잘 만들어짐");
-                findLike();
+                modifyLike();
             }
             if (res.status === 400) {
-                console.log('이미 만들어짐');
             }
         })
     }
@@ -213,12 +207,12 @@ const Detail = () => {
             body: JSON.stringify({boardId: data.bulletinId})
         }).then(res => {
             if (res.status === 200) {
-                console.log("좋아요 수정 됨");
                 findLike();
             }
         }).then(json=>{
             if(!json===null){
                 setTotalLike(json);
+                createLike()
             }
         })
     }
@@ -236,16 +230,13 @@ const Detail = () => {
                 setLikeToggle(json.up);
                 setTotalLike(json.total);
             } else {
-                console.log("조회 실패");
             }
         } catch (error) {
             createLike();
-            console.error("오류 발생:", error);
         }
     }
     const likeHanlder = () => {
         modifyLike();
-        console.log("클릭됨");
     };
     const getImg = async () => {
         await fetch(`${LOAD_PROFILE_URL}?bulletinId=${Id}`)
@@ -297,7 +288,7 @@ const Detail = () => {
                     </div>
                     <div className="content-bottom">
                         {
-                            likeToggle === 0 ?
+                            likeToggle === 1 ?
                                 <GoHeart className="p" size={12 * 2} onClick={likeHanlder}/>
                                 :
                                 <GoHeartFill className="p" color="red" size={12 * 2} onClick={likeHanlder}/>
@@ -357,6 +348,7 @@ const Detail = () => {
                             shape="rounded"
                             onChange={pageHandler}
                         />
+
                     </div>
                 </div>
             </section>
