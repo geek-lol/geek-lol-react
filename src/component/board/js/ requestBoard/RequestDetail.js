@@ -67,7 +67,6 @@ const RequestDetail = () => {
             return res.json(); // JSON 형식으로 응답을 파싱
         }).then(json => {
             setItem(json);
-            console.log(json);
             setTotalLike(json.upCount);
         })
     }
@@ -89,8 +88,6 @@ const RequestDetail = () => {
             });
 
             if (res.ok) {
-                // const json = await res.json();
-                // console.log(json);
                 // 성공적으로 처리된 경우에 수행할 작업 추가
             } else {
                 console.error('Error:', res.status);
@@ -121,11 +118,11 @@ const RequestDetail = () => {
             body: JSON.stringify({applyId: id})
         }).then(res => {
             if (res.status === 200) {
-                console.log("잘 만들어짐");
+                // console.log("잘 만들어짐");
                 findLike();
             }
             if (res.status === 400) {
-                console.log('이미 만들어짐');
+                // console.log('이미 만들어짐');
             }
         })
     }
@@ -139,7 +136,7 @@ const RequestDetail = () => {
             body: JSON.stringify({applyId: id})
         }).then(res => {
             if (res.status === 200) {
-                console.log("좋아요 수정 됨");
+                // console.log("좋아요 수정 됨");
                 findLike();
             }
         })
@@ -155,15 +152,15 @@ const RequestDetail = () => {
             });
             if (res.status === 200) {
                 const json = await res.json(); // JSON 형식으로 파싱
-                console.log('조회잘됨');
+                // console.log('조회잘됨');
                 setLikeToggle(json.up);
-                console.log("TOTAL:"+json.total);
+                // console.log("TOTAL:"+json.total);
                 setTotalLike(json.total);
             } else {
-                console.log("조회 실패");
+                // console.log("조회 실패");
             }
         } catch (error) {
-            console.error("오류 발생:", error);
+            // console.error("오류 발생:", error);
             createLike();
         }
     }
@@ -205,13 +202,13 @@ const RequestDetail = () => {
                         <h1>{item.title}</h1>
                         <div className="detail-info-box">
                             <div className="info-front">
-                                <p>작성일자 - {formatDate(item.localDateTime, "day")}</p><p>|</p>
-                                <p>작성자 - {item.posterName}</p>
+                                <p>작성일자  {formatDate(item.localDateTime, "day")}</p><p>|</p>
+                                <p>작성자 : {item.posterName}</p>
                             </div>
                             <div className="info-back">
-                                <p>조회수 - {item.viewCount - 1}</p><p>|</p>
-                                <p>댓글 - {item.replyCount}</p><p>|</p>
-                                <p>추천 - {totalLike}</p>
+                                <p>조회수  {item.viewCount - 1}</p><p>|</p>
+                                <p>댓글  {item.replyCount}</p><p>|</p>
+                                <p>추천  {totalLike}</p>
                             </div>
                         </div>
                         <div className="videoPlayer">

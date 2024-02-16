@@ -44,7 +44,6 @@ const RequestBoard = () => {
         } else if (title === '작성자') {
             setRbTitle('writer');
         }
-        console.log(rbtitle);
     }, [title]);
 
     useEffect(() => {
@@ -62,7 +61,6 @@ const RequestBoard = () => {
             .then(json => {
                 if (!json) return;
                 SetRequestBoard(json.boardApply);
-                console.log(json.boardApply);
                 setTotalPage(json.totalPages);
             });
     }, [toggle, page]);
@@ -75,7 +73,6 @@ const RequestBoard = () => {
         setType("like");
     };
     const search = () => {
-        console.log(rbtitle, inputContent);
         fetch(`${TROLL_APPLY_URL}/search`, {
             method: 'POST',
             headers: {
@@ -84,7 +81,6 @@ const RequestBoard = () => {
             body: JSON.stringify({type: rbtitle, keyword: inputContent})
         })
             .then(res => {
-                console.log(res.status);
                 if (res.status === 200) {
                     return res.json();
 
@@ -96,7 +92,6 @@ const RequestBoard = () => {
             });
     }
     const pageHandler = (e) => {
-        console.log(+e.target.innerText)
         setPage(e.target.innerText);
     };
     const inputHandler = (e) => {

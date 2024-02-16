@@ -58,7 +58,7 @@ const SelectDetail = () => {
             })
             .then(json => {
                 if (!json) return;
-                console.log(json.reply);
+                // console.log(json.reply);
                 setReplyList(json.reply);
                 setTotalReply(json.totalCount);
                 setTotalPage(json.totalPages);
@@ -78,7 +78,7 @@ const SelectDetail = () => {
                 return res.json();
             }
         }).then(json => {
-            console.log(json);
+            // console.log(json);
 
             setC(json.cons);
             setP(json.pros);
@@ -95,10 +95,10 @@ const SelectDetail = () => {
             body: JSON.stringify({vote: text, rulingId: location.state.rulingId})
         }).then(res => {
             if(res.status===200){return res.json();}
-            console.log(res.status);
+            // console.log(res.status);
         }).then(json=>{
             if(json===undefined){
-                console.log("Asdf");return}
+                return}
             setCons(Math.round(json.consPercent)+"%");
             setPros(Math.round(json.prosPercent)+"%");
             setC(json.cons);
@@ -207,12 +207,12 @@ const SelectDetail = () => {
                         <h1>{title}</h1>
                         <div className="detail-info-box">
                             <div className="info-front">
-                                <p>작성일자 - {formatDate(rulingDate,"day")}</p><p>|</p>
-                                <p>작성자 - {applyPosterName}</p>
+                                <p>작성일자  {formatDate(rulingDate,"day")}</p><p>|</p>
+                                <p>작성자 : {applyPosterName}</p>
                             </div>
                             <div className="info-back">
-                                <p>조회수 - {viewCount - 1}</p><p>|</p>
-                                <p>댓글 - {replyCount}</p>
+                                <p>조회수  {viewCount - 1}</p><p>|</p>
+                                <p>댓글  {replyCount}</p>
                             </div>
                         </div>
                         <div className="videoPlayer">
