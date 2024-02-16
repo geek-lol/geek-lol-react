@@ -1,18 +1,28 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import cn from "classnames";
 import {BsCaretLeftFill, BsPlusLg, BsSend} from "react-icons/bs";
-import {BOARD_REPLY_URL} from "../../../../config/host-config";
+import {BOARD_REPLY_URL, USER_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import Shorts_comment_list from "./Shorts_comment_list";
 import '../scss/Shorts_comment.scss'
-import axios from "axios";
-import {brown} from "@mui/material/colors";
 
 const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
-    const {shortsId} = item;
+    const {shortsId, replyCount} = item;
     const API_BASE_URL = BOARD_REPLY_URL;
+    const API_IMG_URL = USER_URL;
+
+    const [imgUrl, setImgUrl] = useState();
     const token = getCurrentLoginUser().token;
 
+    const requestHeader = {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+
+    const containerRef = useRef(null);
+
+    const [page, setPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(true);
     const [shortReplyList, setShortReplyList] = useState([]); //replyList
     const [shortReplyCount, setShortReplyCount] = useState([]);
     const [replyValue, setReplyValue] = useState({context: ''});
@@ -25,10 +35,34 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             [name]: value,
         });
     };
+    const fetchUserImg = async () => {
+
+        const url = `${API_IMG_URL}/load-profile`;
+        const res = await fetch(url, {
+            method: "GET",
+            headers: requestHeader
+        });
+
+        if (res.status === 200) {
+            const imgData = await res.blob();
+
+            // blob이미지를 url로 변환
+            const profileUrl = window.URL.createObjectURL(imgData);
+
+            setImgUrl(profileUrl);
+            // console.log(profileUrl);
+
+        } else {
+            const errMsg = await res.text();
+            alert(errMsg);
+            setImgUrl(null);
+        }
+
+    };
 
     const addReply = async () => {
         try {
-            const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=${size}`, {
+            const res = await fetch(`${API_BASE_URL}/${shortsId}?page=1&size=15`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,8 +76,14 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             const json = await res.json();
             setReplyValue({context: ''});
             setShortReplyList(json.reply);
-            console.log(json.reply);
+            // console.log(json.reply);
             setShortReplyCount(json.totalCount);
+            // Reset page to 1
+            setPage(2);
+
+            // Scroll to top
+            containerRef.current.scrollTop = 0;
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -52,8 +92,6 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     const submitHandler = (e) => {
         e.preventDefault();
         addReply();
-
-
     };
 
     useEffect(() => {
@@ -61,75 +99,67 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     }, [replyValue]);
 
     // const [items, setItems] = useState([])
-    const [page, setPage] = useState(1);
-    const [size, setSize] = useState(12);
-    const [loading, setLoading] = useState(false);
-    const [ref, inView] = useState(null);
 
-    const getItems = useCallback(async () => {
-        setLoading(true);
 
-        try {
-            const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=${size}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
+
+    const fetchData = async () => {
+        if (replyCount !== 0) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=15`, {
+                    method: 'GET'
+                });
+
+                if (!res.ok) {
+                    throw new Error(`HTTP 오류! 상태: ${res.status}`);
                 }
-            });
 
-            if (!res.ok) {
-                throw new Error(`HTTP 오류! 상태: ${res.status}`);
+                const json = await res.json();
+                setShortReplyList(prevList => [...prevList, ...json.reply]);
+                setPage(prevPage => prevPage + 1);
+
+            } catch (error) {
+                console.log('데이터 없음');
             }
-
-            const json = await res.json();
-            setShortReplyList(json.reply); // 가져온 댓글로 항목을 업데이트합니다.
-            setShortReplyCount(json.totalCount);
-        } catch (error) {
-            console.error('데이터를 가져오는 중 오류 발생:', error);
-        } finally {
-            setLoading(false);
+            setIsLoading(false);
         }
-        // const fetchData = async () => {
-        //     try {
-        //         const res = await fetch(`${API_BASE_URL}/${shortsId}?page=1&size=15`, {
-        //             method: 'GET',
-        //             headers: {
-        //                 'Content-Type': 'application/json'
-        //             }
-        //         });
-        //         if (res.status === 200) {
-        //             const json = await res.json();
-        //             console.log(json.reply);
-        //             setShortReplyList(json.reply);
-        //             setShortReplyCount(json.totalCount);
-        //         } else if (!res.ok) {
-        //             throw new Error(`HTTP error! Status: ${res.status}`);
-        //         }
-        //
-        //     } catch (error) {
-        //         console.error('Error fetching data:', error);
-        //     }
-        // };
-        // fetchData();
-    }, [page]);
+    };
+
+
+
+
 
     useEffect(() => {
-        getItems();
-    }, [getItems])
+        fetchUserImg();
+        fetchData();
+    }, []);
 
 
-    // useEffect(() => {
-    //     if (size > shortReplyCount) {
-    //         setSize(shortReplyCount);
-    //     } else {
-    //
-    //         // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
-    //         if (inView) {
-    //             setPage(shortReplyList => shortReplyList + 1)
-    //         }
-    //     }
-    // }, [inView])
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+        const handleScroll = () => {
+            if (
+                containerRef.current &&
+                containerRef.current.scrollTop + containerRef.current.clientHeight >=
+                containerRef.current.scrollHeight
+            ) {
+                fetchData();
+            }
+        };
 
+        container.addEventListener('scroll', handleScroll);
+        return () => {
+            container.removeEventListener('scroll', handleScroll);
+        };
+    }, [fetchData]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <div className={'comment-container'}>
@@ -140,21 +170,24 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                 </div>
                 <BsPlusLg className={cn('comment-close-btn', {close_animation: viewComment})} onClick={chkViewComment}/>
             </div>
-            <div className={'comment-box'}>
-                <ul className={'comment-list scrollBar'}>
-                    {shortReplyList.map((reply) => (
-                        <Shorts_comment_list
-                            ref={ref}
-                            key={reply.shortsId}
-                            shortReplyList={reply}
-                            item={item}
-                        />
-                    ))}
-                </ul>
+            <div ref={containerRef} className={'comment-box'}>
+                {isLoading ? (
+                    <p>Loading...</p>
+                ) : (
+                    <ul className={'comment-list scrollBar'}>
+                        {shortReplyList && shortReplyList.map((reply) => (
+                            <Shorts_comment_list
+                                key={reply.id}
+                                shortReplyList={reply}
+                                item={item}
+                            />
+                        ))}
+                    </ul>
+                )}
             </div>
             <div className={'comment-save'}>
                 <div className={'comment-save-profile'}>
-                    <img src={process.env.PUBLIC_URL + '/assets/test_icon2.jpg'} alt="프로필이미지"/>
+                    <img src={imgUrl} alt="프로필이미지"/>
                 </div>
                 <div className={'comment-input-box'}>
                     <input

@@ -64,6 +64,7 @@ const Header = ({sendTouch}) => {
     const [isInput, setIsInput] = useState(true);
     const [isLoggedIn, setIsLogin] = useState(false);
     const location = useLocation();
+    const[role,setRole]=useState(getCurrentLoginUser().role);
 
     useEffect(() => {
         const path = location.pathname;
@@ -171,8 +172,8 @@ const Header = ({sendTouch}) => {
                             </ul>
                             미니게임
                         </div>
-                        <p className="nav-item" active-color="yellowgreen"
-                           onClick={(e) => handleIndicator(e.target)}>트롤사형투표</p>
+                        {role==="ADMIN"?<Link className="nav-item" active-color="yellowgreen"
+                           onClick={(e) => handleIndicator(e.target)} to="/admin">어드민</Link>:null}
                         <span className="nav-indicator" style={{
                             width: indicatorStyle.width,
                             left: indicatorStyle.left,

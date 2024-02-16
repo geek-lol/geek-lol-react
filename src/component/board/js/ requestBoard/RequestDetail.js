@@ -9,10 +9,8 @@ import {
 } from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import RequestBoardReply from "../../RequestBoardReply";
-import {VscAccount} from "react-icons/vsc";
-import {BsChatDots} from "react-icons/bs";
-import {FaEye} from "react-icons/fa";
 import {GoHeart, GoHeartFill} from "react-icons/go";
+import {formatDate} from "../../../../utils/format-date";
 
 const RequestDetail = () => {
     const {id} = useParams();
@@ -124,9 +122,7 @@ const RequestDetail = () => {
         }).then(res => {
             if (res.status === 200) {
                 console.log("잘 만들어짐");
-                modifyLike();
                 findLike();
-
             }
             if (res.status === 400) {
                 console.log('이미 만들어짐');
@@ -199,87 +195,100 @@ const RequestDetail = () => {
 
     return (
         <>
-            <section id="section">
-                <div className="box">
-                    <div className="live-feed">
+            <div>
+                <section className="detailSection">
+                    <div className="DetailTop">
+                        <h1 className="RequestTitle">트롤재판소</h1>
+                        <h2 className="subTile">누가 트롤인지 여러분의 손으로 정해보세요!</h2>
+                    </div>
+                    <div className="DetailMid">
+                        <h1>{item.title}</h1>
+                        <div className="detail-info-box">
+                            <div className="info-front">
+                                <p>작성일자 - {formatDate(item.localDateTime, "day")}</p><p>|</p>
+                                <p>작성자 - {item.posterName}</p>
+                            </div>
+                            <div className="info-back">
+                                <p>조회수 - {item.viewCount - 1}</p><p>|</p>
+                                <p>댓글 - {item.replyCount}</p><p>|</p>
+                                <p>추천 - {totalLike}</p>
+                            </div>
+                        </div>
                         <div className="videoPlayer">
                             <ReactPlayer
                                 light={false}
                                 pip={true}
                                 controls={true}
                                 url={Video}
-                                width='800px'
-                                height={'600px'}
+                                width='700px'
+                                height={'400px'}
 
                             />
-                            <div className="infobox">
-                                {
-                                    likeToggle === 0 ?
-                                        <div className="info" onClick={likeHanlder}><GoHeart className="p"
-                                                                                             size={15 * 2}/><span>{totalLike}</span>
-                                        </div>
-                                        :
-                                        <div className="info" onClick={likeHanlder}><GoHeartFill className="p"
-                                                                                                 color="red"
-                                                                                                 size={15 * 2}/><span>{totalLike}</span>
-                                        </div>
-
-                                }
-                                <div className="info"><VscAccount size={15 * 2}/><span>{item.posterName}</span></div>
-                                <div className="info"><BsChatDots size={15 * 2}/><span>{item.reportCount}</span></div>
-                                <div className="info"><FaEye size={15 * 2}/><span>{item.viewCount}</span></div>
-                            </div>
                         </div>
 
-                    </div>
-                    <div className="comment">
-                        <div className="messages" id="live-chat">
-                            <h1>Title : {item.title}</h1>
-                            <span>{item.content}</span>
-                        </div>
-                    </div>
-                </div>
-                <div className="detail-comment">
-                    <form className="detail-comment-form" onChange={replyOnChangeHandler}>
-                        <TextField
-                            id="outlined-basic"
-                            label="댓글 쓰기"
-                            variant="outlined"
-                            fullWidth
-                            multiline
-                            rows={3}
-                            maxRows={3}
-                            sx={{
-                                fontSize: 36,
-                                width: '90%',
-                                borderRadius: '34px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                textAlign: 'center'
-                            }}
-                            value={replyText}
-                        />
-                        <Button
-                            id="bttt"
-                            onClick={inputTextHandler}
-                        >등록</Button>
-                    </form>
-                    <div className="comment-box">
+                        <span className="detailContent">{item.content}</span>
                         {
-                            replyList.map(con =>
-                                <RequestBoardReply item={con} getReplyCount={getReplyCount}/>
-                            )}
-                        <Pagination
-                            activePage={page}
-                            count={totalPage}
-                            variant="outlined"
-                            color="primary"
-                            shape="rounded"
-                            onChange={pageHandler}
-                        />
+                            likeToggle === 1 ?
+                                <div className="info" onClick={likeHanlder}><GoHeart className="p"
+                                                                                     size={25 * 2}/><span>{totalLike}</span>
+                                </div>
+                                :
+                                <div className="info" onClick={likeHanlder}><GoHeartFill className="p"
+                                                                                         color="red"
+                                                                                         size={25 * 2}/><span>{totalLike}</span>
+                                </div>
+
+                        }
+                        <span className="pp">좋아요를 눌러서 투표에 선정되게 도와주세요!</span>
+
                     </div>
-                </div>
-            </section>
+                    <div className="DetailBottom">
+                        <h1 className="replyTitle">댓글</h1>
+                        <form className="detail-comment-form" onChange={replyOnChangeHandler}>
+                            <TextField
+                                id="outlined-basic"
+                                label="댓글 쓰기"
+                                variant="outlined"
+                                fullWidth
+                                multiline
+                                rows={3}
+                                maxRows={3}
+                                sx={{
+                                    fontSize: 36,
+                                    width: '90%',
+                                    borderRadius: '34px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    textAlign: 'center'
+                                }}
+                                value={replyText}
+                            />
+                            <Button
+                                id="bttt"
+                                variant="outlined"
+                                fullWidth
+                                sx={{width: '15%', marginLeft: 1}}
+                                onClick={inputTextHandler}
+                            >등록</Button>
+                        </form>
+                        <div className="comment-box">
+                            {
+                                replyList.map(con =>
+                                    <RequestBoardReply item={con} getReplyCount={getReplyCount}/>
+                                )}
+                            <Pagination
+                                activePage={page}
+                                count={totalPage}
+                                variant="outlined"
+                                color="primary"
+                                shape="rounded"
+                                onChange={pageHandler}
+                            />
+                        </div>
+                    </div>
+
+                </section>
+            </div>
         </>
 
 

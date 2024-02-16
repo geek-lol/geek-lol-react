@@ -4,13 +4,15 @@ const DetailSpellInfo = ({ spellKey, viewSpell, setViewSpell, index, getSpellByK
     <>
         <div
             className={`detail-spell-description ${viewSpell[index] ? 'show' : ''}`}>
-            <span>{getSpellByKey(spellKey.toString()).description}</span>
+            <p>{getSpellByKey(spellKey.toString()).name}</p>
+            <hr/>
+            <p>{getSpellByKey(spellKey.toString()).description}</p>
         </div>
         <img
             src={`https://ddragon.leagueoflegends.com/cdn/14.2.1/img/spell/${getSpellByKey(spellKey.toString()).image.full}`}
             alt="소환사 주문"
             className="summoner-spell-image"
-            width={'20px'}
+            width={'18px'}
             onMouseEnter={() => {
                 const newIsShowDetailSpell = [...viewSpell];
                 newIsShowDetailSpell[index] = true;

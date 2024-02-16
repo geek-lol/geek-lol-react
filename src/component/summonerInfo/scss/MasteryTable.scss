@@ -1,0 +1,86 @@
+.dummy {
+  height: 100px;
+}
+
+.all-mastery-container {
+  font-family: 'Nanum Gothic', sans-serif;
+  font-weight: 500;
+  border: 1.5px solid #c3d1dc;
+  border-top: none;
+  display: flex;
+  justify-content: center;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+
+  .champion-mastery-table {
+    width: 100%;
+
+    .champion-mastery-thead {
+      height: 40px;
+      font-weight: 700;
+
+      .champion-mastery-thead-tr {
+
+        .champion-mastery-thead-tr-th {
+          vertical-align: middle;
+        }
+      }
+    }
+
+    .champion-mastery-tbody {
+      text-align: center;
+
+      .champion-mastery-tbody-tr {
+        height: 100px;
+        horiz-align: center;
+        border-top: 1px solid #c3d1dc;
+        border-bottom: 1px solid #c3d1dc;
+
+        .champion-mastery-tbody-tr-td {
+          vertical-align: middle;
+          font-weight: 700;
+
+          .champion-mastery-image-container {
+            height: 75px;
+            position: relative;
+
+            img {
+              position: absolute;
+              inset: 0;
+            }
+
+            span {
+              position: absolute;
+              inset: 60px 0 0 0;
+              background: #000;
+              color: white;
+              font-weight: 700;
+              height: 15px;
+              font-size: 12px;
+            }
+          }
+
+          .champion-mastery-champion-image-container {
+            position: relative;
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            font-weight: 700;
+
+            img {
+              position: absolute;
+              top: 0;
+              width: 50px;
+              border-radius: 5px;
+            }
+            span {
+              position: absolute;
+              bottom: 0;
+              height: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

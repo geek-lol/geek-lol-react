@@ -45,6 +45,14 @@ export const gameTimeFunc = (t) => {
     return year + "-" + month.substr(-2) + "-" + day.substr(-2) + " " + hour.substr(-2) + ":" + minute.substr(-2) + ":" + second.substr(-2);
 }
 
+export const gameDateFunc = (t) => {
+    const date = new Date(t);
+    const year = date.getFullYear();
+    const month = "0" + (date.getMonth() + 1);
+    const day = "0" + date.getDate();
+    return year + "-" + month.substr(-2) + "-" + day.substr(-2);
+}
+
 export const secondsToMinutesAndSeconds = (seconds) => {
     const minutes = padZero(Math.floor(seconds / 60));
     const remainingSeconds = padZero(seconds % 60);

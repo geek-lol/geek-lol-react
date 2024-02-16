@@ -13,6 +13,7 @@ import SpectorMain from "./component/spector/js/SpectorMain";
 import "./component/LinkReset.scss"
 import MainScene from "./component/game/js/FcsGame";
 import InfoTemplate from "./component/summonerInfo/js/InfoTemplate";
+import RiotText from "./component/RiotText";
 import {getCurrentLoginUser} from "./utils/login-util";
 import MyPageTemplate from "./component/mypage/js/MyPageTemplate";
 import AdminPage from "./component/admin/js/AdminPage";
@@ -89,6 +90,7 @@ function App() {
                 <Route path="/mypage/*" element={<MyPageTemplate />} />
                 <Route path="/resgame" element={<ResponseTime /> }/>
                 <Route path="/csgame" element={<MainScene />}/>
+                <Route path="/riot" element={<RiotText />} /> {/* Add this route for RiotText */}
                 <Route path="/admin" element={<AdminPage />} />
             </Routes>
         </>

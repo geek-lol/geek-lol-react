@@ -85,6 +85,7 @@ const RequestContent = ({item}) => {
                         <div className="player">
                         <ReactPlayer
                             ref={playerRef}
+                            on
                             url={video}
                             controls={false}
                             muted={true}

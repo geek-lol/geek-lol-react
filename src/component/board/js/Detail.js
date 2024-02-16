@@ -6,6 +6,7 @@ import {json, Link, useNavigate, useParams} from "react-router-dom";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import BoardReply from "../BoardReply";
 import {GoHeart, GoHeartFill} from "react-icons/go";
+import {formatDate} from "../../../utils/format-date";
 
 const Detail = () => {
     const GetData = (Id) => {
@@ -42,6 +43,7 @@ const Detail = () => {
     const [totalPage, setTotalPage] = useState();
     const [likeToggle, setLikeToggle] = useState();
     const redirection = useNavigate();
+    const[totalLike,setTotalLike]=useState(null);
 
     useEffect(() => {
         setData({...item});
@@ -88,7 +90,7 @@ const Detail = () => {
         getImg();
     }, []);
     const Replyrendering = async () => {
-        await fetch(`${REPLY_URL}/${data.bulletinId}?page=${page}`, {
+        await fetch(`${REPLY_URL}/${Id}?page=${page}`, {
             method: 'GET',
             headers: {'content-type': 'application/json'},
         })
@@ -214,6 +216,10 @@ const Detail = () => {
                 console.log("좋아요 수정 됨");
                 findLike();
             }
+        }).then(json=>{
+            if(!json===null){
+                setTotalLike(json);
+            }
         })
     }
     const findLike = async () => {
@@ -228,7 +234,7 @@ const Detail = () => {
             if (res.status === 200) {
                 const json = await res.json(); // JSON 형식으로 파싱
                 setLikeToggle(json.up);
-                console.log(json.up);
+                setTotalLike(json.total);
             } else {
                 console.log("조회 실패");
             }
@@ -276,13 +282,13 @@ const Detail = () => {
                         <h1>{data.title}</h1>
                         <div className="detail-info-box">
                             <div className="info-front">
-                                <p>{data.localDateTime}</p><p>|</p>
+                                <p>{formatDate(data.localDateTime,"day")}</p><p>|</p>
                                 <p>{data.posterName}</p>
                             </div>
                             <div className="info-back">
                                 <p>조회수 {data.viewCount - 1}</p><p>|</p>
                                 <p>댓글 {totalReply}</p><p>|</p>
-                                <p>추천 {data.upCount}</p>
+                                <p>추천 {totalLike}</p>
                             </div>
                         </div>
                     </div>
@@ -351,11 +357,6 @@ const Detail = () => {
                             shape="rounded"
                             onChange={pageHandler}
                         />
-                        <div className="moveBox">
-                            <button className="move-button clicked">이전글</button>
-                            <button className="move-button">게시판으로</button>
-                            <button className="move-button">다음 글</button>
-                        </div>
                     </div>
                 </div>
             </section>

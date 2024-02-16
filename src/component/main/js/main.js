@@ -34,16 +34,27 @@ const Main = () => {
           alert('소환사명을 입력해주세요.');
           return;
       }
-      setSplitValue([splitInput[0], splitInput[1] ? splitInput[1] : 'KR1']);
+
+      var regex = /^[가-힣]{2}$/;
+      var characters = splitInput[0].split('');
+
+      if(regex.test(splitInput[0])) {
+          var stringWithSpaces = characters.join(' ');
+
+          setSplitValue([stringWithSpaces, splitInput[1] ? splitInput[1] : 'KR1']);
+      } else {
+          setSplitValue([splitInput[0], splitInput[1] ? splitInput[1] : 'KR1']);
+      }
+
     };
     return (
         <>
 
             <div className='mainBox'>
                 <div className='main__Title'>
-                    <a href='#' className='title__logo'>
-                        <img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지" />
-                    </a>
+                    <div className='title__logo'>
+                        <img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지" className={"logo-image"} />
+                    </div>
                 </div>
                 <div className='input__Title'>
                     <Input value={inputValue} onChange={handleChange} onSubmit={handleSubmit}/>

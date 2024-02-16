@@ -4,7 +4,7 @@ import {TROLL_RULING_BOARD_URL} from "../../../../config/host-config";
 import {Link} from "react-router-dom";
 
 const HeaderCard = ({item,isBool}) => {
-    const {posterId,rulingId,title}=item;
+    const {posterId,rulingId,title}=item||{};
     const [Video, setVideo] = useState();
     const playerRef = useRef(null);
     const [data,setData]=useState(null);
@@ -85,8 +85,8 @@ const HeaderCard = ({item,isBool}) => {
                 </div>
                 <div className="main-text2">
                     {isBool ?
-                        <Link to="/board/SelectDetail" state={{data:data}}><p>이전 투표글로</p></Link> :
-                        <Link to="/board/SelectDetail" state={{data:data}}><p>다음 투표글로</p></Link>
+                        <Link to="/board/SelectDetail" state={{data:data,rulingId:rulingId}}><p>이전 투표글로</p></Link> :
+                        <Link to="/board/SelectDetail" state={{data:data,rulingId:rulingId}}><p>다음 투표글로</p></Link>
 
                     }
                 </div>

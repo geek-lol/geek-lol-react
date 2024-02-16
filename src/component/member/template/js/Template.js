@@ -13,7 +13,8 @@ const Template = () => {
         <div className={'wrapper'}>
             <form>
                 <div className={'container blur'}>
-                    <div className="logo_box"><img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지"/></div>
+                    <div className="logo_box"><img src={process.env.PUBLIC_URL + '/assets/logo.png'} alt="로고이미지"/>
+                    </div>
 
                     <Routes>
                         <Route path="/login" element={<Login/>}/>

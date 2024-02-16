@@ -1,21 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import "../scss/Login.scss";
 import {Link, Route, Routes, useNavigate} from "react-router-dom";
-import {USER_URL} from "../../../../config/host-config";
+import {GOOGLE_URL, USER_URL} from "../../../../config/host-config";
 
 const Login = () => {
     const SIGN_IN_URL = USER_URL + "/signin";
+    const GOOGLE_LOGIN_URL = GOOGLE_URL + "/social-login";
     const redirection = useNavigate();
 
     const [autoLogin, setAutoLogin] = useState(false);
 
 
-
     // 로그인
-    const fetchLoginProcess =  async () => {
-        const res = await fetch(SIGN_IN_URL,{
+    const fetchLoginProcess = async () => {
+        const res = await fetch(SIGN_IN_URL, {
             method: 'POST',
-            headers: { 'content-type': 'application/json' },
+            headers: {'content-type': 'application/json'},
             body: JSON.stringify({
                 id: document.getElementById('email').value,
                 password: document.getElementById('password').value,
@@ -45,12 +45,41 @@ const Login = () => {
 
             redirection('/');
         }
+
+    }
+    const clientId = '359869824371-71gd7mhnch2mbmej6ec29h7mas5c60e1.apps.googleusercontent.com';
+    const uri = 'http://localhost:8686/auth/google/social-login';
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code
+        &scope=openid%20email&client_id=
+        ${clientId}&redirect_uri=${uri}`;
+    const googleLoginProcess = async () => {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            // body: JSON.stringify()
+        });
+
+        if (res.status === 400) { // 가입이 안되었거나 비번이 틀린 경우
+            // 서버에서 온 텍스트를 추출
+            const text = await res.text();
+            alert(text);
+            return;
+        }
     }
 
 
     const loginHandler = e => {
         e.preventDefault();
         fetchLoginProcess();
+    }
+
+    const googleLogin = e => {
+        e.preventDefault();
+        window.open(url);
+        // googleLoginProcess();
+
+
+
     }
 
     const autoLoginHandler = e => {
@@ -80,18 +109,18 @@ const Login = () => {
                 <div className={'login-box easylogin-box'}>
                     <div className={'easy-login-text'}><a>간편로그인</a></div>
                     <div className={'easy-login'}>
-                        <div className={'easy-login-google'}></div>
+                        <div className={'easy-login-google'} onClick={googleLogin}></div>
                         <div className={'easy-login-kakao'}></div>
                     </div>
                 </div>
                 <div className={'login-box loginhelper'}>
                     <div className={'login-helper-box'}>
                         <div className={'login-helper'}>
-                            <Link to='/template/pwreset' >비밀번호 찾기</Link>
+                            <Link to='/template/pwreset'>비밀번호 찾기</Link>
                         </div>
                         <div className={'line2'}></div>
                         <div className={'login-helper sign-up'}>
-                            <Link to='/template/signup' >회원가입</Link>
+                            <Link to='/template/signup'>회원가입</Link>
                         </div>
                     </div>
                 </div>

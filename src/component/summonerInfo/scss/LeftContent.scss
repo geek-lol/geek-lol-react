@@ -33,7 +33,7 @@
       img {
         width: 114px;
         height: 114px;
-        border-radius: 10px;
+        border-radius: 5px;
       }
 
       .summoner-level {
@@ -62,9 +62,9 @@
     .ranking-nickname-container {
       display: flex;
       flex-direction: column;
-      gap: 10px;
       font-family: 'Nanum Gothic', sans-serif;
-
+      height: 114px;
+      justify-content: space-between;
 
       .nickname-prev-ranking {
         display: flex;
@@ -182,9 +182,53 @@
         align-items: flex-end;
 
         .tier {
-          color: #BA8D26;
           font-size: 20px;
           font-weight: 700;
+
+          &.unranked {
+            color: black;
+          }
+
+          &.iron {
+            color: #463627;
+          }
+
+          &.bronze {
+            color: #541616;
+          }
+
+          &.silver {
+            color: silver;
+          }
+
+          &.gold {
+            color: gold;
+          }
+
+          &.platinum {
+            color: #239949;
+          }
+
+          &.emerald {
+            color: #65d187;
+          }
+
+          &.diamond {
+            color: #00d3ff;
+          }
+
+          &.master {
+            color: #cc00cc;
+          }
+
+          &.grandmaster {
+            color: red;
+            font-size: 18px;
+          }
+
+          &.challenger {
+            color: #3f5efb;
+          }
         }
       }
 
