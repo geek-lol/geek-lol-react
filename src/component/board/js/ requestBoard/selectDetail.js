@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ReactPlayer from "react-player";
 import {Pagination, TextField} from "@mui/material";
-import {json, useLocation} from "react-router-dom";
+import {json, useLocation, useNavigate} from "react-router-dom";
 import "../../scss/SelectDetail.scss";
 import {Button, Modal} from 'react-bootstrap';
 import {GiLuciferCannon} from "react-icons/gi";
@@ -18,6 +18,8 @@ const SelectDetail = () => {
     const [dataList, setDataList] = useState([]);
     const [page, setPage] = useState(1);
     const location = useLocation();
+    const redirection = useNavigate();
+
     const {
         title,
         applyPosterId,
@@ -35,7 +37,6 @@ const SelectDetail = () => {
     const [inputText, setInputText] = useState();
     const [totalReply, setTotalReply] = useState(0);
     const [totalPage, setTotalPage] = useState();
-    const [likeToggle, setLikeToggle] = useState(0);
     const [replyList, setReplyList] = useState([]);
     const [totalLike, setTotalLike] = useState(null);
     const [vote, setVote] = useState(null);
@@ -78,11 +79,8 @@ const SelectDetail = () => {
                 return res.json();
             }
         }).then(json => {
-            // console.log(json);
-
             setC(json.cons);
             setP(json.pros);
-
         })
     }
     const setVoteData = async (text) => {
@@ -94,15 +92,24 @@ const SelectDetail = () => {
             },
             body: JSON.stringify({vote: text, rulingId: location.state.rulingId})
         }).then(res => {
-            if(res.status===200){return res.json();}
+            if (res.status === 200) {
+                return res.json();
+            }
+            alert("이전 투표글이거나 이미 투표하셨습니다.");
             // console.log(res.status);
-        }).then(json=>{
-            if(json===undefined){
-                return}
-            setCons(Math.round(json.consPercent)+"%");
-            setPros(Math.round(json.prosPercent)+"%");
+        }).then(json => {
+            if (json === undefined) {
+                return
+            }
+            if (json.error !== null) {
+                alert(json.error);
+                return;
+            }
+            setCons(Math.round(json.consPercent) + "%");
+            setPros(Math.round(json.prosPercent) + "%");
             setC(json.cons);
             setP(json.pros);
+        }).then(a => {
         })
     }
 
@@ -124,21 +131,26 @@ const SelectDetail = () => {
         }
     }
 
+
     const $blue_btn = document.querySelector('.blue-btn');
     const $red_btn = document.querySelector('.red-btn');
-    const [show, setShow] = useState(false);
     const blueClickHandler = () => {
-        // setVote();
+        if (!getCurrentLoginUser().token) {
+            alert("로그인이 필요합니다.");
+        }
         setVs(1);
         setVoteData("pros");
-        $blue_btn.style.width = "350px";
+
         $red_btn.style.width = "150px";
+        $blue_btn.style.width = "350px";
     };
     useEffect(() => {
         getVoteData();
     }, [vote]);
     const redClickHandler = () => {
-        // setVote();
+        if (!getCurrentLoginUser().token) {
+            alert("로그인이 필요합니다.");
+        }
         setVs(2);
         setVoteData("cons");
         $red_btn.style.width = "350px";
@@ -207,12 +219,12 @@ const SelectDetail = () => {
                         <h1>{title}</h1>
                         <div className="detail-info-box">
                             <div className="info-front">
-                                <p>작성일자  {formatDate(rulingDate,"day")}</p><p>|</p>
+                                <p>작성일자 {formatDate(rulingDate, "day")}</p><p>|</p>
                                 <p>작성자 : {applyPosterName}</p>
                             </div>
                             <div className="info-back">
-                                <p>조회수  {viewCount - 1}</p><p>|</p>
-                                <p>댓글  {replyCount}</p>
+                                <p>조회수 {viewCount - 1}</p><p>|</p>
+                                <p>댓글 {replyCount}</p>
                             </div>
                         </div>
                         <div className="videoPlayer">
@@ -230,7 +242,8 @@ const SelectDetail = () => {
                             <div className='blue-box'>
                                 <img src={process.env.PUBLIC_URL + '/assets/bluepng-removebg.png'} alt=""/>
                                 <hr className='hr'/>
-                                <div id="three" className="button BIG-red-button blue-btn" onClick={blueClickHandler}>{pros}
+                                <div id="three" className="button BIG-red-button blue-btn"
+                                     onClick={blueClickHandler}>{pros}
                                 </div>
                             </div>
                             <div className="empty-box">
@@ -248,7 +261,8 @@ const SelectDetail = () => {
                                 <img src={process.env.PUBLIC_URL + '/assets/red-removebg.png'} alt=""/>
                                 <hr className='hr'/>
 
-                                <div id="three" className="button BIG-red-button red-btn" onClick={redClickHandler}>{cons}
+                                <div id="three" className="button BIG-red-button red-btn"
+                                     onClick={redClickHandler}>{cons}
                                 </div>
                             </div>
                         </div>
