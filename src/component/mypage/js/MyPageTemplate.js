@@ -7,7 +7,7 @@ import MyActivityMain from "./activity/MyActivityMain";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import async from "async";
 
-const MyPageTemplate = () => {
+const MyPageTemplate = ({profileSet}) => {
     //mypage 렌더링 유형을 저장
     const [pageType, setPageType] = useState(1);
 
@@ -78,7 +78,7 @@ const MyPageTemplate = () => {
     return (
         <div className="mypage">
             <MypageSideMenu changeType={changeType} />
-            {pageType === 1 && <MyPageProfile userInfo={userInfo} myActivity={myActivity} />}
+            {pageType === 1 && <MyPageProfile userInfo={userInfo} myActivity={myActivity} profileSet={profileSet}/>}
             {pageType === 2 && <MyInformation userInfo={userInfo} changeUser ={changeUser} />}
             {pageType === 3 && <MyActivityMain />}
         </div>

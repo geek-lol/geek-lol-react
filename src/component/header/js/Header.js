@@ -9,7 +9,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import cn from "classnames";
 import {getCurrentLoginUser, isLogin} from "../../../utils/login-util";
 
-const Header = ({sendTouch}) => {
+const Header = ({sendTouch,profile}) => {
     //boardHeader 상태변수
     //nav 시작
     const [hovers1, sethover1] = useState(false);
@@ -164,10 +164,10 @@ const Header = ({sendTouch}) => {
                              }}>
                             <ul className={cn("hide-btn btn2", {hovers2: hovers2})}>
                                 <li>
-                                    <Link to="/csgame">민희언 주기깅</Link>
+                                    <Link to="/csgame">막타 치기</Link>
                                 </li>
                                 <li>
-                                    <Link to="/resgame">반응속도테스트</Link>
+                                    <Link className="atext" to="/resgame">반응속도테스트</Link>
                                 </li>
                             </ul>
                             미니게임
@@ -183,7 +183,7 @@ const Header = ({sendTouch}) => {
                             isInput === true && <SearchBox/>:null}
                     </div>
                     <ul className="certification__box">
-                        {isLoggedIn ? <Profile/> : <LoginBtn/>}
+                        {isLoggedIn ? <Profile profile={profile}/> : <LoginBtn/>}
                     </ul>
 
                 </nav>

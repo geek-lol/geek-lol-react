@@ -123,6 +123,9 @@ a{
         opacity: 0;
         transition: .3s;
       }
+      .atext{
+        font-size: 11px;
+      }
     }
 
     .nav-item:not(.is-active):hover:before {
