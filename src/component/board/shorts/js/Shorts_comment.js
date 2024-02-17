@@ -5,6 +5,7 @@ import {BOARD_REPLY_URL, USER_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import Shorts_comment_list from "./Shorts_comment_list";
 import '../scss/Shorts_comment.scss'
+import {redirect, useNavigate} from "react-router-dom";
 
 const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     const {shortsId, replyCount} = item;
@@ -13,11 +14,13 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
 
     const [imgUrl, setImgUrl] = useState();
     const token = getCurrentLoginUser().token;
+    const redirection = useNavigate();
 
     const requestHeader = {
         'content-type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
+    const defaultImageUrl = process.env.PUBLIC_URL + '/assets/defaultUser.jpg';
 
     const containerRef = useRef(null);
 
@@ -53,9 +56,8 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             // console.log(profileUrl);
 
         } else {
-            const errMsg = await res.text();
-            alert(errMsg);
-            setImgUrl(null);
+
+            console.log('로그인을 하지 않았습니다');
         }
 
     };
@@ -91,6 +93,10 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
 
     const submitHandler = (e) => {
         e.preventDefault();
+        if (!token) {
+            alert('로그인후 이용해주세요.');
+            redirection('/template/login');
+        }
         addReply();
     };
 
@@ -129,7 +135,12 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
 
 
     useEffect(() => {
-        fetchUserImg();
+        if (!token){
+            setImgUrl(defaultImageUrl);
+        } else {
+            fetchUserImg();
+        }
+
         fetchData();
     }, []);
 

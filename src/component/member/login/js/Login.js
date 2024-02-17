@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import "../scss/Login.scss";
 import {Link, Route, Routes, useNavigate} from "react-router-dom";
 import {GOOGLE_URL, USER_URL} from "../../../../config/host-config";
+import {isLogin} from "../../../../utils/login-util";
 
 const Login = () => {
     const SIGN_IN_URL = USER_URL + "/signin";
@@ -90,6 +91,7 @@ const Login = () => {
     useEffect(() => {
         // console.log(autoLogin);
     }, [autoLogin]);
+
 
     return (
         <div className={'loginform'}>

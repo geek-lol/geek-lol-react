@@ -7,7 +7,7 @@ import Profile from "./Profile";
 import MenuModal from "./MenuModal";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import cn from "classnames";
-import {getCurrentLoginUser, isLogin} from "../../../utils/login-util";
+import {getCurrentLoginUser, isLogin, ROLE} from "../../../utils/login-util";
 
 const Header = ({sendTouch,profile}) => {
     //boardHeader 상태변수
@@ -64,7 +64,8 @@ const Header = ({sendTouch,profile}) => {
     const [isInput, setIsInput] = useState(true);
     const [isLoggedIn, setIsLogin] = useState(false);
     const location = useLocation();
-    const[role,setRole]=useState(getCurrentLoginUser().role);
+    // const[role,setRole]=useState(getCurrentLoginUser().role);
+    const[role,setRole]=useState(localStorage.getItem(ROLE));
 
     useEffect(() => {
         const path = location.pathname;

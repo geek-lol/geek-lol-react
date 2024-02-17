@@ -43,7 +43,7 @@ const Detail = () => {
     const [totalPage, setTotalPage] = useState();
     const [likeToggle, setLikeToggle] = useState(1);
     const redirection = useNavigate();
-    const[totalLike,setTotalLike]=useState(null);
+    const [totalLike, setTotalLike] = useState(null);
 
     useEffect(() => {
         setData({...item});
@@ -209,8 +209,8 @@ const Detail = () => {
             if (res.status === 200) {
                 findLike();
             }
-        }).then(json=>{
-            if(!json===null){
+        }).then(json => {
+            if (!json === null) {
                 setTotalLike(json);
                 createLike()
             }
@@ -241,31 +241,18 @@ const Detail = () => {
         modifyLike();
     };
     const getImg = async () => {
-        await fetch(`${LOAD_PROFILE_URL}?bulletinId=${Id}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.arrayBuffer(); // 바이너리 데이터로 변환된 응답 받기
-            })
-            .then(arrayBuffer => {
-                // Blob 객체로 변환
-                const blob = new Blob([arrayBuffer]);
+        const response = await fetch(`${LOAD_PROFILE_URL}?bulletinId=${Id}`);
 
-                // Blob URL 생성
-                const imageUrl = URL.createObjectURL(blob);
+        if (response.status === 200) {
+            const mediaData = await response.text();
 
-                // 이미지를 표시할 DOM 요소에 설정
-                const imageElement = document.createElement('img');
-                imageElement.className = 'imgTag';
-                imageElement.src = imageUrl;
-                // 이미지를 표시할 DOM 요소에 추가
-                const contentCenter = document.querySelector('.content-center');
-                contentCenter.insertBefore(imageElement, contentCenter.firstChild); // 이미지를 첫 번째 자식으로 삽입
-            })
-            .catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
-            });
+            const imageElement = document.createElement('img');
+            imageElement.className = 'imgTag';
+            imageElement.src = mediaData;
+            // 이미지를 표시할 DOM 요소에 추가
+            const contentCenter = document.querySelector('.content-center');
+            contentCenter.insertBefore(imageElement, contentCenter.firstChild); // 이미지를 첫 번째 자식으로 삽입
+        }
     }
     return (
         <>
@@ -275,7 +262,7 @@ const Detail = () => {
                         <h1>{data.title}</h1>
                         <div className="detail-info-box">
                             <div className="info-front">
-                                <p>{formatDate(data.localDateTime,"day")}</p><p>|</p>
+                                <p>{formatDate(data.localDateTime, "day")}</p><p>|</p>
                                 <p>{data.posterName}</p>
                             </div>
                             <div className="info-back">
@@ -286,6 +273,7 @@ const Detail = () => {
                         </div>
                     </div>
                     <div className="content-center">
+                        <p></p>
                         <p>{data.content}</p>
                     </div>
                     <div className="content-bottom">
