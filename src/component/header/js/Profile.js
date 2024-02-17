@@ -18,19 +18,18 @@ const Profile = props => {
             }
         });
         if (res.status === 200) {
-            const profileData = await res.blob();
+            const profileData = await res.text();
 
             // blob이미지를 url로 변환
-            const imgUrl = window.URL.createObjectURL(profileData);
-            console.log(imgUrl);
-            setImgUrl(imgUrl);
+            console.log(profileData);
+            setImgUrl(profileData);
         }
     }
     useEffect(() => {
         userProfileFetch();
     }, [setImgUrl]);
     let src;
-    src = require('../../../image/profile.jpg');
+    src = process.env.PUBLIC_URL + "/defaultUser.jpg";
     return (
         <>
             <Link className='profile__box' to="/mypage">

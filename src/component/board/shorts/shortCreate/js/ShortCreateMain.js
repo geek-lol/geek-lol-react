@@ -163,6 +163,7 @@ const ShortCreateMain = () => {
                                 type='file'
                                 style={{display: 'none'}}
                                 onChange={showVideoHandler}
+                                accept={"video/*"}
                             />
                         </div>
                         <div className={'sc-produce-box'}>

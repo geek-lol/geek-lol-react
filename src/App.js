@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Header from "./component/header/js/Header";
-import { Reset } from "styled-reset";
+import {Reset} from "styled-reset";
 import Template from "./component/member/template/js/Template";
 import {BrowserRouter, json, Route, Routes, useLocation} from "react-router-dom";
 import Main from "./component/main/js/main";
@@ -22,8 +22,7 @@ function App() {
     const [showHeader, setShowHeader] = useState(true);
     const location = useLocation();
     const [touch, setTouch] = useState("");
-    const [autoLogin, setAutoLogin] = useState(null);
-
+    const [autoLogin, setAutoLogin] = useState(undefined);
 
 
     // useEffect(() => {
@@ -32,25 +31,22 @@ function App() {
     // }, []);
     useEffect(() => {
 
-        if(getCurrentLoginUser().autologin === "true"){
+        if (getCurrentLoginUser().autologin === "true") {
             console.log("true 뜸");
-        }else if(getCurrentLoginUser().autologin === "false"){
+        } else if (getCurrentLoginUser().autologin === "false") {
             console.log("false아닌 무언가");
             window.addEventListener('beforeunload', e => {
-                console.log(autoLogin);
-                localStorage.clear();
+                    if (!e.returnValue) return;
+                
+
+                    console.log(autoLogin);
+                    localStorage.clear();
                 }
             )
         }
         setAutoLogin(getCurrentLoginUser().autologin);
 
     }, []);
-
-
-
-
-
-
 
 
     useEffect(() => {
@@ -60,7 +56,7 @@ function App() {
             setShowHeader(true);
         }
     }, [location.pathname]);
-    const sendTouch=(e)=>{
+    const sendTouch = (e) => {
         console.log(e.target);
         const classToClickMap = {
             "c1": "c1",
@@ -77,21 +73,21 @@ function App() {
 
     return (
         <>
-            <Reset />
-            {showHeader && <Header sendTouch={sendTouch} />}
+            <Reset/>
+            {showHeader && <Header sendTouch={sendTouch}/>}
             <Routes>
-                <Route path="/template/*" element={<Template />} />
-                <Route path="/" element={<Main />} />
-                <Route path="/rank" element={<Rank />} />
-                <Route path="/find/:searchValue/:tag" element={<InfoTemplate />} />
-                <Route path="/find/:riotIdGameName/:riotIdTagline" element={<InfoTemplate />} />
-                <Route path="/spector" element={<SpectorMain />} />
-                <Route path="/board/*" element={<BoardTemplate />} />
-                <Route path="/mypage/*" element={<MyPageTemplate />} />
-                <Route path="/resgame" element={<ResponseTime /> }/>
-                <Route path="/csgame" element={<MainScene />}/>
-                <Route path="/riot" element={<RiotText />} /> {/* Add this route for RiotText */}
-                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/template/*" element={<Template/>}/>
+                <Route path="/" element={<Main/>}/>
+                <Route path="/rank" element={<Rank/>}/>
+                <Route path="/find/:searchValue/:tag" element={<InfoTemplate/>}/>
+                <Route path="/find/:riotIdGameName/:riotIdTagline" element={<InfoTemplate/>}/>
+                <Route path="/spector" element={<SpectorMain/>}/>
+                <Route path="/board/*" element={<BoardTemplate/>}/>
+                <Route path="/mypage/*" element={<MyPageTemplate/>}/>
+                <Route path="/resgame" element={<ResponseTime/>}/>
+                <Route path="/csgame" element={<MainScene/>}/>
+                <Route path="/riot" element={<RiotText/>}/> {/* Add this route for RiotText */}
+                <Route path="/admin" element={<AdminPage/>}/>
             </Routes>
         </>
     );
