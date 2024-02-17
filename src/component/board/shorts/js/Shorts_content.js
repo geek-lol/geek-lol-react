@@ -17,6 +17,8 @@ const ShortsContent = ({id, item, upVote}) => {
         'content-type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
+    const containerRef = useRef(null);
+    const [isLoading, setIsLoading] = useState(true);
     const redirect = useNavigate();
     const {shortsId, uploaderName, replyCount, viewCount, upCount, title, context, uploaderId} = item;
 
@@ -128,6 +130,7 @@ const ShortsContent = ({id, item, upVote}) => {
                 // console.log('shorts', json.shorts);
                 setShortList(json.shorts);
                 setReplyLength(replyCount);
+                // setPage(prevPage => prevPage + 1);
                 // console.log(shortsId)
             })
             .catch(error => {
@@ -172,7 +175,9 @@ const ShortsContent = ({id, item, upVote}) => {
         fetchShortVideo();
         fetchUserImg();
         getshortList();
-        getVoteList();
+        if (token) {
+            getVoteList();
+        }
         setVoteLoaded(true);
         setTotalCount(upCount);
     }, []);
@@ -196,6 +201,8 @@ const ShortsContent = ({id, item, upVote}) => {
             redirect('/template/login');
             return;
         }
+
+
 
 
         // 투표 여부에 따른 요청 분기
@@ -273,90 +280,60 @@ const ShortsContent = ({id, item, upVote}) => {
         }
 
 
-        // const fetchData = async () => {
-        //     if (replyCount !== 0) {
-        //         try {
-        //             const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=15`, {
-        //                 method: 'GET'
-        //             });
-        //
-        //             if (!res.ok) {
-        //                 throw new Error(`HTTP 오류! 상태: ${res.status}`);
-        //             }
-        //
-        //             const json = await res.json();
-        //             setShortReplyList(prevList => [...prevList, ...json.reply]);
-        //             setPage(prevPage => prevPage + 1);
-        //
-        //         } catch (error) {
-        //             console.log('데이터 없음');
-        //         }
-        //         setIsLoading(false);
-        //     }
-        // };
 
-        // useEffect(() => {
-        //     fetchData();
-        // }, [])
-        // useEffect(() => {
-        //     const container = containerRef.current;
-        //     if (!container) return;
-        //     const handleScroll = () => {
-        //         if (
-        //             containerRef.current &&
-        //             containerRef.current.scrollTop + containerRef.current.clientHeight >=
-        //             containerRef.current.scrollHeight
-        //         ) {
-        //             fetchData();
-        //         }
-        //     };
-        //
-        //     container.addEventListener('scroll', handleScroll);
-        //     return () => {
-        //         container.removeEventListener('scroll', handleScroll);
-        //     };
-        // }, [fetchData]);
-        //
-        // useEffect(() => {
-        //     const timer = setTimeout(() => {
-        //         setIsLoading(false);
-        //     }, 300);
-        //
-        //     return () => clearTimeout(timer);
-        // }, []);
-        //
-        //
-        //
 
-    // video element 참조
-    const videoRef = useRef(null);
-    const [playing, setPlaying] = useState(true);
 
-    const onPlay = () => {
-        setPlaying(!playing);
-    }
+
+    const videoRefs = useRef({});
+    const [activeVideoId, setActiveVideoId] = useState(null);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const elements = document.querySelectorAll('.video-box video');
+            elements.forEach((element) => {
+                if (isElementInViewport(element)) {
+                    setActiveVideoId(element.id);
+                } else {
+                    element.pause();
+                }
+            });
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const isElementInViewport = (el) => {
+        const rect = el.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    };
+
 
 
     return (
         <>
             <li key={shortsId}
-                className={cn('content-container', {scrollDown_ani_view: viewScrollDownAni}, {scrollUp_ani_view: viewScrollUpAni})}
+                className={'content-container'}
                 ref={contentRef}>
-                <div className={'shortsId'}>{shortsId}</div>
                 {voteLoaded && (
                     <div className={cn('short-form', {animation_view: viewAni})} id={'root'}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
                             {videoLoaded && (
-                                <div className={'video-box'} onClick={onPlay}>
-                                <ReactPlayer
-                                    url={videoUrl}
-                                    playing={playing}
-                                    muted={true}
-                                    loop={true}
-                                    controls={false}
-                                    width='100%'
-                                    height='100%'
-                                ></ReactPlayer>
+                                <div className={'video-box'} >
+                                    <video
+                                        ref={(ref) => (videoRefs.current[shortsId] = ref)}
+                                        src={videoUrl}
+                                        autoPlay={true}
+                                        muted={true}
+                                        loop={true}
+                                        controls={true}
+                                        style={{width:'100%', height:'100%', objectFit:'cover'}}
+                                    ></video>
                                 </div>
                             )}
                             <div className={'overlap-front'}>
@@ -441,9 +418,15 @@ const ShortsContent = ({id, item, upVote}) => {
                     }}>
                         <div className={'modal-inform'}>
                             <div className={'modal-inform-text'}>
-                                <p>정말 신고하시겠습니까?</p>
-                                <p></p>
-                                <p></p>
+                                <p>정말 삭제하시겠습니까?</p>
+                                <div className={'modal-btns'}>
+                                    <div className={'modal-cancel-btn'} onClick={() => setViewReport(false)}>
+                                        <p>취소</p>
+                                    </div>
+                                    <div className={'modal-correct-btn'}>
+                                        <p>확인</p>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
