@@ -13,6 +13,7 @@ const ShortsContent = ({id, item, upVote}) => {
     const API_VOTE_URL = SHORT_VOTE_URL;
     const API_IMG_URL = USER_URL;
     const [token, setToken] = useState(getCurrentLoginUser().token);
+    const [userId, setUserId] = useState(getCurrentLoginUser().userId);
     const requestHeader = {
         'content-type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -203,8 +204,6 @@ const ShortsContent = ({id, item, upVote}) => {
         }
 
 
-
-
         // 투표 여부에 따른 요청 분기
         const vote = async () => {
 
@@ -275,13 +274,9 @@ const ShortsContent = ({id, item, upVote}) => {
 
     const [replyLength, setReplyLength] = useState(null);
     const ReplyCount = (replylength) => {
-            // console.log(replylength)
-            setReplyLength(replylength);
-        }
-
-
-
-
+        // console.log(replylength)
+        setReplyLength(replylength);
+    }
 
 
     const videoRefs = useRef({});
@@ -313,6 +308,27 @@ const ShortsContent = ({id, item, upVote}) => {
         );
     };
 
+    const removeshort = (e) => {
+        if (userId === uploaderId) {
+            removeshortlist();
+        }
+    }
+
+    const removeshortlist = async () => {
+        const res = await fetch(API_BASE_URL, {
+            method: 'DELETE',
+            headers: requestHeader,
+            body: JSON.stringify(shortsId)
+        });
+        if (res.status === 200) {
+            // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
+            const json = await res.json().catch(() => ({}));
+
+
+        } else {
+            console.error('Error:', res.status);
+        }
+    };
 
 
     return (
@@ -324,7 +340,7 @@ const ShortsContent = ({id, item, upVote}) => {
                     <div className={cn('short-form', {animation_view: viewAni})} id={'root'}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
                             {videoLoaded && (
-                                <div className={'video-box'} >
+                                <div className={'video-box'}>
                                     <video
                                         ref={(ref) => (videoRefs.current[shortsId] = ref)}
                                         src={videoUrl}
@@ -332,7 +348,7 @@ const ShortsContent = ({id, item, upVote}) => {
                                         muted={true}
                                         loop={true}
                                         controls={true}
-                                        style={{width:'100%', height:'100%', objectFit:'cover'}}
+                                        style={{width: '100%', height: '100%', objectFit: 'cover'}}
                                     ></video>
                                 </div>
                             )}
@@ -423,7 +439,7 @@ const ShortsContent = ({id, item, upVote}) => {
                                     <div className={'modal-cancel-btn'} onClick={() => setViewReport(false)}>
                                         <p>취소</p>
                                     </div>
-                                    <div className={'modal-correct-btn'}>
+                                    <div className={'modal-correct-btn'} onClick={removeshort}>
                                         <p>확인</p>
                                     </div>
                                 </div>

@@ -32,7 +32,7 @@ const Shorts_header = ({onAdd}) => {
                                 <p className={'btn2'}>미니게임</p>
                                 <div className={'board-menu-bar'}>
                                     <div className={'board-menuline'}></div>
-                                    <Link to='/csgame' className={'menubar btn-b'}>민희언 주기깅</Link>
+                                    <Link to='/csgame' className={'menubar btn-b'}>막타 치기</Link>
                                     <Link to='/resgame' className={'menubar btn-b'}>반응속도테스트</Link>
                                 </div>
                             </div>

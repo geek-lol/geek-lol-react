@@ -28,24 +28,24 @@ function App() {
     //     console.count(getCurrentLoginUser().autologin);
     //     setAutoLogin(getCurrentLoginUser().autologin);
     // }, []);
-    useEffect(() => {
-
-        if (getCurrentLoginUser().autologin === "true") {
-            console.log("true 뜸");
-        } else if (getCurrentLoginUser().autologin === "false") {
-            console.log("false아닌 무언가");
-            const clearLocalStorage = () => {
-                localStorage.clear();
-            };
-            window.addEventListener("unload", clearLocalStorage);
-
-            return () => {
-                window.removeEventListener("unload", clearLocalStorage);
-            };
-        }
-        setAutoLogin(getCurrentLoginUser().autologin);
-
-    }, []);
+    // useEffect(() => {
+    //
+    //     if (getCurrentLoginUser().autologin === "true") {
+    //         console.log("true 뜸");
+    //     } else if (getCurrentLoginUser().autologin === "false") {
+    //         console.log("false아닌 무언가");
+    //         const clearLocalStorage = () => {
+    //             localStorage.clear();
+    //         };
+    //         window.addEventListener("unload", clearLocalStorage);
+    //
+    //         return () => {
+    //             window.removeEventListener("unload", clearLocalStorage);
+    //         };
+    //     }
+    //     setAutoLogin(getCurrentLoginUser().autologin);
+    //
+    // }, []);
 
 
     useEffect(() => {
