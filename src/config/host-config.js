@@ -46,6 +46,8 @@ const TROLL_RULING_DETAIL = '/board/SelectDetail';
 const ADMIN = '/admin';
 const TROLL_RULING_REPLY = '/troll/ruling/reply';
 const COUNT = '/api/count';
+const CSGAME_RANK = '/game/cs';
+const RESGAME_RANK = '/game/res';
 
 export const COUNT_URL = backendHost + COUNT;
 export const USER_URL = backendHost + USER;
@@ -74,3 +76,5 @@ export const TROLL_RULING_DETAIL_URL = S3URL + TROLL_RULING_DETAIL;
 export const TROLL_APPLY_DETAIL_URL = S3URL + TROLL_APPLY_DETAIL;
 export const ADMIN_URL = backendHost + ADMIN;
 export const TROLL_RULING_REPLY_URL = backendHost + TROLL_RULING_REPLY;
+export const CSGAME_RANK_URL = backendHost + CSGAME_RANK;
+export const RESGAME_RANK_URL = backendHost + RESGAME_RANK;

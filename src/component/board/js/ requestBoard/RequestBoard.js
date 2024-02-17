@@ -140,37 +140,24 @@ const RequestBoard = () => {
 
 
     function getTimeRemaining(localDateTime) {
-        // 입력된 로컬 데이트타임을 JavaScript Date 객체로 변환합니다.
-        const targetDate = new Date(localDateTime);
-
-        // 현재 시간을 가져옵니다.
         const currentDate = new Date();
-
-        // 전체 시간과 현재 시간 사이의 차이를 밀리초로 계산합니다.
+        const targetDate = new Date(localDateTime);
         const totalTime = targetDate.getTime() - currentDate.getTime();
 
-        // 남은 시간을 밀리초 단위로 계산합니다.
-        let timeDiff = totalTime;
+        const millisecondsPerDay = 72 * 60 * 60 * 1000;
+        const remainingPercentage = totalTime > 0 ? (totalTime / millisecondsPerDay) * 100 : 0;
 
-        // 남은 일 수 계산
+        const timeDiff = totalTime > 0 ? totalTime : 0;
+
         const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-        timeDiff -= days * (1000 * 60 * 60 * 24);
+        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-        // 남은 시간 계산
-        const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-        timeDiff -= hours * (1000 * 60 * 60);
-
-        // 남은 분 계산
-        const minutes = Math.floor(timeDiff / (1000 * 60));
-        timeDiff -= minutes * (1000 * 60);
-
-        // 남은 초 계산
-        const seconds = Math.floor(timeDiff / 1000);
-        const remainingPercentage = ((totalTime - timeDiff) / totalTime) * 100;
         setTimepersent(remainingPercentage);
         setDay(days);
         setHours(hours);
-        setMinutes(minutes)
+        setMinutes(minutes);
         setSeconds(seconds);
     }
 

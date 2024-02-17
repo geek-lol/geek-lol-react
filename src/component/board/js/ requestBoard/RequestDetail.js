@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import ReactPlayer from "react-player";
 import {Button, Pagination, TextField} from "@mui/material";
 import '../../scss/RequestDetail.scss';
-import { useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {
     TROLL_APPLY_REPLY_URL,
     TROLL_APPLY_URL, TROLL_APPLY_VOTE_URL,
@@ -24,6 +24,7 @@ const RequestDetail = () => {
     const [page, setPage] = useState(1);
     const [likeToggle, setLikeToggle] = useState(0);
     const [totalLike, setTotalLike] = useState(null);
+    const redirection = useNavigate();
 
     const Replyrendering = async () => {
         await fetch(`${TROLL_APPLY_REPLY_URL}/${id}?page=${page}`, {
@@ -187,6 +188,8 @@ const RequestDetail = () => {
     };
 
     const likeHanlder = () => {
+        if(!getCurrentLoginUser().token){alert("로그인이 필요합니다.");}
+
         modifyLike();
     };
 

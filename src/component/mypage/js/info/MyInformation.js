@@ -113,7 +113,7 @@ const MyInformation = ({userInfo,changeUser}) => {
             id : userId
         }
         const res = await fetch(USER_URL+"/delete",{
-            method: "PUT",
+            method: "POST",
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify(payload)
         })
