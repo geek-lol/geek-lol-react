@@ -66,6 +66,7 @@ const UserManagement = () => {
     const API_URL = "http://localhost:8686";
     //토큰
     const token= getCurrentLoginUser().token;
+    const me = getCurrentLoginUser().userId;
     // 요청 헤더 객체
     const requestHeader = {
         'content-type': 'application/json',
@@ -230,25 +231,34 @@ const UserManagement = () => {
                                             selected={isItemSelected}
                                             sx={{ cursor: 'pointer' }}
                                         >
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    onClick={(event) => handleClick(event, row.id)}
-                                                    color="primary"
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby': labelId,
-                                                    }}
-                                                />
-                                            </TableCell>
+                                            {me !== row.id ?
+                                                <TableCell padding="checkbox">
+                                                    <Checkbox
+                                                        onClick={(event) => handleClick(event, row.id)}
+                                                        color="primary"
+                                                        checked={isItemSelected}
+                                                        inputProps={{
+                                                            'aria-labelledby': labelId,
+                                                        }}
+                                                    />
+                                                </TableCell>
+                                                :
+                                                <TableCell padding="checkbox">
+                                                </TableCell>
+                                            }
 
                                             <TableCell align="left">{row.id}</TableCell>
                                             <TableCell align="left">{row.userName}</TableCell>
                                             <TableCell align="left">{row.joinDate}</TableCell>
                                             <TableCell align="left">
                                                 {row.role}
-                                                <Button sx={{ backgroundColor:"rgba(216, 216, 216, 0.61)", color : "black", ml:1}}
-                                                        onClick={() => handleClickOpen(row.id)}
-                                                >권한변경</Button>
+                                                {me !== row.id && <Button sx={{
+                                                    backgroundColor: "rgba(216, 216, 216, 0.61)",
+                                                    color: "black",
+                                                    ml: 1
+                                                }}
+                                                         onClick={() => handleClickOpen(row.id)}
+                                                >권한변경</Button>}
                                             </TableCell>
                                         </TableRow>
                                     );

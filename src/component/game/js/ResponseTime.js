@@ -195,7 +195,7 @@ const ResponseTime = () => {
                             {myRank.rank}
                         </TableCell>
                         <TableCell align="left">{`${myRank.userName}(${myRank.userId})`}</TableCell>
-                        <TableCell align="left">{myRank.score}</TableCell>
+                        <TableCell align="left">{myRank.score}ms</TableCell>
                         <TableCell align="left">{formatDate(myRank.recordDate, null)}</TableCell>
                     </TableRow>}
                         {rankList.map((row) => (
@@ -207,7 +207,7 @@ const ResponseTime = () => {
                                     {row.rank}
                                 </TableCell>
                                 <TableCell align="left">{`${row.userName}(${row.userId})`}</TableCell>
-                                <TableCell align="left">{row.score}</TableCell>
+                                <TableCell align="left">{row.score}ms</TableCell>
                                 <TableCell align="left">{formatDate(row.recordDate,null)}</TableCell>
                             </TableRow>
                         ))}
