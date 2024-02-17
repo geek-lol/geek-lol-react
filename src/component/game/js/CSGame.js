@@ -17,7 +17,7 @@ let redMinions = null;
 let blueMinions = null;
 
 let gametimer = null;
-let timeCount =  120000; //2분 120000
+let timeCount =  90 * 1000 ; //1분 30초
 //시간 format 함수
 function formatTime(seconds) { // 100000 = 100초 = 1분 40초
     const s = Math.floor(seconds / 1000); // 100초
@@ -217,13 +217,13 @@ class CsGame extends Phaser.Scene {
         playerAttack.visible = false;
 
         //왼쪽 위 UI
-        timeText = this.add.text(200,180,`남은시간:00:00`,{ font: '16px Arial', fill: '#ffffff' });
+        timeText = this.add.text(200,180,`남은시간:00:00`,{ font: '16px NeoDunggeunmo', fill: '#ffffff' });
         timeText.setScrollFactor(0);
 
-        scoreText = this.add.text(200,200,`점수:${playerScore}`,{ font: '16px Arial', fill: '#ffffff' });
+        scoreText = this.add.text(200,200,`점수:${playerScore}`,{ font: '16px NeoDunggeunmo', fill: '#ffffff' });
         scoreText.setScrollFactor(0);
 
-        const home = this.add.text(200,150,`홈으로`,{ font: '16px Arial', fill: '#ffffff' });
+        const home = this.add.text(200,150,`홈으로`,{ font: '16px NeoDunggeunmo', fill: '#ffffff' });
         home.setScrollFactor(0);
         home.setInteractive();
         home.on('pointerdown', (pointer)=>{

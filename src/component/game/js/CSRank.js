@@ -54,27 +54,27 @@ export default class rankScene extends Phaser.Scene {
     create () {
         loads();
         this.time.delayedCall(1000,()=>{
-            const home = this.add.text(80,50,`홈으로`,{ font: '20px Arial', fill: '#ffffff' });
-            this.add.text('80','100',`나의 랭킹:`,{ font: '20px Arial', fill: '#ffffff' });
+            const home = this.add.text(80,50,`홈으로`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
+            this.add.text('80','100',`나의 랭킹:`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
             if(myRankRecord !== null){
-                this.add.text('210','100',`${myRankRecord.rank}`,{ font: '20px Arial', fill: '#ffffff' });
-                this.add.text('350','100',`${myRankRecord.userName}(${myRankRecord.userId}):`,{ font: '20px Arial', fill: '#ffffff' });
-                this.add.text('830','100',`${myRankRecord.score}`,{ font: '20px Arial', fill: '#ffffff' });
-                this.add.text('1100','100',`${formatDate(myRankRecord.recordDate)}`,{ font: '20px Arial', fill: '#ffffff' });
+                this.add.text('210','100',`${myRankRecord.rank}`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
+                this.add.text('350','100',`${myRankRecord.userName}(${myRankRecord.userId}):`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
+                this.add.text('830','100',`${myRankRecord.score}`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
+                this.add.text('1100','100',`${formatDate(myRankRecord.recordDate)}`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
             }else{
-                this.add.text('210','100',`게임 정보가 없습니다.`,{ font: '20px Arial', fill: '#ffffff' });
+                this.add.text('210','100',`게임 정보가 없습니다.`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
             }
 
 
-            this.add.text('200','200',`순위`,{ font: '20px Arial', fill: '#ffffff' });
-            this.add.text('400','200',`닉네임(아이디)`,{ font: '20px Arial', fill: '#ffffff' });
-            this.add.text('830','200',`점수`,{ font: '20px Arial', fill: '#ffffff' });
-            this.add.text('1100','200',`기록일`,{ font: '20px Arial', fill: '#ffffff' });
+            this.add.text('200','200',`순위`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
+            this.add.text('400','200',`닉네임(아이디)`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
+            this.add.text('830','200',`점수`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
+            this.add.text('1100','200',`기록일`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
             rankList.map((rankList,index)=>{
-                this.add.text('210',`${250+(50*index)}`,`${rankList.rank}`,{ font: '20px Arial', fill: '#ffffff' });
-                this.add.text('350',`${250+(50*index)}`,`${rankList.userName}(${rankList.userId})`,{ font: '20px Arial', fill: '#ffffff' });
-                this.add.text('830',`${250 + (50 * index)}`,`${rankList.score}`,{ font: '20px Arial', fill: '#ffffff' });
-                this.add.text('1100',`${250+(50*index)}`,`${formatDate(rankList.recordDate)}`,{ font: '20px Arial', fill: '#ffffff' });
+                this.add.text('210',`${250+(50*index)}`,`${rankList.rank}`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
+                this.add.text('350',`${250+(50*index)}`,`${rankList.userName}(${rankList.userId})`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
+                this.add.text('830',`${250 + (50 * index)}`,`${rankList.score}`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
+                this.add.text('1100',`${250+(50*index)}`,`${formatDate(rankList.recordDate)}`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
             })
 
             home.setInteractive();
