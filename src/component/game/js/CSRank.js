@@ -3,13 +3,14 @@ import Phaser from "phaser";
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import axios from "axios";
 import {formatDate} from "../../../utils/format-date";
+import {CSGAME_RANK_URL} from "../../../config/host-config";
 
 // 토큰 가져오기
 const token= getCurrentLoginUser().token;
 const tokenUserId= getCurrentLoginUser().userId;
 
 //요청 URL
-const API_URL = "http://localhost:8686/game/cs";
+const API_URL = CSGAME_RANK_URL;
 
 // 요청 헤더 객체
 const requestHeader = {
@@ -48,10 +49,10 @@ export default class rankScene extends Phaser.Scene {
         super('rankScene');
     }
     preload () {
-        loads();
+
     }
     create () {
-
+        loads();
         this.time.delayedCall(1000,()=>{
             const home = this.add.text(80,50,`홈으로`,{ font: '20px Arial', fill: '#ffffff' });
             this.add.text('80','100',`나의 랭킹:`,{ font: '20px Arial', fill: '#ffffff' });

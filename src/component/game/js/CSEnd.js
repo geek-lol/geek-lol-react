@@ -1,10 +1,22 @@
 import React from 'react';
 import Phaser from "phaser";
 import CsGame from "./CSGame";
+import {CSGAME_RANK_URL} from "../../../config/host-config";
+import {getCurrentLoginUser} from "../../../utils/login-util";
 
-const createRank =() =>{
-
-}
+const createRank =(score) =>{
+    const payload = {
+        score : score
+    }
+    fetch(CSGAME_RANK_URL, {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+            'Authorization': `Bearer ${getCurrentLoginUser().token}`
+        },
+        body: JSON.stringify(payload)
+    }).then(r =>r.json())
+ }
 
 class endScene extends Phaser.Scene {
     constructor() {
@@ -13,7 +25,8 @@ class endScene extends Phaser.Scene {
     preload () {
     }
     create (data) {
-        this.scene.launch('rankScene')
+        createRank(data.score);
+        // this.scene.launch('rankScene')
 
         this.add.rectangle(700,400,500,400,0xFFFF00)
         this.score = data.score;
@@ -28,7 +41,7 @@ class endScene extends Phaser.Scene {
         })
         home.on('pointerdown', (pointer)=>{
             this.scene.stop();
-            this.scene.setVisible(false,'rankScene')
+            // this.scene.setVisible(false,'rankScene')
             this.scene.start('startScene');
         })
     }
