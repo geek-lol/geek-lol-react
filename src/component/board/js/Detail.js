@@ -337,10 +337,10 @@ const Detail = () => {
                         >등록</Button>
                     </form>
                     <div className="comment-box">
-                        {
+                        {replyList.length>0?
                             replyList.map(con =>
                                 <BoardReply item={con} getReplyCount={getReplyCount}/>
-                            )}
+                            ):<p className="e">아직 댓글이 없습니다</p>}
                         <Pagination
                             activePage={page}
                             count={totalPage}

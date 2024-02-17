@@ -177,9 +177,6 @@ const SelectDetail = () => {
                 body: JSON.stringify(requestData),
             });
             if (res.ok) {
-                // const json = await res.json();
-                // console.log(json);
-                // 성공적으로 처리된 경우에 수행할 작업 추가
             } else {
                 console.error('Error:', res.status);
                 // 에러 처리 로직 추가

@@ -11,6 +11,7 @@ import {getCurrentLoginUser} from "../../../../utils/login-util";
 import RequestBoardReply from "../../RequestBoardReply";
 import {GoHeart, GoHeartFill} from "react-icons/go";
 import {formatDate} from "../../../../utils/format-date";
+import BoardReply from "../../BoardReply";
 
 const RequestDetail = () => {
     const {id} = useParams();
@@ -128,6 +129,7 @@ const RequestDetail = () => {
         })
     }
     const modifyLike = async () => {
+        createLike();
         const res = await fetch(`${TROLL_APPLY_VOTE_URL}`, {
             method: 'PUT',
             headers: {
@@ -272,10 +274,10 @@ const RequestDetail = () => {
                             >등록</Button>
                         </form>
                         <div className="comment-box">
-                            {
+                            {replyList.length>0?
                                 replyList.map(con =>
-                                    <RequestBoardReply item={con} getReplyCount={getReplyCount}/>
-                                )}
+                                    <BoardReply item={con} getReplyCount={getReplyCount}/>
+                                ):<p className="e">아직 댓글이 없습니다</p>}
                             <Pagination
                                 activePage={page}
                                 count={totalPage}

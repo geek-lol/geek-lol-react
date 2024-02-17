@@ -185,7 +185,9 @@ const RequestBoard = () => {
                         className="progressBar"
                         completed={timepersent}
                         customLabel={`투표종료까지 ${day}일${hours}시간${minutes}분${seconds}초 남았습니다.`}
+                        customLabelStyles={{margin:"auto"}}
                     />
+                    <h2></h2>
                 </div>
 
                 <div className="board_list_box">
