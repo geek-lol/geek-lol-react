@@ -8,11 +8,12 @@ import {getCurrentLoginUser} from "../../../../utils/login-util";
 import {json, useNavigate} from "react-router-dom";
 import ReactPlayer from "react-player";
 
-const ShortsContent = ({id, item, upVote}) => {
+const ShortsContent = ({id, item, upVote, isError}) => {
     const API_BASE_URL = SHORT_URL;
     const API_VOTE_URL = SHORT_VOTE_URL;
     const API_IMG_URL = USER_URL;
     const [token, setToken] = useState(getCurrentLoginUser().token);
+    const [userId, setUserId] = useState(getCurrentLoginUser().userId);
     const requestHeader = {
         'content-type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -26,15 +27,6 @@ const ShortsContent = ({id, item, upVote}) => {
     const [viewComment, setViewComment] = useState(false);
     const [viewAni, setViewAni] = useState(false);
 
-    // 휠 애니메이션
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [displayCount, setDisplayCount] = useState(1);
-
-
-    const [viewScrollDownAni, setViewScrollDownAni] = useState(false);
-    const [viewScrollUpAni, setViewScrollUpAni] = useState(false);
-    // 휠 이벤트 시간
-    const lastWheelTime = useRef(0);
 
 
     // 신고 모달 띄우기
@@ -115,6 +107,7 @@ const ShortsContent = ({id, item, upVote}) => {
 
     // 쇼츠 리스트
     const getshortList = async () => {
+
         fetch(API_BASE_URL, {
             method: 'GET',
             headers: requestHeader
@@ -129,11 +122,14 @@ const ShortsContent = ({id, item, upVote}) => {
             .then(json => {
                 // console.log('shorts', json.shorts);
                 setShortList(json.shorts);
+                console.log('json.short',json.shorts);
+                console.log(json.error);
                 setReplyLength(replyCount);
                 // setPage(prevPage => prevPage + 1);
                 // console.log(shortsId)
             })
             .catch(error => {
+
                 console.error('Error fetching data:', error);
             });
 
@@ -201,8 +197,6 @@ const ShortsContent = ({id, item, upVote}) => {
             redirect('/template/login');
             return;
         }
-
-
 
 
         // 투표 여부에 따른 요청 분기
@@ -275,13 +269,9 @@ const ShortsContent = ({id, item, upVote}) => {
 
     const [replyLength, setReplyLength] = useState(null);
     const ReplyCount = (replylength) => {
-            // console.log(replylength)
-            setReplyLength(replylength);
-        }
-
-
-
-
+        // console.log(replylength)
+        setReplyLength(replylength);
+    }
 
 
     const videoRefs = useRef({});
@@ -313,6 +303,30 @@ const ShortsContent = ({id, item, upVote}) => {
         );
     };
 
+    const removeshort = (e) => {
+        if (userId === uploaderId) {
+            removeshortlist();
+            setViewReport(false);
+        }
+        getshortList();
+    }
+
+    const removeshortlist = async () => {
+        const res = await fetch(`${API_BASE_URL}/${shortsId}`, {
+            method: 'DELETE',
+            headers: requestHeader
+        });
+        if (res.status === 200) {
+            // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
+            const json = await res.json().catch(() => ({}));
+            setShortList(shortList.filter(short => short.shortsId !== shortsId));
+
+        } else {
+            console.error('Error:', res.status);
+            getshortList();
+
+        }
+    };
 
 
     return (
@@ -324,7 +338,7 @@ const ShortsContent = ({id, item, upVote}) => {
                     <div className={cn('short-form', {animation_view: viewAni})} id={'root'}>
                         <div className={cn('content', {animation_content_view: viewComment})}>
                             {videoLoaded && (
-                                <div className={'video-box'} >
+                                <div className={'video-box'}>
                                     <video
                                         ref={(ref) => (videoRefs.current[shortsId] = ref)}
                                         src={videoUrl}
@@ -332,7 +346,7 @@ const ShortsContent = ({id, item, upVote}) => {
                                         muted={true}
                                         loop={true}
                                         controls={true}
-                                        style={{width:'100%', height:'100%', objectFit:'cover'}}
+                                        style={{width: '100%', height: '100%', objectFit: 'cover'}}
                                     ></video>
                                 </div>
                             )}
@@ -423,7 +437,7 @@ const ShortsContent = ({id, item, upVote}) => {
                                     <div className={'modal-cancel-btn'} onClick={() => setViewReport(false)}>
                                         <p>취소</p>
                                     </div>
-                                    <div className={'modal-correct-btn'}>
+                                    <div className={'modal-correct-btn'} onClick={removeshort}>
                                         <p>확인</p>
                                     </div>
                                 </div>
