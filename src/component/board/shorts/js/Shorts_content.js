@@ -121,8 +121,8 @@ const ShortsContent = ({id, item, upVote, isError}) => {
             .then(json => {
                 // console.log('shorts', json.shorts);
                 setShortList(json.shorts);
-                console.log('json.short',json.shorts);
-                console.log(json.error);
+                // console.log('json.short',json.shorts);
+                // console.log(json.error);
                 setReplyLength(replyCount);
                 // setPage(prevPage => prevPage + 1);
                 // console.log(shortsId)
@@ -319,6 +319,7 @@ const ShortsContent = ({id, item, upVote, isError}) => {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
             setShortList(shortList.filter(short => short.shortsId !== shortsId));
+            getshortList();
 
         } else {
             console.error('Error:', res.status);

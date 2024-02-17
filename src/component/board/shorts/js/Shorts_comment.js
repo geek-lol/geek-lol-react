@@ -78,9 +78,8 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             const json = await res.json();
             setReplyValue({context: ''});
             setShortReplyList(json.reply);
-            // console.log(json.reply);
-            setShortReplyCount(json.totalCount);
-            // Reset page to 1
+            setShortReplyCount(json.reply.length);
+
             setPage(2);
 
             // Scroll to top
@@ -98,6 +97,7 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             redirection('/template/login');
         }
         addReply();
+        fetchData();
     };
 
     useEffect(() => {
@@ -120,6 +120,9 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                 }
 
                 const json = await res.json();
+                console.log(json.reply);
+                setShortReplyCount(json.reply.length);
+                // console.log(json.total);
                 setShortReplyList(prevList => [...prevList, ...json.reply]);
                 setPage(prevPage => prevPage + 1);
 
@@ -191,7 +194,6 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                                 key={reply.id}
                                 shortReplyList={reply}
                                 item={item}
-                                fetchData={fetchData}
                             />
                         ))}
                     </ul>
