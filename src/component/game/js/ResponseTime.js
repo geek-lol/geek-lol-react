@@ -211,6 +211,11 @@ const ResponseTime = () => {
                                 <TableCell align="left">{formatDate(row.recordDate,null)}</TableCell>
                             </TableRow>
                         ))}
+                        {rankList.length=== 0 &&
+                            <TableRow>
+                                <TableCell align="center" colSpan={4}>랭킹 정보가 없습니다. 플레이하세요!</TableCell>
+                            </TableRow>
+                        }
                     </TableBody>
                 </Table>
             </TableContainer>

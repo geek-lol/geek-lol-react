@@ -4,6 +4,8 @@ import {getCurrentLoginUser} from "../../../utils/login-util";
 import axios from "axios";
 import {formatDate} from "../../../utils/format-date";
 import {CSGAME_RANK_URL} from "../../../config/host-config";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
 
 // 토큰 가져오기
 const token= getCurrentLoginUser().token;
@@ -76,6 +78,9 @@ export default class rankScene extends Phaser.Scene {
                 this.add.text('830',`${250 + (50 * index)}`,`${rankList.score}`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
                 this.add.text('1100',`${250+(50*index)}`,`${formatDate(rankList.recordDate)}`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
             })
+            if(rankList.length=== 0){
+                this.add.text('830',`250`,`랭킹 정보가 없습니다. 플레이하세요!`,{ font: '20px NeoDunggeunmo', fill: '#ffffff' });
+            }
 
             home.setInteractive();
             home.on('pointerdown', (pointer)=>{
