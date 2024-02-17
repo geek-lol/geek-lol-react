@@ -16,15 +16,17 @@ const HeaderCard = ({item,isBool}) => {
     const getImg = async () => {
         try {
             const response = await fetch(`${TROLL_RULING_BOARD_URL}/load-video/${rulingId}`, {
-                method: 'POST'
+                method: 'GET'
             });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            const arrayBuffer = await response.arrayBuffer();
-            const blob = new Blob([arrayBuffer]);
-            const videoUrl = URL.createObjectURL(blob);
+            // const arrayBuffer = await response.arrayBuffer();
+            // const blob = new Blob([arrayBuffer]);
+            // const videoUrl = URL.createObjectURL(blob);
+            const videoUrl = await response.text();
             setVideo(videoUrl);
+            console.log(videoUrl);
         } catch (error) {
             console.error('Error fetching video:', error);
         }

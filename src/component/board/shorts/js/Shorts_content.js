@@ -71,10 +71,9 @@ const ShortsContent = ({id, item, upVote}) => {
         });
 
         if (res.status === 200) {
-            const videoData = await res.blob();
+            const shortUrl = await res.text();
 
             // blob이미지를 url로 변환
-            const shortUrl = window.URL.createObjectURL(videoData);
 
             setVideoUrl(shortUrl);
             // console.log(shortUrl);
@@ -91,16 +90,16 @@ const ShortsContent = ({id, item, upVote}) => {
     // 이미지 URL
     const fetchUserImg = async () => {
 
-        const url = `${API_IMG_URL}/profile?userId=${uploaderId}`;
+        const url = `${API_IMG_URL}/profile/${uploaderId}`;
         const res = await fetch(url, {
             method: "GET"
         });
 
         if (res.status === 200) {
-            const imgData = await res.blob();
+            const profileUrl = await res.text();
 
             // blob이미지를 url로 변환
-            const profileUrl = window.URL.createObjectURL(imgData);
+            // const profileUrl = window.URL.createObjectURL(imgData);
 
             setImgUrl(profileUrl);
             // console.log(profileUrl);

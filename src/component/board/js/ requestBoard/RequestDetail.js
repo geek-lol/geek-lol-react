@@ -11,6 +11,7 @@ import {getCurrentLoginUser} from "../../../../utils/login-util";
 import RequestBoardReply from "../../RequestBoardReply";
 import {GoHeart, GoHeartFill} from "react-icons/go";
 import {formatDate} from "../../../../utils/format-date";
+import axios from "axios";
 
 const RequestDetail = () => {
     const {id} = useParams();
@@ -45,21 +46,43 @@ const RequestDetail = () => {
     }
     const [Video, setVideo] = useState();
     const getImg = async () => {
+        // try {
+        //     const response = await fetch(`${TROLL_APPLY_URL}/load-video?applyId=${id}`, {
+        //         method: 'GET'
+        //     });
+        //
+        //     if (!response.ok) {
+        //         throw new Error('Network response was not ok');
+        //     }
+        //     const arrayBuffer = await response.arrayBuffer();
+        //     const blob = new Blob([arrayBuffer]);
+        //     const videoUrl = URL.createObjectURL(blob);
+        //     setVideo(videoUrl);
+        // } catch (error) {
+        //     console.error('Error fetching video:', error);
+        // }
+
         try {
-            const response = await fetch(`${TROLL_APPLY_URL}/load-video?applyId=${id}`, {
-                method: 'GET'
+            console.log(id);
+            const response = await fetch(`${TROLL_APPLY_URL}/load-video/${id}`, {
+                method: "GET"
             });
 
-            if (!response.ok) {
+            console.log(response.status);
+            if(!response.status === 200) {
                 throw new Error('Network response was not ok');
+
             }
-            const arrayBuffer = await response.arrayBuffer();
-            const blob = new Blob([arrayBuffer]);
-            const videoUrl = URL.createObjectURL(blob);
+
+            const videoUrl = await response.text();
             setVideo(videoUrl);
+            console.log(videoUrl);
+
         } catch (error) {
             console.error('Error fetching video:', error);
         }
+
+
     }
     const getDetail = async () => {
         await fetch(`${TROLL_APPLY_URL}/detail/${id}`, {

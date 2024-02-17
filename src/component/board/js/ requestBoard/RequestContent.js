@@ -57,7 +57,7 @@ const RequestContent = ({item}) => {
 
     const getImg = async () => {
         try {
-            const response = await fetch(`${TROLL_APPLY_URL}/load-video?applyId=${applyId}`, {
+            const response = await fetch(`${TROLL_APPLY_URL}/load-video/${applyId}`, {
                 method: 'GET'
             });
 
@@ -65,9 +65,11 @@ const RequestContent = ({item}) => {
                 throw new Error('Network response was not ok');
             }
 
-            const arrayBuffer = await response.arrayBuffer();
-            const blob = new Blob([arrayBuffer]);
-            const videoUrl = URL.createObjectURL(blob);
+            // const arrayBuffer = await response.arrayBuffer();
+            // const blob = new Blob([arrayBuffer]);
+            // const videoUrl = URL.createObjectURL(blob);
+            const videoUrl = await response.text();
+            console.log(videoUrl)
             setVideo(videoUrl);
         } catch (error) {
             console.error('Error fetching video:', error);
