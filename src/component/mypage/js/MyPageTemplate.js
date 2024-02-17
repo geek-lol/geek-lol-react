@@ -6,6 +6,7 @@ import MyActivityMain from "./activity/MyActivityMain";
 
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import async from "async";
+import {COUNT_URL, USER_URL} from "../../../config/host-config";
 
 const MyPageTemplate = () => {
     //mypage 렌더링 유형을 저장
@@ -33,7 +34,7 @@ const MyPageTemplate = () => {
     //회원정보 가져오기 fetch
     const userInfoFetch = async () =>{
         try {
-            const response = await fetch(API_URL+"/user", {
+            const response = await fetch(USER_URL, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -53,7 +54,7 @@ const MyPageTemplate = () => {
 
     //내 활동내역 카운트 가져오기 fetch
     const myActivityCount = async ()=>{
-        const res = await fetch(API_URL+"/api/count",{
+        const res = await fetch(COUNT_URL,{
             method:"GET",
             headers: {
                 'Authorization': `Bearer ${token}`

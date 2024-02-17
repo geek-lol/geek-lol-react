@@ -32,13 +32,10 @@ const MyPageProfile = ({userInfo,myActivity}) => {
             }
         });
         if (res.status === 200) {
-            const profileData = await res.blob();
+            const profileData = await res.text();
 
-            // blob이미지를 url로 변환
-            const imgUrl = window.URL.createObjectURL(profileData);
-            console.log('imgUrl DB에서 넘어온거')
-            console.log(imgUrl)
-            setImgUrl(imgUrl);
+            console.log(profileData)
+            setImgUrl(profileData);
         }
     }
     //회원 이미지 변경 fetch
