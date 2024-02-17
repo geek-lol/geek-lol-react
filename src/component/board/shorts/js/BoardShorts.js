@@ -64,7 +64,7 @@ const BoardShorts = () => {
                             id={shorts.shortsId}
                             item={shorts}
                             upVote={shorts.upCount}
-                            error={error}
+                            isError={error}
                         />
                     ))}
                 </ul>
