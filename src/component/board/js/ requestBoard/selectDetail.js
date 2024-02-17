@@ -29,7 +29,6 @@ const SelectDetail = () => {
         rulingDate,
         viewCount
     } = location.state.data || {};
-    const {rulingId} = location.state.rulingId || {};
     const [vs, setVs] = useState(0);
     const [Video, setVideo] = useState();
     const [token, setToken] = useState(getCurrentLoginUser().token);
@@ -38,9 +37,9 @@ const SelectDetail = () => {
     const [totalReply, setTotalReply] = useState(0);
     const [totalPage, setTotalPage] = useState();
     const [replyList, setReplyList] = useState([]);
-    const [totalLike, setTotalLike] = useState(null);
     const [vote, setVote] = useState(null);
-
+    const $blue_btn = document.querySelector('.blue-btn');
+    const $red_btn = document.querySelector('.red-btn');
     useEffect(() => {
         getImg();
     }, []);
@@ -95,7 +94,6 @@ const SelectDetail = () => {
             if (res.status === 200) {
                 return res.json();
             }
-            alert("이전 투표글이거나 이미 투표하셨습니다.");
             // console.log(res.status);
         }).then(json => {
             if (json === undefined) {
@@ -105,6 +103,17 @@ const SelectDetail = () => {
                 alert(json.error);
                 return;
             }
+            if(text==="pros"){
+                setVs(1);
+                $red_btn.style.width = "150px";
+                $blue_btn.style.width = "350px";
+            }else if(text==="cons"){
+                setVs(0);
+
+                $red_btn.style.width = "350px";
+                $blue_btn.style.width = "150px";
+            }
+
             setCons(Math.round(json.consPercent) + "%");
             setPros(Math.round(json.prosPercent) + "%");
             setC(json.cons);
@@ -132,17 +141,13 @@ const SelectDetail = () => {
     }
 
 
-    const $blue_btn = document.querySelector('.blue-btn');
-    const $red_btn = document.querySelector('.red-btn');
+
     const blueClickHandler = () => {
         if (!getCurrentLoginUser().token) {
             alert("로그인이 필요합니다.");
         }
-        setVs(1);
         setVoteData("pros");
 
-        $red_btn.style.width = "150px";
-        $blue_btn.style.width = "350px";
     };
     useEffect(() => {
         getVoteData();
@@ -151,10 +156,8 @@ const SelectDetail = () => {
         if (!getCurrentLoginUser().token) {
             alert("로그인이 필요합니다.");
         }
-        setVs(2);
         setVoteData("cons");
-        $red_btn.style.width = "350px";
-        $blue_btn.style.width = "150px";
+
     };
 
     const fetchBoardUpload = async () => {
@@ -174,9 +177,6 @@ const SelectDetail = () => {
                 body: JSON.stringify(requestData),
             });
             if (res.ok) {
-                // const json = await res.json();
-                // console.log(json);
-                // 성공적으로 처리된 경우에 수행할 작업 추가
             } else {
                 console.error('Error:', res.status);
                 // 에러 처리 로직 추가

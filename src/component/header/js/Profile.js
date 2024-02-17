@@ -4,7 +4,7 @@ import '../scss/Profile.scss';
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import {Link} from "react-router-dom";
 import {USER_URL} from "../../../config/host-config";
-const Profile = props => {
+const Profile = (profile) => {
     const [token, setToken] = useState(getCurrentLoginUser().token);
     const [imgUrl, setImgUrl] = useState(null);
     const API_URL = "http://localhost:8686/user";
@@ -27,7 +27,7 @@ const Profile = props => {
     }
     useEffect(() => {
         userProfileFetch();
-    }, [setImgUrl]);
+    }, [setImgUrl,profile]);
     let src;
     src = process.env.PUBLIC_URL + "/defaultUser.jpg";
     return (

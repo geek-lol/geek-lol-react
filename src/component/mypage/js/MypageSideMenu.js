@@ -5,11 +5,8 @@ import cn from 'classnames';
 
 
 const MypageSideMenu = ({changeType}) => {
-
     //리다이렉션 변수
     const redirection = useNavigate();
-
-
     const [selectType,setSelectType] = useState({
         profile : true,
         info : false,

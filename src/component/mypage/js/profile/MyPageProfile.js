@@ -5,7 +5,7 @@ import defaultImg from "../../../../image/profile.jpg";
 import {formatDate} from "../../../../utils/format-date";
 import {USER_URL} from "../../../../config/host-config";
 
-const MyPageProfile = ({userInfo,myActivity}) => {
+const MyPageProfile = ({userInfo,myActivity,profileSet}) => {
 
     // 이미지 URL을 저장할 상태변수
     const [imgUrl, setImgUrl] = useState(null);
@@ -20,6 +20,7 @@ const MyPageProfile = ({userInfo,myActivity}) => {
     useEffect(() => {
         userProfileFetch();
     }, []);
+
 
     //회원 이미지 가져오기 fetch
     const userProfileFetch = async () =>{
@@ -37,6 +38,7 @@ const MyPageProfile = ({userInfo,myActivity}) => {
             console.log(profileData)
             setImgUrl(profileData);
         }
+        profileSet(imgUrl);
     }
     //회원 이미지 변경 fetch
     const alterImgFetch= async (file)=>{
@@ -62,10 +64,11 @@ const MyPageProfile = ({userInfo,myActivity}) => {
         } else {
             alert('서버와의 통신이 원활하지 않습니다.');
         }
+        profileSet(file);
     }
     //파일 선택시 썸넬 화면에 렌더링
     function showThumbnailHandler(e) {
-
+        profileSet(e);
         // 첨부된 파일의 데이터를 가져오기
         const file = document.getElementById('profile-img').files[0];
 
@@ -75,8 +78,10 @@ const MyPageProfile = ({userInfo,myActivity}) => {
 
         reader.onloadend = () =>{
             setImgUrl(reader.result);
+            profileSet(file);
         }
-        alterImgFetch(file)
+        alterImgFetch(file);
+        profileSet(file);
     }
     function thumbnailCLickHandler() {
         document.getElementById('profile-img').click();

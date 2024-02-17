@@ -21,6 +21,7 @@ function App() {
     const [showHeader, setShowHeader] = useState(true);
     const location = useLocation();
     const [touch, setTouch] = useState("");
+
     const [autoLogin, setAutoLogin] = useState(undefined);
 
 
@@ -69,11 +70,15 @@ function App() {
             }
         }
     }
+    const[profile,setProfile]=useState();
+    const profileSet = (profile) => {
+        setProfile(profile);
+        }
 
     return (
         <>
             <Reset/>
-            {showHeader && <Header sendTouch={sendTouch}/>}
+            {showHeader && <Header sendTouch={sendTouch} profile={profile}/>}
             <Routes>
                 <Route path="/template/*" element={<Template/>}/>
                 <Route path="/" element={<Main/>}/>
@@ -82,7 +87,7 @@ function App() {
                 <Route path="/find/:riotIdGameName/:riotIdTagline" element={<InfoTemplate/>}/>
                 <Route path="/spector" element={<SpectorMain/>}/>
                 <Route path="/board/*" element={<BoardTemplate/>}/>
-                <Route path="/mypage/*" element={<MyPageTemplate/>}/>
+                <Route path="/mypage/*" element={<MyPageTemplate profileSet={profileSet}/>}/>
                 <Route path="/resgame" element={<ResponseTime/>}/>
                 <Route path="/csgame" element={<MainScene/>}/>
                 <Route path="/riot" element={<RiotText/>}/> {/* Add this route for RiotText */}

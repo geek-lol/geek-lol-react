@@ -41,7 +41,7 @@ const Detail = () => {
     const [replyList, setReplyList] = useState([]);
     const [totalReply, setTotalReply] = useState(0);
     const [totalPage, setTotalPage] = useState();
-    const [likeToggle, setLikeToggle] = useState(0);
+    const [likeToggle, setLikeToggle] = useState(1);
     const redirection = useNavigate();
     const [totalLike, setTotalLike] = useState(null);
 
@@ -191,7 +191,7 @@ const Detail = () => {
             body: JSON.stringify({boardId: data.bulletinId})
         }).then(res => {
             if (res.status === 200) {
-                modifyLike();
+                findLike();
             }
             if (res.status === 400) {
             }
@@ -218,7 +218,7 @@ const Detail = () => {
     }
     const findLike = async () => {
         try {
-            const res = await fetch(`${BOARD_VOTE_URL}?bulletinId=${data.bulletinId}`, {
+            const res = await fetch(`${BOARD_VOTE_URL}?bulletinId=${Id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -227,6 +227,7 @@ const Detail = () => {
             });
             if (res.status === 200) {
                 const json = await res.json(); // JSON 형식으로 파싱
+                console.log(json);
                 setLikeToggle(json.up);
                 setTotalLike(json.total);
             } else {
@@ -277,7 +278,7 @@ const Detail = () => {
                     </div>
                     <div className="content-bottom">
                         {
-                            likeToggle === 1 ?
+                            likeToggle === 0 ?
                                 <GoHeart className="p" size={12 * 2} onClick={likeHanlder}/>
                                 :
                                 <GoHeartFill className="p" color="red" size={12 * 2} onClick={likeHanlder}/>
@@ -325,10 +326,10 @@ const Detail = () => {
                         >등록</Button>
                     </form>
                     <div className="comment-box">
-                        {
+                        {replyList.length>0?
                             replyList.map(con =>
                                 <BoardReply item={con} getReplyCount={getReplyCount}/>
-                            )}
+                            ):<p className="e">아직 댓글이 없습니다</p>}
                         <Pagination
                             activePage={page}
                             count={totalPage}

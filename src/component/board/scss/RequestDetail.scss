@@ -54,14 +54,13 @@
       justify-content: center;
       gap: 5px;
     }
-
     h1 {
       width: 100%;
       justify-content: start;
       font-weight: 700;
       font-size: 30px;
       margin: 16px 0;
-      text-align: center;
+      text-align: start;
     }
 
     .detail-info-box {
@@ -197,6 +196,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  .e{
+    margin: 15px 0;
+  }
   .tq{
     margin: 15px;
   }
