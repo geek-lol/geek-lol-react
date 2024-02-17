@@ -145,11 +145,11 @@ const FreeBoard = () => {
                             <span className="s-title5 py-1">조회</span>
                             <span className="s-title6 py-1">추천</span>
                         </div>
-                        {boardList.map(con =>
+                        {boardList.length>0? boardList.map(con =>
                             <BoardContent
                                 item={con}
                             />
-                        )}
+                        ):<p className="empty-text">- 아직 글이 없습니다. -</p>}
                         <nav className="page-box">
                             <div className="write-btn">
                                 <Link to="/board/create">글쓰기</Link>

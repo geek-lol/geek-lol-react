@@ -102,10 +102,10 @@ const Login = () => {
                         <div className={'line'}></div>
                         <input className={'login-inputbox'} id={'password'} type="password" placeholder={'password'}/>
                     </div>
-                    <div className={'auto-login-check'}>
-                        <input type="checkbox" onClick={autoLoginHandler}/>
-                        <p>자동로그인</p>
-                    </div>
+                    {/*<div className={'auto-login-check'}>*/}
+                    {/*    <input type="checkbox" onClick={autoLoginHandler}/>*/}
+                    {/*    <p>자동로그인</p>*/}
+                    {/*</div>*/}
                     <button className={'signin-box'} onClick={loginHandler}>로그인</button>
                 </div>
                 <div className={'login-box easylogin-box'}>

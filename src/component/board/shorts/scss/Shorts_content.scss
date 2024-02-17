@@ -198,6 +198,7 @@
 
     .comment_form_view {
       width: 25%;
+      min-width: 460px;
 
       .comment_view {
         opacity: 1;
@@ -251,21 +252,51 @@
       height: 120px;
       padding: 30px;
       border-radius: 5px;
+
       align-items: center;
 
       .modal-inform-text {
         width: 100%;
+        height: 100%;
         font-family: 'NanumGothic', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 20px;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .modal-btns {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+
+          .modal-cancel-btn {
+            border: 2px solid #9BDADA;
+            padding: 10px;
+            border-radius: 5px;
+
+            cursor: pointer;
+          }
+
+          .modal-correct-btn {
+            color: #FFFFFF;
+            border: 1px solid #cccccc;
+            padding: 11px;
+            border-radius: 5px;
+            background: #9BDADA;
+
+            cursor: pointer;
+          }
+        }
       }
-
-
     }
   }
 }
+
+
 
 
 @media screen and (min-width: 1900px) and (max-width: 2200px) {
