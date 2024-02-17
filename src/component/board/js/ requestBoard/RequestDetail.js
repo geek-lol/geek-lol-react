@@ -120,11 +120,11 @@ const RequestDetail = () => {
             body: JSON.stringify({applyId: id})
         }).then(res => {
             if (res.status === 200) {
-                // console.log("잘 만들어짐");
+                console.log("잘 만들어짐");
                 findLike();
             }
             if (res.status === 400) {
-                // console.log('이미 만들어짐');
+                console.log('이미 만들어짐');
             }
         })
     }
@@ -139,7 +139,7 @@ const RequestDetail = () => {
             body: JSON.stringify({applyId: id})
         }).then(res => {
             if (res.status === 200) {
-                // console.log("좋아요 수정 됨");
+                console.log("좋아요 수정 됨");
                 findLike();
             }
         })
@@ -155,12 +155,12 @@ const RequestDetail = () => {
             });
             if (res.status === 200) {
                 const json = await res.json(); // JSON 형식으로 파싱
-                // console.log('조회잘됨');
+                console.log('조회잘됨');
                 setLikeToggle(json.up);
                 // console.log("TOTAL:"+json.total);
                 setTotalLike(json.total);
             } else {
-                // console.log("조회 실패");
+                console.log("조회 실패");
             }
         } catch (error) {
             // console.error("오류 발생:", error);
@@ -276,7 +276,7 @@ const RequestDetail = () => {
                         <div className="comment-box">
                             {replyList.length>0?
                                 replyList.map(con =>
-                                    <BoardReply item={con} getReplyCount={getReplyCount}/>
+                                    <RequestBoardReply item={con} getReplyCount={getReplyCount}/>
                                 ):<p className="e">아직 댓글이 없습니다</p>}
                             <Pagination
                                 activePage={page}
