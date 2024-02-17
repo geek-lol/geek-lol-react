@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+
+.rank {
+  width: 100%;
+  //height: 90vh;
+  display: flex;
+  justify-content: center;
+  background: #eee;
+  
+  
+  .rank-container {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px;
+    margin: 20vh 0;
+    background: #fbfbfb;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+
+    .rank-title {
+      font-family: 'Nanum Gothic', sans-serif;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 35px;
+    }
+
+    .rank-select {
+      width: 25%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      margin: 60px 0;
+    }
+
+    .rank-board {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-radius: 10px;
+      box-shadow: 2px 2px 5px #CCCCCC;
+    }
+
+    .rank-bottom {
+      margin: 50px;
+
+      .navigation {
+
+        .paging {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+
+          .page-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 30px;
+            height: 30px;
+            box-shadow: 1px 1px 3px #cccccc;
+            border-radius: 5px ;
+            border: 1px solid #9fe8ff;
+            margin: 3px;
+
+            &.current-page {
+              background: black;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+}

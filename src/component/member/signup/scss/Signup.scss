@@ -11,22 +11,30 @@
 
   .signup-textbox {
     color: #fff;
-    font-size: 30px;
+    font-size: 25px;
   }
   .signup-input-box {
     display: flex;
     flex-direction: column;
     gap: 3px;
     width: 75%;
-    display: flex;
     justify-content: center;
-    flex-direction: column;
-    
+    .row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      .message {
+        font-size: 13px;
+      }
+    }
     .input-textbox {
       color: #fff;
-      font-size: 18px;
+      font-size: 16px;
     }
-    
+
+
     .signup-input {
       border: none;
       border-radius: 5px;
@@ -51,6 +59,8 @@
     margin-top: 5px;
 
     .button-textbox {
+      border: 0;
+      background: none;
       color: #fff;
       font-size: 20px;
     }
