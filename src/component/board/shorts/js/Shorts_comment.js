@@ -191,6 +191,7 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                                 key={reply.id}
                                 shortReplyList={reply}
                                 item={item}
+                                fetchData={fetchData}
                             />
                         ))}
                     </ul>
