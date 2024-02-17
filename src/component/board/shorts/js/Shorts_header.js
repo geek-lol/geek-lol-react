@@ -32,8 +32,8 @@ const Shorts_header = ({onAdd}) => {
                                 <p className={'btn2'}>미니게임</p>
                                 <div className={'board-menu-bar'}>
                                     <div className={'board-menuline'}></div>
-                                    <Link to='/board/main' className={'menubar btn-b'}>응 미니게임~</Link>
-                                    <Link to='/board/main' className={'menubar btn-b'}>2야</Link>
+                                    <Link to='/csgame' className={'menubar btn-b'}>민희언 주기깅</Link>
+                                    <Link to='/resgame' className={'menubar btn-b'}>반응속도테스트</Link>
                                 </div>
                             </div>
                         </div>
@@ -45,12 +45,11 @@ const Shorts_header = ({onAdd}) => {
                                     <div className={'board-menuline'}></div>
 
                                     <Link to='/board/main' className={'menubar btn-b'}>자유게시판</Link>
-                                    <Link to='/board/main' className={'menubar btn-b'}>LCK게시판</Link>
-                                    <Link to='/board/main' className={'menubar btn-b'}>공략게시판</Link>
+                                    <Link to='/board/main/Request' className={'menubar btn-b'}>트롤재판소</Link>
+                                    <Link to='/board/shorts' className={'menubar btn-b'}>하이라이트</Link>
                                 </div>
                             </div>
                         </div>
-                        <Link to='/rank' className={'btn-b'}><MdHowToVote className={'btn1'}/><p className={'btn2'}>트롤재판소</p></Link>
                     </div>
                 </div>
             </div>

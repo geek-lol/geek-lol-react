@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Header from "./component/header/js/Header";
 import { Reset } from "styled-reset";
 import Template from "./component/member/template/js/Template";
 import {BrowserRouter, json, Route, Routes, useLocation} from "react-router-dom";
 import Main from "./component/main/js/main";
-import Board from "./component/board/js/Board";
 import Rank from "./component/rank/js/Rank";
 import BoardTemplate from "./component/board/js/BoardTemplate";
 import ResponseTime from "./component/game/js/ResponseTime";
@@ -36,11 +34,14 @@ function App() {
             console.log("true 뜸");
         }else if(getCurrentLoginUser().autologin === "false"){
             console.log("false아닌 무언가");
-            window.addEventListener('beforeunload', e => {
-                console.log(autoLogin);
+            const clearLocalStorage = () => {
                 localStorage.clear();
-                }
-            )
+            };
+            window.addEventListener("unload", clearLocalStorage);
+
+            return () => {
+                window.removeEventListener("unload", clearLocalStorage);
+            };
         }
         setAutoLogin(getCurrentLoginUser().autologin);
 
