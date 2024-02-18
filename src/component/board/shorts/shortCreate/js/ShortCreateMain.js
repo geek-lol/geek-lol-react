@@ -76,7 +76,6 @@ const ShortCreateMain = () => {
 
     // 쇼츠 업로드
 
-
     const fetchShortUpload = async () => {
 
 
@@ -163,6 +162,7 @@ const ShortCreateMain = () => {
                                 type='file'
                                 style={{display: 'none'}}
                                 onChange={showVideoHandler}
+                                accept={"video/*"}
                             />
                         </div>
                         <div className={'sc-produce-box'}>

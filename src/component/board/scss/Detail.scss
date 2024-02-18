@@ -44,8 +44,8 @@
       border-bottom: 1px solid black;
       margin-bottom: 32px;
       .imgTag{
-        width: 50%;
-        height: 300px;
+        width: 500px;
+        object-fit: contain;
       }
     }
     .content-bottom{

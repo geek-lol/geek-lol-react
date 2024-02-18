@@ -5,6 +5,7 @@ import {BOARD_REPLY_URL, USER_URL} from "../../../../config/host-config";
 import {getCurrentLoginUser} from "../../../../utils/login-util";
 import Shorts_comment_list from "./Shorts_comment_list";
 import '../scss/Shorts_comment.scss'
+import {redirect, useNavigate} from "react-router-dom";
 
 const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     const {shortsId, replyCount} = item;
@@ -13,11 +14,13 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
 
     const [imgUrl, setImgUrl] = useState();
     const token = getCurrentLoginUser().token;
+    const redirection = useNavigate();
 
     const requestHeader = {
         'content-type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
+    const defaultImageUrl = process.env.PUBLIC_URL + '/assets/defaultUser.jpg';
 
     const containerRef = useRef(null);
 
@@ -26,6 +29,18 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     const [shortReplyList, setShortReplyList] = useState([]); //replyList
     const [shortReplyCount, setShortReplyCount] = useState([]);
     const [replyValue, setReplyValue] = useState({context: ''});
+    // const [word, setWord] = useState(undefined);
+
+    const Dcommnet = (shortReplyList) => {
+        setShortReplyList(shortReplyList);
+        // console.log(word);
+        // setPage(2);
+    };
+    const commentCount = (shortReplyCount) => {
+        setShortReplyCount(shortReplyCount.length);
+        // console.log(word);
+        // setPage(2);
+    };
 
 
     const onChange = (event) => {
@@ -44,25 +59,21 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
         });
 
         if (res.status === 200) {
-            const imgData = await res.blob();
+            const imgData = await res.text();
 
-            // blob이미지를 url로 변환
-            const profileUrl = window.URL.createObjectURL(imgData);
-
-            setImgUrl(profileUrl);
+            setImgUrl(imgData);
             // console.log(profileUrl);
 
         } else {
-            const errMsg = await res.text();
-            alert(errMsg);
-            setImgUrl(null);
+
+            console.log('로그인을 하지 않았습니다');
         }
 
     };
 
     const addReply = async () => {
         try {
-            const res = await fetch(`${API_BASE_URL}/${shortsId}?page=1&size=15`, {
+            const res = await fetch(`${API_BASE_URL}/${shortsId}?page=1&size=10`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -76,9 +87,8 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             const json = await res.json();
             setReplyValue({context: ''});
             setShortReplyList(json.reply);
-            // console.log(json.reply);
+            setShortReplyCount(json.reply.length);
             setShortReplyCount(json.totalCount);
-            // Reset page to 1
             setPage(2);
 
             // Scroll to top
@@ -91,12 +101,17 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
 
     const submitHandler = (e) => {
         e.preventDefault();
+        if (!token) {
+            alert('로그인후 이용해주세요.');
+            redirection('/template/login');
+        }
         addReply();
+        fetchData();
     };
 
     useEffect(() => {
         ReplyCount(shortReplyCount);
-    }, [replyValue]);
+    }, [shortReplyCount]);
 
     // const [items, setItems] = useState([])
 
@@ -105,16 +120,16 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     const fetchData = async () => {
         if (replyCount !== 0) {
             try {
-                const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=15`, {
+                const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=10`, {
                     method: 'GET'
                 });
 
                 if (!res.ok) {
                     throw new Error(`HTTP 오류! 상태: ${res.status}`);
                 }
-
                 const json = await res.json();
-                setShortReplyList(prevList => [...prevList, ...json.reply]);
+                setShortReplyList(json.reply);
+                setShortReplyCount(json.reply.length);
                 setPage(prevPage => prevPage + 1);
 
             } catch (error) {
@@ -129,7 +144,11 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
 
 
     useEffect(() => {
-        fetchUserImg();
+        if (!token){
+            setImgUrl(defaultImageUrl);
+        } else {
+            fetchUserImg();
+        }
         fetchData();
     }, []);
 
@@ -180,6 +199,8 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                                 key={reply.id}
                                 shortReplyList={reply}
                                 item={item}
+                                Dcommnet={Dcommnet}
+                                commentCount={commentCount}
                             />
                         ))}
                     </ul>

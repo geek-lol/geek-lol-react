@@ -11,6 +11,7 @@ import Paper from '@mui/material/Paper';
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import axios from "axios";
 import {formatDate} from "../../../utils/format-date";
+import {RESGAME_RANK_URL} from "../../../config/host-config";
 const ResponseTime = () => {
 
     let startTime; // 시작시간
@@ -24,7 +25,7 @@ const ResponseTime = () => {
     const [token, setToken] = useState(getCurrentLoginUser().token);
     const tokenId = getCurrentLoginUser().userId;
     //요청 URL
-    const API_URL = "http://localhost:8686/game/res";
+    const API_URL = RESGAME_RANK_URL;
 
     // 요청 헤더 객체
     const requestHeader = {
@@ -194,7 +195,7 @@ const ResponseTime = () => {
                             {myRank.rank}
                         </TableCell>
                         <TableCell align="left">{`${myRank.userName}(${myRank.userId})`}</TableCell>
-                        <TableCell align="left">{myRank.score}</TableCell>
+                        <TableCell align="left">{myRank.score}ms</TableCell>
                         <TableCell align="left">{formatDate(myRank.recordDate, null)}</TableCell>
                     </TableRow>}
                         {rankList.map((row) => (
@@ -206,10 +207,15 @@ const ResponseTime = () => {
                                     {row.rank}
                                 </TableCell>
                                 <TableCell align="left">{`${row.userName}(${row.userId})`}</TableCell>
-                                <TableCell align="left">{row.score}</TableCell>
+                                <TableCell align="left">{row.score}ms</TableCell>
                                 <TableCell align="left">{formatDate(row.recordDate,null)}</TableCell>
                             </TableRow>
                         ))}
+                        {rankList.length=== 0 &&
+                            <TableRow>
+                                <TableCell align="center" colSpan={4}>랭킹 정보가 없습니다. 플레이하세요!</TableCell>
+                            </TableRow>
+                        }
                     </TableBody>
                 </Table>
             </TableContainer>
