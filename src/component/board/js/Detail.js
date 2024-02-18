@@ -128,6 +128,9 @@ const Detail = () => {
         if (totalReply <= 0) setTotalReply(0);
         setTotalReply(totalReply - 1);
     }
+
+    const [after, setAfter] = useState(null);
+
     const detailDelete = async () => {
         await fetch(`${BOARD_URL}`, {
             method: 'DELETE',
@@ -142,6 +145,14 @@ const Detail = () => {
             })
 
         }).then(res => {
+            if (res.status === 200) {
+                return res.json();
+            }
+        }).then(json => {
+            console.log(json);
+            setAfter(json.board);
+            redirection('/board/main/FreeBoard', {state: {board : json.board}});
+
         });
     };
     const useConfirm = (message = null, onConfirm, onCancel) => {
@@ -165,7 +176,6 @@ const Detail = () => {
     const deleteConfirm = () => {
         detailDelete();
         getReplyCount();
-        redirection('/board/main/FreeBoard');
     };
     const cancelConfirm = () => console.log("취소했습니다.");
     const confirmDelete = useConfirm(

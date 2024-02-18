@@ -10,6 +10,12 @@ const BoardShorts = () => {
     const [shortList, setShortList] = useState([]);
     const [error, setError] = useState(true); // 에러 상태 추가
     const API_BASE_URL = SHORT_URL
+    const [word, setWord] = useState(undefined);
+
+    const anymore = (word) => {
+        setWord(word.shorts);
+        console.log(word);
+    };
 
 
     useEffect(() => {
@@ -36,7 +42,7 @@ const BoardShorts = () => {
 
             });
 
-    }, []);
+    }, [word]);
 
 
 
@@ -46,7 +52,7 @@ const BoardShorts = () => {
             <div className={'shorts-header-wrapper'}>
                 <Shorts_header/>
             </div>
-            {error ? (
+            {!shortList ? (
                 <div className={'short-form'} id={'root'}>
                     <div className={'content'}>
                         <div className={'video-box'}>
@@ -64,6 +70,9 @@ const BoardShorts = () => {
                             id={shorts.shortsId}
                             item={shorts}
                             upVote={shorts.upCount}
+                            isError={error}
+                            anymore={anymore}
+
                         />
                     ))}
                 </ul>

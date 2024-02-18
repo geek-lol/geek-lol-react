@@ -61,7 +61,6 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
         if (res.status === 200) {
             const imgData = await res.text();
 
-
             setImgUrl(imgData);
             // console.log(profileUrl);
 

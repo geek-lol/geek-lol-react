@@ -310,6 +310,7 @@ const ShortsContent = ({id, item, upVote, anymore}) => {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
             setShortList(shortList.filter(short => short.shortsId !== shortsId));
+
             getshortList();
         } else {
             console.error('Error:', res.status);
