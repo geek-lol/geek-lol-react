@@ -8,7 +8,7 @@ import {getCurrentLoginUser} from "../../../utils/login-util";
 import async from "async";
 import {COUNT_URL, USER_URL} from "../../../config/host-config";
 
-const MyPageTemplate = ({profileSet}) => {
+const MyPageTemplate = ({profileSet,getNickname}) => {
     //mypage 렌더링 유형을 저장
     const [pageType, setPageType] = useState(1);
 
@@ -79,8 +79,8 @@ const MyPageTemplate = ({profileSet}) => {
     return (
         <div className="mypage">
             <MypageSideMenu changeType={changeType} />
-            {pageType === 1 && <MyPageProfile userInfo={userInfo} myActivity={myActivity} profileSet={profileSet}/>}
-            {pageType === 2 && <MyInformation userInfo={userInfo} changeUser ={changeUser} />}
+            {pageType === 1 && <MyPageProfile userInfo={userInfo} myActivity={myActivity} profileSet={profileSet} />}
+            {pageType === 2 && <MyInformation userInfo={userInfo} changeUser ={changeUser} getNickname={getNickname} />}
             {pageType === 3 && <MyActivityMain />}
         </div>
     );
