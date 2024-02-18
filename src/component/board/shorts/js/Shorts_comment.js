@@ -36,6 +36,11 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
         // console.log(word);
         // setPage(2);
     };
+    const commentCount = (shortReplyCount) => {
+        setShortReplyCount(shortReplyCount.length);
+        // console.log(word);
+        // setPage(2);
+    };
 
 
     const onChange = (event) => {
@@ -54,12 +59,10 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
         });
 
         if (res.status === 200) {
-            const imgData = await res.blob();
+            const imgData = await res.text();
 
-            // blob이미지를 url로 변환
-            const profileUrl = window.URL.createObjectURL(imgData);
 
-            setImgUrl(profileUrl);
+            setImgUrl(imgData);
             // console.log(profileUrl);
 
         } else {
@@ -127,6 +130,7 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                 }
                 const json = await res.json();
                 setShortReplyList(json.reply);
+                setShortReplyCount(json.reply.length);
                 setPage(prevPage => prevPage + 1);
 
             } catch (error) {
@@ -197,6 +201,7 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                                 shortReplyList={reply}
                                 item={item}
                                 Dcommnet={Dcommnet}
+                                commentCount={commentCount}
                             />
                         ))}
                     </ul>

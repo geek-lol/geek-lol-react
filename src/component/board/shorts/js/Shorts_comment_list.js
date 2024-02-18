@@ -6,7 +6,7 @@ import {getCurrentLoginUser} from "../../../../utils/login-util";
 import {BsThreeDotsVertical} from "react-icons/bs";
 import cn from "classnames";
 
-const ShortsCommentList = ({item, shortReplyList, ref,Dcommnet}) => {
+const ShortsCommentList = ({item, shortReplyList,Dcommnet, commentCount}) => {
     const token = getCurrentLoginUser().token;
     const [userId, setUserId] = useState(getCurrentLoginUser().userId);
     const requestHeader = {
@@ -37,18 +37,16 @@ const ShortsCommentList = ({item, shortReplyList, ref,Dcommnet}) => {
     // 댓글쓴 사람의 이미지 URL
     const fetchWriterImg = async () => {
 
-        const url = `${API_IMG_URL}/profile?userId=${writerId}`;
+        const url = `${API_IMG_URL}/profile/${writerId}`;
         const res = await fetch(url, {
             method: "GET"
         });
 
         if (res.status === 200) {
-            const imgData = await res.blob();
+            const imgData = await res.text();
 
-            // blob이미지를 url로 변환
-            const profileUrl = window.URL.createObjectURL(imgData);
 
-            setWriterImgUrl(profileUrl);
+            setWriterImgUrl(imgData);
             // console.log(profileUrl);
 
         } else {
@@ -111,6 +109,9 @@ const ShortsCommentList = ({item, shortReplyList, ref,Dcommnet}) => {
             const json = await res.json().catch(() => ({}));
 
             Dcommnet(json.reply);
+            commentCount(json.reply);
+            console.log(json.reply)
+            setViewDelete(false);
         } else {
             console.error('Error:', res.status);
 
