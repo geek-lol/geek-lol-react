@@ -65,7 +65,6 @@ const MyInformation = ({userInfo,changeUser,getNickname}) => {
 
         if (res.status === 200) {
             const json = await res.json();
-            // localStorage.clear();
 
             const {token, userName, role, id} = json;
             getNickname(userName);
@@ -74,7 +73,7 @@ const MyInformation = ({userInfo,changeUser,getNickname}) => {
             localStorage.setItem('ROLE', role);
             localStorage.setItem('USER_ID', id);
 
-            changeUser(user);
+            changeUser(json);
         } else {
             alert('서버와의 통신이 원활하지 않습니다.');
         }
@@ -96,17 +95,6 @@ const MyInformation = ({userInfo,changeUser,getNickname}) => {
             setNewNameCheck(false);
             setAlterName(false);
         }
-    }
-    const inputNameHandler = (e) =>{
-        const inputs = e.target.value
-        if (inputs.length < 2 || inputs.length>6){
-            setNewNameCheck(false);
-            setMessage("닉네임은 2~6글자 사이여야 합니다.")
-        } else{
-            setNewNameCheck(true);
-            setMessage("닉네임 사용가능 합니다!")
-        }
-        setNewName(inputs);
     }
 
     const deleteFetch = async () =>{
@@ -177,8 +165,7 @@ const MyInformation = ({userInfo,changeUser,getNickname}) => {
                                 className="my-info-item"
                                 id="alterUserName"
                                 value={newName}
-                                variant="standard"
-                                onChange={inputNameHandler}/>
+                                variant="standard"/>
                             <span className={'message'} style={
                                 newNameCheck
                                     ? {color: '#61DBF0'}

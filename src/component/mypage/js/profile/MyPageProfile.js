@@ -12,14 +12,14 @@ const MyPageProfile = ({userInfo,myActivity,profileSet}) => {
 
     // 토큰 가져오기
     const token= getCurrentLoginUser().token;
-    const userId = getCurrentLoginUser().token;
+    const userId = getCurrentLoginUser().userId;
 
     //요청 URL
     const API_URL = "http://localhost:8686/user";
 
     useEffect(() => {
         userProfileFetch();
-    }, []);
+    }, [imgUrl]);
 
 
     //회원 이미지 가져오기 fetch
@@ -37,8 +37,9 @@ const MyPageProfile = ({userInfo,myActivity,profileSet}) => {
 
             console.log(profileData)
             setImgUrl(profileData);
+            profileSet(profileData);
         }
-        profileSet(imgUrl);
+
     }
     //회원 이미지 변경 fetch
     const alterImgFetch= async (file)=>{
@@ -66,21 +67,16 @@ const MyPageProfile = ({userInfo,myActivity,profileSet}) => {
         }
     }
     //파일 선택시 썸넬 화면에 렌더링
-    function showThumbnailHandler(e) {
-        profileSet(e);
-        // 첨부된 파일의 데이터를 가져오기
+    async function showThumbnailHandler(e) {
+        //첨부된 파일의 데이터를 가져오기
         const file = document.getElementById('profile-img').files[0];
 
-        // console.log(file)
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-
-        reader.onloadend = () =>{
-            setImgUrl(reader.result);
-            profileSet(reader.result);
+        if (file){
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            await alterImgFetch(file);
+            await setImgUrl(file);
         }
-        alterImgFetch(file);
-        profileSet(reader.result);
     }
     function thumbnailCLickHandler() {
         document.getElementById('profile-img').click();
