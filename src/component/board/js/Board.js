@@ -16,7 +16,7 @@ const Board = ({touch}) => {
                 <Route path={'/FreeBoard'} element={<FreeBoard/>}/>
                 <Route path={'/LCK'} element={<LcKboard/>}/>
                 <Route path={'/Solution'} element={<Solution/>}/>
-                <Route path={'/Request'} element={<RequestBoard/>}/>
+                <Route path={'/Request'} element={<RequestBoard />}/>
             </Routes>
 
         </>

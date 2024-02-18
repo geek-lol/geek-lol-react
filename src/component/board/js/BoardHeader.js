@@ -9,10 +9,10 @@ function BoardHeader({touch}) {
         if (window.location.href.includes("FreeBoard")) {
             setClick("c1");
         }
-        if (window.location.href.includes("LCK")) {
+        if (window.location.href.includes("Request")) {
             setClick("c2");
         }
-        if (window.location.href.includes("Solution")) {
+        if (window.location.href.includes("Short")) {
             setClick("c3");
         }
     }, [click,touch]);

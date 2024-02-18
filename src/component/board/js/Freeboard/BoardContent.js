@@ -4,10 +4,8 @@ import {Link} from "react-router-dom";
 function BoardContent({item}) {
     const {bulletinId,posterId,title,viewCount,localDateTime,upCount,totlaReply}=item;
     const [timeDifference, setTimeDifference] = useState('');
-
     // 현재 시간을 가져오는 함수
     const getCurrentTime = () => new Date();
-
     // 두 날짜 사이의 차이를 계산하는 함수
     const calculateTimeDifference = (startDateTime, endDateTime) => {
         const timeDifference = Math.abs(endDateTime - startDateTime);

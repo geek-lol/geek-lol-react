@@ -41,7 +41,7 @@ const Detail = () => {
     const [replyList, setReplyList] = useState([]);
     const [totalReply, setTotalReply] = useState(0);
     const [totalPage, setTotalPage] = useState();
-    const [likeToggle, setLikeToggle] = useState(1);
+    const [likeToggle, setLikeToggle] = useState(0);
     const redirection = useNavigate();
     const[totalLike,setTotalLike]=useState(null);
     const [word,setWord]=useState();
