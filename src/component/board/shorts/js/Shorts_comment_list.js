@@ -29,10 +29,11 @@ const ShortsCommentList = ({item, shortReplyList,Dcommnet, commentCount}) => {
 
     useEffect(() => {
         fetchWriterImg();
+        setWriter(false);
         if (userId === writerId) {
             setWriter(true);
         }
-    }, [])
+    }, [shortReplyList])
 
     // 댓글쓴 사람의 이미지 URL
     const fetchWriterImg = async () => {

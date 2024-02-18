@@ -88,7 +88,6 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             setReplyValue({context: ''});
             setShortReplyList(json.reply);
             setShortReplyCount(json.reply.length);
-            setShortReplyCount(json.totalCount);
             setPage(2);
 
             // Scroll to top
