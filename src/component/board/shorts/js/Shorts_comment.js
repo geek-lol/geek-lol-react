@@ -29,6 +29,13 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     const [shortReplyList, setShortReplyList] = useState([]); //replyList
     const [shortReplyCount, setShortReplyCount] = useState([]);
     const [replyValue, setReplyValue] = useState({context: ''});
+    // const [word, setWord] = useState(undefined);
+
+    const Dcommnet = (shortReplyList) => {
+        setShortReplyList(shortReplyList);
+        // console.log(word);
+        // setPage(2);
+    };
 
 
     const onChange = (event) => {
@@ -64,7 +71,7 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
 
     const addReply = async () => {
         try {
-            const res = await fetch(`${API_BASE_URL}/${shortsId}?page=1&size=15`, {
+            const res = await fetch(`${API_BASE_URL}/${shortsId}?page=1&size=10`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -78,8 +85,12 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             const json = await res.json();
             setReplyValue({context: ''});
             setShortReplyList(json.reply);
+<<<<<<< Updated upstream
             setShortReplyCount(json.reply.length);
 
+=======
+            setShortReplyCount(json.totalCount);
+>>>>>>> Stashed changes
             setPage(2);
 
             // Scroll to top
@@ -102,7 +113,7 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
 
     useEffect(() => {
         ReplyCount(shortReplyCount);
-    }, [replyValue]);
+    }, [shortReplyCount]);
 
     // const [items, setItems] = useState([])
 
@@ -111,19 +122,22 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     const fetchData = async () => {
         if (replyCount !== 0) {
             try {
-                const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=15`, {
+                const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=10`, {
                     method: 'GET'
                 });
 
                 if (!res.ok) {
                     throw new Error(`HTTP 오류! 상태: ${res.status}`);
                 }
-
                 const json = await res.json();
+<<<<<<< Updated upstream
                 console.log(json.reply);
                 setShortReplyCount(json.reply.length);
                 // console.log(json.total);
                 setShortReplyList(prevList => [...prevList, ...json.reply]);
+=======
+                setShortReplyList(json.reply);
+>>>>>>> Stashed changes
                 setPage(prevPage => prevPage + 1);
 
             } catch (error) {
@@ -143,7 +157,6 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
         } else {
             fetchUserImg();
         }
-
         fetchData();
     }, []);
 
@@ -194,6 +207,10 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                                 key={reply.id}
                                 shortReplyList={reply}
                                 item={item}
+<<<<<<< Updated upstream
+=======
+                                Dcommnet={Dcommnet}
+>>>>>>> Stashed changes
                             />
                         ))}
                     </ul>
