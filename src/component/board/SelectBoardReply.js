@@ -59,7 +59,6 @@ const SelectBoardReply = ({item,getReplyCount}) => {
                 },
             });
             if (response.ok) {
-                alert("삭제되었습니다.");
                 console.log('댓글이 성공적으로 삭제되었습니다.');
             } else {
                 // 서버 응답이 JSON 형식이 아닌 경우에 대한 처리

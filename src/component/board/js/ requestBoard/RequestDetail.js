@@ -37,6 +37,9 @@ const RequestDetail = () => {
                 if (res.status === 200) {
                     return res.json();
                 }
+                if(res.status===400){
+                    setReplyList([]);
+                }
             })
             .then(json => {
                 if (!json) return;

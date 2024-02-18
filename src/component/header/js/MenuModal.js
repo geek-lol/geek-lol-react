@@ -15,11 +15,9 @@ const MenuModal = ({menu, isLogin,modalTouchHandler}) => {
                     <SearchBox/>
                     <Link to="/board/main/FreeBoard" className="modalContent c1"
                           onClick={modalTouchHandler}>자유게시판</Link>
-                    <Link to="/board/main/LCK" className="modalContent c2"
-                          onClick={modalTouchHandler}>LCK</Link>
-                    <Link to="/board/main/Solution" className="modalContent c3"
-                          onClick={modalTouchHandler}>공략게시판</Link>
-                    <Link to="/" className="modalContent c4"
+                    <Link to="/board/Request" className="modalContent c1"
+                          onClick={modalTouchHandler}>투표게시판</Link>
+                    <Link to="/board/shorts" className="modalContent c4"
                           onClick={modalTouchHandler}>하이라이트</Link>
                 </div>
                 <div className="infoBox">

@@ -1,3 +1,4 @@
+
 .profile__box{
   display: flex;
   align-items: center;
@@ -16,5 +17,10 @@
     font-size: 1.25em;
     font-weight: 700;
     color: #000;
+  }
+  @media screen and (max-width:1400px) {
+        .nickname{
+          color: #fff;
+        }
   }
 }

@@ -43,7 +43,12 @@ const Detail = () => {
     const [totalPage, setTotalPage] = useState();
     const [likeToggle, setLikeToggle] = useState(1);
     const redirection = useNavigate();
-    const [totalLike, setTotalLike] = useState(null);
+    const[totalLike,setTotalLike]=useState(null);
+    const [word,setWord]=useState();
+    const wordfc=(text)=>{
+        setWord(text);
+    }
+
 
     useEffect(() => {
         setData({...item});
@@ -81,7 +86,7 @@ const Detail = () => {
     // 댓글 리스트 가져오기
     useEffect(() => {
         Replyrendering();
-    }, [inputText, page, totalReply]);
+    }, [inputText, page, totalReply,word]);
     useEffect(() => {
         findLike();
     }, [data]);
@@ -96,6 +101,9 @@ const Detail = () => {
             .then(res => {
                 if (res.status === 200) {
                     return res.json();
+                }
+                if(res.status===400){
+                    setReplyList([]);
                 }
             })
             .then(json => {
@@ -338,7 +346,7 @@ const Detail = () => {
                     <div className="comment-box">
                         {replyList.length>0?
                             replyList.map(con =>
-                                <BoardReply item={con} getReplyCount={getReplyCount}/>
+                                <BoardReply item={con} getReplyCount={getReplyCount} wordfc={wordfc} Replyrendering={Replyrendering}/>
                             ):<p className="e">아직 댓글이 없습니다</p>}
                         <Pagination
                             activePage={page}

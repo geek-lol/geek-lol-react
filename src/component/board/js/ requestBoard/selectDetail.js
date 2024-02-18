@@ -55,6 +55,9 @@ const SelectDetail = () => {
                 if (res.status === 200) {
                     return res.json();
                 }
+                if (res.status === 400) {
+                    setReplyList([]);
+                }
             })
             .then(json => {
                 if (!json) return;
@@ -298,10 +301,10 @@ const SelectDetail = () => {
                             >등록</Button>
                         </form>
                         <div className="comment-box">
-                            {
+                            {replyList.length>0?
                                 replyList.map(con =>
                                     <SelectBoardReply item={con} getReplyCount={getReplyCount}/>
-                                )}
+                                ):<p className="e">아직 댓글이 없습니다.</p>}
                             <Pagination
                                 className="tq"
                                 activePage={page}
