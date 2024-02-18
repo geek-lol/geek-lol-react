@@ -83,6 +83,9 @@ const MyActivityComment = () => {
             setRows(updatedRows)
             setTotalPage(json.totalPages)
         }
+        if (json.totalPages === 0){
+            setTotalPage(1);
+        }
     }
 
     useEffect(()=>{
