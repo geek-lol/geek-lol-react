@@ -29,6 +29,18 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     const [shortReplyList, setShortReplyList] = useState([]); //replyList
     const [shortReplyCount, setShortReplyCount] = useState([]);
     const [replyValue, setReplyValue] = useState({context: ''});
+    // const [word, setWord] = useState(undefined);
+
+    const Dcommnet = (shortReplyList) => {
+        setShortReplyList(shortReplyList);
+        // console.log(word);
+        // setPage(2);
+    };
+    const commentCount = (shortReplyCount) => {
+        setShortReplyCount(shortReplyCount.length);
+        // console.log(word);
+        // setPage(2);
+    };
 
 
     const onChange = (event) => {
@@ -49,9 +61,6 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
         if (res.status === 200) {
             const imgData = await res.text();
 
-            // blob이미지를 url로 변환
-            // const profileUrl = window.URL.createObjectURL(imgData);
-
             setImgUrl(imgData);
             // console.log(profileUrl);
 
@@ -64,7 +73,7 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
 
     const addReply = async () => {
         try {
-            const res = await fetch(`${API_BASE_URL}/${shortsId}?page=1&size=15`, {
+            const res = await fetch(`${API_BASE_URL}/${shortsId}?page=1&size=10`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -78,9 +87,8 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             const json = await res.json();
             setReplyValue({context: ''});
             setShortReplyList(json.reply);
-            // console.log(json.reply);
+            setShortReplyCount(json.reply.length);
             setShortReplyCount(json.totalCount);
-            // Reset page to 1
             setPage(2);
 
             // Scroll to top
@@ -98,11 +106,12 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             redirection('/template/login');
         }
         addReply();
+        fetchData();
     };
 
     useEffect(() => {
         ReplyCount(shortReplyCount);
-    }, [replyValue]);
+    }, [shortReplyCount]);
 
     // const [items, setItems] = useState([])
 
@@ -111,16 +120,16 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
     const fetchData = async () => {
         if (replyCount !== 0) {
             try {
-                const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=15`, {
+                const res = await fetch(`${API_BASE_URL}/${shortsId}?page=${page}&size=10`, {
                     method: 'GET'
                 });
 
                 if (!res.ok) {
                     throw new Error(`HTTP 오류! 상태: ${res.status}`);
                 }
-
                 const json = await res.json();
-                setShortReplyList(prevList => [...prevList, ...json.reply]);
+                setShortReplyList(json.reply);
+                setShortReplyCount(json.reply.length);
                 setPage(prevPage => prevPage + 1);
 
             } catch (error) {
@@ -140,7 +149,6 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
         } else {
             fetchUserImg();
         }
-
         fetchData();
     }, []);
 
@@ -191,7 +199,8 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                                 key={reply.id}
                                 shortReplyList={reply}
                                 item={item}
-                                fetchData={fetchData}
+                                Dcommnet={Dcommnet}
+                                commentCount={commentCount}
                             />
                         ))}
                     </ul>

@@ -72,6 +72,7 @@ const BoardShorts = () => {
                             upVote={shorts.upCount}
                             isError={error}
                             anymore={anymore}
+
                         />
                     ))}
                 </ul>

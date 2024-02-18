@@ -76,7 +76,6 @@ const ShortCreateMain = () => {
 
     // 쇼츠 업로드
 
-
     const fetchShortUpload = async () => {
 
 

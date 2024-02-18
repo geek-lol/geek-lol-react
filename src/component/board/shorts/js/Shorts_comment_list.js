@@ -6,7 +6,7 @@ import {getCurrentLoginUser} from "../../../../utils/login-util";
 import {BsThreeDotsVertical} from "react-icons/bs";
 import cn from "classnames";
 
-const ShortsCommentList = ({item, shortReplyList, ref,fetchData}) => {
+const ShortsCommentList = ({item, shortReplyList,Dcommnet, commentCount}) => {
     const token = getCurrentLoginUser().token;
     const [userId, setUserId] = useState(getCurrentLoginUser().userId);
     const requestHeader = {
@@ -98,6 +98,7 @@ const ShortsCommentList = ({item, shortReplyList, ref,fetchData}) => {
     }, [replyDate]);  // localDateTime이 변경될 때마다 useEffect 실행
 
 
+
     const removeComment = async () => {
         const res = await fetch(`${API_BASE_URL}/${replyId}`, {
             method: 'DELETE',
@@ -107,7 +108,10 @@ const ShortsCommentList = ({item, shortReplyList, ref,fetchData}) => {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
 
-            fetchData();
+            Dcommnet(json.reply);
+            commentCount(json.reply);
+            console.log(json.reply)
+            setViewDelete(false);
         } else {
             console.error('Error:', res.status);
 

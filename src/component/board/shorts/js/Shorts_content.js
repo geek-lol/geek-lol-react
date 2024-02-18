@@ -8,7 +8,7 @@ import {getCurrentLoginUser} from "../../../../utils/login-util";
 import {json, useNavigate} from "react-router-dom";
 import ReactPlayer from "react-player";
 
-const ShortsContent = ({id, item, upVote, isError, anymore}) => {
+const ShortsContent = ({id, item, upVote, anymore}) => {
     const API_BASE_URL = SHORT_URL;
     const API_VOTE_URL = SHORT_VOTE_URL;
     const API_IMG_URL = USER_URL;
@@ -20,13 +20,13 @@ const ShortsContent = ({id, item, upVote, isError, anymore}) => {
     };
     const containerRef = useRef(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isError, setIsError] = useState(null);
     const redirect = useNavigate();
-    const {shortsId, uploaderName, replyCount, viewCount, upCount, title, context, uploaderId} = item;
+    const {shortsId, uploaderName, replyCount, viewCount, upCount, title, context, uploaderId, uploadDate} = item;
 
 
     const [viewComment, setViewComment] = useState(false);
     const [viewAni, setViewAni] = useState(false);
-
 
 
     // 신고 모달 띄우기
@@ -121,8 +121,6 @@ const ShortsContent = ({id, item, upVote, isError, anymore}) => {
             .then(json => {
                 // console.log('shorts', json.shorts);
                 setShortList(json.shorts);
-                console.log('json.short',json.shorts);
-                console.log(json.error);
                 setReplyLength(replyCount);
                 // setPage(prevPage => prevPage + 1);
                 // console.log(shortsId)
@@ -302,13 +300,6 @@ const ShortsContent = ({id, item, upVote, isError, anymore}) => {
         );
     };
 
-    const removeshort = (e) => {
-        if (userId === uploaderId) {
-            removeshortlist();
-            setViewReport(false);
-        }
-        getshortList();
-    }
 
     const removeshortlist = async () => {
         const res = await fetch(`${API_BASE_URL}/${shortsId}`, {
@@ -319,14 +310,15 @@ const ShortsContent = ({id, item, upVote, isError, anymore}) => {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
             setShortList(shortList.filter(short => short.shortsId !== shortsId));
-            anymore(json);
+
+            getshortList();
         } else {
             console.error('Error:', res.status);
             getshortList();
 
         }
     };
-
+    const formattedUploadDate = new Date(uploadDate).toLocaleDateString('ko-KR');
 
     return (
         <>
@@ -430,16 +422,17 @@ const ShortsContent = ({id, item, upVote, isError, anymore}) => {
                         }
                     }}>
                         <div className={'modal-inform'}>
-                            <div className={'modal-inform-text'}>
-                                <p>정말 삭제하시겠습니까?</p>
-                                <div className={'modal-btns'}>
-                                    <div className={'modal-cancel-btn'} onClick={() => setViewReport(false)}>
-                                        <p>취소</p>
-                                    </div>
-                                    <div className={'modal-correct-btn'} onClick={removeshort}>
-                                        <p>확인</p>
-                                    </div>
-                                </div>
+                            <div className={'modal-box'}>
+                                <p className={'p-text'}>업로드 날짜</p>
+                                {new Date(uploadDate).toLocaleDateString('ko-KR')}
+                            </div>
+                            <div className={'modal-box'}>
+                                <p className={'p-text'}>설명</p>
+                                {context}
+                            </div>
+                            <div className={'modal-box'}>
+                                <p className={'p-text'}>조회수</p>
+                                {viewCount}회
                             </div>
 
                         </div>
