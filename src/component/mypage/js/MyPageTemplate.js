@@ -23,7 +23,8 @@ const MyPageTemplate = ({profileSet}) => {
         userId: "",
         userName:""
     });
-
+    // 유저 정보가 변하는지 감지하는 변수
+    const [userState , setUserState] = useState(false);
     // 토큰 가져오기
     const token= getCurrentLoginUser().token;
     const userId = getCurrentLoginUser().token;
@@ -65,15 +66,20 @@ const MyPageTemplate = ({profileSet}) => {
     }
     //하위 컴포넌트에서 userInfo변경
     const changeUser = (user) =>{
-        setUserInfo(user)
+        setUserInfo(prevState => ({
+            ...prevState,
+            user
+        }))
+        setUserState(!userState);
     }
     //하위 컴포넌트에서 type 변경
     const changeType = (type)=>{
         setPageType(type)
     }
-
     useEffect(() => {
-        userInfoFetch();
+        userInfoFetch()
+    }, [userState]);
+    useEffect(() => {
         myActivityCount();
     }, []);
     return (
