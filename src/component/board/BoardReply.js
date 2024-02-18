@@ -3,7 +3,7 @@ import {getCurrentLoginUser} from "../../utils/login-util";
 import {AiFillAlert} from "react-icons/ai";
 import {REPLY_URL} from "../../config/host-config";
 
-const BoardReply = ({item,getReplyCount}) => {
+const BoardReply = ({item,getReplyCount,wordfc,Replyrendering}) => {
     const {replyId, context, replyDate, writerId,writerName} = item;
     //토큰
     const [token, setToken] = useState(getCurrentLoginUser().token);
@@ -57,23 +57,19 @@ const BoardReply = ({item,getReplyCount}) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-            });
-
-            if (response.ok) {
-                console.log('댓글이 성공적으로 삭제되었습니다.');
-            } else {
-                // 서버 응답이 JSON 형식이 아닌 경우에 대한 처리
-                const contentType = response.headers.get('content-type');
-                if (contentType && contentType.includes('application/json')) {
-                    const responseData = await response.json();
-                    console.error('댓글 삭제 실패:', responseData.error);
-                } else {
-                    console.error('서버에서 예상하지 못한 형식의 응답을 받았습니다.');
-                    // 적절한 처리를 추가하세요.
+            }).then(res=>{
+                if(res.status===200){
+                    wordfc("ASdf");
+                    Replyrendering();
+                    return res.json();
                 }
-            }
+            }).then(json=>{
+
+                console.log(json);
+            })
+
+
         } catch (error) {
-            console.error('댓글 삭제 중 오류 발생:', error);
         }
     };
     const useConfirm = (message = null, onConfirm, onCancel) => {
@@ -96,6 +92,7 @@ const BoardReply = ({item,getReplyCount}) => {
     };
     const deleteConfirm = () => {
         deleteReply();
+        Replyrendering();
         getReplyCount();
         console.log("삭제했습니다.");
     };
