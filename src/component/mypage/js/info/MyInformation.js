@@ -18,7 +18,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const MyInformation = ({userInfo,changeUser}) => {
+const MyInformation = ({userInfo,changeUser,getNickname}) => {
     //리다이렉션 변수
     const redirection = useNavigate();
     // 비밀번호 수정 버튼 클릭 확인 변수
@@ -66,8 +66,8 @@ const MyInformation = ({userInfo,changeUser}) => {
         if (res.status === 200) {
             const json = await res.json();
 
-
             const {token, userName, role, id} = json;
+            getNickname(userName);
             localStorage.setItem('ACCESS_TOKEN', token);
             localStorage.setItem('USER_NAME', userName);
             localStorage.setItem('ROLE', role);

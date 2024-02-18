@@ -65,7 +65,6 @@ const MyPageProfile = ({userInfo,myActivity,profileSet}) => {
         } else {
             alert('서버와의 통신이 원활하지 않습니다.');
         }
-        // profileSet(file);
     }
     //파일 선택시 썸넬 화면에 렌더링
     async function showThumbnailHandler(e) {
@@ -75,11 +74,9 @@ const MyPageProfile = ({userInfo,myActivity,profileSet}) => {
         if (file){
             const reader = new FileReader();
             reader.readAsDataURL(file);
-
             await alterImgFetch(file);
             await setImgUrl(file);
         }
-
     }
     function thumbnailCLickHandler() {
         document.getElementById('profile-img').click();

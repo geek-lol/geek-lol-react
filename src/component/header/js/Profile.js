@@ -4,7 +4,7 @@ import '../scss/Profile.scss';
 import {getCurrentLoginUser} from "../../../utils/login-util";
 import {Link} from "react-router-dom";
 import {USER_URL} from "../../../config/host-config";
-const Profile = (profile) => {
+const Profile = ({profile,nickname}) => {
     const [token, setToken] = useState(getCurrentLoginUser().token);
     const [imgUrl, setImgUrl] = useState(undefined);
     const API_URL = "http://localhost:8686/user";
@@ -45,7 +45,7 @@ const Profile = (profile) => {
         <>
             <Link className='profile__box' to="/mypage">
                 <img className='profile' alt='흠냐' src={!imgUrl?src:imgUrl}/>
-                <span className='nickname'>{getCurrentLoginUser().username}</span>
+                <span className='nickname'>{nickname?nickname:getCurrentLoginUser().username}</span>
             </Link>
         </>
     );

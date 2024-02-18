@@ -9,7 +9,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import cn from "classnames";
 import {getCurrentLoginUser, isLogin, ROLE} from "../../../utils/login-util";
 
-const Header = ({sendTouch,profile}) => {
+const Header = ({sendTouch,profile,nickname}) => {
     //boardHeader 상태변수
     //nav 시작
     const [hovers1, sethover1] = useState(false);
@@ -184,7 +184,7 @@ const Header = ({sendTouch,profile}) => {
                             isInput === true && <SearchBox/>:null}
                     </div>
                     <ul className="certification__box">
-                        {isLoggedIn ? <Profile profile={profile}/> : <LoginBtn/>}
+                        {isLoggedIn ? <Profile profile={profile} nickname={nickname}/> : <LoginBtn/>}
                     </ul>
 
                 </nav>
