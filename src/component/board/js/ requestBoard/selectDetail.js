@@ -83,6 +83,11 @@ const SelectDetail = () => {
         }).then(json => {
             setC(json.cons);
             setP(json.pros);
+            if(location.state.isBool===true){
+                setCons(Math.round(json.consPercent) + "%");
+                setPros(Math.round(json.prosPercent) + "%");
+            }
+
         })
     }
     const setVoteData = async (text) => {
@@ -103,6 +108,7 @@ const SelectDetail = () => {
                 return
             }
             if (json.error !== null) {
+
                 alert(json.error);
                 return;
             }
@@ -143,9 +149,6 @@ const SelectDetail = () => {
             console.error('Error fetching video:', error);
         }
     }
-
-
-
     const blueClickHandler = () => {
         if (!getCurrentLoginUser().token) {
             alert("로그인이 필요합니다.");

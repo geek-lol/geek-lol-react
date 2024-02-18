@@ -9,7 +9,7 @@ import RequestContent from "./RequestContent";
 import {Pagination} from "@mui/material";
 import HeaderCard from "./headerCard";
 
-const RequestBoard = () => {
+const RequestBoard = ({touch}) => {
     const [hide, setHide] = useState(false);
     const [title, setTitle] = useState("제목");
     const [requestBoard, SetRequestBoard] = useState([]);

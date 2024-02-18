@@ -150,7 +150,7 @@ const BoardCreate = () => {
                 <div className={'btn-container'}>
                     <div className={'bc-btns'}>
                         <div className={'cancel-btn'}>
-                            <Link to="/board/main" className={'btn-b'}>취소</Link>
+                            <Link to="/board/main/FreeBoard" className={'btn-b'}>취소</Link>
                         </div>
                         <div className={'save-btn'} onClick={uploadHandler}>
                             <p className={'btn'}>등록</p>

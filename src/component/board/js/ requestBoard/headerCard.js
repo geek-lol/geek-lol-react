@@ -87,9 +87,8 @@ const HeaderCard = ({item,isBool}) => {
                 </div>
                 <div className="main-text2">
                     {isBool ?
-                        <Link to="/board/SelectDetail" state={{data:data,rulingId:rulingId}}><p>이전 투표글로</p></Link> :
-                        <Link to="/board/SelectDetail" state={{data:data,rulingId:rulingId}}><p>현재 투표글로</p></Link>
-
+                        <Link to="/board/SelectDetail" state={{data:data,rulingId:rulingId,isBool:isBool}}><p>이전 투표글로</p></Link> :
+                        <Link to="/board/SelectDetail" state={{data:data,rulingId:rulingId,isBool:isBool}}><p>현재 투표글로</p></Link>
                     }
                 </div>
             </div>

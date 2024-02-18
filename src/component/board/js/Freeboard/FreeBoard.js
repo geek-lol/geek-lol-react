@@ -22,7 +22,6 @@ const FreeBoard = () => {
     const [SortPage, setSortPage] = useState("0");
     const location = useLocation();
 
-    console.log(location);
     const relativeButtonHandler = (e) => {
         setHide(!hide);
     }
@@ -41,7 +40,6 @@ const FreeBoard = () => {
             setCleantitle('content');
         } else if (title === '작성자') {
             setCleantitle('poster');
-
         }
     }, [title]);
 
@@ -85,7 +83,6 @@ const FreeBoard = () => {
     useEffect(() => {
         search();
     }, [SortPage]);
-
     const inputHandler = (e) => {
         setInputContent(e.target.value);
     };
