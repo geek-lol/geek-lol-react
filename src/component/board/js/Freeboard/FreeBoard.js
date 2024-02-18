@@ -3,7 +3,7 @@ import {GoChevronDown} from "react-icons/go";
 import cn from "classnames";
 import {CiSearch} from "react-icons/ci";
 
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {BOARD_URL} from "../../../../config/host-config";
 import Board from "../Board";
 import BoardContent from "./BoardContent";
@@ -20,6 +20,9 @@ const FreeBoard = () => {
     const [inputContent, setInputContent] = useState("");
     const [cleantitle, setCleantitle] = useState("title");
     const [SortPage, setSortPage] = useState("0");
+    const location = useLocation();
+
+    console.log(location);
     const relativeButtonHandler = (e) => {
         setHide(!hide);
     }

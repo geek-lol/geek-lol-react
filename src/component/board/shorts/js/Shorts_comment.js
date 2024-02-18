@@ -47,12 +47,12 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
         });
 
         if (res.status === 200) {
-            const imgData = await res.blob();
+            const imgData = await res.text();
 
             // blob이미지를 url로 변환
-            const profileUrl = window.URL.createObjectURL(imgData);
+            // const profileUrl = window.URL.createObjectURL(imgData);
 
-            setImgUrl(profileUrl);
+            setImgUrl(imgData);
             // console.log(profileUrl);
 
         } else {

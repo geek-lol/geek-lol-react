@@ -37,18 +37,16 @@ const ShortsCommentList = ({item, shortReplyList, ref,fetchData}) => {
     // 댓글쓴 사람의 이미지 URL
     const fetchWriterImg = async () => {
 
-        const url = `${API_IMG_URL}/profile?userId=${writerId}`;
+        const url = `${API_IMG_URL}/profile/${writerId}`;
         const res = await fetch(url, {
             method: "GET"
         });
 
         if (res.status === 200) {
-            const imgData = await res.blob();
+            const imgData = await res.text();
 
-            // blob이미지를 url로 변환
-            const profileUrl = window.URL.createObjectURL(imgData);
 
-            setWriterImgUrl(profileUrl);
+            setWriterImgUrl(imgData);
             // console.log(profileUrl);
 
         } else {

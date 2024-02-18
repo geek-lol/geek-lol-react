@@ -8,7 +8,7 @@ import {getCurrentLoginUser} from "../../../../utils/login-util";
 import {json, useNavigate} from "react-router-dom";
 import ReactPlayer from "react-player";
 
-const ShortsContent = ({id, item, upVote, isError}) => {
+const ShortsContent = ({id, item, upVote, isError, anymore}) => {
     const API_BASE_URL = SHORT_URL;
     const API_VOTE_URL = SHORT_VOTE_URL;
     const API_IMG_URL = USER_URL;
@@ -319,7 +319,7 @@ const ShortsContent = ({id, item, upVote, isError}) => {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
             setShortList(shortList.filter(short => short.shortsId !== shortsId));
-
+            anymore(json);
         } else {
             console.error('Error:', res.status);
             getshortList();
