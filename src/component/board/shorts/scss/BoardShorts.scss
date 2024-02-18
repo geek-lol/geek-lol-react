@@ -1,0 +1,127 @@
+::-webkit-scrollbar {
+  display: none;
+}
+
+.short-container {
+  width: 100%;
+  min-height: 300px;
+  height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  overflow-y: hidden;
+
+
+  .shorts-header-wrapper {
+    position: fixed;
+    height: 97vh;
+    width: 12%;
+    min-width: 100px;
+    min-height: 300px;
+    display: flex;
+    justify-content: center;
+    background: #ffffff;
+    border-right: 1px solid #CCCCCC;
+    padding: 1%;
+    z-index: 3000;
+    //position: absolute;
+  }
+
+  .shorts-content-wrapper {
+    margin-left: 10%;
+    width: 90%;
+    overflow-y: auto;
+    flex-flow: column nowrap;
+    scroll-snap-type: y mandatory;
+    //text-align: center;
+
+  }
+
+  .shorts-content-wrapper > * {
+    scroll-snap-align: start;
+  }
+
+  .short-form {
+    //padding: 10% 0;
+    width: 100%;
+    min-width: 450px;
+    min-height: 450px;
+    height: 80%;
+    margin-top: 10vh;
+
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    .content {
+      width: 25%;
+      min-width: 450px;
+      height: 100%;
+      background: #ffffff;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+      display: flex;
+      position: relative;
+      z-index: 2000;
+
+
+      .video-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+
+        .error-icon {
+          font-size: 50px;
+          margin-bottom: 20px;
+        }
+
+        .error-msg {
+
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1260px) {
+  .short-container {
+    width: 100%;
+    height: 100vh;
+    min-height: 300px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+
+    .shorts-header-wrapper {
+      width: 3%;
+      height: 96%;
+      min-width: 30px;
+      min-height: 300px;
+      display: flex;
+      justify-content: center;
+      background: #ffffff;
+      border-right: 1px solid #CCCCCC;
+      padding: 1%;
+      z-index: 3000;
+      //position: absolute;
+    }
+
+    .shorts-content-wrapper {
+      width: 90%;
+      height: 96%;
+      flex-flow: column nowrap;
+      scroll-snap-type: y mandatory;
+
+    }
+
+    .shorts-content-wrapper > * {
+      scroll-snap-align: start;
+    }
+
+  }
+}
+
+

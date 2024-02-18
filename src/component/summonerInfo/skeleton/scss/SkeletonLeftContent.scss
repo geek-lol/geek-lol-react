@@ -1,0 +1,44 @@
+.skeleton-left-content {
+  width: 353px;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+
+
+  .skeleton-summoner-profile {
+    width: 353px;
+    min-height: 147px;
+    border: 1.5px #c3d1dc solid;
+    border-radius: 5px;
+  }
+
+  .skeleton-rank {
+    width: 353px;
+    height: 167.5px;
+    //height: 167.5px;
+
+    .skeleton-rankInfo {
+      width: 100%;
+      height: 167.5px;
+      border-radius: 5px;
+      border: 1.5px #c3d1dc solid;
+    }
+  }
+}
+
+.skeleton-summoner-profile, .skeleton-rankInfo,{
+  animation: loading 2s linear infinite;
+  animation-delay: 0s;
+  background-color: #cacaca;
+}
+
+@keyframes loading {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

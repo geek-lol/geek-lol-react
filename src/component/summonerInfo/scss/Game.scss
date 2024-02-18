@@ -1,0 +1,343 @@
+.game {
+  border-radius: 5px;
+  min-height: 130px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+
+  &.win {
+    background-color: rgba(0, 240, 255, 0.2);
+  }
+
+  &.lose {
+    background-color: rgba(255, 59, 59, 0.2);
+  }
+
+  .result-indicator {
+    width: 10px;
+    height: 130px;
+
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+
+    &.win {
+      background-color: rgba(0, 240, 255, 1);
+    }
+
+    &.lose {
+      background-color: rgba(255, 59, 59, 1);
+    }
+  }
+
+  .game-info-real {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 50%;
+
+    justify-content: space-between;
+  }
+
+  .game-info {
+    display: flex;
+    flex-direction: column;
+
+    .game-info-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+
+      .game-time {
+        position: relative;
+
+        .game-timestamp {
+          display: none;
+          position: absolute;
+
+          height: auto;
+
+          top: 0;
+          left: 50%;
+          transform: translate(-50%, -100%);
+          z-index: 1;
+          width: 260px;
+
+          background-color: #00207b;
+          color: #fff;
+          padding: 10px;
+          border-radius: 5px;
+          font-family: 'Nanum Gothic', sans-serif;
+          font-weight: 500;
+
+          &.show {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          }
+        }
+      }
+
+
+      .game-type {
+        font-size: 16px;
+        font-weight: 700;
+        font-family: 'Nanum Gothic', sans-serif;
+
+        &.win {
+          color: rgb(0, 173, 186);
+        }
+
+        &.lose {
+          color: rgba(255, 59, 59, 1);
+        }
+      }
+
+      .game-end-time {
+        font-weight: 700;
+        font-family: 'Nanum Gothic', sans-serif;
+      }
+
+      .game-progress-time-outcome {
+
+        .game-progress-time {
+          font-weight: 700;
+          font-family: 'Nanum Gothic', sans-serif;
+        }
+      }
+    }
+
+
+  }
+
+  .searchInfo {
+
+    .my-game-data {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 230px;
+
+      .player-info {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        width: 240px;
+
+        img {
+          border-radius: 5px;
+          width: 60px;
+        }
+
+        .summoner-spell-info {
+          position: relative;
+          height: 60px;
+
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+
+          .spell-description {
+            display: none;
+            position: absolute;
+            height: auto;
+
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            z-index: 1;
+            width: 400px;
+
+            background-color: #00207b;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Nanum Gothic', sans-serif;
+            font-weight: 500;
+
+
+            &.show {
+              display: block;
+            }
+
+          }
+
+          .spell-description1 {
+            display: none;
+            position: absolute;
+            height: auto;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -60%);
+            z-index: 1;
+            width: 400px;
+
+            background-color: #00207b;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+
+
+            &.show {
+              display: block;
+            }
+
+          }
+
+          .summoner-spell-image {
+            width: 30px;
+          }
+        }
+      }
+
+      .summoner-rune-info {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+
+        .rune-description {
+          display: none;
+          position: absolute;
+          height: auto;
+          top: 0;
+          left: 50%;
+          transform: translate(-50%, -110%);
+          z-index: 1;
+          width: 400px;
+
+          background-color: #00207b;
+          color: #fff;
+          padding: 10px;
+          border-radius: 5px;
+
+          &.show {
+            display: block;
+          }
+        }
+
+        img {
+          width: 30px;
+        }
+      }
+
+      .kda-data-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 120px;
+
+        .kda-number {
+          font-family: 'Nanum Gothic', sans-serif;
+          font-weight: 700;
+        }
+
+        .kda {
+          font-family: 'Nanum Gothic', sans-serif;
+          font-weight: 700;
+          font-size: 13px;
+        }
+
+        .kda-blue {
+          color: blue;
+        }
+        .kda-brown {
+          color: brown;
+        }
+        .kda-green {
+          color: green;
+        }
+        .kda-perfect {
+          color: purple;
+        }
+      }
+
+      .item-slot {
+
+        display: flex;
+        gap: 3px;
+        position: relative;
+
+        .item-description {
+          display: none;
+          position: absolute;
+          height: auto;
+          top: 0;
+          left: 50%;
+          transform: translate(-50%, -100%);
+          z-index: 1;
+          width: 300px;
+
+          background-color: #00207b;
+          color: #fff;
+          padding: 10px;
+          border-radius: 5px;
+
+
+          &.show {
+            display: block;
+          }
+        }
+
+        img {
+          width: 25px;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
+
+  .right-champion-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 280px;
+    font-family: 'Nanum Gothic', sans-serif;
+    font-weight: 700;
+
+
+    .team-one {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 150px;
+    }
+
+    .team-two {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 150px;
+    }
+
+    .champion-name-image {
+      display: flex;
+      align-items: center;
+
+      span {
+        font-size: 14px;
+      }
+
+      span:hover {
+        color: blue;
+        text-decoration-line: underline;
+      }
+
+      img {
+      }
+
+      .mine {
+        border-radius: 50%;
+      }
+    }
+  }
+
+
+}
+
