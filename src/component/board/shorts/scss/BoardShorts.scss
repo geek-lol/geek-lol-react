@@ -1,6 +1,3 @@
-::-webkit-scrollbar {
-  display: none;
-}
 
 .short-container {
   width: 100%;
@@ -10,6 +7,10 @@
   justify-content: space-between;
   flex-direction: row;
   overflow-y: hidden;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
 
   .shorts-header-wrapper {
