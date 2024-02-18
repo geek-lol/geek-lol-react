@@ -29,7 +29,6 @@ const MyInformation = ({userInfo,changeUser,getNickname}) => {
     //입력 닉네임 저장
     const [newName,setNewName] = useState(userInfo.userName);
     const [newNameCheck,setNewNameCheck] = useState(false);
-    const [message,setMessage] = useState("");
 
     const [user,setUser] = useState(userInfo);
 
@@ -88,12 +87,11 @@ const MyInformation = ({userInfo,changeUser,getNickname}) => {
         setAlterName(false);
     }
     const alterNameClikHandler = ()=>{
-        if (!newNameCheck){
-            setAlterName(true);
+        if (alterName){
+            alterNameFetch()
+            setAlterName(false)
         }else{
-            alterNameFetch();
-            setNewNameCheck(false);
-            setAlterName(false);
+            setAlterName(true);
         }
     }
 
@@ -110,6 +108,10 @@ const MyInformation = ({userInfo,changeUser,getNickname}) => {
             localStorage.clear()
             redirection('/');
         }
+    }
+    const inputNameHandler = (e) =>{
+        const inputs = e.target.value
+        setNewName(inputs);
     }
 
     //모달 관련
@@ -165,11 +167,8 @@ const MyInformation = ({userInfo,changeUser,getNickname}) => {
                                 className="my-info-item"
                                 id="alterUserName"
                                 value={newName}
-                                variant="standard"/>
-                            <span className={'message'} style={
-                                newNameCheck
-                                    ? {color: '#61DBF0'}
-                                    : {color: '#F15F5F'}}>{message}</span>
+                                variant="standard"
+                                onChange={inputNameHandler}/>
                                 <div className="alter-text" onClick={changeAlterNameClikHandler}>취소</div>
                                 <div className="alter-text" onClick={alterNameClikHandler}>완료</div>
                         </>
