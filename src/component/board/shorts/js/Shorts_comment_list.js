@@ -110,10 +110,7 @@ const ShortsCommentList = ({item, shortReplyList, ref,Dcommnet}) => {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
 
-<<<<<<< Updated upstream
-=======
             Dcommnet(json.reply);
->>>>>>> Stashed changes
         } else {
             console.error('Error:', res.status);
 

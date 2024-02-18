@@ -8,11 +8,7 @@ import {getCurrentLoginUser} from "../../../../utils/login-util";
 import {json, useNavigate} from "react-router-dom";
 import ReactPlayer from "react-player";
 
-<<<<<<< Updated upstream
-const ShortsContent = ({id, item, upVote, isError}) => {
-=======
 const ShortsContent = ({id, item, upVote, anymore}) => {
->>>>>>> Stashed changes
     const API_BASE_URL = SHORT_URL;
     const API_VOTE_URL = SHORT_VOTE_URL;
     const API_IMG_URL = USER_URL;
@@ -125,13 +121,6 @@ const ShortsContent = ({id, item, upVote, anymore}) => {
             .then(json => {
                 // console.log('shorts', json.shorts);
                 setShortList(json.shorts);
-<<<<<<< Updated upstream
-                // console.log('json.short',json.shorts);
-                // console.log(json.error);
-=======
-                console.log('json.short', json.shorts);
-                console.log(json.error);
->>>>>>> Stashed changes
                 setReplyLength(replyCount);
                 // setPage(prevPage => prevPage + 1);
                 // console.log(shortsId)
@@ -321,14 +310,7 @@ const ShortsContent = ({id, item, upVote, anymore}) => {
             // 예상치 못한 끝이 발생하지 않도록 비동기 처리로 변경
             const json = await res.json().catch(() => ({}));
             setShortList(shortList.filter(short => short.shortsId !== shortsId));
-<<<<<<< Updated upstream
             getshortList();
-
-=======
-            anymore(json);
-            console.log(json.error);
-            getshortList();
->>>>>>> Stashed changes
         } else {
             console.error('Error:', res.status);
             getshortList();

@@ -64,11 +64,6 @@ const BoardShorts = () => {
                             id={shorts.shortsId}
                             item={shorts}
                             upVote={shorts.upCount}
-<<<<<<< Updated upstream
-                            isError={error}
-=======
-                            anymore={anymore}
->>>>>>> Stashed changes
                         />
                     ))}
                 </ul>

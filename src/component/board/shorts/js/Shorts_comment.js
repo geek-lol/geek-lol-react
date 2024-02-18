@@ -85,12 +85,8 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
             const json = await res.json();
             setReplyValue({context: ''});
             setShortReplyList(json.reply);
-<<<<<<< Updated upstream
             setShortReplyCount(json.reply.length);
-
-=======
             setShortReplyCount(json.totalCount);
->>>>>>> Stashed changes
             setPage(2);
 
             // Scroll to top
@@ -130,14 +126,7 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                     throw new Error(`HTTP 오류! 상태: ${res.status}`);
                 }
                 const json = await res.json();
-<<<<<<< Updated upstream
-                console.log(json.reply);
-                setShortReplyCount(json.reply.length);
-                // console.log(json.total);
-                setShortReplyList(prevList => [...prevList, ...json.reply]);
-=======
                 setShortReplyList(json.reply);
->>>>>>> Stashed changes
                 setPage(prevPage => prevPage + 1);
 
             } catch (error) {
@@ -207,10 +196,7 @@ const ShortsComment = ({item, chkViewComment, viewComment, ReplyCount}) => {
                                 key={reply.id}
                                 shortReplyList={reply}
                                 item={item}
-<<<<<<< Updated upstream
-=======
                                 Dcommnet={Dcommnet}
->>>>>>> Stashed changes
                             />
                         ))}
                     </ul>
