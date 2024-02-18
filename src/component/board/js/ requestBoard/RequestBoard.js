@@ -184,10 +184,10 @@ const RequestBoard = () => {
                         height="30px"
                         className="progressBar"
                         completed={timepersent}
-                        customLabel={`투표종료까지 ${day}일${hours}시간${minutes}분${seconds}초 남았습니다.`}
-                        customLabelStyles={{margin:"auto"}}
+                        customLabel={Math.round(timepersent) + "%"}
+                        customLabelStyles={{margin: "auto"}}
                     />
-                    <h2></h2>
+                    <h2 className="pb">투표종료까지 {day}일{hours}시간{minutes}분{seconds}초 남았습니다.</h2>
                 </div>
 
                 <div className="board_list_box">
@@ -226,9 +226,9 @@ const RequestBoard = () => {
                     </div>
                     <div className="board_table_box">
                         {requestBoard.length > 0 ? requestBoard.map(con =>
-                            <RequestContent item={con}/>)
-                        :
-                        <p className="empty-text">- 아직 글이 없습니다. -</p>
+                                <RequestContent item={con}/>)
+                            :
+                            <p className="empty-text">- 아직 글이 없습니다. -</p>
                         }
 
                         <nav className="page-box">
