@@ -110,6 +110,8 @@ const SelectDetail = () => {
             if (json.error !== null) {
 
                 alert(json.error);
+                setCons(Math.round(json.consPercent) + "%");
+                setPros(Math.round(json.prosPercent) + "%");
                 return;
             }
             if(text==="pros"){
