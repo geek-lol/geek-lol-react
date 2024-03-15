@@ -1,5 +1,4 @@
 # KDT 팀 프로젝트 3조 <br> - NOT (Noah's Ark or Titanic:노아의 방주 또는 타이타닉)
-- 사이트 가기 : [GEEK LOL](http://geeklol.site)
 - ppt 및 프로젝트 소개 : [canva 바로가기](https://www.canva.com/design/DAF83EX-8eY/HgqQhkd8n76Jt6HcLElocw/view?utm_content=DAF83EX-8eY&utm_campaign=designshare&utm_medium=link&utm_source=editor)
 - 개발기간 : 2024-01-18~2024-02-18 (30일)
 
