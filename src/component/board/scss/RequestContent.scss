@@ -1,0 +1,160 @@
+.Request-Content-Box{
+  color: black;
+  margin: 32px;
+
+  .content-box{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .player{
+      background-color: black;
+      width: 300px;
+      height: 168px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .video-box{
+      border-radius: 5px;
+      width: 400px;
+      overflow: hidden;
+    }
+    .title-box{
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      margin-left: 16px;
+      gap: 15px;
+      h1{
+        font-size: 24px;
+        font-weight: 500;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+  .info-Box{
+    margin: 24px 0 24px 0;
+    display: flex;
+    gap: 6px;
+    justify-content: flex-start;
+    .info{
+      align-items: center;
+      display: flex;
+
+    }
+    span{
+      margin-left: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+  }
+}
+.main-vote-title{
+  font-size: 30px;
+  font-weight: 900;
+  text-align: center;
+}
+.card-box{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.progress-bar{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .pb{
+    margin: 15px 0;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .progressBar{
+    border: lightgray solid 1px;
+    border-radius: 36px;
+    overflow: hidden;
+
+    .progressBar {
+
+    }
+  }
+}
+.hero {
+  background-color: lightgray;
+  display: inline-block;
+  position: relative;
+  width: 300px;
+  min-width: 300px;
+  height: 300px;
+  border-radius: 10px;
+  overflow:hidden;
+  box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.3);
+  margin: 30px;
+  .video{
+    background-color: black;
+  }
+  img{
+    width: 100%;}
+  .text {
+    background-image: linear-gradient(0deg , #3f5efb, #fc466b);
+    border-radius: 30px;
+    position: absolute;
+    top: 50%;
+    left: -5px;
+    height: 65%;
+    width: 108%;
+    transform: skew(19deg, -9deg);
+  }
+  .second{
+      background-image: linear-gradient(-20deg , #bb7413, #e7d25c)
+  }
+  .logo {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    background-color: #fff;
+    position: absolute;
+    bottom: 30%;
+    left: 30px;
+    overflow:hidden;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.7);
+  }
+  .main-text {
+    position: relative;
+    color: #fff;
+    font-weight: 900;
+    display: flex;
+    justify-content: center;
+    bottom: -40px;
+
+    p{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin: 5px 15px;
+    }
+  }
+  .main-text2 {
+    position: relative;
+    color: #fff;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    bottom: -55px;
+
+    p{
+      border: white 1px solid;
+      padding: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+    }
+  }
+
+}
+

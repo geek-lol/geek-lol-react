@@ -9,15 +9,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
 
 
-
-
 .wrapper {
   width: 100%;
-  height: 100dvh;
+  height: 93.9vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url('../../../../image/loginbg.jpg');
+  background-image: url('../../../../../public/assets/loginbg.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;

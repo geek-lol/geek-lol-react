@@ -1,0 +1,26 @@
+
+.profile__box{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 30px;
+  cursor: pointer;
+  .profile{
+    margin: 10px;
+    width: 60px;
+    height: 60px;
+    border-radius: 70%;
+    overflow: hidden;
+    background-color: #00FFF0;
+  }
+  .nickname{
+    font-size: 1.25em;
+    font-weight: 700;
+    color: #000;
+  }
+  @media screen and (max-width:1400px) {
+        .nickname{
+          color: #fff;
+        }
+  }
+}

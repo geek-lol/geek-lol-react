@@ -1,0 +1,210 @@
+.detailSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 700px;
+  margin: auto;
+
+.pp{
+  margin: 15px;}
+  .DetailTop {
+    width: 100%;
+
+    .RequestTitle {
+      margin: 70px 0 15px 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .subTile {
+      font-size: 12px;
+      font-weight: 500;
+      margin: 15px 0 50px 0;
+
+    }
+
+    .btnBox {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 50px;
+
+      .Btn1 {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .Btn2 {
+        font-size: 12px;
+        font-weight: 400;
+        color: grey;
+      }
+    }
+  }
+
+  .DetailMid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .info{
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    h1 {
+      width: 100%;
+      justify-content: start;
+      font-weight: 700;
+      font-size: 30px;
+      margin: 16px 0;
+      text-align: start;
+    }
+
+    .detail-info-box {
+      display: flex;
+      justify-content: flex-start;
+      margin: 5px 0 10px 0;
+      width: 100%;
+
+      .info-front {
+        display: flex;
+        margin-right: auto;
+      }
+
+      .info-back {
+        display: flex;
+      }
+
+      p {
+        margin: 4px;
+      }
+    }
+
+    .detailTitle {
+      text-align: start;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .videoPlayer {
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: lightgray solid 2px;
+      overflow: hidden;
+      border-radius: 5px;
+    }
+
+    .detailContent {
+      padding: 15px 0;
+      border-bottom: lightgray solid 2px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .votebox {
+      width: 100%;
+
+      .voteTitle {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 700;
+        margin: 25px;
+      }
+
+      .vote {
+        .prosbtn {
+          background-color: red;
+          width: 50%;
+          height: 100px;
+
+        }
+
+        .consbtn {
+          background-color: blue;
+          width: 50%;
+          height: 100px;
+
+        }
+      }
+    }
+  }
+
+  .DetailBottom {
+    width: 100%;
+
+    .replyTitle {
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .detail-comment-form {
+      width: 100%;
+      margin: 15px auto;
+      display: flex;
+      border-radius: 24px;
+      #outlined-basic {
+        border-radius: 16px;
+      }
+      #bttt {
+        font-weight: 700;
+        color: black;
+        border: lightgray solid 1px;
+        font-size: 18px;
+      }
+    }
+
+    .comment2{
+      width: 95%;
+      padding: 12px;
+      border-radius: 16px;
+      border: solid lightgray 1px;
+      display: flex;
+      flex-direction: column;
+      margin: 5px;
+      .comment-top{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .tqbox{
+          display: flex;
+        }
+        p{
+          padding: 5px;
+          cursor: pointer;
+        }
+      }
+      .comment-content{
+        display: flex;
+        justify-content: space-between;
+        padding: 8px;
+        .ctt{
+          padding: 16px;
+        }
+      }
+    }
+  }
+}
+.comment-box{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .e{
+    margin: 15px 0;
+  }
+  .tq{
+    margin: 15px;
+  }
+}
+
+button {
+  background-color: transparent; /* 배경색 투명하게 */
+  border: none; /* 테두리 없애기 */
+  outline: none; /* 포커스시 테두리 없애기 */
+  cursor: pointer; /* 마우스를 올리면 커서 모양 변경 */
+}

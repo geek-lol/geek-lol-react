@@ -1,0 +1,115 @@
+
+$breakpoint-desktop : 1800px;
+
+@mixin desktop{
+  @media (min-width: #{$breakpoint-desktop}) {
+    @content;
+  }
+}
+
+@font-face {
+  font-family: 'NEXONFootballGothicBA1';
+  src: url('../../../font/tahoma.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+.non{
+  display: none;
+}
+
+.res-wrapper{
+  background-image: url("./poro2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 150vh;
+  position: absolute;
+  z-index: -1;
+}
+
+// 다시 테스트
+.btn-reset{
+  width: fit-content;
+  margin: 0 auto 10px;
+}
+
+// 페이지 제목 (반응 속도 테스트)
+.game-title{
+  padding-top: 50px;
+  font-size: 1.7rem;
+  font-weight: 700;
+  text-align: center;
+  color: white;
+}
+
+.game-main{
+  position: relative;
+  //게임 화면
+  #screen {
+    width: 800px;
+    height: 300px;
+    margin: 0 auto;
+
+    text-align: center;
+    user-select: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+
+    border-radius: 10px;
+    position: relative;
+  }
+  #result{
+    background-color: black;
+    width: fit-content;
+    margin-left: 10px;
+    color: white;
+    position: absolute;
+    top: 0;
+    left:calc(25% + 800px);/* #screen의 너비와 동일한 값으로 설정 */
+    @include desktop{
+      left:calc(35% + 800px);
+    }
+  }
+}
+
+#screen.waiting {
+  background-color: #c7ffff;
+}
+
+#screen.ready {
+  background-color: red;
+  color: white;
+}
+
+#screen.now {
+  background-color: #00ff3c;
+}
+
+// 게임 진행도
+#gameCount {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+//랭킹 제목
+.rank-title{
+  margin: 20px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+//랭킹 목록
+.game-rank{
+  width: 70%;
+  margin: 0px auto;
+  .game-rank-row{
+    border: 1px solid black;
+  }
+  .game-rank-item{
+     padding: 10px;
+     margin: 10px;
+   }
+}

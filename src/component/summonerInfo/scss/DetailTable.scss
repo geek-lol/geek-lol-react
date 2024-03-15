@@ -1,0 +1,226 @@
+.detail-game-info {
+  display: none;
+
+  .detail-game-info-champion {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .detail-summoner-name:hover {
+      color: blue;
+      text-decoration-line: underline ;
+    }
+  }
+
+  .detail-champion-spell-rune {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+
+    img {
+      border-radius: 5px;
+    }
+
+    .detail-spell-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+
+  &.show {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.detail-rune-container {
+  .detail-rune-info {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    
+    img {
+      background: #000;
+      border-radius: 50%;
+    }
+
+    .detail-rune-description {
+      display: none;
+      text-align: left;
+
+      position: absolute;
+      height: auto;
+
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -100%);
+      z-index: 1;
+      width: 400px;
+
+      background-color: #00207b;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      font-family: 'Nanum Gothic', sans-serif;
+      font-weight: 500;
+
+      &.show {
+        display: block;
+      }
+    }
+  }
+}
+
+.detail-spell-container {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  .detail-spell-description {
+    display: none;
+    position: absolute;
+    height: auto;
+    text-align: left;
+
+
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    z-index: 1;
+    width: 400px;
+
+    background-color: #00207b;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'Nanum Gothic', sans-serif;
+    font-weight: 500;
+
+    &.show {
+      display: block;
+    }
+  }
+}
+
+
+.detail-tbody .detail-tr {
+  display: table-row;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+}
+
+.detail-thead {
+
+  height: 40px;
+  .detail-thead-tr {
+
+    .detail-th {
+      vertical-align: middle;
+
+      &:first-child {
+        text-align: left;
+      }
+
+      &:nth-child(n+2) {
+        text-align: center;
+      }
+    }
+  }
+}
+
+.detail-tbody {
+  .detail-tr {
+    border-top: 1px solid #ababab; /* Top border */
+    border-bottom: 1px solid #ababab; /* Bottom border */
+
+    .item-td {
+      vertical-align: middle;
+      .item-description {
+        display: none;
+        position: absolute;
+        height: auto;
+        top: 0;
+        left: 50%;
+        transform: translate(0%, -100%);
+        z-index: 1;
+        width: 400px;
+        text-align: left;
+
+        background-color: #00207b;
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+
+        &.show {
+          display: block;
+        }
+      }
+
+      img {
+        width: 23px;
+        border-radius: 5px;
+      }
+    }
+    .detail-td {
+      height: 40px;
+      vertical-align: middle;
+      text-align: center;
+
+
+      .item-img {
+        border-radius: 5px;
+      }
+
+      .multiple-kill {
+        span {
+          //border: 1px solid black;
+          border-radius: 5px;
+
+          font-size: 12px;
+          font-weight: 700;
+          color: #fff;
+          padding: 5px;
+
+          &.X {
+            color: #000;
+          }
+          &.펜타킬 {
+            background: #000000;
+          }
+          &.쿼드라킬 {
+            background: yellow;
+          }
+          &.트리플킬 {
+            background: grey;
+          }
+          &.더블킬 {
+            background: #00d1ff;
+          }
+        }
+
+
+      }
+    }
+  }
+}
+
+
+
+.detail-table {
+  .detail-tbody {
+
+    &.victory-team {
+      background-color: rgba(0, 240, 255, 0.2);
+    }
+
+    &.lose-team {
+      background-color: rgba(255, 59, 59, 0.2);
+    }
+  }
+}
